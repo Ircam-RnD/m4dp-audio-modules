@@ -1,0 +1,29 @@
+{
+  "name": "m4dp-audio-modules",
+  "version": "0.0.1",
+  "description": "",
+  "main": "./dist/index.js",
+  "standalone": "M4DPAudioModules",
+  "scripts": {
+    "transpile": "./bin/scripts.js --transpile",
+    "prebundle": "npm run transpile",
+    "bundle": "./bin/scripts.js --bundle",
+    "watch": "./bin/scripts.js --watch",
+    "serve": "./bin/scripts.js --serve"
+  },
+  "author": "Samuel Goldszmidt",
+  "license": "ISC",
+  "devDependencies": {
+    "babel-runtime": "^5.8.25",
+    "babelify": "^6.4.0",
+    "browserify": "^11.2.0",
+    "watch": "^0.16.0",
+    "connect": "^3.3.5",
+    "fs-extra": "^0.16.3",
+    "fsm-as-promised": "^0.6.0",
+    "node-watch": "^0.3.4",
+    "portfinder": "^0.4.0",
+    "serve-favicon": "^2.2.0",
+    "serve-static": "^1.9.2"
+  }
+}

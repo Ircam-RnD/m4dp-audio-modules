@@ -1,0 +1,35 @@
+'use strict';
+
+var _interopRequireDefault = require('babel-runtime/helpers/interop-require-default')['default'];
+
+var _dialogEnhancementIndexJs = require('./dialog-enhancement/index.js');
+
+var _dialogEnhancementIndexJs2 = _interopRequireDefault(_dialogEnhancementIndexJs);
+
+var _multichannelSpatialiserIndexJs = require('./multichannel-spatialiser/index.js');
+
+var _multichannelSpatialiserIndexJs2 = _interopRequireDefault(_multichannelSpatialiserIndexJs);
+
+var _noiseAdaptationIndexJs = require('./noise-adaptation/index.js');
+
+var _noiseAdaptationIndexJs2 = _interopRequireDefault(_noiseAdaptationIndexJs);
+
+var _objectSpatialiserAndMixerIndexJs = require('./object-spatialiser-and-mixer/index.js');
+
+var _objectSpatialiserAndMixerIndexJs2 = _interopRequireDefault(_objectSpatialiserAndMixerIndexJs);
+
+var _smartFaderIndexJs = require('./smart-fader/index.js');
+
+var _smartFaderIndexJs2 = _interopRequireDefault(_smartFaderIndexJs);
+
+var M4DPAudioModules = {
+    'DialogEnhancement': _dialogEnhancementIndexJs2['default'],
+    'MultichannelSpatialiser': _multichannelSpatialiserIndexJs2['default'],
+    'NoiseAdaptation': _noiseAdaptationIndexJs2['default'],
+    'ObjectSpatialiserAndMixer': _objectSpatialiserAndMixerIndexJs2['default'],
+    'SmartFader': _smartFaderIndexJs2['default']
+};
+
+// @fix, Extra ugly, should use export default M4DPAudioModules;
+window.M4DPAudioModules = M4DPAudioModules;
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImxpYi9zbWFydC1mYWRlci9pbmRleC5qcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7O3dDQUE4QiwrQkFBK0I7Ozs7OENBQ3pCLHFDQUFxQzs7OztzQ0FDN0MsNkJBQTZCOzs7O2dEQUNuQix5Q0FBeUM7Ozs7aUNBQ3hELHdCQUF3Qjs7OztBQUcvQyxJQUFNLGdCQUFnQixHQUFHO0FBQ3JCLHVCQUFtQix1Q0FBbUI7QUFDdEMsNkJBQXlCLDZDQUF5QjtBQUNsRCxxQkFBaUIscUNBQWlCO0FBQ2xDLCtCQUEyQiwrQ0FBMkI7QUFDdEQsZ0JBQVksZ0NBQVk7Q0FDM0IsQ0FBQzs7O0FBR0YsTUFBTSxDQUFDLGdCQUFnQixHQUFHLGdCQUFnQixDQUFDIiwiZmlsZSI6ImxpYi9zbWFydC1mYWRlci9pbmRleC5qcyIsInNvdXJjZXNDb250ZW50IjpbImltcG9ydCBEaWFsb2dFbmhhbmNlbWVudCBmcm9tICcuL2RpYWxvZy1lbmhhbmNlbWVudC9pbmRleC5qcyc7XG5pbXBvcnQgTXVsdGljaGFubmVsU3BhdGlhbGlzZXIgZnJvbSAnLi9tdWx0aWNoYW5uZWwtc3BhdGlhbGlzZXIvaW5kZXguanMnO1xuaW1wb3J0IE5vaXNlQWRhcHRhdGlvbiBmcm9tICcuL25vaXNlLWFkYXB0YXRpb24vaW5kZXguanMnO1xuaW1wb3J0IE9iamVjdFNwYXRpYWxpc2VyQW5kTWl4ZXIgZnJvbSAnLi9vYmplY3Qtc3BhdGlhbGlzZXItYW5kLW1peGVyL2luZGV4LmpzJztcbmltcG9ydCBTbWFydEZhZGVyIGZyb20gJy4vc21hcnQtZmFkZXIvaW5kZXguanMnO1xuXG5cbmNvbnN0IE00RFBBdWRpb01vZHVsZXMgPSB7XG4gICAgXCJEaWFsb2dFbmhhbmNlbWVudFwiOiBEaWFsb2dFbmhhbmNlbWVudCxcbiAgICBcIk11bHRpY2hhbm5lbFNwYXRpYWxpc2VyXCI6IE11bHRpY2hhbm5lbFNwYXRpYWxpc2VyLFxuICAgIFwiTm9pc2VBZGFwdGF0aW9uXCI6IE5vaXNlQWRhcHRhdGlvbixcbiAgICBcIk9iamVjdFNwYXRpYWxpc2VyQW5kTWl4ZXJcIjogT2JqZWN0U3BhdGlhbGlzZXJBbmRNaXhlcixcbiAgICBcIlNtYXJ0RmFkZXJcIjogU21hcnRGYWRlclxufTtcblxuLy8gQGZpeCwgRXh0cmEgdWdseSwgc2hvdWxkIHVzZSBleHBvcnQgZGVmYXVsdCBNNERQQXVkaW9Nb2R1bGVzO1xud2luZG93Lk00RFBBdWRpb01vZHVsZXMgPSBNNERQQXVkaW9Nb2R1bGVzO1xuXG5cblxuIl19
