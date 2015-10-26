@@ -1,0 +1,2059 @@
+{
+  "type": "Program",
+  "body": [
+    {
+      "type": "ImportDeclaration",
+      "specifiers": [
+        {
+          "type": "ImportDefaultSpecifier",
+          "local": {
+            "type": "Identifier",
+            "name": "AbstractNode",
+            "range": [
+              7,
+              19
+            ],
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 7
+              },
+              "end": {
+                "line": 1,
+                "column": 19
+              }
+            }
+          },
+          "range": [
+            7,
+            19
+          ],
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 7
+            },
+            "end": {
+              "line": 1,
+              "column": 19
+            }
+          }
+        }
+      ],
+      "source": {
+        "type": "Literal",
+        "value": "../core/index.js",
+        "raw": "'../core/index.js'",
+        "range": [
+          25,
+          43
+        ],
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 25
+          },
+          "end": {
+            "line": 1,
+            "column": 43
+          }
+        }
+      },
+      "range": [
+        0,
+        44
+      ],
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 1,
+          "column": 44
+        }
+      }
+    },
+    {
+      "type": "ExportDefaultDeclaration",
+      "declaration": {
+        "type": "ClassDeclaration",
+        "id": {
+          "type": "Identifier",
+          "name": "DialogEnhancement",
+          "range": [
+            68,
+            85
+          ],
+          "loc": {
+            "start": {
+              "line": 4,
+              "column": 21
+            },
+            "end": {
+              "line": 4,
+              "column": 38
+            }
+          }
+        },
+        "superClass": {
+          "type": "Identifier",
+          "name": "AbstractNode",
+          "range": [
+            94,
+            106
+          ],
+          "loc": {
+            "start": {
+              "line": 4,
+              "column": 47
+            },
+            "end": {
+              "line": 4,
+              "column": 59
+            }
+          }
+        },
+        "body": {
+          "type": "ClassBody",
+          "body": [
+            {
+              "type": "MethodDefinition",
+              "key": {
+                "type": "Identifier",
+                "name": "constructor",
+                "range": [
+                  211,
+                  222
+                ],
+                "loc": {
+                  "start": {
+                    "line": 9,
+                    "column": 4
+                  },
+                  "end": {
+                    "line": 9,
+                    "column": 15
+                  }
+                }
+              },
+              "value": {
+                "type": "FunctionExpression",
+                "id": null,
+                "params": [
+                  {
+                    "type": "Identifier",
+                    "name": "audioContext",
+                    "range": [
+                      223,
+                      235
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 9,
+                        "column": 16
+                      },
+                      "end": {
+                        "line": 9,
+                        "column": 28
+                      }
+                    }
+                  },
+                  {
+                    "type": "Identifier",
+                    "name": "audioStreamsDescription",
+                    "range": [
+                      237,
+                      260
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 9,
+                        "column": 30
+                      },
+                      "end": {
+                        "line": 9,
+                        "column": 53
+                      }
+                    }
+                  },
+                  {
+                    "type": "Identifier",
+                    "name": "mode",
+                    "range": [
+                      262,
+                      266
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 9,
+                        "column": 55
+                      },
+                      "end": {
+                        "line": 9,
+                        "column": 59
+                      }
+                    }
+                  },
+                  {
+                    "type": "Identifier",
+                    "name": "dialogGain",
+                    "range": [
+                      268,
+                      278
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 9,
+                        "column": 61
+                      },
+                      "end": {
+                        "line": 9,
+                        "column": 71
+                      }
+                    }
+                  }
+                ],
+                "body": {
+                  "type": "BlockStatement",
+                  "body": [
+                    {
+                      "type": "ExpressionStatement",
+                      "expression": {
+                        "type": "CallExpression",
+                        "callee": {
+                          "type": "Super",
+                          "range": [
+                            289,
+                            294
+                          ],
+                          "loc": {
+                            "start": {
+                              "line": 10,
+                              "column": 8
+                            },
+                            "end": {
+                              "line": 10,
+                              "column": 13
+                            }
+                          }
+                        },
+                        "arguments": [
+                          {
+                            "type": "Identifier",
+                            "name": "audioContext",
+                            "range": [
+                              295,
+                              307
+                            ],
+                            "loc": {
+                              "start": {
+                                "line": 10,
+                                "column": 14
+                              },
+                              "end": {
+                                "line": 10,
+                                "column": 26
+                              }
+                            }
+                          }
+                        ],
+                        "range": [
+                          289,
+                          308
+                        ],
+                        "loc": {
+                          "start": {
+                            "line": 10,
+                            "column": 8
+                          },
+                          "end": {
+                            "line": 10,
+                            "column": 27
+                          }
+                        }
+                      },
+                      "range": [
+                        289,
+                        309
+                      ],
+                      "loc": {
+                        "start": {
+                          "line": 10,
+                          "column": 8
+                        },
+                        "end": {
+                          "line": 10,
+                          "column": 28
+                        }
+                      }
+                    },
+                    {
+                      "type": "ExpressionStatement",
+                      "expression": {
+                        "type": "AssignmentExpression",
+                        "operator": "=",
+                        "left": {
+                          "type": "MemberExpression",
+                          "computed": false,
+                          "object": {
+                            "type": "ThisExpression",
+                            "range": [
+                              318,
+                              322
+                            ],
+                            "loc": {
+                              "start": {
+                                "line": 11,
+                                "column": 8
+                              },
+                              "end": {
+                                "line": 11,
+                                "column": 12
+                              }
+                            }
+                          },
+                          "property": {
+                            "type": "Identifier",
+                            "name": "_mode",
+                            "range": [
+                              323,
+                              328
+                            ],
+                            "loc": {
+                              "start": {
+                                "line": 11,
+                                "column": 13
+                              },
+                              "end": {
+                                "line": 11,
+                                "column": 18
+                              }
+                            }
+                          },
+                          "range": [
+                            318,
+                            328
+                          ],
+                          "loc": {
+                            "start": {
+                              "line": 11,
+                              "column": 8
+                            },
+                            "end": {
+                              "line": 11,
+                              "column": 18
+                            }
+                          }
+                        },
+                        "right": {
+                          "type": "Identifier",
+                          "name": "mode",
+                          "range": [
+                            331,
+                            335
+                          ],
+                          "loc": {
+                            "start": {
+                              "line": 11,
+                              "column": 21
+                            },
+                            "end": {
+                              "line": 11,
+                              "column": 25
+                            }
+                          }
+                        },
+                        "range": [
+                          318,
+                          335
+                        ],
+                        "loc": {
+                          "start": {
+                            "line": 11,
+                            "column": 8
+                          },
+                          "end": {
+                            "line": 11,
+                            "column": 25
+                          }
+                        }
+                      },
+                      "range": [
+                        318,
+                        336
+                      ],
+                      "loc": {
+                        "start": {
+                          "line": 11,
+                          "column": 8
+                        },
+                        "end": {
+                          "line": 11,
+                          "column": 26
+                        }
+                      }
+                    },
+                    {
+                      "type": "ExpressionStatement",
+                      "expression": {
+                        "type": "AssignmentExpression",
+                        "operator": "=",
+                        "left": {
+                          "type": "MemberExpression",
+                          "computed": false,
+                          "object": {
+                            "type": "ThisExpression",
+                            "range": [
+                              345,
+                              349
+                            ],
+                            "loc": {
+                              "start": {
+                                "line": 12,
+                                "column": 8
+                              },
+                              "end": {
+                                "line": 12,
+                                "column": 12
+                              }
+                            }
+                          },
+                          "property": {
+                            "type": "Identifier",
+                            "name": "_audioStreamsDescription",
+                            "range": [
+                              350,
+                              374
+                            ],
+                            "loc": {
+                              "start": {
+                                "line": 12,
+                                "column": 13
+                              },
+                              "end": {
+                                "line": 12,
+                                "column": 37
+                              }
+                            }
+                          },
+                          "range": [
+                            345,
+                            374
+                          ],
+                          "loc": {
+                            "start": {
+                              "line": 12,
+                              "column": 8
+                            },
+                            "end": {
+                              "line": 12,
+                              "column": 37
+                            }
+                          }
+                        },
+                        "right": {
+                          "type": "Identifier",
+                          "name": "audioStreamsDescription",
+                          "range": [
+                            377,
+                            400
+                          ],
+                          "loc": {
+                            "start": {
+                              "line": 12,
+                              "column": 40
+                            },
+                            "end": {
+                              "line": 12,
+                              "column": 63
+                            }
+                          }
+                        },
+                        "range": [
+                          345,
+                          400
+                        ],
+                        "loc": {
+                          "start": {
+                            "line": 12,
+                            "column": 8
+                          },
+                          "end": {
+                            "line": 12,
+                            "column": 63
+                          }
+                        }
+                      },
+                      "range": [
+                        345,
+                        401
+                      ],
+                      "loc": {
+                        "start": {
+                          "line": 12,
+                          "column": 8
+                        },
+                        "end": {
+                          "line": 12,
+                          "column": 64
+                        }
+                      }
+                    }
+                  ],
+                  "range": [
+                    279,
+                    407
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 9,
+                      "column": 72
+                    },
+                    "end": {
+                      "line": 13,
+                      "column": 5
+                    }
+                  }
+                },
+                "generator": false,
+                "expression": false,
+                "range": [
+                  222,
+                  407
+                ],
+                "loc": {
+                  "start": {
+                    "line": 9,
+                    "column": 15
+                  },
+                  "end": {
+                    "line": 13,
+                    "column": 5
+                  }
+                }
+              },
+              "kind": "constructor",
+              "computed": false,
+              "range": [
+                211,
+                407
+              ],
+              "loc": {
+                "start": {
+                  "line": 9,
+                  "column": 4
+                },
+                "end": {
+                  "line": 13,
+                  "column": 5
+                }
+              },
+              "leadingComments": [
+                {
+                  "type": "Block",
+                  "value": "*\n     * Constructor\n     * audioContext, audioStreamsDescription, mode, dialogGain\n     ",
+                  "range": [
+                    113,
+                    206
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 5,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 8,
+                      "column": 7
+                    }
+                  }
+                }
+              ],
+              "trailingComments": [
+                {
+                  "type": "Block",
+                  "value": "*\n     * Set Mode\n     * @param {number} value - 1, 2 or 3\n     ",
+                  "range": [
+                    412,
+                    480
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 14,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 17,
+                      "column": 7
+                    }
+                  }
+                }
+              ],
+              "static": false
+            },
+            {
+              "type": "MethodDefinition",
+              "key": {
+                "type": "Identifier",
+                "name": "mode",
+                "range": [
+                  489,
+                  493
+                ],
+                "loc": {
+                  "start": {
+                    "line": 18,
+                    "column": 8
+                  },
+                  "end": {
+                    "line": 18,
+                    "column": 12
+                  }
+                }
+              },
+              "value": {
+                "type": "FunctionExpression",
+                "id": null,
+                "params": [
+                  {
+                    "type": "Identifier",
+                    "name": "value",
+                    "range": [
+                      494,
+                      499
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 18,
+                        "column": 13
+                      },
+                      "end": {
+                        "line": 18,
+                        "column": 18
+                      }
+                    }
+                  }
+                ],
+                "body": {
+                  "type": "BlockStatement",
+                  "body": [
+                    {
+                      "type": "ExpressionStatement",
+                      "expression": {
+                        "type": "AssignmentExpression",
+                        "operator": "=",
+                        "left": {
+                          "type": "MemberExpression",
+                          "computed": false,
+                          "object": {
+                            "type": "ThisExpression",
+                            "range": [
+                              510,
+                              514
+                            ],
+                            "loc": {
+                              "start": {
+                                "line": 19,
+                                "column": 8
+                              },
+                              "end": {
+                                "line": 19,
+                                "column": 12
+                              }
+                            }
+                          },
+                          "property": {
+                            "type": "Identifier",
+                            "name": "_mode",
+                            "range": [
+                              515,
+                              520
+                            ],
+                            "loc": {
+                              "start": {
+                                "line": 19,
+                                "column": 13
+                              },
+                              "end": {
+                                "line": 19,
+                                "column": 18
+                              }
+                            }
+                          },
+                          "range": [
+                            510,
+                            520
+                          ],
+                          "loc": {
+                            "start": {
+                              "line": 19,
+                              "column": 8
+                            },
+                            "end": {
+                              "line": 19,
+                              "column": 18
+                            }
+                          }
+                        },
+                        "right": {
+                          "type": "Identifier",
+                          "name": "value",
+                          "range": [
+                            523,
+                            528
+                          ],
+                          "loc": {
+                            "start": {
+                              "line": 19,
+                              "column": 21
+                            },
+                            "end": {
+                              "line": 19,
+                              "column": 26
+                            }
+                          }
+                        },
+                        "range": [
+                          510,
+                          528
+                        ],
+                        "loc": {
+                          "start": {
+                            "line": 19,
+                            "column": 8
+                          },
+                          "end": {
+                            "line": 19,
+                            "column": 26
+                          }
+                        }
+                      },
+                      "range": [
+                        510,
+                        529
+                      ],
+                      "loc": {
+                        "start": {
+                          "line": 19,
+                          "column": 8
+                        },
+                        "end": {
+                          "line": 19,
+                          "column": 27
+                        }
+                      }
+                    }
+                  ],
+                  "range": [
+                    500,
+                    535
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 18,
+                      "column": 19
+                    },
+                    "end": {
+                      "line": 20,
+                      "column": 5
+                    }
+                  }
+                },
+                "generator": false,
+                "expression": false,
+                "range": [
+                  493,
+                  535
+                ],
+                "loc": {
+                  "start": {
+                    "line": 18,
+                    "column": 12
+                  },
+                  "end": {
+                    "line": 20,
+                    "column": 5
+                  }
+                }
+              },
+              "kind": "set",
+              "computed": false,
+              "range": [
+                485,
+                535
+              ],
+              "loc": {
+                "start": {
+                  "line": 18,
+                  "column": 4
+                },
+                "end": {
+                  "line": 20,
+                  "column": 5
+                }
+              },
+              "leadingComments": [
+                {
+                  "type": "Block",
+                  "value": "*\n     * Set Mode\n     * @param {number} value - 1, 2 or 3\n     ",
+                  "range": [
+                    412,
+                    480
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 14,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 17,
+                      "column": 7
+                    }
+                  }
+                }
+              ],
+              "trailingComments": [
+                {
+                  "type": "Block",
+                  "value": "*\n     * Get Mode\n     ",
+                  "range": [
+                    540,
+                    567
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 21,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 23,
+                      "column": 7
+                    }
+                  }
+                }
+              ],
+              "static": false
+            },
+            {
+              "type": "MethodDefinition",
+              "key": {
+                "type": "Identifier",
+                "name": "mode",
+                "range": [
+                  576,
+                  580
+                ],
+                "loc": {
+                  "start": {
+                    "line": 24,
+                    "column": 8
+                  },
+                  "end": {
+                    "line": 24,
+                    "column": 12
+                  }
+                }
+              },
+              "value": {
+                "type": "FunctionExpression",
+                "id": null,
+                "params": [],
+                "body": {
+                  "type": "BlockStatement",
+                  "body": [
+                    {
+                      "type": "ReturnStatement",
+                      "argument": {
+                        "type": "MemberExpression",
+                        "computed": false,
+                        "object": {
+                          "type": "ThisExpression",
+                          "range": [
+                            599,
+                            603
+                          ],
+                          "loc": {
+                            "start": {
+                              "line": 25,
+                              "column": 15
+                            },
+                            "end": {
+                              "line": 25,
+                              "column": 19
+                            }
+                          }
+                        },
+                        "property": {
+                          "type": "Identifier",
+                          "name": "_mode",
+                          "range": [
+                            604,
+                            609
+                          ],
+                          "loc": {
+                            "start": {
+                              "line": 25,
+                              "column": 20
+                            },
+                            "end": {
+                              "line": 25,
+                              "column": 25
+                            }
+                          }
+                        },
+                        "range": [
+                          599,
+                          609
+                        ],
+                        "loc": {
+                          "start": {
+                            "line": 25,
+                            "column": 15
+                          },
+                          "end": {
+                            "line": 25,
+                            "column": 25
+                          }
+                        }
+                      },
+                      "range": [
+                        592,
+                        610
+                      ],
+                      "loc": {
+                        "start": {
+                          "line": 25,
+                          "column": 8
+                        },
+                        "end": {
+                          "line": 25,
+                          "column": 26
+                        }
+                      }
+                    }
+                  ],
+                  "range": [
+                    582,
+                    616
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 24,
+                      "column": 14
+                    },
+                    "end": {
+                      "line": 26,
+                      "column": 5
+                    }
+                  }
+                },
+                "generator": false,
+                "expression": false,
+                "range": [
+                  580,
+                  616
+                ],
+                "loc": {
+                  "start": {
+                    "line": 24,
+                    "column": 12
+                  },
+                  "end": {
+                    "line": 26,
+                    "column": 5
+                  }
+                }
+              },
+              "kind": "get",
+              "computed": false,
+              "range": [
+                572,
+                616
+              ],
+              "loc": {
+                "start": {
+                  "line": 24,
+                  "column": 4
+                },
+                "end": {
+                  "line": 26,
+                  "column": 5
+                }
+              },
+              "leadingComments": [
+                {
+                  "type": "Block",
+                  "value": "*\n     * Get Mode\n     ",
+                  "range": [
+                    540,
+                    567
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 21,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 23,
+                      "column": 7
+                    }
+                  }
+                }
+              ],
+              "trailingComments": [
+                {
+                  "type": "Block",
+                  "value": "*\n     * Set audioStreamsDescription\n     ",
+                  "range": [
+                    621,
+                    667
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 27,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 29,
+                      "column": 7
+                    }
+                  }
+                }
+              ],
+              "static": false
+            },
+            {
+              "type": "MethodDefinition",
+              "key": {
+                "type": "Identifier",
+                "name": "audioStreamsDescription",
+                "range": [
+                  676,
+                  699
+                ],
+                "loc": {
+                  "start": {
+                    "line": 30,
+                    "column": 8
+                  },
+                  "end": {
+                    "line": 30,
+                    "column": 31
+                  }
+                }
+              },
+              "value": {
+                "type": "FunctionExpression",
+                "id": null,
+                "params": [
+                  {
+                    "type": "Identifier",
+                    "name": "value",
+                    "range": [
+                      700,
+                      705
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 30,
+                        "column": 32
+                      },
+                      "end": {
+                        "line": 30,
+                        "column": 37
+                      }
+                    }
+                  }
+                ],
+                "body": {
+                  "type": "BlockStatement",
+                  "body": [
+                    {
+                      "type": "ExpressionStatement",
+                      "expression": {
+                        "type": "AssignmentExpression",
+                        "operator": "=",
+                        "left": {
+                          "type": "MemberExpression",
+                          "computed": false,
+                          "object": {
+                            "type": "ThisExpression",
+                            "range": [
+                              716,
+                              720
+                            ],
+                            "loc": {
+                              "start": {
+                                "line": 31,
+                                "column": 8
+                              },
+                              "end": {
+                                "line": 31,
+                                "column": 12
+                              }
+                            }
+                          },
+                          "property": {
+                            "type": "Identifier",
+                            "name": "_audioStreamsDescription",
+                            "range": [
+                              721,
+                              745
+                            ],
+                            "loc": {
+                              "start": {
+                                "line": 31,
+                                "column": 13
+                              },
+                              "end": {
+                                "line": 31,
+                                "column": 37
+                              }
+                            }
+                          },
+                          "range": [
+                            716,
+                            745
+                          ],
+                          "loc": {
+                            "start": {
+                              "line": 31,
+                              "column": 8
+                            },
+                            "end": {
+                              "line": 31,
+                              "column": 37
+                            }
+                          }
+                        },
+                        "right": {
+                          "type": "Identifier",
+                          "name": "value",
+                          "range": [
+                            748,
+                            753
+                          ],
+                          "loc": {
+                            "start": {
+                              "line": 31,
+                              "column": 40
+                            },
+                            "end": {
+                              "line": 31,
+                              "column": 45
+                            }
+                          }
+                        },
+                        "range": [
+                          716,
+                          753
+                        ],
+                        "loc": {
+                          "start": {
+                            "line": 31,
+                            "column": 8
+                          },
+                          "end": {
+                            "line": 31,
+                            "column": 45
+                          }
+                        }
+                      },
+                      "range": [
+                        716,
+                        754
+                      ],
+                      "loc": {
+                        "start": {
+                          "line": 31,
+                          "column": 8
+                        },
+                        "end": {
+                          "line": 31,
+                          "column": 46
+                        }
+                      }
+                    }
+                  ],
+                  "range": [
+                    706,
+                    760
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 30,
+                      "column": 38
+                    },
+                    "end": {
+                      "line": 32,
+                      "column": 5
+                    }
+                  }
+                },
+                "generator": false,
+                "expression": false,
+                "range": [
+                  699,
+                  760
+                ],
+                "loc": {
+                  "start": {
+                    "line": 30,
+                    "column": 31
+                  },
+                  "end": {
+                    "line": 32,
+                    "column": 5
+                  }
+                }
+              },
+              "kind": "set",
+              "computed": false,
+              "range": [
+                672,
+                760
+              ],
+              "loc": {
+                "start": {
+                  "line": 30,
+                  "column": 4
+                },
+                "end": {
+                  "line": 32,
+                  "column": 5
+                }
+              },
+              "leadingComments": [
+                {
+                  "type": "Block",
+                  "value": "*\n     * Set audioStreamsDescription\n     ",
+                  "range": [
+                    621,
+                    667
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 27,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 29,
+                      "column": 7
+                    }
+                  }
+                }
+              ],
+              "trailingComments": [
+                {
+                  "type": "Block",
+                  "value": "*\n     * Get audioStreamsDescription\n     ",
+                  "range": [
+                    765,
+                    811
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 33,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 35,
+                      "column": 7
+                    }
+                  }
+                }
+              ],
+              "static": false
+            },
+            {
+              "type": "MethodDefinition",
+              "key": {
+                "type": "Identifier",
+                "name": "audioStreamsDescription",
+                "range": [
+                  820,
+                  843
+                ],
+                "loc": {
+                  "start": {
+                    "line": 36,
+                    "column": 8
+                  },
+                  "end": {
+                    "line": 36,
+                    "column": 31
+                  }
+                }
+              },
+              "value": {
+                "type": "FunctionExpression",
+                "id": null,
+                "params": [],
+                "body": {
+                  "type": "BlockStatement",
+                  "body": [
+                    {
+                      "type": "ReturnStatement",
+                      "argument": {
+                        "type": "MemberExpression",
+                        "computed": false,
+                        "object": {
+                          "type": "ThisExpression",
+                          "range": [
+                            862,
+                            866
+                          ],
+                          "loc": {
+                            "start": {
+                              "line": 37,
+                              "column": 15
+                            },
+                            "end": {
+                              "line": 37,
+                              "column": 19
+                            }
+                          }
+                        },
+                        "property": {
+                          "type": "Identifier",
+                          "name": "_audioStreamsDescription",
+                          "range": [
+                            867,
+                            891
+                          ],
+                          "loc": {
+                            "start": {
+                              "line": 37,
+                              "column": 20
+                            },
+                            "end": {
+                              "line": 37,
+                              "column": 44
+                            }
+                          }
+                        },
+                        "range": [
+                          862,
+                          891
+                        ],
+                        "loc": {
+                          "start": {
+                            "line": 37,
+                            "column": 15
+                          },
+                          "end": {
+                            "line": 37,
+                            "column": 44
+                          }
+                        }
+                      },
+                      "range": [
+                        855,
+                        892
+                      ],
+                      "loc": {
+                        "start": {
+                          "line": 37,
+                          "column": 8
+                        },
+                        "end": {
+                          "line": 37,
+                          "column": 45
+                        }
+                      }
+                    }
+                  ],
+                  "range": [
+                    845,
+                    898
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 36,
+                      "column": 33
+                    },
+                    "end": {
+                      "line": 38,
+                      "column": 5
+                    }
+                  }
+                },
+                "generator": false,
+                "expression": false,
+                "range": [
+                  843,
+                  898
+                ],
+                "loc": {
+                  "start": {
+                    "line": 36,
+                    "column": 31
+                  },
+                  "end": {
+                    "line": 38,
+                    "column": 5
+                  }
+                }
+              },
+              "kind": "get",
+              "computed": false,
+              "range": [
+                816,
+                898
+              ],
+              "loc": {
+                "start": {
+                  "line": 36,
+                  "column": 4
+                },
+                "end": {
+                  "line": 38,
+                  "column": 5
+                }
+              },
+              "leadingComments": [
+                {
+                  "type": "Block",
+                  "value": "*\n     * Get audioStreamsDescription\n     ",
+                  "range": [
+                    765,
+                    811
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 33,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 35,
+                      "column": 7
+                    }
+                  }
+                }
+              ],
+              "trailingComments": [
+                {
+                  "type": "Block",
+                  "value": "*\n     * Set dialogGain\n     ",
+                  "range": [
+                    903,
+                    936
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 39,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 41,
+                      "column": 7
+                    }
+                  }
+                }
+              ],
+              "static": false
+            },
+            {
+              "type": "MethodDefinition",
+              "key": {
+                "type": "Identifier",
+                "name": "dialogGain",
+                "range": [
+                  945,
+                  955
+                ],
+                "loc": {
+                  "start": {
+                    "line": 42,
+                    "column": 8
+                  },
+                  "end": {
+                    "line": 42,
+                    "column": 18
+                  }
+                }
+              },
+              "value": {
+                "type": "FunctionExpression",
+                "id": null,
+                "params": [
+                  {
+                    "type": "Identifier",
+                    "name": "value",
+                    "range": [
+                      956,
+                      961
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 42,
+                        "column": 19
+                      },
+                      "end": {
+                        "line": 42,
+                        "column": 24
+                      }
+                    }
+                  }
+                ],
+                "body": {
+                  "type": "BlockStatement",
+                  "body": [
+                    {
+                      "type": "ExpressionStatement",
+                      "expression": {
+                        "type": "AssignmentExpression",
+                        "operator": "=",
+                        "left": {
+                          "type": "MemberExpression",
+                          "computed": false,
+                          "object": {
+                            "type": "ThisExpression",
+                            "range": [
+                              972,
+                              976
+                            ],
+                            "loc": {
+                              "start": {
+                                "line": 43,
+                                "column": 8
+                              },
+                              "end": {
+                                "line": 43,
+                                "column": 12
+                              }
+                            }
+                          },
+                          "property": {
+                            "type": "Identifier",
+                            "name": "_dialogGain",
+                            "range": [
+                              977,
+                              988
+                            ],
+                            "loc": {
+                              "start": {
+                                "line": 43,
+                                "column": 13
+                              },
+                              "end": {
+                                "line": 43,
+                                "column": 24
+                              }
+                            }
+                          },
+                          "range": [
+                            972,
+                            988
+                          ],
+                          "loc": {
+                            "start": {
+                              "line": 43,
+                              "column": 8
+                            },
+                            "end": {
+                              "line": 43,
+                              "column": 24
+                            }
+                          }
+                        },
+                        "right": {
+                          "type": "Identifier",
+                          "name": "value",
+                          "range": [
+                            991,
+                            996
+                          ],
+                          "loc": {
+                            "start": {
+                              "line": 43,
+                              "column": 27
+                            },
+                            "end": {
+                              "line": 43,
+                              "column": 32
+                            }
+                          }
+                        },
+                        "range": [
+                          972,
+                          996
+                        ],
+                        "loc": {
+                          "start": {
+                            "line": 43,
+                            "column": 8
+                          },
+                          "end": {
+                            "line": 43,
+                            "column": 32
+                          }
+                        }
+                      },
+                      "range": [
+                        972,
+                        997
+                      ],
+                      "loc": {
+                        "start": {
+                          "line": 43,
+                          "column": 8
+                        },
+                        "end": {
+                          "line": 43,
+                          "column": 33
+                        }
+                      }
+                    }
+                  ],
+                  "range": [
+                    962,
+                    1003
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 42,
+                      "column": 25
+                    },
+                    "end": {
+                      "line": 44,
+                      "column": 5
+                    }
+                  }
+                },
+                "generator": false,
+                "expression": false,
+                "range": [
+                  955,
+                  1003
+                ],
+                "loc": {
+                  "start": {
+                    "line": 42,
+                    "column": 18
+                  },
+                  "end": {
+                    "line": 44,
+                    "column": 5
+                  }
+                }
+              },
+              "kind": "set",
+              "computed": false,
+              "range": [
+                941,
+                1003
+              ],
+              "loc": {
+                "start": {
+                  "line": 42,
+                  "column": 4
+                },
+                "end": {
+                  "line": 44,
+                  "column": 5
+                }
+              },
+              "leadingComments": [
+                {
+                  "type": "Block",
+                  "value": "*\n     * Set dialogGain\n     ",
+                  "range": [
+                    903,
+                    936
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 39,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 41,
+                      "column": 7
+                    }
+                  }
+                }
+              ],
+              "trailingComments": [
+                {
+                  "type": "Block",
+                  "value": "*\n     * Get dialogGain\n     ",
+                  "range": [
+                    1008,
+                    1041
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 45,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 47,
+                      "column": 7
+                    }
+                  }
+                }
+              ],
+              "static": false
+            },
+            {
+              "type": "MethodDefinition",
+              "key": {
+                "type": "Identifier",
+                "name": "dialogGain",
+                "range": [
+                  1050,
+                  1060
+                ],
+                "loc": {
+                  "start": {
+                    "line": 48,
+                    "column": 8
+                  },
+                  "end": {
+                    "line": 48,
+                    "column": 18
+                  }
+                }
+              },
+              "value": {
+                "type": "FunctionExpression",
+                "id": null,
+                "params": [],
+                "body": {
+                  "type": "BlockStatement",
+                  "body": [
+                    {
+                      "type": "ReturnStatement",
+                      "argument": {
+                        "type": "MemberExpression",
+                        "computed": false,
+                        "object": {
+                          "type": "ThisExpression",
+                          "range": [
+                            1079,
+                            1083
+                          ],
+                          "loc": {
+                            "start": {
+                              "line": 49,
+                              "column": 15
+                            },
+                            "end": {
+                              "line": 49,
+                              "column": 19
+                            }
+                          }
+                        },
+                        "property": {
+                          "type": "Identifier",
+                          "name": "_dialogGain",
+                          "range": [
+                            1084,
+                            1095
+                          ],
+                          "loc": {
+                            "start": {
+                              "line": 49,
+                              "column": 20
+                            },
+                            "end": {
+                              "line": 49,
+                              "column": 31
+                            }
+                          }
+                        },
+                        "range": [
+                          1079,
+                          1095
+                        ],
+                        "loc": {
+                          "start": {
+                            "line": 49,
+                            "column": 15
+                          },
+                          "end": {
+                            "line": 49,
+                            "column": 31
+                          }
+                        }
+                      },
+                      "range": [
+                        1072,
+                        1096
+                      ],
+                      "loc": {
+                        "start": {
+                          "line": 49,
+                          "column": 8
+                        },
+                        "end": {
+                          "line": 49,
+                          "column": 32
+                        }
+                      }
+                    }
+                  ],
+                  "range": [
+                    1062,
+                    1102
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 48,
+                      "column": 20
+                    },
+                    "end": {
+                      "line": 50,
+                      "column": 5
+                    }
+                  }
+                },
+                "generator": false,
+                "expression": false,
+                "range": [
+                  1060,
+                  1102
+                ],
+                "loc": {
+                  "start": {
+                    "line": 48,
+                    "column": 18
+                  },
+                  "end": {
+                    "line": 50,
+                    "column": 5
+                  }
+                }
+              },
+              "kind": "get",
+              "computed": false,
+              "range": [
+                1046,
+                1102
+              ],
+              "loc": {
+                "start": {
+                  "line": 48,
+                  "column": 4
+                },
+                "end": {
+                  "line": 50,
+                  "column": 5
+                }
+              },
+              "leadingComments": [
+                {
+                  "type": "Block",
+                  "value": "*\n     * Get dialogGain\n     ",
+                  "range": [
+                    1008,
+                    1041
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 45,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 47,
+                      "column": 7
+                    }
+                  }
+                }
+              ],
+              "static": false
+            }
+          ],
+          "range": [
+            107,
+            1104
+          ],
+          "loc": {
+            "start": {
+              "line": 4,
+              "column": 60
+            },
+            "end": {
+              "line": 51,
+              "column": 1
+            }
+          }
+        },
+        "range": [
+          62,
+          1104
+        ],
+        "loc": {
+          "start": {
+            "line": 4,
+            "column": 15
+          },
+          "end": {
+            "line": 51,
+            "column": 1
+          }
+        },
+        "leadingComments": [],
+        "trailingComments": []
+      },
+      "range": [
+        47,
+        1104
+      ],
+      "loc": {
+        "start": {
+          "line": 4,
+          "column": 0
+        },
+        "end": {
+          "line": 51,
+          "column": 1
+        }
+      }
+    }
+  ],
+  "sourceType": "module",
+  "range": [
+    0,
+    1104
+  ],
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 51,
+      "column": 1
+    }
+  },
+  "comments": [
+    {
+      "type": "Block",
+      "value": "*\n     * Constructor\n     * audioContext, audioStreamsDescription, mode, dialogGain\n     ",
+      "range": [
+        113,
+        206
+      ],
+      "loc": {
+        "start": {
+          "line": 5,
+          "column": 4
+        },
+        "end": {
+          "line": 8,
+          "column": 7
+        }
+      }
+    },
+    {
+      "type": "Block",
+      "value": "*\n     * Set Mode\n     * @param {number} value - 1, 2 or 3\n     ",
+      "range": [
+        412,
+        480
+      ],
+      "loc": {
+        "start": {
+          "line": 14,
+          "column": 4
+        },
+        "end": {
+          "line": 17,
+          "column": 7
+        }
+      }
+    },
+    {
+      "type": "Block",
+      "value": "*\n     * Get Mode\n     ",
+      "range": [
+        540,
+        567
+      ],
+      "loc": {
+        "start": {
+          "line": 21,
+          "column": 4
+        },
+        "end": {
+          "line": 23,
+          "column": 7
+        }
+      }
+    },
+    {
+      "type": "Block",
+      "value": "*\n     * Set audioStreamsDescription\n     ",
+      "range": [
+        621,
+        667
+      ],
+      "loc": {
+        "start": {
+          "line": 27,
+          "column": 4
+        },
+        "end": {
+          "line": 29,
+          "column": 7
+        }
+      }
+    },
+    {
+      "type": "Block",
+      "value": "*\n     * Get audioStreamsDescription\n     ",
+      "range": [
+        765,
+        811
+      ],
+      "loc": {
+        "start": {
+          "line": 33,
+          "column": 4
+        },
+        "end": {
+          "line": 35,
+          "column": 7
+        }
+      }
+    },
+    {
+      "type": "Block",
+      "value": "*\n     * Set dialogGain\n     ",
+      "range": [
+        903,
+        936
+      ],
+      "loc": {
+        "start": {
+          "line": 39,
+          "column": 4
+        },
+        "end": {
+          "line": 41,
+          "column": 7
+        }
+      }
+    },
+    {
+      "type": "Block",
+      "value": "*\n     * Get dialogGain\n     ",
+      "range": [
+        1008,
+        1041
+      ],
+      "loc": {
+        "start": {
+          "line": 45,
+          "column": 4
+        },
+        "end": {
+          "line": 47,
+          "column": 7
+        }
+      }
+    }
+  ]
+}

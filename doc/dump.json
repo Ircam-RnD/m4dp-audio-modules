@@ -1,0 +1,2418 @@
+[
+  {
+    "__docId__": 0,
+    "kind": "file",
+    "static": true,
+    "variation": null,
+    "name": "lib/core/index.js",
+    "memberof": null,
+    "longname": "lib/core/index.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 1,
+    "content": "export default class AbstractNode {\n    /**\n     * AbstractNode constructor\n     * Template for the projet audio nodes: audioContext reference, connect and disconnect methods\n     * @param {AudioContext} audioContext - audioContext instance.\n     */\n    constructor(audioContext){\n        this._audioContext = audioContext;\n        this.input = this._audioContext.createGain();\n        this._ouput = this._audioContext.createGain();\n    }\n    /**\n     * Connect the audio node\n     */\n    connect(node){\n        this._ouput.connect(node)\n    }\n    /**\n     * Disconnect the audio node\n     */\n    disconnect(node){\n        this._ouput.disconnect(node)\n    }\n}\n"
+  },
+  {
+    "__docId__": 1,
+    "kind": "class",
+    "static": true,
+    "variation": null,
+    "name": "AbstractNode",
+    "memberof": "lib/core/index.js",
+    "longname": "lib/core/index.js~AbstractNode",
+    "access": null,
+    "export": true,
+    "importPath": "m4dp-audio-modules/lib/core/index.js",
+    "importStyle": "AbstractNode",
+    "description": null,
+    "lineNumber": 1,
+    "undocument": true,
+    "interface": false
+  },
+  {
+    "__docId__": 2,
+    "kind": "constructor",
+    "static": false,
+    "variation": null,
+    "name": "constructor",
+    "memberof": "lib/core/index.js~AbstractNode",
+    "longname": "lib/core/index.js~AbstractNode#constructor",
+    "access": null,
+    "description": "AbstractNode constructor\nTemplate for the projet audio nodes: audioContext reference, connect and disconnect methods",
+    "lineNumber": 7,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "AudioContext"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "audioContext",
+        "description": "audioContext instance."
+      }
+    ],
+    "generator": false
+  },
+  {
+    "__docId__": 3,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_audioContext",
+    "memberof": "lib/core/index.js~AbstractNode",
+    "longname": "lib/core/index.js~AbstractNode#_audioContext",
+    "access": null,
+    "description": null,
+    "lineNumber": 8,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 4,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "input",
+    "memberof": "lib/core/index.js~AbstractNode",
+    "longname": "lib/core/index.js~AbstractNode#input",
+    "access": null,
+    "description": null,
+    "lineNumber": 9,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 5,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_ouput",
+    "memberof": "lib/core/index.js~AbstractNode",
+    "longname": "lib/core/index.js~AbstractNode#_ouput",
+    "access": null,
+    "description": null,
+    "lineNumber": 10,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 6,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "connect",
+    "memberof": "lib/core/index.js~AbstractNode",
+    "longname": "lib/core/index.js~AbstractNode#connect",
+    "access": null,
+    "description": "Connect the audio node",
+    "lineNumber": 15,
+    "params": [
+      {
+        "name": "node",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "generator": false
+  },
+  {
+    "__docId__": 7,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "disconnect",
+    "memberof": "lib/core/index.js~AbstractNode",
+    "longname": "lib/core/index.js~AbstractNode#disconnect",
+    "access": null,
+    "description": "Disconnect the audio node",
+    "lineNumber": 21,
+    "params": [
+      {
+        "name": "node",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "generator": false
+  },
+  {
+    "__docId__": 8,
+    "kind": "file",
+    "static": true,
+    "variation": null,
+    "name": "lib/dialog-enhancement/index.js",
+    "memberof": null,
+    "longname": "lib/dialog-enhancement/index.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 1,
+    "content": "import AbstractNode from '../core/index.js';\n\n\nexport default class DialogEnhancement extends AbstractNode {\n    /**\n     * Constructor\n     * audioContext, audioStreamsDescription, mode, dialogGain\n     */\n    constructor(audioContext, audioStreamsDescription, mode, dialogGain){\n        super(audioContext);\n        this._mode = mode;\n        this._audioStreamsDescription = audioStreamsDescription;\n    }\n    /**\n     * Set Mode\n     * @param {number} value - 1, 2 or 3\n     */\n    set mode(value){\n        this._mode = value;\n    }\n    /**\n     * Get Mode\n     */\n    get mode(){\n        return this._mode;\n    }\n    /**\n     * Set audioStreamsDescription\n     */\n    set audioStreamsDescription(value){\n        this._audioStreamsDescription = value;\n    }\n    /**\n     * Get audioStreamsDescription\n     */\n    get audioStreamsDescription(){\n        return this._audioStreamsDescription;\n    }\n    /**\n     * Set dialogGain\n     */\n    set dialogGain(value){\n        this._dialogGain = value;\n    }\n    /**\n     * Get dialogGain\n     */\n    get dialogGain(){\n        return this._dialogGain;\n    }\n}\n"
+  },
+  {
+    "__docId__": 9,
+    "kind": "class",
+    "static": true,
+    "variation": null,
+    "name": "DialogEnhancement",
+    "memberof": "lib/dialog-enhancement/index.js",
+    "longname": "lib/dialog-enhancement/index.js~DialogEnhancement",
+    "access": null,
+    "export": true,
+    "importPath": "m4dp-audio-modules/lib/dialog-enhancement/index.js",
+    "importStyle": "DialogEnhancement",
+    "description": null,
+    "lineNumber": 4,
+    "undocument": true,
+    "interface": false,
+    "extends": [
+      "lib/core/index.js~AbstractNode"
+    ]
+  },
+  {
+    "__docId__": 10,
+    "kind": "constructor",
+    "static": false,
+    "variation": null,
+    "name": "constructor",
+    "memberof": "lib/dialog-enhancement/index.js~DialogEnhancement",
+    "longname": "lib/dialog-enhancement/index.js~DialogEnhancement#constructor",
+    "access": null,
+    "description": "Constructor\naudioContext, audioStreamsDescription, mode, dialogGain",
+    "lineNumber": 9,
+    "params": [
+      {
+        "name": "audioContext",
+        "types": [
+          "*"
+        ]
+      },
+      {
+        "name": "audioStreamsDescription",
+        "types": [
+          "*"
+        ]
+      },
+      {
+        "name": "mode",
+        "types": [
+          "*"
+        ]
+      },
+      {
+        "name": "dialogGain",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "generator": false
+  },
+  {
+    "__docId__": 11,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_mode",
+    "memberof": "lib/dialog-enhancement/index.js~DialogEnhancement",
+    "longname": "lib/dialog-enhancement/index.js~DialogEnhancement#_mode",
+    "access": null,
+    "description": null,
+    "lineNumber": 11,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 12,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_audioStreamsDescription",
+    "memberof": "lib/dialog-enhancement/index.js~DialogEnhancement",
+    "longname": "lib/dialog-enhancement/index.js~DialogEnhancement#_audioStreamsDescription",
+    "access": null,
+    "description": null,
+    "lineNumber": 12,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 13,
+    "kind": "set",
+    "static": false,
+    "variation": null,
+    "name": "mode",
+    "memberof": "lib/dialog-enhancement/index.js~DialogEnhancement",
+    "longname": "lib/dialog-enhancement/index.js~DialogEnhancement#mode",
+    "access": null,
+    "description": "Set Mode",
+    "lineNumber": 18,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "number"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "value",
+        "description": "1, 2 or 3"
+      }
+    ],
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 14,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_mode",
+    "memberof": "lib/dialog-enhancement/index.js~DialogEnhancement",
+    "longname": "lib/dialog-enhancement/index.js~DialogEnhancement#_mode",
+    "access": null,
+    "description": null,
+    "lineNumber": 19,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 15,
+    "kind": "get",
+    "static": false,
+    "variation": null,
+    "name": "mode",
+    "memberof": "lib/dialog-enhancement/index.js~DialogEnhancement",
+    "longname": "lib/dialog-enhancement/index.js~DialogEnhancement#mode",
+    "access": null,
+    "description": "Get Mode",
+    "lineNumber": 24,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 16,
+    "kind": "set",
+    "static": false,
+    "variation": null,
+    "name": "audioStreamsDescription",
+    "memberof": "lib/dialog-enhancement/index.js~DialogEnhancement",
+    "longname": "lib/dialog-enhancement/index.js~DialogEnhancement#audioStreamsDescription",
+    "access": null,
+    "description": "Set audioStreamsDescription",
+    "lineNumber": 30,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 17,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_audioStreamsDescription",
+    "memberof": "lib/dialog-enhancement/index.js~DialogEnhancement",
+    "longname": "lib/dialog-enhancement/index.js~DialogEnhancement#_audioStreamsDescription",
+    "access": null,
+    "description": null,
+    "lineNumber": 31,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 18,
+    "kind": "get",
+    "static": false,
+    "variation": null,
+    "name": "audioStreamsDescription",
+    "memberof": "lib/dialog-enhancement/index.js~DialogEnhancement",
+    "longname": "lib/dialog-enhancement/index.js~DialogEnhancement#audioStreamsDescription",
+    "access": null,
+    "description": "Get audioStreamsDescription",
+    "lineNumber": 36,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 19,
+    "kind": "set",
+    "static": false,
+    "variation": null,
+    "name": "dialogGain",
+    "memberof": "lib/dialog-enhancement/index.js~DialogEnhancement",
+    "longname": "lib/dialog-enhancement/index.js~DialogEnhancement#dialogGain",
+    "access": null,
+    "description": "Set dialogGain",
+    "lineNumber": 42,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 20,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_dialogGain",
+    "memberof": "lib/dialog-enhancement/index.js~DialogEnhancement",
+    "longname": "lib/dialog-enhancement/index.js~DialogEnhancement#_dialogGain",
+    "access": null,
+    "description": null,
+    "lineNumber": 43,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 21,
+    "kind": "get",
+    "static": false,
+    "variation": null,
+    "name": "dialogGain",
+    "memberof": "lib/dialog-enhancement/index.js~DialogEnhancement",
+    "longname": "lib/dialog-enhancement/index.js~DialogEnhancement#dialogGain",
+    "access": null,
+    "description": "Get dialogGain",
+    "lineNumber": 48,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 22,
+    "kind": "file",
+    "static": true,
+    "variation": null,
+    "name": "lib/index.js",
+    "memberof": null,
+    "longname": "lib/index.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 1,
+    "content": "import DialogEnhancement from './dialog-enhancement/index.js';\nimport MultichannelSpatialiser from './multichannel-spatialiser/index.js';\nimport NoiseAdaptation from './noise-adaptation/index.js';\nimport ObjectSpatialiserAndMixer from './object-spatialiser-and-mixer/index.js';\nimport SmartFader from './smart-fader/index.js';\n\n\nconst M4DPAudioModules = {\n    \"DialogEnhancement\": DialogEnhancement,\n    \"MultichannelSpatialiser\": MultichannelSpatialiser,\n    \"NoiseAdaptation\": NoiseAdaptation,\n    \"ObjectSpatialiserAndMixer\": ObjectSpatialiserAndMixer,\n    \"SmartFader\": SmartFader\n};\n\n// @fix, Extra ugly, should use export default M4DPAudioModules;\nwindow.M4DPAudioModules = M4DPAudioModules;\n\n\n\n"
+  },
+  {
+    "__docId__": 23,
+    "kind": "variable",
+    "static": true,
+    "variation": null,
+    "name": "M4DPAudioModules",
+    "memberof": "lib/index.js",
+    "longname": "lib/index.js~M4DPAudioModules",
+    "access": null,
+    "export": false,
+    "importPath": "m4dp-audio-modules/lib/index.js",
+    "importStyle": null,
+    "description": null,
+    "lineNumber": 8,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 24,
+    "kind": "file",
+    "static": true,
+    "variation": null,
+    "name": "lib/multichannel-spatialiser/index.js",
+    "memberof": null,
+    "longname": "lib/multichannel-spatialiser/index.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 1,
+    "content": "import AbstractNode from '../core/index.js';\n\n\nexport default class MultichannelSpatialiser extends AbstractNode {\n    constructor(audioContext, outputType = 'headphone', audioStreamsDescription = {}, hrtf, eqPreset, offsetGain, listeningAxis){\n        super(audioContext);\n        this._outputType = outputType;\n        this._audioStreamsDescription = audioStreamsDescription;\n        this._hrtf = hrtf;\n        this._eqPreset = eqPreset;\n        this._offsetGain = offsetGain;\n        this._listeningAxis = listeningAxis;\n    }\n    /**\n     * Set outputType: 'headphone' or 'speaker', 'multicanal'\n     * @todo: automatic for 'multicanal' even if nb of speaker 'wrong'\n     */\n    set outputType(value){\n        this._outputType = value;\n    }\n    /**\n     * Get outputType: 'headphone' or 'speaker'\n     */\n    get outputType(){\n        return this._outputType\n    }\n    /**\n     * Set audio streams description (json)\n     */\n    set audioStreamsDescription(value){\n\n    }\n    /**\n     * Get audio streams description\n     */\n    get audioStreamsDescription(){\n        return _audioStreamsDescription;\n    }\n    /**\n     * Set hrtf\n     * @todo: which kind of value, json?\n     */\n    set hrtf(value){\n        this._hrtf = value;\n    }\n    /**\n     * Get hrtf\n     */\n    get hrtf(){\n        return this._hrtf;\n    }\n    /**\n     * Set eqPreset\n     * @todo: which kind of value, json?\n     * @todo: set it to none to not appy any eq?\n     */\n    set eqPreset(value){\n        this._eqPreset = value;\n    }\n    /**\n     * Get eqPreset\n     */\n    get eqPreset(){\n        return this._eqPreset;\n    }\n    /**\n     * Set offsetGain\n     */\n    set offsetGain(value){\n        this._offsetGain = value;\n    }\n    /**\n     * Get offsetGain\n     */\n    get offsetGain(){\n        return this._offsetGain;\n    }\n    /**\n     * Set listeningAxis\n     */\n    set listeningAxis(value){\n        this._listeningAxis = value;\n    }\n    /**\n     * Get listeningAxis\n     */\n    get listeningAxis(){\n        return this._listeningAxis;\n    }\n}\n"
+  },
+  {
+    "__docId__": 25,
+    "kind": "class",
+    "static": true,
+    "variation": null,
+    "name": "MultichannelSpatialiser",
+    "memberof": "lib/multichannel-spatialiser/index.js",
+    "longname": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser",
+    "access": null,
+    "export": true,
+    "importPath": "m4dp-audio-modules/lib/multichannel-spatialiser/index.js",
+    "importStyle": "MultichannelSpatialiser",
+    "description": null,
+    "lineNumber": 4,
+    "undocument": true,
+    "interface": false,
+    "extends": [
+      "lib/core/index.js~AbstractNode"
+    ]
+  },
+  {
+    "__docId__": 26,
+    "kind": "constructor",
+    "static": false,
+    "variation": null,
+    "name": "constructor",
+    "memberof": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser",
+    "longname": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser#constructor",
+    "access": null,
+    "description": null,
+    "lineNumber": 5,
+    "undocument": true,
+    "params": [
+      {
+        "name": "audioContext",
+        "types": [
+          "*"
+        ]
+      },
+      {
+        "name": "outputType",
+        "optional": true,
+        "types": [
+          "string"
+        ],
+        "defaultRaw": "headphone",
+        "defaultValue": "headphone"
+      },
+      {
+        "name": "audioStreamsDescription",
+        "optional": true,
+        "types": [
+          "{}"
+        ],
+        "defaultRaw": {},
+        "defaultValue": "{}"
+      },
+      {
+        "name": "hrtf",
+        "types": [
+          "*"
+        ]
+      },
+      {
+        "name": "eqPreset",
+        "types": [
+          "*"
+        ]
+      },
+      {
+        "name": "offsetGain",
+        "types": [
+          "*"
+        ]
+      },
+      {
+        "name": "listeningAxis",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "generator": false
+  },
+  {
+    "__docId__": 27,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_outputType",
+    "memberof": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser",
+    "longname": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser#_outputType",
+    "access": null,
+    "description": null,
+    "lineNumber": 7,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 28,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_audioStreamsDescription",
+    "memberof": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser",
+    "longname": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser#_audioStreamsDescription",
+    "access": null,
+    "description": null,
+    "lineNumber": 8,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 29,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_hrtf",
+    "memberof": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser",
+    "longname": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser#_hrtf",
+    "access": null,
+    "description": null,
+    "lineNumber": 9,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 30,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_eqPreset",
+    "memberof": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser",
+    "longname": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser#_eqPreset",
+    "access": null,
+    "description": null,
+    "lineNumber": 10,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 31,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_offsetGain",
+    "memberof": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser",
+    "longname": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser#_offsetGain",
+    "access": null,
+    "description": null,
+    "lineNumber": 11,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 32,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_listeningAxis",
+    "memberof": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser",
+    "longname": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser#_listeningAxis",
+    "access": null,
+    "description": null,
+    "lineNumber": 12,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 33,
+    "kind": "set",
+    "static": false,
+    "variation": null,
+    "name": "outputType",
+    "memberof": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser",
+    "longname": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser#outputType",
+    "access": null,
+    "description": "Set outputType: 'headphone' or 'speaker', 'multicanal'\n@todo: automatic for 'multicanal' even if nb of speaker 'wrong'",
+    "lineNumber": 18,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 34,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_outputType",
+    "memberof": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser",
+    "longname": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser#_outputType",
+    "access": null,
+    "description": null,
+    "lineNumber": 19,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 35,
+    "kind": "get",
+    "static": false,
+    "variation": null,
+    "name": "outputType",
+    "memberof": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser",
+    "longname": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser#outputType",
+    "access": null,
+    "description": "Get outputType: 'headphone' or 'speaker'",
+    "lineNumber": 24,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 36,
+    "kind": "set",
+    "static": false,
+    "variation": null,
+    "name": "audioStreamsDescription",
+    "memberof": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser",
+    "longname": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser#audioStreamsDescription",
+    "access": null,
+    "description": "Set audio streams description (json)",
+    "lineNumber": 30,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 37,
+    "kind": "get",
+    "static": false,
+    "variation": null,
+    "name": "audioStreamsDescription",
+    "memberof": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser",
+    "longname": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser#audioStreamsDescription",
+    "access": null,
+    "description": "Get audio streams description",
+    "lineNumber": 36,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 38,
+    "kind": "set",
+    "static": false,
+    "variation": null,
+    "name": "hrtf",
+    "memberof": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser",
+    "longname": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser#hrtf",
+    "access": null,
+    "description": "Set hrtf\n@todo: which kind of value, json?",
+    "lineNumber": 43,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 39,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_hrtf",
+    "memberof": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser",
+    "longname": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser#_hrtf",
+    "access": null,
+    "description": null,
+    "lineNumber": 44,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 40,
+    "kind": "get",
+    "static": false,
+    "variation": null,
+    "name": "hrtf",
+    "memberof": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser",
+    "longname": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser#hrtf",
+    "access": null,
+    "description": "Get hrtf",
+    "lineNumber": 49,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 41,
+    "kind": "set",
+    "static": false,
+    "variation": null,
+    "name": "eqPreset",
+    "memberof": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser",
+    "longname": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser#eqPreset",
+    "access": null,
+    "description": "Set eqPreset\n@todo: which kind of value, json?\n@todo: set it to none to not appy any eq?",
+    "lineNumber": 57,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 42,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_eqPreset",
+    "memberof": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser",
+    "longname": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser#_eqPreset",
+    "access": null,
+    "description": null,
+    "lineNumber": 58,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 43,
+    "kind": "get",
+    "static": false,
+    "variation": null,
+    "name": "eqPreset",
+    "memberof": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser",
+    "longname": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser#eqPreset",
+    "access": null,
+    "description": "Get eqPreset",
+    "lineNumber": 63,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 44,
+    "kind": "set",
+    "static": false,
+    "variation": null,
+    "name": "offsetGain",
+    "memberof": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser",
+    "longname": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser#offsetGain",
+    "access": null,
+    "description": "Set offsetGain",
+    "lineNumber": 69,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 45,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_offsetGain",
+    "memberof": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser",
+    "longname": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser#_offsetGain",
+    "access": null,
+    "description": null,
+    "lineNumber": 70,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 46,
+    "kind": "get",
+    "static": false,
+    "variation": null,
+    "name": "offsetGain",
+    "memberof": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser",
+    "longname": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser#offsetGain",
+    "access": null,
+    "description": "Get offsetGain",
+    "lineNumber": 75,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 47,
+    "kind": "set",
+    "static": false,
+    "variation": null,
+    "name": "listeningAxis",
+    "memberof": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser",
+    "longname": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser#listeningAxis",
+    "access": null,
+    "description": "Set listeningAxis",
+    "lineNumber": 81,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 48,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_listeningAxis",
+    "memberof": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser",
+    "longname": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser#_listeningAxis",
+    "access": null,
+    "description": null,
+    "lineNumber": 82,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 49,
+    "kind": "get",
+    "static": false,
+    "variation": null,
+    "name": "listeningAxis",
+    "memberof": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser",
+    "longname": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser#listeningAxis",
+    "access": null,
+    "description": "Get listeningAxis",
+    "lineNumber": 87,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 50,
+    "kind": "file",
+    "static": true,
+    "variation": null,
+    "name": "lib/noise-adaptation/index.js",
+    "memberof": null,
+    "longname": "lib/noise-adaptation/index.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 1,
+    "content": "import AbstractNode from '../core/index.js';\n\n\nexport default class NoiseAdaptation extends AbstractNode {\n    constructor(audioContext, headphone = false){\n        super(audioContext);\n        this._headphone = headphone;\n    }\n    /**\n     * Process:\n     * @todo: track noise, add compression, improve voice if no headphone\n     */\n    _process(){\n\n    }\n    /**\n     * Set headphone\n     * @param {boolean} value - true is headphone, else, false.\n     */\n    set headphone(value){\n        this._headphone = value\n    }\n    /**\n     * Get headphone, return True if headphone is connected, else, false\n     */\n    get headphone(){\n        return this._headphone;\n    }\n}\n"
+  },
+  {
+    "__docId__": 51,
+    "kind": "class",
+    "static": true,
+    "variation": null,
+    "name": "NoiseAdaptation",
+    "memberof": "lib/noise-adaptation/index.js",
+    "longname": "lib/noise-adaptation/index.js~NoiseAdaptation",
+    "access": null,
+    "export": true,
+    "importPath": "m4dp-audio-modules/lib/noise-adaptation/index.js",
+    "importStyle": "NoiseAdaptation",
+    "description": null,
+    "lineNumber": 4,
+    "undocument": true,
+    "interface": false,
+    "extends": [
+      "lib/core/index.js~AbstractNode"
+    ]
+  },
+  {
+    "__docId__": 52,
+    "kind": "constructor",
+    "static": false,
+    "variation": null,
+    "name": "constructor",
+    "memberof": "lib/noise-adaptation/index.js~NoiseAdaptation",
+    "longname": "lib/noise-adaptation/index.js~NoiseAdaptation#constructor",
+    "access": null,
+    "description": null,
+    "lineNumber": 5,
+    "undocument": true,
+    "params": [
+      {
+        "name": "audioContext",
+        "types": [
+          "*"
+        ]
+      },
+      {
+        "name": "headphone",
+        "optional": true,
+        "types": [
+          "boolean"
+        ],
+        "defaultRaw": false,
+        "defaultValue": "false"
+      }
+    ],
+    "generator": false
+  },
+  {
+    "__docId__": 53,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_headphone",
+    "memberof": "lib/noise-adaptation/index.js~NoiseAdaptation",
+    "longname": "lib/noise-adaptation/index.js~NoiseAdaptation#_headphone",
+    "access": null,
+    "description": null,
+    "lineNumber": 7,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 54,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "_process",
+    "memberof": "lib/noise-adaptation/index.js~NoiseAdaptation",
+    "longname": "lib/noise-adaptation/index.js~NoiseAdaptation#_process",
+    "access": null,
+    "description": "Process:\n@todo: track noise, add compression, improve voice if no headphone",
+    "lineNumber": 13,
+    "params": [],
+    "generator": false
+  },
+  {
+    "__docId__": 55,
+    "kind": "set",
+    "static": false,
+    "variation": null,
+    "name": "headphone",
+    "memberof": "lib/noise-adaptation/index.js~NoiseAdaptation",
+    "longname": "lib/noise-adaptation/index.js~NoiseAdaptation#headphone",
+    "access": null,
+    "description": "Set headphone",
+    "lineNumber": 20,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "boolean"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "value",
+        "description": "true is headphone, else, false."
+      }
+    ],
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 56,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_headphone",
+    "memberof": "lib/noise-adaptation/index.js~NoiseAdaptation",
+    "longname": "lib/noise-adaptation/index.js~NoiseAdaptation#_headphone",
+    "access": null,
+    "description": null,
+    "lineNumber": 21,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 57,
+    "kind": "get",
+    "static": false,
+    "variation": null,
+    "name": "headphone",
+    "memberof": "lib/noise-adaptation/index.js~NoiseAdaptation",
+    "longname": "lib/noise-adaptation/index.js~NoiseAdaptation#headphone",
+    "access": null,
+    "description": "Get headphone, return True if headphone is connected, else, false",
+    "lineNumber": 26,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 58,
+    "kind": "file",
+    "static": true,
+    "variation": null,
+    "name": "lib/object-spatialiser-and-mixer/index.js",
+    "memberof": null,
+    "longname": "lib/object-spatialiser-and-mixer/index.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 1,
+    "content": "import MultichannelSpatialiser from '../multichannel-spatialiser/index.js';\n\n\nexport default class ObjectSpatialiserAndMixer extends MultichannelSpatialiser {\n    constructor(audioContext, outputType = 'headphone', audioStreamsDescription = {}, hrtf, eqPreset, offsetGain, listeningAxis){\n        super(audioContext, outputType, audioStreamsDescription, hrtf, eqPreset, offsetGain, listeningAxis);\n    }\n    /*\n     * Set the position of the sound\n     */\n    setPosition(azimuth, elevation, distance){\n        this._azimuth = azimuth;\n        this._elevation = elevation;\n        this._distance = distance;\n    }\n    /*\n     * Get the position of the sound\n     */\n    getPosition(){\n        return {'azimuth': this._azimuth, 'elevation': this._elevation, 'distance': this._distance};\n    }\n    /**\n     * Process: \"position\" + \"gain\"\n     * @todo: how to automatically set the gain, how to have RMS from \"the other signal\" here\n     */\n     _process(){\n     }\n}\n"
+  },
+  {
+    "__docId__": 59,
+    "kind": "class",
+    "static": true,
+    "variation": null,
+    "name": "ObjectSpatialiserAndMixer",
+    "memberof": "lib/object-spatialiser-and-mixer/index.js",
+    "longname": "lib/object-spatialiser-and-mixer/index.js~ObjectSpatialiserAndMixer",
+    "access": null,
+    "export": true,
+    "importPath": "m4dp-audio-modules/lib/object-spatialiser-and-mixer/index.js",
+    "importStyle": "ObjectSpatialiserAndMixer",
+    "description": null,
+    "lineNumber": 4,
+    "undocument": true,
+    "interface": false,
+    "extends": [
+      "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser"
+    ]
+  },
+  {
+    "__docId__": 60,
+    "kind": "constructor",
+    "static": false,
+    "variation": null,
+    "name": "constructor",
+    "memberof": "lib/object-spatialiser-and-mixer/index.js~ObjectSpatialiserAndMixer",
+    "longname": "lib/object-spatialiser-and-mixer/index.js~ObjectSpatialiserAndMixer#constructor",
+    "access": null,
+    "description": null,
+    "lineNumber": 5,
+    "undocument": true,
+    "params": [
+      {
+        "name": "audioContext",
+        "types": [
+          "*"
+        ]
+      },
+      {
+        "name": "outputType",
+        "optional": true,
+        "types": [
+          "string"
+        ],
+        "defaultRaw": "headphone",
+        "defaultValue": "headphone"
+      },
+      {
+        "name": "audioStreamsDescription",
+        "optional": true,
+        "types": [
+          "{}"
+        ],
+        "defaultRaw": {},
+        "defaultValue": "{}"
+      },
+      {
+        "name": "hrtf",
+        "types": [
+          "*"
+        ]
+      },
+      {
+        "name": "eqPreset",
+        "types": [
+          "*"
+        ]
+      },
+      {
+        "name": "offsetGain",
+        "types": [
+          "*"
+        ]
+      },
+      {
+        "name": "listeningAxis",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "generator": false
+  },
+  {
+    "__docId__": 61,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "setPosition",
+    "memberof": "lib/object-spatialiser-and-mixer/index.js~ObjectSpatialiserAndMixer",
+    "longname": "lib/object-spatialiser-and-mixer/index.js~ObjectSpatialiserAndMixer#setPosition",
+    "access": null,
+    "description": null,
+    "lineNumber": 11,
+    "undocument": true,
+    "params": [
+      {
+        "name": "azimuth",
+        "types": [
+          "*"
+        ]
+      },
+      {
+        "name": "elevation",
+        "types": [
+          "*"
+        ]
+      },
+      {
+        "name": "distance",
+        "types": [
+          "*"
+        ]
+      }
+    ],
+    "generator": false
+  },
+  {
+    "__docId__": 62,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_azimuth",
+    "memberof": "lib/object-spatialiser-and-mixer/index.js~ObjectSpatialiserAndMixer",
+    "longname": "lib/object-spatialiser-and-mixer/index.js~ObjectSpatialiserAndMixer#_azimuth",
+    "access": null,
+    "description": null,
+    "lineNumber": 12,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 63,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_elevation",
+    "memberof": "lib/object-spatialiser-and-mixer/index.js~ObjectSpatialiserAndMixer",
+    "longname": "lib/object-spatialiser-and-mixer/index.js~ObjectSpatialiserAndMixer#_elevation",
+    "access": null,
+    "description": null,
+    "lineNumber": 13,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 64,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_distance",
+    "memberof": "lib/object-spatialiser-and-mixer/index.js~ObjectSpatialiserAndMixer",
+    "longname": "lib/object-spatialiser-and-mixer/index.js~ObjectSpatialiserAndMixer#_distance",
+    "access": null,
+    "description": null,
+    "lineNumber": 14,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 65,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "getPosition",
+    "memberof": "lib/object-spatialiser-and-mixer/index.js~ObjectSpatialiserAndMixer",
+    "longname": "lib/object-spatialiser-and-mixer/index.js~ObjectSpatialiserAndMixer#getPosition",
+    "access": null,
+    "description": null,
+    "lineNumber": 19,
+    "undocument": true,
+    "params": [],
+    "return": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 66,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "_process",
+    "memberof": "lib/object-spatialiser-and-mixer/index.js~ObjectSpatialiserAndMixer",
+    "longname": "lib/object-spatialiser-and-mixer/index.js~ObjectSpatialiserAndMixer#_process",
+    "access": null,
+    "description": "Process: \"position\" + \"gain\"\n@todo: how to automatically set the gain, how to have RMS from \"the other signal\" here",
+    "lineNumber": 26,
+    "params": [],
+    "generator": false
+  },
+  {
+    "__docId__": 67,
+    "kind": "file",
+    "static": true,
+    "variation": null,
+    "name": "lib/smart-fader/index.js",
+    "memberof": null,
+    "longname": "lib/smart-fader/index.js",
+    "access": null,
+    "description": null,
+    "lineNumber": 1,
+    "content": "import AbstractNode from '../core/index.js';\n\n\nexport default class SmartFader extends AbstractNode {\n    /**\n     * SmartFade constructor\n     * @param {AudioContext} audioContext - audioContext instance.\n     * @param {number} db - db value for the SmartFader.\n     * @param {number} loudness - loudness value.\n     * @param {number} maxTruePeak - maxTruePeak value.\n     */\n    constructor(audioContext, db = undefined, loudness = undefined, maxTruePeak = undefined){\n        super(audioContext);\n        this._db = db;\n        this._loudness = loudness;\n        this._maxTruePeak = maxTruePeak;\n        this._dynamicCompressionState = undefined;\n    }\n    /**\n     * Set the db value\n     */\n    set db(value){\n        this._db = value;\n    }\n    /**\n     * Get the db value\n     */\n    get db(){\n        return this._db;\n    }\n    /**\n     * Set the loudness value\n     */\n    set loudness(value){\n        this._loudness = value;\n    }\n    /**\n     * Get the loudness value\n     */\n    get loudness(){\n        return this._loudness\n    }\n    /**\n     * Set the MaxTruePeak value\n     */\n    set maxTruePeak(value){\n        this._maxTruePeak = value;\n    }\n    /**\n     * Get the MaxTruePeak value\n     */\n    get maxTruePeak(){\n        return this._maxTruePeak;\n    }\n    /**\n     * Get the dynamic compression state\n     */\n    get dynamicCompressionState(){\n        return this._dynamicCompressionState;\n    }\n    _process(){\n\n    }\n}\n"
+  },
+  {
+    "__docId__": 68,
+    "kind": "class",
+    "static": true,
+    "variation": null,
+    "name": "SmartFader",
+    "memberof": "lib/smart-fader/index.js",
+    "longname": "lib/smart-fader/index.js~SmartFader",
+    "access": null,
+    "export": true,
+    "importPath": "m4dp-audio-modules/lib/smart-fader/index.js",
+    "importStyle": "SmartFader",
+    "description": null,
+    "lineNumber": 4,
+    "undocument": true,
+    "interface": false,
+    "extends": [
+      "lib/core/index.js~AbstractNode"
+    ]
+  },
+  {
+    "__docId__": 69,
+    "kind": "constructor",
+    "static": false,
+    "variation": null,
+    "name": "constructor",
+    "memberof": "lib/smart-fader/index.js~SmartFader",
+    "longname": "lib/smart-fader/index.js~SmartFader#constructor",
+    "access": null,
+    "description": "SmartFade constructor",
+    "lineNumber": 12,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "AudioContext"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "audioContext",
+        "description": "audioContext instance."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "number"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "db",
+        "description": "db value for the SmartFader."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "number"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "loudness",
+        "description": "loudness value."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "number"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "maxTruePeak",
+        "description": "maxTruePeak value."
+      }
+    ],
+    "generator": false
+  },
+  {
+    "__docId__": 70,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_db",
+    "memberof": "lib/smart-fader/index.js~SmartFader",
+    "longname": "lib/smart-fader/index.js~SmartFader#_db",
+    "access": null,
+    "description": null,
+    "lineNumber": 14,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 71,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_loudness",
+    "memberof": "lib/smart-fader/index.js~SmartFader",
+    "longname": "lib/smart-fader/index.js~SmartFader#_loudness",
+    "access": null,
+    "description": null,
+    "lineNumber": 15,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 72,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_maxTruePeak",
+    "memberof": "lib/smart-fader/index.js~SmartFader",
+    "longname": "lib/smart-fader/index.js~SmartFader#_maxTruePeak",
+    "access": null,
+    "description": null,
+    "lineNumber": 16,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 73,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_dynamicCompressionState",
+    "memberof": "lib/smart-fader/index.js~SmartFader",
+    "longname": "lib/smart-fader/index.js~SmartFader#_dynamicCompressionState",
+    "access": null,
+    "description": null,
+    "lineNumber": 17,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 74,
+    "kind": "set",
+    "static": false,
+    "variation": null,
+    "name": "db",
+    "memberof": "lib/smart-fader/index.js~SmartFader",
+    "longname": "lib/smart-fader/index.js~SmartFader#db",
+    "access": null,
+    "description": "Set the db value",
+    "lineNumber": 22,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 75,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_db",
+    "memberof": "lib/smart-fader/index.js~SmartFader",
+    "longname": "lib/smart-fader/index.js~SmartFader#_db",
+    "access": null,
+    "description": null,
+    "lineNumber": 23,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 76,
+    "kind": "get",
+    "static": false,
+    "variation": null,
+    "name": "db",
+    "memberof": "lib/smart-fader/index.js~SmartFader",
+    "longname": "lib/smart-fader/index.js~SmartFader#db",
+    "access": null,
+    "description": "Get the db value",
+    "lineNumber": 28,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 77,
+    "kind": "set",
+    "static": false,
+    "variation": null,
+    "name": "loudness",
+    "memberof": "lib/smart-fader/index.js~SmartFader",
+    "longname": "lib/smart-fader/index.js~SmartFader#loudness",
+    "access": null,
+    "description": "Set the loudness value",
+    "lineNumber": 34,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 78,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_loudness",
+    "memberof": "lib/smart-fader/index.js~SmartFader",
+    "longname": "lib/smart-fader/index.js~SmartFader#_loudness",
+    "access": null,
+    "description": null,
+    "lineNumber": 35,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 79,
+    "kind": "get",
+    "static": false,
+    "variation": null,
+    "name": "loudness",
+    "memberof": "lib/smart-fader/index.js~SmartFader",
+    "longname": "lib/smart-fader/index.js~SmartFader#loudness",
+    "access": null,
+    "description": "Get the loudness value",
+    "lineNumber": 40,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 80,
+    "kind": "set",
+    "static": false,
+    "variation": null,
+    "name": "maxTruePeak",
+    "memberof": "lib/smart-fader/index.js~SmartFader",
+    "longname": "lib/smart-fader/index.js~SmartFader#maxTruePeak",
+    "access": null,
+    "description": "Set the MaxTruePeak value",
+    "lineNumber": 46,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 81,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_maxTruePeak",
+    "memberof": "lib/smart-fader/index.js~SmartFader",
+    "longname": "lib/smart-fader/index.js~SmartFader#_maxTruePeak",
+    "access": null,
+    "description": null,
+    "lineNumber": 47,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 82,
+    "kind": "get",
+    "static": false,
+    "variation": null,
+    "name": "maxTruePeak",
+    "memberof": "lib/smart-fader/index.js~SmartFader",
+    "longname": "lib/smart-fader/index.js~SmartFader#maxTruePeak",
+    "access": null,
+    "description": "Get the MaxTruePeak value",
+    "lineNumber": 52,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 83,
+    "kind": "get",
+    "static": false,
+    "variation": null,
+    "name": "dynamicCompressionState",
+    "memberof": "lib/smart-fader/index.js~SmartFader",
+    "longname": "lib/smart-fader/index.js~SmartFader#dynamicCompressionState",
+    "access": null,
+    "description": "Get the dynamic compression state",
+    "lineNumber": 58,
+    "type": {
+      "types": [
+        "*"
+      ]
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 84,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "_process",
+    "memberof": "lib/smart-fader/index.js~SmartFader",
+    "longname": "lib/smart-fader/index.js~SmartFader#_process",
+    "access": null,
+    "description": null,
+    "lineNumber": 61,
+    "undocument": true,
+    "params": [],
+    "generator": false
+  },
+  {
+    "__docId__": 86,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Infinity",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Infinity",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Infinity",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 87,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "NaN",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/NaN",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~NaN",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 88,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "undefined",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/undefined",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~undefined",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 89,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "null",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/null",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~null",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 90,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Object",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Object",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 91,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "object",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~object",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 92,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Function",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Function",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 93,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "function",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~function",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 94,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Boolean",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Boolean",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 95,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "boolean",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Boolean",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~boolean",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 96,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Symbol",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Symbol",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 97,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Error",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Error",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 98,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "EvalError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/EvalError",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~EvalError",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 99,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "InternalError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/InternalError",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~InternalError",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 100,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "RangeError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RangeError",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~RangeError",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 101,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "ReferenceError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ReferenceError",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~ReferenceError",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 102,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "SyntaxError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/SyntaxError",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~SyntaxError",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 103,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "TypeError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/TypeError",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~TypeError",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 104,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "URIError",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/URIError",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~URIError",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 105,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Number",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Number",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 106,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "number",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~number",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 107,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Date",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Date",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 108,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "String",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~String",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 109,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "string",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~string",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 110,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "RegExp",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~RegExp",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 111,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Array",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 112,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Int8Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int8Array",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Int8Array",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 113,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Uint8Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Uint8Array",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 114,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Uint8ClampedArray",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8ClampedArray",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Uint8ClampedArray",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 115,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Int16Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int16Array",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Int16Array",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 116,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Uint16Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint16Array",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Uint16Array",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 117,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Int32Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Int32Array",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Int32Array",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 118,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Uint32Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint32Array",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Uint32Array",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 119,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Float32Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float32Array",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Float32Array",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 120,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Float64Array",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Float64Array",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Float64Array",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 121,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Map",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Map",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 122,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Set",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Set",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 123,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "WeakMap",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakMap",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~WeakMap",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 124,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "WeakSet",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakSet",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~WeakSet",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 125,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "ArrayBuffer",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/ArrayBuffer",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~ArrayBuffer",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 126,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "DataView",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/DataView",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~DataView",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 127,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "JSON",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~JSON",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 128,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Promise",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Promise",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 129,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Generator",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Generator",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Generator",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 130,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "GeneratorFunction",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/GeneratorFunction",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~GeneratorFunction",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 131,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Reflect",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Reflect",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Reflect",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 132,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Proxy",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy",
+    "memberof": "BuiltinExternal/ECMAScriptExternal.js",
+    "longname": "BuiltinExternal/ECMAScriptExternal.js~Proxy",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 134,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "CanvasRenderingContext2D",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D",
+    "memberof": "BuiltinExternal/WebAPIExternal.js",
+    "longname": "BuiltinExternal/WebAPIExternal.js~CanvasRenderingContext2D",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 135,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "DocumentFragment",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/DocumentFragment",
+    "memberof": "BuiltinExternal/WebAPIExternal.js",
+    "longname": "BuiltinExternal/WebAPIExternal.js~DocumentFragment",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 136,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Element",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/Element",
+    "memberof": "BuiltinExternal/WebAPIExternal.js",
+    "longname": "BuiltinExternal/WebAPIExternal.js~Element",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 137,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Event",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/Event",
+    "memberof": "BuiltinExternal/WebAPIExternal.js",
+    "longname": "BuiltinExternal/WebAPIExternal.js~Event",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 138,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "Node",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/Node",
+    "memberof": "BuiltinExternal/WebAPIExternal.js",
+    "longname": "BuiltinExternal/WebAPIExternal.js~Node",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 139,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "NodeList",
+    "externalLink": "https://developer.mozilla.org/en-US/docs/Web/API/NodeList",
+    "memberof": "BuiltinExternal/WebAPIExternal.js",
+    "longname": "BuiltinExternal/WebAPIExternal.js~NodeList",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  },
+  {
+    "__docId__": 140,
+    "kind": "external",
+    "static": true,
+    "variation": null,
+    "name": "XMLHttpRequest",
+    "externalLink": "https://developer.mozilla.org/en/docs/Web/API/XMLHttpRequest",
+    "memberof": "BuiltinExternal/WebAPIExternal.js",
+    "longname": "BuiltinExternal/WebAPIExternal.js~XMLHttpRequest",
+    "access": null,
+    "description": null,
+    "builtinExternal": true
+  }
+]

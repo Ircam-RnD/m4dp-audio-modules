@@ -1,0 +1,55 @@
+{
+  "coverage": "72.72%",
+  "expectCount": 44,
+  "actualCount": 32,
+  "files": {
+    "lib/core/index.js": {
+      "expectCount": 5,
+      "actualCount": 3,
+      "undocumentLines": [
+        1,
+        9
+      ]
+    },
+    "lib/dialog-enhancement/index.js": {
+      "expectCount": 8,
+      "actualCount": 7,
+      "undocumentLines": [
+        4
+      ]
+    },
+    "lib/multichannel-spatialiser/index.js": {
+      "expectCount": 14,
+      "actualCount": 12,
+      "undocumentLines": [
+        4,
+        5
+      ]
+    },
+    "lib/noise-adaptation/index.js": {
+      "expectCount": 4,
+      "actualCount": 2,
+      "undocumentLines": [
+        4,
+        5
+      ]
+    },
+    "lib/object-spatialiser-and-mixer/index.js": {
+      "expectCount": 4,
+      "actualCount": 0,
+      "undocumentLines": [
+        4,
+        5,
+        19,
+        11
+      ]
+    },
+    "lib/smart-fader/index.js": {
+      "expectCount": 9,
+      "actualCount": 8,
+      "undocumentLines": [
+        4
+      ]
+    }
+  }
+}
