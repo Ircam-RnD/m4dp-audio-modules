@@ -33,6 +33,9 @@
   <ul>
     
   <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">core</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/lib/core/index.js~AbstractNode.html">AbstractNode</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-AudioStreamsDescription">AudioStreamsDescription</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-EqPreset">EqPreset</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-HRTF">HRTF</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">dialog-enhancement</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/lib/dialog-enhancement/index.js~DialogEnhancement.html">DialogEnhancement</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">multichannel-spatialiser</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/lib/multichannel-spatialiser/index.js~MultichannelSpatialiser.html">MultichannelSpatialiser</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">noise-adaptation</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/lib/noise-adaptation/index.js~NoiseAdaptation.html">NoiseAdaptation</a></span></span></li>
@@ -48,11 +51,11 @@
 
 export default class SmartFader extends AbstractNode {
     /**
-     * SmartFade constructor
      * @param {AudioContext} audioContext - audioContext instance.
      * @param {number} db - db value for the SmartFader.
      * @param {number} loudness - loudness value.
      * @param {number} maxTruePeak - maxTruePeak value.
+     * @todo give range of accepted values
      */
     constructor(audioContext, db = undefined, loudness = undefined, maxTruePeak = undefined){
         super(audioContext);
@@ -63,42 +66,52 @@ export default class SmartFader extends AbstractNode {
     }
     /**
      * Set the db value
+     * @todo give range of accepted values
+     * @type {number}
      */
     set db(value){
         this._db = value;
     }
     /**
      * Get the db value
+     * @type {number}
      */
     get db(){
         return this._db;
     }
     /**
      * Set the loudness value
+     * @todo give range of accepted values
+     * @type {number}
      */
     set loudness(value){
         this._loudness = value;
     }
     /**
      * Get the loudness value
+     * @type {number}
      */
     get loudness(){
         return this._loudness
     }
     /**
      * Set the MaxTruePeak value
+     * @todo give range of accepted values
+     * @type {number}
      */
     set maxTruePeak(value){
         this._maxTruePeak = value;
     }
     /**
      * Get the MaxTruePeak value
+     * @type {number}
      */
     get maxTruePeak(){
         return this._maxTruePeak;
     }
     /**
      * Get the dynamic compression state
+     * @type {number}
      */
     get dynamicCompressionState(){
         return this._dynamicCompressionState;

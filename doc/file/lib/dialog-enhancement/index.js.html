@@ -33,6 +33,9 @@
   <ul>
     
   <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">core</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/lib/core/index.js~AbstractNode.html">AbstractNode</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-AudioStreamsDescription">AudioStreamsDescription</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-EqPreset">EqPreset</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-HRTF">HRTF</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">dialog-enhancement</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/lib/dialog-enhancement/index.js~DialogEnhancement.html">DialogEnhancement</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">multichannel-spatialiser</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/lib/multichannel-spatialiser/index.js~MultichannelSpatialiser.html">MultichannelSpatialiser</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">noise-adaptation</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/lib/noise-adaptation/index.js~NoiseAdaptation.html">NoiseAdaptation</a></span></span></li>
@@ -48,8 +51,10 @@
 
 export default class DialogEnhancement extends AbstractNode {
     /**
-     * Constructor
-     * audioContext, audioStreamsDescription, mode, dialogGain
+     * @param {AudioContext} audioContext - audioContext instance.
+     * @param {AudioStreamsDescription} audioStreamsDescription - audioStreamsDescription.
+     * @param {number} mode - mode
+     * @param {number} dialogGain - dialog gain
      */
     constructor(audioContext, audioStreamsDescription, mode, dialogGain){
         super(audioContext);
@@ -57,43 +62,51 @@ export default class DialogEnhancement extends AbstractNode {
         this._audioStreamsDescription = audioStreamsDescription;
     }
     /**
-     * Set Mode
-     * @param {number} value - 1, 2 or 3
+     * Set Mode - value is 1, 2 or 3
+     * @type {number}
      */
     set mode(value){
         this._mode = value;
     }
     /**
-     * Get Mode
+     * Get Mode - value is 1, 2 or 3
+     * @type {number}
      */
     get mode(){
         return this._mode;
     }
     /**
      * Set audioStreamsDescription
+     * @type {AudioStreamsDescription}
      */
     set audioStreamsDescription(value){
         this._audioStreamsDescription = value;
     }
     /**
      * Get audioStreamsDescription
+     * @type {AudioStreamsDescription}
      */
     get audioStreamsDescription(){
         return this._audioStreamsDescription;
     }
     /**
      * Set dialogGain
+     * @type {number}
+     * @todo give range of accepted values
      */
     set dialogGain(value){
         this._dialogGain = value;
     }
     /**
      * Get dialogGain
+     * @type {number}
+     * @todo give range of accepted values
      */
     get dialogGain(){
         return this._dialogGain;
     }
 }
+
 </code></pre>
 
 </div>

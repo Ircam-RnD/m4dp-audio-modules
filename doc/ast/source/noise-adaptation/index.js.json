@@ -123,16 +123,16 @@
                 "type": "Identifier",
                 "name": "constructor",
                 "range": [
-                  111,
-                  122
+                  262,
+                  273
                 ],
                 "loc": {
                   "start": {
-                    "line": 5,
+                    "line": 9,
                     "column": 4
                   },
                   "end": {
-                    "line": 5,
+                    "line": 9,
                     "column": 15
                   }
                 }
@@ -145,16 +145,16 @@
                     "type": "Identifier",
                     "name": "audioContext",
                     "range": [
-                      123,
-                      135
+                      274,
+                      286
                     ],
                     "loc": {
                       "start": {
-                        "line": 5,
+                        "line": 9,
                         "column": 16
                       },
                       "end": {
-                        "line": 5,
+                        "line": 9,
                         "column": 28
                       }
                     }
@@ -165,16 +165,16 @@
                       "type": "Identifier",
                       "name": "headphone",
                       "range": [
-                        137,
-                        146
+                        288,
+                        297
                       ],
                       "loc": {
                         "start": {
-                          "line": 5,
+                          "line": 9,
                           "column": 30
                         },
                         "end": {
-                          "line": 5,
+                          "line": 9,
                           "column": 39
                         }
                       }
@@ -184,31 +184,31 @@
                       "value": false,
                       "raw": "false",
                       "range": [
-                        149,
-                        154
+                        300,
+                        305
                       ],
                       "loc": {
                         "start": {
-                          "line": 5,
+                          "line": 9,
                           "column": 42
                         },
                         "end": {
-                          "line": 5,
+                          "line": 9,
                           "column": 47
                         }
                       }
                     },
                     "range": [
-                      137,
-                      154
+                      288,
+                      305
                     ],
                     "loc": {
                       "start": {
-                        "line": 5,
+                        "line": 9,
                         "column": 30
                       },
                       "end": {
-                        "line": 5,
+                        "line": 9,
                         "column": 47
                       }
                     }
@@ -224,16 +224,16 @@
                         "callee": {
                           "type": "Super",
                           "range": [
-                            165,
-                            170
+                            316,
+                            321
                           ],
                           "loc": {
                             "start": {
-                              "line": 6,
+                              "line": 10,
                               "column": 8
                             },
                             "end": {
-                              "line": 6,
+                              "line": 10,
                               "column": 13
                             }
                           }
@@ -243,47 +243,47 @@
                             "type": "Identifier",
                             "name": "audioContext",
                             "range": [
-                              171,
-                              183
+                              322,
+                              334
                             ],
                             "loc": {
                               "start": {
-                                "line": 6,
+                                "line": 10,
                                 "column": 14
                               },
                               "end": {
-                                "line": 6,
+                                "line": 10,
                                 "column": 26
                               }
                             }
                           }
                         ],
                         "range": [
-                          165,
-                          184
+                          316,
+                          335
                         ],
                         "loc": {
                           "start": {
-                            "line": 6,
+                            "line": 10,
                             "column": 8
                           },
                           "end": {
-                            "line": 6,
+                            "line": 10,
                             "column": 27
                           }
                         }
                       },
                       "range": [
-                        165,
-                        185
+                        316,
+                        336
                       ],
                       "loc": {
                         "start": {
-                          "line": 6,
+                          "line": 10,
                           "column": 8
                         },
                         "end": {
-                          "line": 6,
+                          "line": 10,
                           "column": 28
                         }
                       }
@@ -299,16 +299,16 @@
                           "object": {
                             "type": "ThisExpression",
                             "range": [
-                              194,
-                              198
+                              345,
+                              349
                             ],
                             "loc": {
                               "start": {
-                                "line": 7,
+                                "line": 11,
                                 "column": 8
                               },
                               "end": {
-                                "line": 7,
+                                "line": 11,
                                 "column": 12
                               }
                             }
@@ -317,31 +317,31 @@
                             "type": "Identifier",
                             "name": "_headphone",
                             "range": [
-                              199,
-                              209
+                              350,
+                              360
                             ],
                             "loc": {
                               "start": {
-                                "line": 7,
+                                "line": 11,
                                 "column": 13
                               },
                               "end": {
-                                "line": 7,
+                                "line": 11,
                                 "column": 23
                               }
                             }
                           },
                           "range": [
-                            194,
-                            209
+                            345,
+                            360
                           ],
                           "loc": {
                             "start": {
-                              "line": 7,
+                              "line": 11,
                               "column": 8
                             },
                             "end": {
-                              "line": 7,
+                              "line": 11,
                               "column": 23
                             }
                           }
@@ -350,62 +350,62 @@
                           "type": "Identifier",
                           "name": "headphone",
                           "range": [
-                            212,
-                            221
+                            363,
+                            372
                           ],
                           "loc": {
                             "start": {
-                              "line": 7,
+                              "line": 11,
                               "column": 26
                             },
                             "end": {
-                              "line": 7,
+                              "line": 11,
                               "column": 35
                             }
                           }
                         },
                         "range": [
-                          194,
-                          221
+                          345,
+                          372
                         ],
                         "loc": {
                           "start": {
-                            "line": 7,
+                            "line": 11,
                             "column": 8
                           },
                           "end": {
-                            "line": 7,
+                            "line": 11,
                             "column": 35
                           }
                         }
                       },
                       "range": [
-                        194,
-                        222
+                        345,
+                        373
                       ],
                       "loc": {
                         "start": {
-                          "line": 7,
+                          "line": 11,
                           "column": 8
                         },
                         "end": {
-                          "line": 7,
+                          "line": 11,
                           "column": 36
                         }
                       }
                     }
                   ],
                   "range": [
-                    155,
-                    228
+                    306,
+                    379
                   ],
                   "loc": {
                     "start": {
-                      "line": 5,
+                      "line": 9,
                       "column": 48
                     },
                     "end": {
-                      "line": 8,
+                      "line": 12,
                       "column": 5
                     }
                   }
@@ -413,16 +413,16 @@
                 "generator": false,
                 "expression": false,
                 "range": [
-                  122,
-                  228
+                  273,
+                  379
                 ],
                 "loc": {
                   "start": {
-                    "line": 5,
+                    "line": 9,
                     "column": 15
                   },
                   "end": {
-                    "line": 8,
+                    "line": 12,
                     "column": 5
                   }
                 }
@@ -430,34 +430,54 @@
               "kind": "constructor",
               "computed": false,
               "range": [
-                111,
-                228
+                262,
+                379
               ],
               "loc": {
                 "start": {
-                  "line": 5,
+                  "line": 9,
                   "column": 4
                 },
                 "end": {
-                  "line": 8,
+                  "line": 12,
                   "column": 5
                 }
               },
+              "leadingComments": [
+                {
+                  "type": "Block",
+                  "value": "*\n     * @param {AudioContext} audioContext - audioContext instance.\n     * @param {boolean} headphone - true is headphone, else, false.\n     ",
+                  "range": [
+                    111,
+                    257
+                  ],
+                  "loc": {
+                    "start": {
+                      "line": 5,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 8,
+                      "column": 7
+                    }
+                  }
+                }
+              ],
               "trailingComments": [
                 {
                   "type": "Block",
                   "value": "*\n     * Process:\n     * @todo: track noise, add compression, improve voice if no headphone\n     ",
                   "range": [
-                    233,
-                    334
+                    384,
+                    485
                   ],
                   "loc": {
                     "start": {
-                      "line": 9,
+                      "line": 13,
                       "column": 4
                     },
                     "end": {
-                      "line": 12,
+                      "line": 16,
                       "column": 7
                     }
                   }
@@ -471,16 +491,16 @@
                 "type": "Identifier",
                 "name": "_process",
                 "range": [
-                  339,
-                  347
+                  490,
+                  498
                 ],
                 "loc": {
                   "start": {
-                    "line": 13,
+                    "line": 17,
                     "column": 4
                   },
                   "end": {
-                    "line": 13,
+                    "line": 17,
                     "column": 12
                   }
                 }
@@ -493,16 +513,16 @@
                   "type": "BlockStatement",
                   "body": [],
                   "range": [
-                    349,
-                    357
+                    500,
+                    508
                   ],
                   "loc": {
                     "start": {
-                      "line": 13,
+                      "line": 17,
                       "column": 14
                     },
                     "end": {
-                      "line": 15,
+                      "line": 19,
                       "column": 5
                     }
                   }
@@ -510,16 +530,16 @@
                 "generator": false,
                 "expression": false,
                 "range": [
-                  347,
-                  357
+                  498,
+                  508
                 ],
                 "loc": {
                   "start": {
-                    "line": 13,
+                    "line": 17,
                     "column": 12
                   },
                   "end": {
-                    "line": 15,
+                    "line": 19,
                     "column": 5
                   }
                 }
@@ -527,16 +547,16 @@
               "kind": "method",
               "computed": false,
               "range": [
-                339,
-                357
+                490,
+                508
               ],
               "loc": {
                 "start": {
-                  "line": 13,
+                  "line": 17,
                   "column": 4
                 },
                 "end": {
-                  "line": 15,
+                  "line": 19,
                   "column": 5
                 }
               },
@@ -545,16 +565,16 @@
                   "type": "Block",
                   "value": "*\n     * Process:\n     * @todo: track noise, add compression, improve voice if no headphone\n     ",
                   "range": [
-                    233,
-                    334
+                    384,
+                    485
                   ],
                   "loc": {
                     "start": {
-                      "line": 9,
+                      "line": 13,
                       "column": 4
                     },
                     "end": {
-                      "line": 12,
+                      "line": 16,
                       "column": 7
                     }
                   }
@@ -563,18 +583,18 @@
               "trailingComments": [
                 {
                   "type": "Block",
-                  "value": "*\n     * Set headphone\n     * @param {boolean} value - true is headphone, else, false.\n     ",
+                  "value": "*\n     * Set headphone - true is headphone, else, false.\n     * @type {boolean}\n     ",
                   "range": [
-                    362,
-                    458
+                    513,
+                    602
                   ],
                   "loc": {
                     "start": {
-                      "line": 16,
+                      "line": 20,
                       "column": 4
                     },
                     "end": {
-                      "line": 19,
+                      "line": 23,
                       "column": 7
                     }
                   }
@@ -588,16 +608,16 @@
                 "type": "Identifier",
                 "name": "headphone",
                 "range": [
-                  467,
-                  476
+                  611,
+                  620
                 ],
                 "loc": {
                   "start": {
-                    "line": 20,
+                    "line": 24,
                     "column": 8
                   },
                   "end": {
-                    "line": 20,
+                    "line": 24,
                     "column": 17
                   }
                 }
@@ -610,16 +630,16 @@
                     "type": "Identifier",
                     "name": "value",
                     "range": [
-                      477,
-                      482
+                      621,
+                      626
                     ],
                     "loc": {
                       "start": {
-                        "line": 20,
+                        "line": 24,
                         "column": 18
                       },
                       "end": {
-                        "line": 20,
+                        "line": 24,
                         "column": 23
                       }
                     }
@@ -639,16 +659,16 @@
                           "object": {
                             "type": "ThisExpression",
                             "range": [
-                              493,
-                              497
+                              637,
+                              641
                             ],
                             "loc": {
                               "start": {
-                                "line": 21,
+                                "line": 25,
                                 "column": 8
                               },
                               "end": {
-                                "line": 21,
+                                "line": 25,
                                 "column": 12
                               }
                             }
@@ -657,31 +677,31 @@
                             "type": "Identifier",
                             "name": "_headphone",
                             "range": [
-                              498,
-                              508
+                              642,
+                              652
                             ],
                             "loc": {
                               "start": {
-                                "line": 21,
+                                "line": 25,
                                 "column": 13
                               },
                               "end": {
-                                "line": 21,
+                                "line": 25,
                                 "column": 23
                               }
                             }
                           },
                           "range": [
-                            493,
-                            508
+                            637,
+                            652
                           ],
                           "loc": {
                             "start": {
-                              "line": 21,
+                              "line": 25,
                               "column": 8
                             },
                             "end": {
-                              "line": 21,
+                              "line": 25,
                               "column": 23
                             }
                           }
@@ -690,62 +710,62 @@
                           "type": "Identifier",
                           "name": "value",
                           "range": [
-                            511,
-                            516
+                            655,
+                            660
                           ],
                           "loc": {
                             "start": {
-                              "line": 21,
+                              "line": 25,
                               "column": 26
                             },
                             "end": {
-                              "line": 21,
+                              "line": 25,
                               "column": 31
                             }
                           }
                         },
                         "range": [
-                          493,
-                          516
+                          637,
+                          660
                         ],
                         "loc": {
                           "start": {
-                            "line": 21,
+                            "line": 25,
                             "column": 8
                           },
                           "end": {
-                            "line": 21,
+                            "line": 25,
                             "column": 31
                           }
                         }
                       },
                       "range": [
-                        493,
-                        521
+                        637,
+                        665
                       ],
                       "loc": {
                         "start": {
-                          "line": 21,
+                          "line": 25,
                           "column": 8
                         },
                         "end": {
-                          "line": 22,
+                          "line": 26,
                           "column": 4
                         }
                       }
                     }
                   ],
                   "range": [
-                    483,
-                    522
+                    627,
+                    666
                   ],
                   "loc": {
                     "start": {
-                      "line": 20,
+                      "line": 24,
                       "column": 24
                     },
                     "end": {
-                      "line": 22,
+                      "line": 26,
                       "column": 5
                     }
                   }
@@ -753,16 +773,16 @@
                 "generator": false,
                 "expression": false,
                 "range": [
-                  476,
-                  522
+                  620,
+                  666
                 ],
                 "loc": {
                   "start": {
-                    "line": 20,
+                    "line": 24,
                     "column": 17
                   },
                   "end": {
-                    "line": 22,
+                    "line": 26,
                     "column": 5
                   }
                 }
@@ -770,34 +790,34 @@
               "kind": "set",
               "computed": false,
               "range": [
-                463,
-                522
+                607,
+                666
               ],
               "loc": {
                 "start": {
-                  "line": 20,
+                  "line": 24,
                   "column": 4
                 },
                 "end": {
-                  "line": 22,
+                  "line": 26,
                   "column": 5
                 }
               },
               "leadingComments": [
                 {
                   "type": "Block",
-                  "value": "*\n     * Set headphone\n     * @param {boolean} value - true is headphone, else, false.\n     ",
+                  "value": "*\n     * Set headphone - true is headphone, else, false.\n     * @type {boolean}\n     ",
                   "range": [
-                    362,
-                    458
+                    513,
+                    602
                   ],
                   "loc": {
                     "start": {
-                      "line": 16,
+                      "line": 20,
                       "column": 4
                     },
                     "end": {
-                      "line": 19,
+                      "line": 23,
                       "column": 7
                     }
                   }
@@ -806,18 +826,18 @@
               "trailingComments": [
                 {
                   "type": "Block",
-                  "value": "*\n     * Get headphone, return True if headphone is connected, else, false\n     ",
+                  "value": "*\n     * Get headphone, return True if headphone is connected, else, false\n     * @type {boolean}\n     ",
                   "range": [
-                    527,
-                    611
+                    671,
+                    778
                   ],
                   "loc": {
                     "start": {
-                      "line": 23,
+                      "line": 27,
                       "column": 4
                     },
                     "end": {
-                      "line": 25,
+                      "line": 30,
                       "column": 7
                     }
                   }
@@ -831,16 +851,16 @@
                 "type": "Identifier",
                 "name": "headphone",
                 "range": [
-                  620,
-                  629
+                  787,
+                  796
                 ],
                 "loc": {
                   "start": {
-                    "line": 26,
+                    "line": 31,
                     "column": 8
                   },
                   "end": {
-                    "line": 26,
+                    "line": 31,
                     "column": 17
                   }
                 }
@@ -860,16 +880,16 @@
                         "object": {
                           "type": "ThisExpression",
                           "range": [
-                            648,
-                            652
+                            815,
+                            819
                           ],
                           "loc": {
                             "start": {
-                              "line": 27,
+                              "line": 32,
                               "column": 15
                             },
                             "end": {
-                              "line": 27,
+                              "line": 32,
                               "column": 19
                             }
                           }
@@ -878,62 +898,62 @@
                           "type": "Identifier",
                           "name": "_headphone",
                           "range": [
-                            653,
-                            663
+                            820,
+                            830
                           ],
                           "loc": {
                             "start": {
-                              "line": 27,
+                              "line": 32,
                               "column": 20
                             },
                             "end": {
-                              "line": 27,
+                              "line": 32,
                               "column": 30
                             }
                           }
                         },
                         "range": [
-                          648,
-                          663
+                          815,
+                          830
                         ],
                         "loc": {
                           "start": {
-                            "line": 27,
+                            "line": 32,
                             "column": 15
                           },
                           "end": {
-                            "line": 27,
+                            "line": 32,
                             "column": 30
                           }
                         }
                       },
                       "range": [
-                        641,
-                        664
+                        808,
+                        831
                       ],
                       "loc": {
                         "start": {
-                          "line": 27,
+                          "line": 32,
                           "column": 8
                         },
                         "end": {
-                          "line": 27,
+                          "line": 32,
                           "column": 31
                         }
                       }
                     }
                   ],
                   "range": [
-                    631,
-                    670
+                    798,
+                    837
                   ],
                   "loc": {
                     "start": {
-                      "line": 26,
+                      "line": 31,
                       "column": 19
                     },
                     "end": {
-                      "line": 28,
+                      "line": 33,
                       "column": 5
                     }
                   }
@@ -941,16 +961,16 @@
                 "generator": false,
                 "expression": false,
                 "range": [
-                  629,
-                  670
+                  796,
+                  837
                 ],
                 "loc": {
                   "start": {
-                    "line": 26,
+                    "line": 31,
                     "column": 17
                   },
                   "end": {
-                    "line": 28,
+                    "line": 33,
                     "column": 5
                   }
                 }
@@ -958,34 +978,34 @@
               "kind": "get",
               "computed": false,
               "range": [
-                616,
-                670
+                783,
+                837
               ],
               "loc": {
                 "start": {
-                  "line": 26,
+                  "line": 31,
                   "column": 4
                 },
                 "end": {
-                  "line": 28,
+                  "line": 33,
                   "column": 5
                 }
               },
               "leadingComments": [
                 {
                   "type": "Block",
-                  "value": "*\n     * Get headphone, return True if headphone is connected, else, false\n     ",
+                  "value": "*\n     * Get headphone, return True if headphone is connected, else, false\n     * @type {boolean}\n     ",
                   "range": [
-                    527,
-                    611
+                    671,
+                    778
                   ],
                   "loc": {
                     "start": {
-                      "line": 23,
+                      "line": 27,
                       "column": 4
                     },
                     "end": {
-                      "line": 25,
+                      "line": 30,
                       "column": 7
                     }
                   }
@@ -996,7 +1016,7 @@
           ],
           "range": [
             105,
-            672
+            839
           ],
           "loc": {
             "start": {
@@ -1004,14 +1024,14 @@
               "column": 58
             },
             "end": {
-              "line": 29,
+              "line": 34,
               "column": 1
             }
           }
         },
         "range": [
           62,
-          672
+          839
         ],
         "loc": {
           "start": {
@@ -1019,7 +1039,7 @@
             "column": 15
           },
           "end": {
-            "line": 29,
+            "line": 34,
             "column": 1
           }
         },
@@ -1028,7 +1048,7 @@
       },
       "range": [
         47,
-        672
+        839
       ],
       "loc": {
         "start": {
@@ -1036,7 +1056,7 @@
           "column": 0
         },
         "end": {
-          "line": 29,
+          "line": 34,
           "column": 1
         }
       }
@@ -1045,7 +1065,7 @@
   "sourceType": "module",
   "range": [
     0,
-    672
+    839
   ],
   "loc": {
     "start": {
@@ -1053,61 +1073,79 @@
       "column": 0
     },
     "end": {
-      "line": 29,
+      "line": 34,
       "column": 1
     }
   },
   "comments": [
     {
       "type": "Block",
+      "value": "*\n     * @param {AudioContext} audioContext - audioContext instance.\n     * @param {boolean} headphone - true is headphone, else, false.\n     ",
+      "range": [
+        111,
+        257
+      ],
+      "loc": {
+        "start": {
+          "line": 5,
+          "column": 4
+        },
+        "end": {
+          "line": 8,
+          "column": 7
+        }
+      }
+    },
+    {
+      "type": "Block",
       "value": "*\n     * Process:\n     * @todo: track noise, add compression, improve voice if no headphone\n     ",
       "range": [
-        233,
-        334
+        384,
+        485
       ],
       "loc": {
         "start": {
-          "line": 9,
+          "line": 13,
           "column": 4
         },
         "end": {
-          "line": 12,
-          "column": 7
-        }
-      }
-    },
-    {
-      "type": "Block",
-      "value": "*\n     * Set headphone\n     * @param {boolean} value - true is headphone, else, false.\n     ",
-      "range": [
-        362,
-        458
-      ],
-      "loc": {
-        "start": {
           "line": 16,
-          "column": 4
-        },
-        "end": {
-          "line": 19,
           "column": 7
         }
       }
     },
     {
       "type": "Block",
-      "value": "*\n     * Get headphone, return True if headphone is connected, else, false\n     ",
+      "value": "*\n     * Set headphone - true is headphone, else, false.\n     * @type {boolean}\n     ",
       "range": [
-        527,
-        611
+        513,
+        602
       ],
       "loc": {
         "start": {
-          "line": 23,
+          "line": 20,
           "column": 4
         },
         "end": {
-          "line": 25,
+          "line": 23,
+          "column": 7
+        }
+      }
+    },
+    {
+      "type": "Block",
+      "value": "*\n     * Get headphone, return True if headphone is connected, else, false\n     * @type {boolean}\n     ",
+      "range": [
+        671,
+        778
+      ],
+      "loc": {
+        "start": {
+          "line": 27,
+          "column": 4
+        },
+        "end": {
+          "line": 30,
           "column": 7
         }
       }

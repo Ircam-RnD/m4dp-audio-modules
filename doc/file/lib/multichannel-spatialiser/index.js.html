@@ -33,6 +33,9 @@
   <ul>
     
   <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">core</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/lib/core/index.js~AbstractNode.html">AbstractNode</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-AudioStreamsDescription">AudioStreamsDescription</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-EqPreset">EqPreset</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-HRTF">HRTF</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">dialog-enhancement</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/lib/dialog-enhancement/index.js~DialogEnhancement.html">DialogEnhancement</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">multichannel-spatialiser</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/lib/multichannel-spatialiser/index.js~MultichannelSpatialiser.html">MultichannelSpatialiser</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">noise-adaptation</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/lib/noise-adaptation/index.js~NoiseAdaptation.html">NoiseAdaptation</a></span></span></li>
@@ -47,6 +50,15 @@
 
 
 export default class MultichannelSpatialiser extends AbstractNode {
+    /**
+     * @param {AudioContext} audioContext - audioContext instance.
+     * @param {string} outputType - output type &quot;headphone&quot; or &quot;speaker&quot;
+     * @param {AudioStreamsDescription} audioStreamsDescription - audioStreamsDescription.
+     * @param {HRTF} hrtf - hrtf @todo to be defined
+     * @param {EqPreset} eqPreset - dialog gain @todo to be defined
+     * @param {number} offsetGain - gain @todo value to be defined
+     * @param {number} listeningAxis - angle? @todo value to be defined
+     */
     constructor(audioContext, outputType = &apos;headphone&apos;, audioStreamsDescription = {}, hrtf, eqPreset, offsetGain, listeningAxis){
         super(audioContext);
         this._outputType = outputType;
@@ -59,30 +71,35 @@ export default class MultichannelSpatialiser extends AbstractNode {
     /**
      * Set outputType: &apos;headphone&apos; or &apos;speaker&apos;, &apos;multicanal&apos;
      * @todo: automatic for &apos;multicanal&apos; even if nb of speaker &apos;wrong&apos;
+     * @type {string}
      */
     set outputType(value){
         this._outputType = value;
     }
     /**
      * Get outputType: &apos;headphone&apos; or &apos;speaker&apos;
+     * @type {string}
      */
     get outputType(){
         return this._outputType
     }
     /**
      * Set audio streams description (json)
+     * @type {AudioStreamsDescription}
      */
     set audioStreamsDescription(value){
 
     }
     /**
      * Get audio streams description
+     * @type {AudioStreamsDescription}
      */
     get audioStreamsDescription(){
         return _audioStreamsDescription;
     }
     /**
      * Set hrtf
+     * @type {HRTF}
      * @todo: which kind of value, json?
      */
     set hrtf(value){
@@ -90,6 +107,7 @@ export default class MultichannelSpatialiser extends AbstractNode {
     }
     /**
      * Get hrtf
+     * @type {HRTF}
      */
     get hrtf(){
         return this._hrtf;
@@ -98,36 +116,45 @@ export default class MultichannelSpatialiser extends AbstractNode {
      * Set eqPreset
      * @todo: which kind of value, json?
      * @todo: set it to none to not appy any eq?
+     * @type {EqPreset}
      */
     set eqPreset(value){
         this._eqPreset = value;
     }
     /**
      * Get eqPreset
+     * @type {EqPreset}
      */
     get eqPreset(){
         return this._eqPreset;
     }
     /**
      * Set offsetGain
+     * @todo range
+     * @type {number}
      */
     set offsetGain(value){
         this._offsetGain = value;
     }
     /**
      * Get offsetGain
+     * @todo range
+     * @type {number}
      */
     get offsetGain(){
         return this._offsetGain;
     }
     /**
      * Set listeningAxis
+     * @todo value type? angle?
+     * @type {number}
      */
     set listeningAxis(value){
         this._listeningAxis = value;
     }
     /**
      * Get listeningAxis
+     * @type {number}
      */
     get listeningAxis(){
         return this._listeningAxis;

@@ -9,16 +9,16 @@
           "type": "Identifier",
           "name": "AbstractNode",
           "range": [
-            21,
-            33
+            154,
+            166
           ],
           "loc": {
             "start": {
-              "line": 1,
+              "line": 4,
               "column": 21
             },
             "end": {
-              "line": 1,
+              "line": 4,
               "column": 33
             }
           }
@@ -33,16 +33,16 @@
                 "type": "Identifier",
                 "name": "constructor",
                 "range": [
-                  254,
-                  265
+                  288,
+                  299
                 ],
                 "loc": {
                   "start": {
-                    "line": 7,
+                    "line": 9,
                     "column": 4
                   },
                   "end": {
-                    "line": 7,
+                    "line": 9,
                     "column": 15
                   }
                 }
@@ -55,16 +55,16 @@
                     "type": "Identifier",
                     "name": "audioContext",
                     "range": [
-                      266,
-                      278
+                      300,
+                      312
                     ],
                     "loc": {
                       "start": {
-                        "line": 7,
+                        "line": 9,
                         "column": 16
                       },
                       "end": {
-                        "line": 7,
+                        "line": 9,
                         "column": 28
                       }
                     }
@@ -84,16 +84,16 @@
                           "object": {
                             "type": "ThisExpression",
                             "range": [
-                              289,
-                              293
+                              323,
+                              327
                             ],
                             "loc": {
                               "start": {
-                                "line": 8,
+                                "line": 10,
                                 "column": 8
                               },
                               "end": {
-                                "line": 8,
+                                "line": 10,
                                 "column": 12
                               }
                             }
@@ -102,31 +102,31 @@
                             "type": "Identifier",
                             "name": "_audioContext",
                             "range": [
-                              294,
-                              307
+                              328,
+                              341
                             ],
                             "loc": {
                               "start": {
-                                "line": 8,
+                                "line": 10,
                                 "column": 13
                               },
                               "end": {
-                                "line": 8,
+                                "line": 10,
                                 "column": 26
                               }
                             }
                           },
                           "range": [
-                            289,
-                            307
+                            323,
+                            341
                           ],
                           "loc": {
                             "start": {
-                              "line": 8,
+                              "line": 10,
                               "column": 8
                             },
                             "end": {
-                              "line": 8,
+                              "line": 10,
                               "column": 26
                             }
                           }
@@ -135,49 +135,69 @@
                           "type": "Identifier",
                           "name": "audioContext",
                           "range": [
-                            310,
-                            322
+                            344,
+                            356
                           ],
                           "loc": {
                             "start": {
-                              "line": 8,
+                              "line": 10,
                               "column": 29
                             },
                             "end": {
-                              "line": 8,
+                              "line": 10,
                               "column": 41
                             }
                           }
                         },
                         "range": [
-                          289,
-                          322
+                          323,
+                          356
                         ],
                         "loc": {
                           "start": {
-                            "line": 8,
+                            "line": 10,
                             "column": 8
                           },
                           "end": {
-                            "line": 8,
+                            "line": 10,
                             "column": 41
                           }
                         }
                       },
                       "range": [
-                        289,
-                        323
+                        323,
+                        357
                       ],
                       "loc": {
                         "start": {
-                          "line": 8,
+                          "line": 10,
                           "column": 8
                         },
                         "end": {
-                          "line": 8,
+                          "line": 10,
                           "column": 42
                         }
-                      }
+                      },
+                      "trailingComments": [
+                        {
+                          "type": "Block",
+                          "value": "*\n         * @type {AudioNode}\n         ",
+                          "range": [
+                            366,
+                            410
+                          ],
+                          "loc": {
+                            "start": {
+                              "line": 11,
+                              "column": 8
+                            },
+                            "end": {
+                              "line": 13,
+                              "column": 11
+                            }
+                          }
+                        }
+                      ]
                     },
                     {
                       "type": "ExpressionStatement",
@@ -190,16 +210,16 @@
                           "object": {
                             "type": "ThisExpression",
                             "range": [
-                              332,
-                              336
+                              419,
+                              423
                             ],
                             "loc": {
                               "start": {
-                                "line": 9,
+                                "line": 14,
                                 "column": 8
                               },
                               "end": {
-                                "line": 9,
+                                "line": 14,
                                 "column": 12
                               }
                             }
@@ -208,31 +228,31 @@
                             "type": "Identifier",
                             "name": "input",
                             "range": [
-                              337,
-                              342
+                              424,
+                              429
                             ],
                             "loc": {
                               "start": {
-                                "line": 9,
+                                "line": 14,
                                 "column": 13
                               },
                               "end": {
-                                "line": 9,
+                                "line": 14,
                                 "column": 18
                               }
                             }
                           },
                           "range": [
-                            332,
-                            342
+                            419,
+                            429
                           ],
                           "loc": {
                             "start": {
-                              "line": 9,
+                              "line": 14,
                               "column": 8
                             },
                             "end": {
-                              "line": 9,
+                              "line": 14,
                               "column": 18
                             }
                           }
@@ -248,16 +268,16 @@
                               "object": {
                                 "type": "ThisExpression",
                                 "range": [
-                                  345,
-                                  349
+                                  432,
+                                  436
                                 ],
                                 "loc": {
                                   "start": {
-                                    "line": 9,
+                                    "line": 14,
                                     "column": 21
                                   },
                                   "end": {
-                                    "line": 9,
+                                    "line": 14,
                                     "column": 25
                                   }
                                 }
@@ -266,31 +286,31 @@
                                 "type": "Identifier",
                                 "name": "_audioContext",
                                 "range": [
-                                  350,
-                                  363
+                                  437,
+                                  450
                                 ],
                                 "loc": {
                                   "start": {
-                                    "line": 9,
+                                    "line": 14,
                                     "column": 26
                                   },
                                   "end": {
-                                    "line": 9,
+                                    "line": 14,
                                     "column": 39
                                   }
                                 }
                               },
                               "range": [
-                                345,
-                                363
+                                432,
+                                450
                               ],
                               "loc": {
                                 "start": {
-                                  "line": 9,
+                                  "line": 14,
                                   "column": 21
                                 },
                                 "end": {
-                                  "line": 9,
+                                  "line": 14,
                                   "column": 39
                                 }
                               }
@@ -299,80 +319,100 @@
                               "type": "Identifier",
                               "name": "createGain",
                               "range": [
-                                364,
-                                374
+                                451,
+                                461
                               ],
                               "loc": {
                                 "start": {
-                                  "line": 9,
+                                  "line": 14,
                                   "column": 40
                                 },
                                 "end": {
-                                  "line": 9,
+                                  "line": 14,
                                   "column": 50
                                 }
                               }
                             },
                             "range": [
-                              345,
-                              374
+                              432,
+                              461
                             ],
                             "loc": {
                               "start": {
-                                "line": 9,
+                                "line": 14,
                                 "column": 21
                               },
                               "end": {
-                                "line": 9,
+                                "line": 14,
                                 "column": 50
                               }
                             }
                           },
                           "arguments": [],
                           "range": [
-                            345,
-                            376
+                            432,
+                            463
                           ],
                           "loc": {
                             "start": {
-                              "line": 9,
+                              "line": 14,
                               "column": 21
                             },
                             "end": {
-                              "line": 9,
+                              "line": 14,
                               "column": 52
                             }
                           }
                         },
                         "range": [
-                          332,
-                          376
+                          419,
+                          463
                         ],
                         "loc": {
                           "start": {
-                            "line": 9,
+                            "line": 14,
                             "column": 8
                           },
                           "end": {
-                            "line": 9,
+                            "line": 14,
                             "column": 52
                           }
                         }
                       },
                       "range": [
-                        332,
-                        377
+                        419,
+                        464
                       ],
                       "loc": {
                         "start": {
-                          "line": 9,
+                          "line": 14,
                           "column": 8
                         },
                         "end": {
-                          "line": 9,
+                          "line": 14,
                           "column": 53
                         }
-                      }
+                      },
+                      "leadingComments": [
+                        {
+                          "type": "Block",
+                          "value": "*\n         * @type {AudioNode}\n         ",
+                          "range": [
+                            366,
+                            410
+                          ],
+                          "loc": {
+                            "start": {
+                              "line": 11,
+                              "column": 8
+                            },
+                            "end": {
+                              "line": 13,
+                              "column": 11
+                            }
+                          }
+                        }
+                      ]
                     },
                     {
                       "type": "ExpressionStatement",
@@ -385,16 +425,16 @@
                           "object": {
                             "type": "ThisExpression",
                             "range": [
-                              386,
-                              390
+                              473,
+                              477
                             ],
                             "loc": {
                               "start": {
-                                "line": 10,
+                                "line": 15,
                                 "column": 8
                               },
                               "end": {
-                                "line": 10,
+                                "line": 15,
                                 "column": 12
                               }
                             }
@@ -403,31 +443,31 @@
                             "type": "Identifier",
                             "name": "_ouput",
                             "range": [
-                              391,
-                              397
+                              478,
+                              484
                             ],
                             "loc": {
                               "start": {
-                                "line": 10,
+                                "line": 15,
                                 "column": 13
                               },
                               "end": {
-                                "line": 10,
+                                "line": 15,
                                 "column": 19
                               }
                             }
                           },
                           "range": [
-                            386,
-                            397
+                            473,
+                            484
                           ],
                           "loc": {
                             "start": {
-                              "line": 10,
+                              "line": 15,
                               "column": 8
                             },
                             "end": {
-                              "line": 10,
+                              "line": 15,
                               "column": 19
                             }
                           }
@@ -443,16 +483,16 @@
                               "object": {
                                 "type": "ThisExpression",
                                 "range": [
-                                  400,
-                                  404
+                                  487,
+                                  491
                                 ],
                                 "loc": {
                                   "start": {
-                                    "line": 10,
+                                    "line": 15,
                                     "column": 22
                                   },
                                   "end": {
-                                    "line": 10,
+                                    "line": 15,
                                     "column": 26
                                   }
                                 }
@@ -461,31 +501,31 @@
                                 "type": "Identifier",
                                 "name": "_audioContext",
                                 "range": [
-                                  405,
-                                  418
+                                  492,
+                                  505
                                 ],
                                 "loc": {
                                   "start": {
-                                    "line": 10,
+                                    "line": 15,
                                     "column": 27
                                   },
                                   "end": {
-                                    "line": 10,
+                                    "line": 15,
                                     "column": 40
                                   }
                                 }
                               },
                               "range": [
-                                400,
-                                418
+                                487,
+                                505
                               ],
                               "loc": {
                                 "start": {
-                                  "line": 10,
+                                  "line": 15,
                                   "column": 22
                                 },
                                 "end": {
-                                  "line": 10,
+                                  "line": 15,
                                   "column": 40
                                 }
                               }
@@ -494,93 +534,93 @@
                               "type": "Identifier",
                               "name": "createGain",
                               "range": [
-                                419,
-                                429
+                                506,
+                                516
                               ],
                               "loc": {
                                 "start": {
-                                  "line": 10,
+                                  "line": 15,
                                   "column": 41
                                 },
                                 "end": {
-                                  "line": 10,
+                                  "line": 15,
                                   "column": 51
                                 }
                               }
                             },
                             "range": [
-                              400,
-                              429
+                              487,
+                              516
                             ],
                             "loc": {
                               "start": {
-                                "line": 10,
+                                "line": 15,
                                 "column": 22
                               },
                               "end": {
-                                "line": 10,
+                                "line": 15,
                                 "column": 51
                               }
                             }
                           },
                           "arguments": [],
                           "range": [
-                            400,
-                            431
+                            487,
+                            518
                           ],
                           "loc": {
                             "start": {
-                              "line": 10,
+                              "line": 15,
                               "column": 22
                             },
                             "end": {
-                              "line": 10,
+                              "line": 15,
                               "column": 53
                             }
                           }
                         },
                         "range": [
-                          386,
-                          431
+                          473,
+                          518
                         ],
                         "loc": {
                           "start": {
-                            "line": 10,
+                            "line": 15,
                             "column": 8
                           },
                           "end": {
-                            "line": 10,
+                            "line": 15,
                             "column": 53
                           }
                         }
                       },
                       "range": [
-                        386,
-                        432
+                        473,
+                        519
                       ],
                       "loc": {
                         "start": {
-                          "line": 10,
+                          "line": 15,
                           "column": 8
                         },
                         "end": {
-                          "line": 10,
+                          "line": 15,
                           "column": 54
                         }
                       }
                     }
                   ],
                   "range": [
-                    279,
-                    438
+                    313,
+                    525
                   ],
                   "loc": {
                     "start": {
-                      "line": 7,
+                      "line": 9,
                       "column": 29
                     },
                     "end": {
-                      "line": 11,
+                      "line": 16,
                       "column": 5
                     }
                   }
@@ -588,16 +628,16 @@
                 "generator": false,
                 "expression": false,
                 "range": [
-                  265,
-                  438
+                  299,
+                  525
                 ],
                 "loc": {
                   "start": {
-                    "line": 7,
+                    "line": 9,
                     "column": 15
                   },
                   "end": {
-                    "line": 11,
+                    "line": 16,
                     "column": 5
                   }
                 }
@@ -605,34 +645,34 @@
               "kind": "constructor",
               "computed": false,
               "range": [
-                254,
-                438
+                288,
+                525
               ],
               "loc": {
                 "start": {
-                  "line": 7,
+                  "line": 9,
                   "column": 4
                 },
                 "end": {
-                  "line": 11,
+                  "line": 16,
                   "column": 5
                 }
               },
               "leadingComments": [
                 {
                   "type": "Block",
-                  "value": "*\n     * AbstractNode constructor\n     * Template for the projet audio nodes: audioContext reference, connect and disconnect methods\n     * @param {AudioContext} audioContext - audioContext instance.\n     ",
+                  "value": "*\n     * AbstractNode constructor\n     * @param {AudioContext} audioContext - audioContext instance.\n     ",
                   "range": [
-                    40,
-                    249
+                    173,
+                    283
                   ],
                   "loc": {
                     "start": {
-                      "line": 2,
+                      "line": 5,
                       "column": 4
                     },
                     "end": {
-                      "line": 6,
+                      "line": 8,
                       "column": 7
                     }
                   }
@@ -641,18 +681,18 @@
               "trailingComments": [
                 {
                   "type": "Block",
-                  "value": "*\n     * Connect the audio node\n     ",
+                  "value": "*\n     * Connect the audio node\n     * @param {AudioNode} node - an AudioNode to connect to.\n     ",
                   "range": [
-                    443,
-                    484
+                    530,
+                    632
                   ],
                   "loc": {
                     "start": {
-                      "line": 12,
+                      "line": 17,
                       "column": 4
                     },
                     "end": {
-                      "line": 14,
+                      "line": 20,
                       "column": 7
                     }
                   }
@@ -666,16 +706,16 @@
                 "type": "Identifier",
                 "name": "connect",
                 "range": [
-                  489,
-                  496
+                  637,
+                  644
                 ],
                 "loc": {
                   "start": {
-                    "line": 15,
+                    "line": 21,
                     "column": 4
                   },
                   "end": {
-                    "line": 15,
+                    "line": 21,
                     "column": 11
                   }
                 }
@@ -688,16 +728,16 @@
                     "type": "Identifier",
                     "name": "node",
                     "range": [
-                      497,
-                      501
+                      645,
+                      649
                     ],
                     "loc": {
                       "start": {
-                        "line": 15,
+                        "line": 21,
                         "column": 12
                       },
                       "end": {
-                        "line": 15,
+                        "line": 21,
                         "column": 16
                       }
                     }
@@ -719,16 +759,16 @@
                             "object": {
                               "type": "ThisExpression",
                               "range": [
-                                512,
-                                516
+                                660,
+                                664
                               ],
                               "loc": {
                                 "start": {
-                                  "line": 16,
+                                  "line": 22,
                                   "column": 8
                                 },
                                 "end": {
-                                  "line": 16,
+                                  "line": 22,
                                   "column": 12
                                 }
                               }
@@ -737,31 +777,31 @@
                               "type": "Identifier",
                               "name": "_ouput",
                               "range": [
-                                517,
-                                523
+                                665,
+                                671
                               ],
                               "loc": {
                                 "start": {
-                                  "line": 16,
+                                  "line": 22,
                                   "column": 13
                                 },
                                 "end": {
-                                  "line": 16,
+                                  "line": 22,
                                   "column": 19
                                 }
                               }
                             },
                             "range": [
-                              512,
-                              523
+                              660,
+                              671
                             ],
                             "loc": {
                               "start": {
-                                "line": 16,
+                                "line": 22,
                                 "column": 8
                               },
                               "end": {
-                                "line": 16,
+                                "line": 22,
                                 "column": 19
                               }
                             }
@@ -770,31 +810,31 @@
                             "type": "Identifier",
                             "name": "connect",
                             "range": [
-                              524,
-                              531
+                              672,
+                              679
                             ],
                             "loc": {
                               "start": {
-                                "line": 16,
+                                "line": 22,
                                 "column": 20
                               },
                               "end": {
-                                "line": 16,
+                                "line": 22,
                                 "column": 27
                               }
                             }
                           },
                           "range": [
-                            512,
-                            531
+                            660,
+                            679
                           ],
                           "loc": {
                             "start": {
-                              "line": 16,
+                              "line": 22,
                               "column": 8
                             },
                             "end": {
-                              "line": 16,
+                              "line": 22,
                               "column": 27
                             }
                           }
@@ -804,63 +844,63 @@
                             "type": "Identifier",
                             "name": "node",
                             "range": [
-                              532,
-                              536
+                              680,
+                              684
                             ],
                             "loc": {
                               "start": {
-                                "line": 16,
+                                "line": 22,
                                 "column": 28
                               },
                               "end": {
-                                "line": 16,
+                                "line": 22,
                                 "column": 32
                               }
                             }
                           }
                         ],
                         "range": [
-                          512,
-                          537
+                          660,
+                          685
                         ],
                         "loc": {
                           "start": {
-                            "line": 16,
+                            "line": 22,
                             "column": 8
                           },
                           "end": {
-                            "line": 16,
+                            "line": 22,
                             "column": 33
                           }
                         }
                       },
                       "range": [
-                        512,
-                        542
+                        660,
+                        690
                       ],
                       "loc": {
                         "start": {
-                          "line": 16,
+                          "line": 22,
                           "column": 8
                         },
                         "end": {
-                          "line": 17,
+                          "line": 23,
                           "column": 4
                         }
                       }
                     }
                   ],
                   "range": [
-                    502,
-                    543
+                    650,
+                    691
                   ],
                   "loc": {
                     "start": {
-                      "line": 15,
+                      "line": 21,
                       "column": 17
                     },
                     "end": {
-                      "line": 17,
+                      "line": 23,
                       "column": 5
                     }
                   }
@@ -868,16 +908,16 @@
                 "generator": false,
                 "expression": false,
                 "range": [
-                  496,
-                  543
+                  644,
+                  691
                 ],
                 "loc": {
                   "start": {
-                    "line": 15,
+                    "line": 21,
                     "column": 11
                   },
                   "end": {
-                    "line": 17,
+                    "line": 23,
                     "column": 5
                   }
                 }
@@ -885,34 +925,34 @@
               "kind": "method",
               "computed": false,
               "range": [
-                489,
-                543
+                637,
+                691
               ],
               "loc": {
                 "start": {
-                  "line": 15,
+                  "line": 21,
                   "column": 4
                 },
                 "end": {
-                  "line": 17,
+                  "line": 23,
                   "column": 5
                 }
               },
               "leadingComments": [
                 {
                   "type": "Block",
-                  "value": "*\n     * Connect the audio node\n     ",
+                  "value": "*\n     * Connect the audio node\n     * @param {AudioNode} node - an AudioNode to connect to.\n     ",
                   "range": [
-                    443,
-                    484
+                    530,
+                    632
                   ],
                   "loc": {
                     "start": {
-                      "line": 12,
+                      "line": 17,
                       "column": 4
                     },
                     "end": {
-                      "line": 14,
+                      "line": 20,
                       "column": 7
                     }
                   }
@@ -921,18 +961,18 @@
               "trailingComments": [
                 {
                   "type": "Block",
-                  "value": "*\n     * Disconnect the audio node\n     ",
+                  "value": "*\n     * Disconnect the audio node\n     * @param {AudioNode} node - an AudioNode to disconnect to.\n     ",
                   "range": [
-                    548,
-                    592
+                    696,
+                    804
                   ],
                   "loc": {
                     "start": {
-                      "line": 18,
+                      "line": 24,
                       "column": 4
                     },
                     "end": {
-                      "line": 20,
+                      "line": 27,
                       "column": 7
                     }
                   }
@@ -946,16 +986,16 @@
                 "type": "Identifier",
                 "name": "disconnect",
                 "range": [
-                  597,
-                  607
+                  809,
+                  819
                 ],
                 "loc": {
                   "start": {
-                    "line": 21,
+                    "line": 28,
                     "column": 4
                   },
                   "end": {
-                    "line": 21,
+                    "line": 28,
                     "column": 14
                   }
                 }
@@ -968,16 +1008,16 @@
                     "type": "Identifier",
                     "name": "node",
                     "range": [
-                      608,
-                      612
+                      820,
+                      824
                     ],
                     "loc": {
                       "start": {
-                        "line": 21,
+                        "line": 28,
                         "column": 15
                       },
                       "end": {
-                        "line": 21,
+                        "line": 28,
                         "column": 19
                       }
                     }
@@ -999,16 +1039,16 @@
                             "object": {
                               "type": "ThisExpression",
                               "range": [
-                                623,
-                                627
+                                835,
+                                839
                               ],
                               "loc": {
                                 "start": {
-                                  "line": 22,
+                                  "line": 29,
                                   "column": 8
                                 },
                                 "end": {
-                                  "line": 22,
+                                  "line": 29,
                                   "column": 12
                                 }
                               }
@@ -1017,31 +1057,31 @@
                               "type": "Identifier",
                               "name": "_ouput",
                               "range": [
-                                628,
-                                634
+                                840,
+                                846
                               ],
                               "loc": {
                                 "start": {
-                                  "line": 22,
+                                  "line": 29,
                                   "column": 13
                                 },
                                 "end": {
-                                  "line": 22,
+                                  "line": 29,
                                   "column": 19
                                 }
                               }
                             },
                             "range": [
-                              623,
-                              634
+                              835,
+                              846
                             ],
                             "loc": {
                               "start": {
-                                "line": 22,
+                                "line": 29,
                                 "column": 8
                               },
                               "end": {
-                                "line": 22,
+                                "line": 29,
                                 "column": 19
                               }
                             }
@@ -1050,31 +1090,31 @@
                             "type": "Identifier",
                             "name": "disconnect",
                             "range": [
-                              635,
-                              645
+                              847,
+                              857
                             ],
                             "loc": {
                               "start": {
-                                "line": 22,
+                                "line": 29,
                                 "column": 20
                               },
                               "end": {
-                                "line": 22,
+                                "line": 29,
                                 "column": 30
                               }
                             }
                           },
                           "range": [
-                            623,
-                            645
+                            835,
+                            857
                           ],
                           "loc": {
                             "start": {
-                              "line": 22,
+                              "line": 29,
                               "column": 8
                             },
                             "end": {
-                              "line": 22,
+                              "line": 29,
                               "column": 30
                             }
                           }
@@ -1084,63 +1124,63 @@
                             "type": "Identifier",
                             "name": "node",
                             "range": [
-                              646,
-                              650
+                              858,
+                              862
                             ],
                             "loc": {
                               "start": {
-                                "line": 22,
+                                "line": 29,
                                 "column": 31
                               },
                               "end": {
-                                "line": 22,
+                                "line": 29,
                                 "column": 35
                               }
                             }
                           }
                         ],
                         "range": [
-                          623,
-                          651
+                          835,
+                          863
                         ],
                         "loc": {
                           "start": {
-                            "line": 22,
+                            "line": 29,
                             "column": 8
                           },
                           "end": {
-                            "line": 22,
+                            "line": 29,
                             "column": 36
                           }
                         }
                       },
                       "range": [
-                        623,
-                        656
+                        835,
+                        868
                       ],
                       "loc": {
                         "start": {
-                          "line": 22,
+                          "line": 29,
                           "column": 8
                         },
                         "end": {
-                          "line": 23,
+                          "line": 30,
                           "column": 4
                         }
                       }
                     }
                   ],
                   "range": [
-                    613,
-                    657
+                    825,
+                    869
                   ],
                   "loc": {
                     "start": {
-                      "line": 21,
+                      "line": 28,
                       "column": 20
                     },
                     "end": {
-                      "line": 23,
+                      "line": 30,
                       "column": 5
                     }
                   }
@@ -1148,16 +1188,16 @@
                 "generator": false,
                 "expression": false,
                 "range": [
-                  607,
-                  657
+                  819,
+                  869
                 ],
                 "loc": {
                   "start": {
-                    "line": 21,
+                    "line": 28,
                     "column": 14
                   },
                   "end": {
-                    "line": 23,
+                    "line": 30,
                     "column": 5
                   }
                 }
@@ -1165,34 +1205,34 @@
               "kind": "method",
               "computed": false,
               "range": [
-                597,
-                657
+                809,
+                869
               ],
               "loc": {
                 "start": {
-                  "line": 21,
+                  "line": 28,
                   "column": 4
                 },
                 "end": {
-                  "line": 23,
+                  "line": 30,
                   "column": 5
                 }
               },
               "leadingComments": [
                 {
                   "type": "Block",
-                  "value": "*\n     * Disconnect the audio node\n     ",
+                  "value": "*\n     * Disconnect the audio node\n     * @param {AudioNode} node - an AudioNode to disconnect to.\n     ",
                   "range": [
-                    548,
-                    592
+                    696,
+                    804
                   ],
                   "loc": {
                     "start": {
-                      "line": 18,
+                      "line": 24,
                       "column": 4
                     },
                     "end": {
-                      "line": 20,
+                      "line": 27,
                       "column": 7
                     }
                   }
@@ -1202,40 +1242,225 @@
             }
           ],
           "range": [
-            34,
-            659
+            167,
+            871
           ],
           "loc": {
             "start": {
-              "line": 1,
+              "line": 4,
               "column": 34
             },
             "end": {
-              "line": 24,
+              "line": 31,
               "column": 1
             }
           }
         },
         "range": [
-          15,
-          659
+          148,
+          871
         ],
         "loc": {
           "start": {
-            "line": 1,
+            "line": 4,
             "column": 15
           },
           "end": {
-            "line": 24,
+            "line": 31,
             "column": 1
           }
         },
-        "leadingComments": [],
-        "trailingComments": []
+        "leadingComments": [
+          {
+            "type": "Block",
+            "value": "*\n * Template for other audio nodes: set the audioContext reference and provide connect/disconnect methods for the audio node.\n ",
+            "range": [
+              0,
+              132
+            ],
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 0
+              },
+              "end": {
+                "line": 3,
+                "column": 3
+              }
+            }
+          }
+        ],
+        "trailingComments": [
+          {
+            "type": "Block",
+            "value": "*\n * AudioStreamsDescription\n * @todo: to be defined\n * @typedef {Object} AudioStreamsDescription\n ",
+            "range": [
+              874,
+              977
+            ],
+            "loc": {
+              "start": {
+                "line": 34,
+                "column": 0
+              },
+              "end": {
+                "line": 38,
+                "column": 3
+              }
+            }
+          },
+          {
+            "type": "Block",
+            "value": "*\n * HRTF\n * @todo: to be defined\n * @typedef {Object} HRTF\n ",
+            "range": [
+              979,
+              1044
+            ],
+            "loc": {
+              "start": {
+                "line": 40,
+                "column": 0
+              },
+              "end": {
+                "line": 44,
+                "column": 3
+              }
+            }
+          },
+          {
+            "type": "Block",
+            "value": "*\n * EqPreset\n * @todo: to be defined\n * @typedef {Object} EqPreset\n ",
+            "range": [
+              1046,
+              1119
+            ],
+            "loc": {
+              "start": {
+                "line": 46,
+                "column": 0
+              },
+              "end": {
+                "line": 50,
+                "column": 3
+              }
+            }
+          }
+        ]
       },
       "range": [
+        133,
+        871
+      ],
+      "loc": {
+        "start": {
+          "line": 4,
+          "column": 0
+        },
+        "end": {
+          "line": 31,
+          "column": 1
+        }
+      },
+      "leadingComments": [
+        {
+          "type": "Block",
+          "value": "*\n * Template for other audio nodes: set the audioContext reference and provide connect/disconnect methods for the audio node.\n ",
+          "range": [
+            0,
+            132
+          ],
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 0
+            },
+            "end": {
+              "line": 3,
+              "column": 3
+            }
+          }
+        }
+      ],
+      "trailingComments": [
+        {
+          "type": "Block",
+          "value": "*\n * AudioStreamsDescription\n * @todo: to be defined\n * @typedef {Object} AudioStreamsDescription\n ",
+          "range": [
+            874,
+            977
+          ],
+          "loc": {
+            "start": {
+              "line": 34,
+              "column": 0
+            },
+            "end": {
+              "line": 38,
+              "column": 3
+            }
+          }
+        },
+        {
+          "type": "Block",
+          "value": "*\n * HRTF\n * @todo: to be defined\n * @typedef {Object} HRTF\n ",
+          "range": [
+            979,
+            1044
+          ],
+          "loc": {
+            "start": {
+              "line": 40,
+              "column": 0
+            },
+            "end": {
+              "line": 44,
+              "column": 3
+            }
+          }
+        },
+        {
+          "type": "Block",
+          "value": "*\n * EqPreset\n * @todo: to be defined\n * @typedef {Object} EqPreset\n ",
+          "range": [
+            1046,
+            1119
+          ],
+          "loc": {
+            "start": {
+              "line": 46,
+              "column": 0
+            },
+            "end": {
+              "line": 50,
+              "column": 3
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "sourceType": "module",
+  "range": [
+    133,
+    871
+  ],
+  "loc": {
+    "start": {
+      "line": 4,
+      "column": 0
+    },
+    "end": {
+      "line": 31,
+      "column": 1
+    }
+  },
+  "comments": [
+    {
+      "type": "Block",
+      "value": "*\n * Template for other audio nodes: set the audioContext reference and provide connect/disconnect methods for the audio node.\n ",
+      "range": [
         0,
-        659
+        132
       ],
       "loc": {
         "start": {
@@ -1243,79 +1468,134 @@
           "column": 0
         },
         "end": {
-          "line": 24,
-          "column": 1
+          "line": 3,
+          "column": 3
         }
       }
-    }
-  ],
-  "sourceType": "module",
-  "range": [
-    0,
-    659
-  ],
-  "loc": {
-    "start": {
-      "line": 1,
-      "column": 0
     },
-    "end": {
-      "line": 24,
-      "column": 1
-    }
-  },
-  "comments": [
     {
       "type": "Block",
-      "value": "*\n     * AbstractNode constructor\n     * Template for the projet audio nodes: audioContext reference, connect and disconnect methods\n     * @param {AudioContext} audioContext - audioContext instance.\n     ",
+      "value": "*\n     * AbstractNode constructor\n     * @param {AudioContext} audioContext - audioContext instance.\n     ",
       "range": [
-        40,
-        249
+        173,
+        283
       ],
       "loc": {
         "start": {
-          "line": 2,
+          "line": 5,
           "column": 4
         },
         "end": {
-          "line": 6,
+          "line": 8,
           "column": 7
         }
       }
     },
     {
       "type": "Block",
-      "value": "*\n     * Connect the audio node\n     ",
+      "value": "*\n         * @type {AudioNode}\n         ",
       "range": [
-        443,
-        484
+        366,
+        410
       ],
       "loc": {
         "start": {
-          "line": 12,
-          "column": 4
+          "line": 11,
+          "column": 8
         },
         "end": {
-          "line": 14,
-          "column": 7
+          "line": 13,
+          "column": 11
         }
       }
     },
     {
       "type": "Block",
-      "value": "*\n     * Disconnect the audio node\n     ",
+      "value": "*\n     * Connect the audio node\n     * @param {AudioNode} node - an AudioNode to connect to.\n     ",
       "range": [
-        548,
-        592
+        530,
+        632
       ],
       "loc": {
         "start": {
-          "line": 18,
+          "line": 17,
           "column": 4
         },
         "end": {
           "line": 20,
           "column": 7
+        }
+      }
+    },
+    {
+      "type": "Block",
+      "value": "*\n     * Disconnect the audio node\n     * @param {AudioNode} node - an AudioNode to disconnect to.\n     ",
+      "range": [
+        696,
+        804
+      ],
+      "loc": {
+        "start": {
+          "line": 24,
+          "column": 4
+        },
+        "end": {
+          "line": 27,
+          "column": 7
+        }
+      }
+    },
+    {
+      "type": "Block",
+      "value": "*\n * AudioStreamsDescription\n * @todo: to be defined\n * @typedef {Object} AudioStreamsDescription\n ",
+      "range": [
+        874,
+        977
+      ],
+      "loc": {
+        "start": {
+          "line": 34,
+          "column": 0
+        },
+        "end": {
+          "line": 38,
+          "column": 3
+        }
+      }
+    },
+    {
+      "type": "Block",
+      "value": "*\n * HRTF\n * @todo: to be defined\n * @typedef {Object} HRTF\n ",
+      "range": [
+        979,
+        1044
+      ],
+      "loc": {
+        "start": {
+          "line": 40,
+          "column": 0
+        },
+        "end": {
+          "line": 44,
+          "column": 3
+        }
+      }
+    },
+    {
+      "type": "Block",
+      "value": "*\n * EqPreset\n * @todo: to be defined\n * @typedef {Object} EqPreset\n ",
+      "range": [
+        1046,
+        1119
+      ],
+      "loc": {
+        "start": {
+          "line": 46,
+          "column": 0
+        },
+        "end": {
+          "line": 50,
+          "column": 3
         }
       }
     }

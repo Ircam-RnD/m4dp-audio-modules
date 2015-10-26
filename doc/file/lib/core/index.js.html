@@ -33,6 +33,9 @@
   <ul>
     
   <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">core</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/lib/core/index.js~AbstractNode.html">AbstractNode</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-AudioStreamsDescription">AudioStreamsDescription</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-EqPreset">EqPreset</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-HRTF">HRTF</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">dialog-enhancement</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/lib/dialog-enhancement/index.js~DialogEnhancement.html">DialogEnhancement</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">multichannel-spatialiser</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/lib/multichannel-spatialiser/index.js~MultichannelSpatialiser.html">MultichannelSpatialiser</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">noise-adaptation</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/lib/noise-adaptation/index.js~NoiseAdaptation.html">NoiseAdaptation</a></span></span></li>
@@ -43,30 +46,56 @@
 </nav>
 
 <div class="content" data-ice="content"><h1 data-ice="title">lib/core/index.js</h1>
-<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">export default class AbstractNode {
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">/**
+ * Template for other audio nodes: set the audioContext reference and provide connect/disconnect methods for the audio node.
+ */
+export default class AbstractNode {
     /**
      * AbstractNode constructor
-     * Template for the projet audio nodes: audioContext reference, connect and disconnect methods
      * @param {AudioContext} audioContext - audioContext instance.
      */
     constructor(audioContext){
         this._audioContext = audioContext;
+        /**
+         * @type {AudioNode}
+         */
         this.input = this._audioContext.createGain();
         this._ouput = this._audioContext.createGain();
     }
     /**
      * Connect the audio node
+     * @param {AudioNode} node - an AudioNode to connect to.
      */
     connect(node){
         this._ouput.connect(node)
     }
     /**
      * Disconnect the audio node
+     * @param {AudioNode} node - an AudioNode to disconnect to.
      */
     disconnect(node){
         this._ouput.disconnect(node)
     }
 }
+
+
+/**
+ * AudioStreamsDescription
+ * @todo: to be defined
+ * @typedef {Object} AudioStreamsDescription
+ */
+
+/**
+ * HRTF
+ * @todo: to be defined
+ * @typedef {Object} HRTF
+ */
+
+/**
+ * EqPreset
+ * @todo: to be defined
+ * @typedef {Object} EqPreset
+ */
 </code></pre>
 
 </div>

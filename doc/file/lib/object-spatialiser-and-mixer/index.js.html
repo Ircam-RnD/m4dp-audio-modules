@@ -33,6 +33,9 @@
   <ul>
     
   <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">core</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/lib/core/index.js~AbstractNode.html">AbstractNode</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-AudioStreamsDescription">AudioStreamsDescription</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-EqPreset">EqPreset</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-HRTF">HRTF</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">dialog-enhancement</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/lib/dialog-enhancement/index.js~DialogEnhancement.html">DialogEnhancement</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">multichannel-spatialiser</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/lib/multichannel-spatialiser/index.js~MultichannelSpatialiser.html">MultichannelSpatialiser</a></span></span></li>
 <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">noise-adaptation</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/lib/noise-adaptation/index.js~NoiseAdaptation.html">NoiseAdaptation</a></span></span></li>
@@ -47,22 +50,37 @@
 
 
 export default class ObjectSpatialiserAndMixer extends MultichannelSpatialiser {
+    /**
+     * @param {AudioContext} audioContext - audioContext instance.
+     * @param {string} outputType - output type &quot;headphone&quot; or &quot;speaker&quot;
+     * @param {AudioStreamsDescription} audioStreamsDescription - audioStreamsDescription.
+     * @param {HRTF} hrtf - hrtf @todo to be defined
+     * @param {EqPreset} eqPreset - dialog gain @todo to be defined
+     * @param {number} offsetGain - gain @todo value to be defined
+     * @param {number} listeningAxis - angle? @todo value to be defined
+     */
     constructor(audioContext, outputType = &apos;headphone&apos;, audioStreamsDescription = {}, hrtf, eqPreset, offsetGain, listeningAxis){
         super(audioContext, outputType, audioStreamsDescription, hrtf, eqPreset, offsetGain, listeningAxis);
     }
-    /*
+    /**
      * Set the position of the sound
+     * @param {number} azimuth - azimuth @todo values to be defined
+     * @param {number} elevation - elevation @todo values to be defined
+     * @param {number} distance - distance @todo values to be defined
      */
     setPosition(azimuth, elevation, distance){
         this._azimuth = azimuth;
         this._elevation = elevation;
         this._distance = distance;
     }
-    /*
+    /**
      * Get the position of the sound
+     * @todo return an array? better I think for setPosition/getPosition homogeneity
+     * @return {array}
      */
     getPosition(){
-        return {&apos;azimuth&apos;: this._azimuth, &apos;elevation&apos;: this._elevation, &apos;distance&apos;: this._distance};
+        //return {&apos;azimuth&apos;: this._azimuth, &apos;elevation&apos;: this._elevation, &apos;distance&apos;: this._distance};
+        return [this._azimuth, this._elevation, this._distance];
     }
     /**
      * Process: &quot;position&quot; + &quot;gain&quot;

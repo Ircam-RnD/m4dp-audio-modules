@@ -390,6 +390,24 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "lib/core/index.js~audiostreamsdescription",
+    "typedef/index.html#static-typedef-AudioStreamsDescription",
+    "lib/core/index.js~AudioStreamsDescription",
+    "typedef"
+  ],
+  [
+    "lib/core/index.js~eqpreset",
+    "typedef/index.html#static-typedef-EqPreset",
+    "lib/core/index.js~EqPreset",
+    "typedef"
+  ],
+  [
+    "lib/core/index.js~hrtf",
+    "typedef/index.html#static-typedef-HRTF",
+    "lib/core/index.js~HRTF",
+    "typedef"
+  ],
+  [
     "lib/dialog-enhancement/index.js",
     "file/lib/dialog-enhancement/index.js.html",
     "lib/dialog-enhancement/index.js",
@@ -427,13 +445,13 @@ window.esdocSearchIndex = [
   ],
   [
     "lib/dialog-enhancement/index.js~dialogenhancement#mode",
-    "class/lib/dialog-enhancement/index.js~DialogEnhancement.html#instance-get-mode",
+    "class/lib/dialog-enhancement/index.js~DialogEnhancement.html#instance-set-mode",
     "lib/dialog-enhancement/index.js~DialogEnhancement#mode",
     "member"
   ],
   [
     "lib/dialog-enhancement/index.js~dialogenhancement#mode",
-    "class/lib/dialog-enhancement/index.js~DialogEnhancement.html#instance-set-mode",
+    "class/lib/dialog-enhancement/index.js~DialogEnhancement.html#instance-get-mode",
     "lib/dialog-enhancement/index.js~DialogEnhancement#mode",
     "member"
   ],
@@ -451,13 +469,13 @@ window.esdocSearchIndex = [
   ],
   [
     "lib/multichannel-spatialiser/index.js~multichannelspatialiser#audiostreamsdescription",
-    "class/lib/multichannel-spatialiser/index.js~MultichannelSpatialiser.html#instance-set-audioStreamsDescription",
+    "class/lib/multichannel-spatialiser/index.js~MultichannelSpatialiser.html#instance-get-audioStreamsDescription",
     "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser#audioStreamsDescription",
     "member"
   ],
   [
     "lib/multichannel-spatialiser/index.js~multichannelspatialiser#audiostreamsdescription",
-    "class/lib/multichannel-spatialiser/index.js~MultichannelSpatialiser.html#instance-get-audioStreamsDescription",
+    "class/lib/multichannel-spatialiser/index.js~MultichannelSpatialiser.html#instance-set-audioStreamsDescription",
     "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser#audioStreamsDescription",
     "member"
   ],
@@ -493,20 +511,14 @@ window.esdocSearchIndex = [
   ],
   [
     "lib/multichannel-spatialiser/index.js~multichannelspatialiser#listeningaxis",
-    "class/lib/multichannel-spatialiser/index.js~MultichannelSpatialiser.html#instance-set-listeningAxis",
-    "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser#listeningAxis",
-    "member"
-  ],
-  [
-    "lib/multichannel-spatialiser/index.js~multichannelspatialiser#listeningaxis",
     "class/lib/multichannel-spatialiser/index.js~MultichannelSpatialiser.html#instance-get-listeningAxis",
     "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser#listeningAxis",
     "member"
   ],
   [
-    "lib/multichannel-spatialiser/index.js~multichannelspatialiser#offsetgain",
-    "class/lib/multichannel-spatialiser/index.js~MultichannelSpatialiser.html#instance-get-offsetGain",
-    "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser#offsetGain",
+    "lib/multichannel-spatialiser/index.js~multichannelspatialiser#listeningaxis",
+    "class/lib/multichannel-spatialiser/index.js~MultichannelSpatialiser.html#instance-set-listeningAxis",
+    "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser#listeningAxis",
     "member"
   ],
   [
@@ -516,14 +528,20 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "lib/multichannel-spatialiser/index.js~multichannelspatialiser#outputtype",
-    "class/lib/multichannel-spatialiser/index.js~MultichannelSpatialiser.html#instance-set-outputType",
-    "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser#outputType",
+    "lib/multichannel-spatialiser/index.js~multichannelspatialiser#offsetgain",
+    "class/lib/multichannel-spatialiser/index.js~MultichannelSpatialiser.html#instance-get-offsetGain",
+    "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser#offsetGain",
     "member"
   ],
   [
     "lib/multichannel-spatialiser/index.js~multichannelspatialiser#outputtype",
     "class/lib/multichannel-spatialiser/index.js~MultichannelSpatialiser.html#instance-get-outputType",
+    "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser#outputType",
+    "member"
+  ],
+  [
+    "lib/multichannel-spatialiser/index.js~multichannelspatialiser#outputtype",
+    "class/lib/multichannel-spatialiser/index.js~MultichannelSpatialiser.html#instance-set-outputType",
     "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser#outputType",
     "member"
   ],
@@ -589,13 +607,13 @@ window.esdocSearchIndex = [
   ],
   [
     "lib/smart-fader/index.js~smartfader#db",
-    "class/lib/smart-fader/index.js~SmartFader.html#instance-set-db",
+    "class/lib/smart-fader/index.js~SmartFader.html#instance-get-db",
     "lib/smart-fader/index.js~SmartFader#db",
     "member"
   ],
   [
     "lib/smart-fader/index.js~smartfader#db",
-    "class/lib/smart-fader/index.js~SmartFader.html#instance-get-db",
+    "class/lib/smart-fader/index.js~SmartFader.html#instance-set-db",
     "lib/smart-fader/index.js~SmartFader#db",
     "member"
   ],
@@ -607,25 +625,25 @@ window.esdocSearchIndex = [
   ],
   [
     "lib/smart-fader/index.js~smartfader#loudness",
-    "class/lib/smart-fader/index.js~SmartFader.html#instance-get-loudness",
-    "lib/smart-fader/index.js~SmartFader#loudness",
-    "member"
-  ],
-  [
-    "lib/smart-fader/index.js~smartfader#loudness",
     "class/lib/smart-fader/index.js~SmartFader.html#instance-set-loudness",
     "lib/smart-fader/index.js~SmartFader#loudness",
     "member"
   ],
   [
-    "lib/smart-fader/index.js~smartfader#maxtruepeak",
-    "class/lib/smart-fader/index.js~SmartFader.html#instance-set-maxTruePeak",
-    "lib/smart-fader/index.js~SmartFader#maxTruePeak",
+    "lib/smart-fader/index.js~smartfader#loudness",
+    "class/lib/smart-fader/index.js~SmartFader.html#instance-get-loudness",
+    "lib/smart-fader/index.js~SmartFader#loudness",
     "member"
   ],
   [
     "lib/smart-fader/index.js~smartfader#maxtruepeak",
     "class/lib/smart-fader/index.js~SmartFader.html#instance-get-maxTruePeak",
+    "lib/smart-fader/index.js~SmartFader#maxTruePeak",
+    "member"
+  ],
+  [
+    "lib/smart-fader/index.js~smartfader#maxtruepeak",
+    "class/lib/smart-fader/index.js~SmartFader.html#instance-set-maxTruePeak",
     "lib/smart-fader/index.js~SmartFader#maxTruePeak",
     "member"
   ]
