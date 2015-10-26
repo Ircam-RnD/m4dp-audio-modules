@@ -390,6 +390,12 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
+    "lib/core/index.js~audiocontext",
+    "external/index.html",
+    "lib/core/index.js~AudioContext",
+    "external"
+  ],
+  [
     "lib/core/index.js~audiostreamsdescription",
     "typedef/index.html#static-typedef-AudioStreamsDescription",
     "lib/core/index.js~AudioStreamsDescription",
@@ -415,13 +421,13 @@ window.esdocSearchIndex = [
   ],
   [
     "lib/dialog-enhancement/index.js~dialogenhancement#audiostreamsdescription",
-    "class/lib/dialog-enhancement/index.js~DialogEnhancement.html#instance-get-audioStreamsDescription",
+    "class/lib/dialog-enhancement/index.js~DialogEnhancement.html#instance-set-audioStreamsDescription",
     "lib/dialog-enhancement/index.js~DialogEnhancement#audioStreamsDescription",
     "member"
   ],
   [
     "lib/dialog-enhancement/index.js~dialogenhancement#audiostreamsdescription",
-    "class/lib/dialog-enhancement/index.js~DialogEnhancement.html#instance-set-audioStreamsDescription",
+    "class/lib/dialog-enhancement/index.js~DialogEnhancement.html#instance-get-audioStreamsDescription",
     "lib/dialog-enhancement/index.js~DialogEnhancement#audioStreamsDescription",
     "member"
   ],
@@ -433,13 +439,13 @@ window.esdocSearchIndex = [
   ],
   [
     "lib/dialog-enhancement/index.js~dialogenhancement#dialoggain",
-    "class/lib/dialog-enhancement/index.js~DialogEnhancement.html#instance-get-dialogGain",
+    "class/lib/dialog-enhancement/index.js~DialogEnhancement.html#instance-set-dialogGain",
     "lib/dialog-enhancement/index.js~DialogEnhancement#dialogGain",
     "member"
   ],
   [
     "lib/dialog-enhancement/index.js~dialogenhancement#dialoggain",
-    "class/lib/dialog-enhancement/index.js~DialogEnhancement.html#instance-set-dialogGain",
+    "class/lib/dialog-enhancement/index.js~DialogEnhancement.html#instance-get-dialogGain",
     "lib/dialog-enhancement/index.js~DialogEnhancement#dialogGain",
     "member"
   ],
@@ -487,20 +493,14 @@ window.esdocSearchIndex = [
   ],
   [
     "lib/multichannel-spatialiser/index.js~multichannelspatialiser#eqpreset",
-    "class/lib/multichannel-spatialiser/index.js~MultichannelSpatialiser.html#instance-set-eqPreset",
-    "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser#eqPreset",
-    "member"
-  ],
-  [
-    "lib/multichannel-spatialiser/index.js~multichannelspatialiser#eqpreset",
     "class/lib/multichannel-spatialiser/index.js~MultichannelSpatialiser.html#instance-get-eqPreset",
     "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser#eqPreset",
     "member"
   ],
   [
-    "lib/multichannel-spatialiser/index.js~multichannelspatialiser#hrtf",
-    "class/lib/multichannel-spatialiser/index.js~MultichannelSpatialiser.html#instance-get-hrtf",
-    "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser#hrtf",
+    "lib/multichannel-spatialiser/index.js~multichannelspatialiser#eqpreset",
+    "class/lib/multichannel-spatialiser/index.js~MultichannelSpatialiser.html#instance-set-eqPreset",
+    "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser#eqPreset",
     "member"
   ],
   [
@@ -510,9 +510,9 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "lib/multichannel-spatialiser/index.js~multichannelspatialiser#listeningaxis",
-    "class/lib/multichannel-spatialiser/index.js~MultichannelSpatialiser.html#instance-get-listeningAxis",
-    "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser#listeningAxis",
+    "lib/multichannel-spatialiser/index.js~multichannelspatialiser#hrtf",
+    "class/lib/multichannel-spatialiser/index.js~MultichannelSpatialiser.html#instance-get-hrtf",
+    "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser#hrtf",
     "member"
   ],
   [
@@ -522,14 +522,20 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "lib/multichannel-spatialiser/index.js~multichannelspatialiser#offsetgain",
-    "class/lib/multichannel-spatialiser/index.js~MultichannelSpatialiser.html#instance-set-offsetGain",
-    "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser#offsetGain",
+    "lib/multichannel-spatialiser/index.js~multichannelspatialiser#listeningaxis",
+    "class/lib/multichannel-spatialiser/index.js~MultichannelSpatialiser.html#instance-get-listeningAxis",
+    "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser#listeningAxis",
     "member"
   ],
   [
     "lib/multichannel-spatialiser/index.js~multichannelspatialiser#offsetgain",
     "class/lib/multichannel-spatialiser/index.js~MultichannelSpatialiser.html#instance-get-offsetGain",
+    "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser#offsetGain",
+    "member"
+  ],
+  [
+    "lib/multichannel-spatialiser/index.js~multichannelspatialiser#offsetgain",
+    "class/lib/multichannel-spatialiser/index.js~MultichannelSpatialiser.html#instance-set-offsetGain",
     "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser#offsetGain",
     "member"
   ],
@@ -625,25 +631,25 @@ window.esdocSearchIndex = [
   ],
   [
     "lib/smart-fader/index.js~smartfader#loudness",
-    "class/lib/smart-fader/index.js~SmartFader.html#instance-set-loudness",
-    "lib/smart-fader/index.js~SmartFader#loudness",
-    "member"
-  ],
-  [
-    "lib/smart-fader/index.js~smartfader#loudness",
     "class/lib/smart-fader/index.js~SmartFader.html#instance-get-loudness",
     "lib/smart-fader/index.js~SmartFader#loudness",
     "member"
   ],
   [
-    "lib/smart-fader/index.js~smartfader#maxtruepeak",
-    "class/lib/smart-fader/index.js~SmartFader.html#instance-get-maxTruePeak",
-    "lib/smart-fader/index.js~SmartFader#maxTruePeak",
+    "lib/smart-fader/index.js~smartfader#loudness",
+    "class/lib/smart-fader/index.js~SmartFader.html#instance-set-loudness",
+    "lib/smart-fader/index.js~SmartFader#loudness",
     "member"
   ],
   [
     "lib/smart-fader/index.js~smartfader#maxtruepeak",
     "class/lib/smart-fader/index.js~SmartFader.html#instance-set-maxTruePeak",
+    "lib/smart-fader/index.js~SmartFader#maxTruePeak",
+    "member"
+  ],
+  [
+    "lib/smart-fader/index.js~smartfader#maxtruepeak",
+    "class/lib/smart-fader/index.js~SmartFader.html#instance-get-maxTruePeak",
     "lib/smart-fader/index.js~SmartFader#maxTruePeak",
     "member"
   ]

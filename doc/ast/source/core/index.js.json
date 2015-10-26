@@ -1344,6 +1344,24 @@
                 "column": 3
               }
             }
+          },
+          {
+            "type": "Block",
+            "value": "*\n * @external {AudioContext} https://developer.mozilla.org/fr/docs/Web/API/AudioContext\n ",
+            "range": [
+              1122,
+              1216
+            ],
+            "loc": {
+              "start": {
+                "line": 52,
+                "column": 1
+              },
+              "end": {
+                "line": 54,
+                "column": 3
+              }
+            }
           }
         ]
       },
@@ -1432,6 +1450,24 @@
             },
             "end": {
               "line": 50,
+              "column": 3
+            }
+          }
+        },
+        {
+          "type": "Block",
+          "value": "*\n * @external {AudioContext} https://developer.mozilla.org/fr/docs/Web/API/AudioContext\n ",
+          "range": [
+            1122,
+            1216
+          ],
+          "loc": {
+            "start": {
+              "line": 52,
+              "column": 1
+            },
+            "end": {
+              "line": 54,
               "column": 3
             }
           }
@@ -1595,6 +1631,24 @@
         },
         "end": {
           "line": 50,
+          "column": 3
+        }
+      }
+    },
+    {
+      "type": "Block",
+      "value": "*\n * @external {AudioContext} https://developer.mozilla.org/fr/docs/Web/API/AudioContext\n ",
+      "range": [
+        1122,
+        1216
+      ],
+      "loc": {
+        "start": {
+          "line": 52,
+          "column": 1
+        },
+        "end": {
+          "line": 54,
           "column": 3
         }
       }
