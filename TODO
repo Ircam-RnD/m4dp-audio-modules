@@ -3,7 +3,7 @@ TODO
 * dotscreen : instancer un audioStreamDescription et faire la sandbox
 * ftv : egalisation du casque, fournir les réglages
 * ftv : souhaits sur le compresseur 'ratio, threshold, attach, release'
-* ftv : plage des paramètre (ex sur le smartfader range en dB)
+* ftv : plage des paramètres (ex sur le smartfader range en dB)
 * JP : binaural
 * T : compressor smart fader (que veut matthieu dans son réglage de volume, loudness pas utilisé)
 * T : transaural
