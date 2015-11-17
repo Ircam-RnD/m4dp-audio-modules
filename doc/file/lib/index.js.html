@@ -33,7 +33,8 @@
   <ul>
     
   <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">core</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/lib/core/index.js~AbstractNode.html">AbstractNode</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-AudioStreamsDescription">AudioStreamsDescription</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/lib/core/index.js~AudioStreamDescription.html">AudioStreamDescription</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/lib/core/index.js~AudioStreamDescriptionCollection.html">AudioStreamDescriptionCollection</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-EqPreset">EqPreset</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-HRTF">HRTF</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://developer.mozilla.org/fr/docs/Web/API/AudioContext">AudioContext</a></span></span></li>
@@ -52,6 +53,7 @@ import MultichannelSpatialiser from &apos;./multichannel-spatialiser/index.js&ap
 import NoiseAdaptation from &apos;./noise-adaptation/index.js&apos;;
 import ObjectSpatialiserAndMixer from &apos;./object-spatialiser-and-mixer/index.js&apos;;
 import SmartFader from &apos;./smart-fader/index.js&apos;;
+import {AudioStreamDescriptionCollection, AudioStreamDescription} from &apos;./core/index.js&apos;;
 
 
 const M4DPAudioModules = {
@@ -59,14 +61,13 @@ const M4DPAudioModules = {
     &quot;MultichannelSpatialiser&quot;: MultichannelSpatialiser,
     &quot;NoiseAdaptation&quot;: NoiseAdaptation,
     &quot;ObjectSpatialiserAndMixer&quot;: ObjectSpatialiserAndMixer,
-    &quot;SmartFader&quot;: SmartFader
+    &quot;SmartFader&quot;: SmartFader,
+    &quot;AudioStreamDescriptionCollection&quot;: AudioStreamDescriptionCollection,
+    &quot;AudioStreamDescription&quot;: AudioStreamDescription
 };
 
 // @fix, Extra ugly, should use export default M4DPAudioModules;
 window.M4DPAudioModules = M4DPAudioModules;
-
-
-
 </code></pre>
 
 </div>

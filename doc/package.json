@@ -9,7 +9,8 @@
     "prebundle": "npm run transpile",
     "bundle": "./bin/scripts.js --bundle",
     "watch": "./bin/scripts.js --watch",
-    "serve": "./bin/scripts.js --serve"
+    "serve": "./bin/scripts.js --serve",
+    "doc": "esdoc -c esdoc.json"
   },
   "author": "Samuel Goldszmidt",
   "license": "ISC",

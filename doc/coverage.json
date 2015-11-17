@@ -1,11 +1,11 @@
 {
-  "coverage": "88.63%",
-  "expectCount": 44,
-  "actualCount": 39,
+  "coverage": "90.16%",
+  "expectCount": 61,
+  "actualCount": 55,
   "files": {
     "lib/core/index.js": {
-      "expectCount": 5,
-      "actualCount": 5,
+      "expectCount": 24,
+      "actualCount": 24,
       "undocumentLines": []
     },
     "lib/dialog-enhancement/index.js": {
@@ -37,10 +37,11 @@
       ]
     },
     "lib/smart-fader/index.js": {
-      "expectCount": 9,
-      "actualCount": 8,
+      "expectCount": 7,
+      "actualCount": 5,
       "undocumentLines": [
-        4
+        4,
+        46
       ]
     }
   }

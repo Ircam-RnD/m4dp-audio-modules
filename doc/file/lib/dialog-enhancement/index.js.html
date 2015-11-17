@@ -33,7 +33,8 @@
   <ul>
     
   <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">core</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/lib/core/index.js~AbstractNode.html">AbstractNode</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-AudioStreamsDescription">AudioStreamsDescription</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/lib/core/index.js~AudioStreamDescription.html">AudioStreamDescription</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/lib/core/index.js~AudioStreamDescriptionCollection.html">AudioStreamDescriptionCollection</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-EqPreset">EqPreset</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-HRTF">HRTF</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://developer.mozilla.org/fr/docs/Web/API/AudioContext">AudioContext</a></span></span></li>
@@ -53,20 +54,22 @@
 export default class DialogEnhancement extends AbstractNode {
     /**
      * @param {AudioContext} audioContext - audioContext instance.
-     * @param {AudioStreamsDescription} audioStreamsDescription - audioStreamsDescription.
+     * @param {AudioStreamDescriptionCollection} audioStreamDescriptionCollection - audioStreamDescriptionCollection.
      * @param {number} mode - mode
      * @param {number} dialogGain - dialog gain
      */
-    constructor(audioContext, audioStreamsDescription, mode, dialogGain){
-        super(audioContext);
+    constructor(audioContext, audioStreamDescriptionCollection, mode, dialogGain){
+        super(audioContext, audioStreamDescriptionCollection);
         this._mode = mode;
-        this._audioStreamsDescription = audioStreamsDescription;
     }
     /**
      * Set Mode - value is 1, 2 or 3
      * @type {number}
      */
     set mode(value){
+        // @todo error in some mode: eg. mode 1 and no dialog =&gt; &quot;impossible&quot;
+        // error mode 2 et pas de 5.0 ou 5.1
+        // error mode 3 et pas de st&#xE9;r&#xE9;o
         this._mode = value;
     }
     /**
@@ -77,18 +80,18 @@ export default class DialogEnhancement extends AbstractNode {
         return this._mode;
     }
     /**
-     * Set audioStreamsDescription
-     * @type {AudioStreamsDescription}
+     * Set audioStreamDescriptionCollection
+     * @type {AudioStreamDescriptionCollection}
      */
-    set audioStreamsDescription(value){
-        this._audioStreamsDescription = value;
+    set audioStreamDescriptionCollection(value){
+        this._audioStreamDescriptionCollection = value;
     }
     /**
-     * Get audioStreamsDescription
-     * @type {AudioStreamsDescription}
+     * Get audioStreamDescriptionCollection
+     * @type {AudioStreamDescriptionCollection}
      */
-    get audioStreamsDescription(){
-        return this._audioStreamsDescription;
+    get audioStreamDescriptionCollection(){
+        return this._audioStreamDescriptionCollection;
     }
     /**
      * Set dialogGain

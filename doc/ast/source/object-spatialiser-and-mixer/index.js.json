@@ -123,8 +123,8 @@
                 "type": "Identifier",
                 "name": "constructor",
                 "range": [
-                  670,
-                  681
+                  697,
+                  708
                 ],
                 "loc": {
                   "start": {
@@ -145,8 +145,8 @@
                     "type": "Identifier",
                     "name": "audioContext",
                     "range": [
-                      682,
-                      694
+                      709,
+                      721
                     ],
                     "loc": {
                       "start": {
@@ -163,10 +163,10 @@
                     "type": "AssignmentPattern",
                     "left": {
                       "type": "Identifier",
-                      "name": "outputType",
+                      "name": "audioStreamDescriptionCollection",
                       "range": [
-                        696,
-                        706
+                        723,
+                        755
                       ],
                       "loc": {
                         "start": {
@@ -175,32 +175,31 @@
                         },
                         "end": {
                           "line": 14,
-                          "column": 40
+                          "column": 62
                         }
                       }
                     },
                     "right": {
-                      "type": "Literal",
-                      "value": "headphone",
-                      "raw": "'headphone'",
+                      "type": "Identifier",
+                      "name": "undefined",
                       "range": [
-                        709,
-                        720
+                        758,
+                        767
                       ],
                       "loc": {
                         "start": {
                           "line": 14,
-                          "column": 43
+                          "column": 65
                         },
                         "end": {
                           "line": 14,
-                          "column": 54
+                          "column": 74
                         }
                       }
                     },
                     "range": [
-                      696,
-                      720
+                      723,
+                      767
                     ],
                     "loc": {
                       "start": {
@@ -209,7 +208,7 @@
                       },
                       "end": {
                         "line": 14,
-                        "column": 54
+                        "column": 74
                       }
                     }
                   },
@@ -217,84 +216,49 @@
                     "type": "AssignmentPattern",
                     "left": {
                       "type": "Identifier",
-                      "name": "audioStreamsDescription",
+                      "name": "outputType",
                       "range": [
-                        722,
-                        745
+                        769,
+                        779
                       ],
                       "loc": {
                         "start": {
                           "line": 14,
-                          "column": 56
+                          "column": 76
                         },
                         "end": {
                           "line": 14,
-                          "column": 79
+                          "column": 86
                         }
                       }
                     },
                     "right": {
-                      "type": "ObjectExpression",
-                      "properties": [],
+                      "type": "Literal",
+                      "value": "headphone",
+                      "raw": "'headphone'",
                       "range": [
-                        748,
-                        750
+                        782,
+                        793
                       ],
                       "loc": {
                         "start": {
                           "line": 14,
-                          "column": 82
+                          "column": 89
                         },
                         "end": {
                           "line": 14,
-                          "column": 84
+                          "column": 100
                         }
                       }
                     },
                     "range": [
-                      722,
-                      750
+                      769,
+                      793
                     ],
                     "loc": {
                       "start": {
                         "line": 14,
-                        "column": 56
-                      },
-                      "end": {
-                        "line": 14,
-                        "column": 84
-                      }
-                    }
-                  },
-                  {
-                    "type": "Identifier",
-                    "name": "hrtf",
-                    "range": [
-                      752,
-                      756
-                    ],
-                    "loc": {
-                      "start": {
-                        "line": 14,
-                        "column": 86
-                      },
-                      "end": {
-                        "line": 14,
-                        "column": 90
-                      }
-                    }
-                  },
-                  {
-                    "type": "Identifier",
-                    "name": "eqPreset",
-                    "range": [
-                      758,
-                      766
-                    ],
-                    "loc": {
-                      "start": {
-                        "line": 14,
-                        "column": 92
+                        "column": 76
                       },
                       "end": {
                         "line": 14,
@@ -304,10 +268,10 @@
                   },
                   {
                     "type": "Identifier",
-                    "name": "offsetGain",
+                    "name": "hrtf",
                     "range": [
-                      768,
-                      778
+                      795,
+                      799
                     ],
                     "loc": {
                       "start": {
@@ -316,7 +280,43 @@
                       },
                       "end": {
                         "line": 14,
-                        "column": 112
+                        "column": 106
+                      }
+                    }
+                  },
+                  {
+                    "type": "Identifier",
+                    "name": "eqPreset",
+                    "range": [
+                      801,
+                      809
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 14,
+                        "column": 108
+                      },
+                      "end": {
+                        "line": 14,
+                        "column": 116
+                      }
+                    }
+                  },
+                  {
+                    "type": "Identifier",
+                    "name": "offsetGain",
+                    "range": [
+                      811,
+                      821
+                    ],
+                    "loc": {
+                      "start": {
+                        "line": 14,
+                        "column": 118
+                      },
+                      "end": {
+                        "line": 14,
+                        "column": 128
                       }
                     }
                   },
@@ -324,17 +324,17 @@
                     "type": "Identifier",
                     "name": "listeningAxis",
                     "range": [
-                      780,
-                      793
+                      823,
+                      836
                     ],
                     "loc": {
                       "start": {
                         "line": 14,
-                        "column": 114
+                        "column": 130
                       },
                       "end": {
                         "line": 14,
-                        "column": 127
+                        "column": 143
                       }
                     }
                   }
@@ -349,8 +349,8 @@
                         "callee": {
                           "type": "Super",
                           "range": [
-                            804,
-                            809
+                            847,
+                            852
                           ],
                           "loc": {
                             "start": {
@@ -368,8 +368,8 @@
                             "type": "Identifier",
                             "name": "audioContext",
                             "range": [
-                              810,
-                              822
+                              853,
+                              865
                             ],
                             "loc": {
                               "start": {
@@ -384,10 +384,10 @@
                           },
                           {
                             "type": "Identifier",
-                            "name": "outputType",
+                            "name": "audioStreamDescriptionCollection",
                             "range": [
-                              824,
-                              834
+                              867,
+                              899
                             ],
                             "loc": {
                               "start": {
@@ -396,25 +396,25 @@
                               },
                               "end": {
                                 "line": 15,
-                                "column": 38
+                                "column": 60
                               }
                             }
                           },
                           {
                             "type": "Identifier",
-                            "name": "audioStreamsDescription",
+                            "name": "outputType",
                             "range": [
-                              836,
-                              859
+                              901,
+                              911
                             ],
                             "loc": {
                               "start": {
                                 "line": 15,
-                                "column": 40
+                                "column": 62
                               },
                               "end": {
                                 "line": 15,
-                                "column": 63
+                                "column": 72
                               }
                             }
                           },
@@ -422,17 +422,17 @@
                             "type": "Identifier",
                             "name": "hrtf",
                             "range": [
-                              861,
-                              865
+                              913,
+                              917
                             ],
                             "loc": {
                               "start": {
                                 "line": 15,
-                                "column": 65
+                                "column": 74
                               },
                               "end": {
                                 "line": 15,
-                                "column": 69
+                                "column": 78
                               }
                             }
                           },
@@ -440,17 +440,17 @@
                             "type": "Identifier",
                             "name": "eqPreset",
                             "range": [
-                              867,
-                              875
+                              919,
+                              927
                             ],
                             "loc": {
                               "start": {
                                 "line": 15,
-                                "column": 71
+                                "column": 80
                               },
                               "end": {
                                 "line": 15,
-                                "column": 79
+                                "column": 88
                               }
                             }
                           },
@@ -458,17 +458,17 @@
                             "type": "Identifier",
                             "name": "offsetGain",
                             "range": [
-                              877,
-                              887
+                              929,
+                              939
                             ],
                             "loc": {
                               "start": {
                                 "line": 15,
-                                "column": 81
+                                "column": 90
                               },
                               "end": {
                                 "line": 15,
-                                "column": 91
+                                "column": 100
                               }
                             }
                           },
@@ -476,24 +476,24 @@
                             "type": "Identifier",
                             "name": "listeningAxis",
                             "range": [
-                              889,
-                              902
+                              941,
+                              954
                             ],
                             "loc": {
                               "start": {
                                 "line": 15,
-                                "column": 93
+                                "column": 102
                               },
                               "end": {
                                 "line": 15,
-                                "column": 106
+                                "column": 115
                               }
                             }
                           }
                         ],
                         "range": [
-                          804,
-                          903
+                          847,
+                          955
                         ],
                         "loc": {
                           "start": {
@@ -502,13 +502,13 @@
                           },
                           "end": {
                             "line": 15,
-                            "column": 107
+                            "column": 116
                           }
                         }
                       },
                       "range": [
-                        804,
-                        904
+                        847,
+                        956
                       ],
                       "loc": {
                         "start": {
@@ -517,19 +517,19 @@
                         },
                         "end": {
                           "line": 15,
-                          "column": 108
+                          "column": 117
                         }
                       }
                     }
                   ],
                   "range": [
-                    794,
-                    910
+                    837,
+                    962
                   ],
                   "loc": {
                     "start": {
                       "line": 14,
-                      "column": 128
+                      "column": 144
                     },
                     "end": {
                       "line": 16,
@@ -540,8 +540,8 @@
                 "generator": false,
                 "expression": false,
                 "range": [
-                  681,
-                  910
+                  708,
+                  962
                 ],
                 "loc": {
                   "start": {
@@ -557,8 +557,8 @@
               "kind": "constructor",
               "computed": false,
               "range": [
-                670,
-                910
+                697,
+                962
               ],
               "loc": {
                 "start": {
@@ -573,10 +573,10 @@
               "leadingComments": [
                 {
                   "type": "Block",
-                  "value": "*\n     * @param {AudioContext} audioContext - audioContext instance.\n     * @param {string} outputType - output type \"headphone\" or \"speaker\"\n     * @param {AudioStreamsDescription} audioStreamsDescription - audioStreamsDescription.\n     * @param {HRTF} hrtf - hrtf @todo to be defined\n     * @param {EqPreset} eqPreset - dialog gain @todo to be defined\n     * @param {number} offsetGain - gain @todo value to be defined\n     * @param {number} listeningAxis - angle? @todo value to be defined\n     ",
+                  "value": "*\n     * @param {AudioContext} audioContext - audioContext instance.\n     * @param {AudioStreamDescriptionCollection} audioStreamDescriptionCollection - audioStreamDescriptionCollection.\n     * @param {string} outputType - output type \"headphone\" or \"speaker\"\n     * @param {HRTF} hrtf - hrtf @todo to be defined\n     * @param {EqPreset} eqPreset - dialog gain @todo to be defined\n     * @param {number} offsetGain - gain @todo value to be defined\n     * @param {number} listeningAxis - angle? @todo value to be defined\n     ",
                   "range": [
                     163,
-                    665
+                    692
                   ],
                   "loc": {
                     "start": {
@@ -593,10 +593,10 @@
               "trailingComments": [
                 {
                   "type": "Block",
-                  "value": "*\n     * Set the position of the sound\n     * @param {number} azimuth - azimuth @todo values to be defined\n     * @param {number} elevation - elevation @todo values to be defined\n     * @param {number} distance - distance @todo values to be defined\n     ",
+                  "value": "*\n     * Set the position of the sound\n     * @todo only for a unique mono stream\n     * @param {number} azimuth - azimuth @todo values to be defined\n     * @param {number} elevation - elevation @todo values to be defined\n     * @param {number} distance - distance @todo values to be defined\n     ",
                   "range": [
-                    915,
-                    1173
+                    967,
+                    1268
                   ],
                   "loc": {
                     "start": {
@@ -604,7 +604,7 @@
                       "column": 4
                     },
                     "end": {
-                      "line": 22,
+                      "line": 23,
                       "column": 7
                     }
                   }
@@ -618,16 +618,16 @@
                 "type": "Identifier",
                 "name": "setPosition",
                 "range": [
-                  1178,
-                  1189
+                  1273,
+                  1284
                 ],
                 "loc": {
                   "start": {
-                    "line": 23,
+                    "line": 24,
                     "column": 4
                   },
                   "end": {
-                    "line": 23,
+                    "line": 24,
                     "column": 15
                   }
                 }
@@ -640,16 +640,16 @@
                     "type": "Identifier",
                     "name": "azimuth",
                     "range": [
-                      1190,
-                      1197
+                      1285,
+                      1292
                     ],
                     "loc": {
                       "start": {
-                        "line": 23,
+                        "line": 24,
                         "column": 16
                       },
                       "end": {
-                        "line": 23,
+                        "line": 24,
                         "column": 23
                       }
                     }
@@ -658,16 +658,16 @@
                     "type": "Identifier",
                     "name": "elevation",
                     "range": [
-                      1199,
-                      1208
+                      1294,
+                      1303
                     ],
                     "loc": {
                       "start": {
-                        "line": 23,
+                        "line": 24,
                         "column": 25
                       },
                       "end": {
-                        "line": 23,
+                        "line": 24,
                         "column": 34
                       }
                     }
@@ -676,16 +676,16 @@
                     "type": "Identifier",
                     "name": "distance",
                     "range": [
-                      1210,
-                      1218
+                      1305,
+                      1313
                     ],
                     "loc": {
                       "start": {
-                        "line": 23,
+                        "line": 24,
                         "column": 36
                       },
                       "end": {
-                        "line": 23,
+                        "line": 24,
                         "column": 44
                       }
                     }
@@ -705,16 +705,16 @@
                           "object": {
                             "type": "ThisExpression",
                             "range": [
-                              1229,
-                              1233
+                              1324,
+                              1328
                             ],
                             "loc": {
                               "start": {
-                                "line": 24,
+                                "line": 25,
                                 "column": 8
                               },
                               "end": {
-                                "line": 24,
+                                "line": 25,
                                 "column": 12
                               }
                             }
@@ -723,31 +723,31 @@
                             "type": "Identifier",
                             "name": "_azimuth",
                             "range": [
-                              1234,
-                              1242
+                              1329,
+                              1337
                             ],
                             "loc": {
                               "start": {
-                                "line": 24,
+                                "line": 25,
                                 "column": 13
                               },
                               "end": {
-                                "line": 24,
+                                "line": 25,
                                 "column": 21
                               }
                             }
                           },
                           "range": [
-                            1229,
-                            1242
+                            1324,
+                            1337
                           ],
                           "loc": {
                             "start": {
-                              "line": 24,
+                              "line": 25,
                               "column": 8
                             },
                             "end": {
-                              "line": 24,
+                              "line": 25,
                               "column": 21
                             }
                           }
@@ -756,46 +756,46 @@
                           "type": "Identifier",
                           "name": "azimuth",
                           "range": [
-                            1245,
-                            1252
+                            1340,
+                            1347
                           ],
                           "loc": {
                             "start": {
-                              "line": 24,
+                              "line": 25,
                               "column": 24
                             },
                             "end": {
-                              "line": 24,
+                              "line": 25,
                               "column": 31
                             }
                           }
                         },
                         "range": [
-                          1229,
-                          1252
+                          1324,
+                          1347
                         ],
                         "loc": {
                           "start": {
-                            "line": 24,
+                            "line": 25,
                             "column": 8
                           },
                           "end": {
-                            "line": 24,
+                            "line": 25,
                             "column": 31
                           }
                         }
                       },
                       "range": [
-                        1229,
-                        1253
+                        1324,
+                        1348
                       ],
                       "loc": {
                         "start": {
-                          "line": 24,
+                          "line": 25,
                           "column": 8
                         },
                         "end": {
-                          "line": 24,
+                          "line": 25,
                           "column": 32
                         }
                       }
@@ -811,16 +811,16 @@
                           "object": {
                             "type": "ThisExpression",
                             "range": [
-                              1262,
-                              1266
+                              1357,
+                              1361
                             ],
                             "loc": {
                               "start": {
-                                "line": 25,
+                                "line": 26,
                                 "column": 8
                               },
                               "end": {
-                                "line": 25,
+                                "line": 26,
                                 "column": 12
                               }
                             }
@@ -829,31 +829,31 @@
                             "type": "Identifier",
                             "name": "_elevation",
                             "range": [
-                              1267,
-                              1277
+                              1362,
+                              1372
                             ],
                             "loc": {
                               "start": {
-                                "line": 25,
+                                "line": 26,
                                 "column": 13
                               },
                               "end": {
-                                "line": 25,
+                                "line": 26,
                                 "column": 23
                               }
                             }
                           },
                           "range": [
-                            1262,
-                            1277
+                            1357,
+                            1372
                           ],
                           "loc": {
                             "start": {
-                              "line": 25,
+                              "line": 26,
                               "column": 8
                             },
                             "end": {
-                              "line": 25,
+                              "line": 26,
                               "column": 23
                             }
                           }
@@ -862,46 +862,46 @@
                           "type": "Identifier",
                           "name": "elevation",
                           "range": [
-                            1280,
-                            1289
+                            1375,
+                            1384
                           ],
                           "loc": {
                             "start": {
-                              "line": 25,
+                              "line": 26,
                               "column": 26
                             },
                             "end": {
-                              "line": 25,
+                              "line": 26,
                               "column": 35
                             }
                           }
                         },
                         "range": [
-                          1262,
-                          1289
+                          1357,
+                          1384
                         ],
                         "loc": {
                           "start": {
-                            "line": 25,
+                            "line": 26,
                             "column": 8
                           },
                           "end": {
-                            "line": 25,
+                            "line": 26,
                             "column": 35
                           }
                         }
                       },
                       "range": [
-                        1262,
-                        1290
+                        1357,
+                        1385
                       ],
                       "loc": {
                         "start": {
-                          "line": 25,
+                          "line": 26,
                           "column": 8
                         },
                         "end": {
-                          "line": 25,
+                          "line": 26,
                           "column": 36
                         }
                       }
@@ -917,16 +917,16 @@
                           "object": {
                             "type": "ThisExpression",
                             "range": [
-                              1299,
-                              1303
+                              1394,
+                              1398
                             ],
                             "loc": {
                               "start": {
-                                "line": 26,
+                                "line": 27,
                                 "column": 8
                               },
                               "end": {
-                                "line": 26,
+                                "line": 27,
                                 "column": 12
                               }
                             }
@@ -935,31 +935,31 @@
                             "type": "Identifier",
                             "name": "_distance",
                             "range": [
-                              1304,
-                              1313
+                              1399,
+                              1408
                             ],
                             "loc": {
                               "start": {
-                                "line": 26,
+                                "line": 27,
                                 "column": 13
                               },
                               "end": {
-                                "line": 26,
+                                "line": 27,
                                 "column": 22
                               }
                             }
                           },
                           "range": [
-                            1299,
-                            1313
+                            1394,
+                            1408
                           ],
                           "loc": {
                             "start": {
-                              "line": 26,
+                              "line": 27,
                               "column": 8
                             },
                             "end": {
-                              "line": 26,
+                              "line": 27,
                               "column": 22
                             }
                           }
@@ -968,62 +968,62 @@
                           "type": "Identifier",
                           "name": "distance",
                           "range": [
-                            1316,
-                            1324
+                            1411,
+                            1419
                           ],
                           "loc": {
                             "start": {
-                              "line": 26,
+                              "line": 27,
                               "column": 25
                             },
                             "end": {
-                              "line": 26,
+                              "line": 27,
                               "column": 33
                             }
                           }
                         },
                         "range": [
-                          1299,
-                          1324
+                          1394,
+                          1419
                         ],
                         "loc": {
                           "start": {
-                            "line": 26,
+                            "line": 27,
                             "column": 8
                           },
                           "end": {
-                            "line": 26,
+                            "line": 27,
                             "column": 33
                           }
                         }
                       },
                       "range": [
-                        1299,
-                        1325
+                        1394,
+                        1420
                       ],
                       "loc": {
                         "start": {
-                          "line": 26,
+                          "line": 27,
                           "column": 8
                         },
                         "end": {
-                          "line": 26,
+                          "line": 27,
                           "column": 34
                         }
                       }
                     }
                   ],
                   "range": [
-                    1219,
-                    1331
+                    1314,
+                    1426
                   ],
                   "loc": {
                     "start": {
-                      "line": 23,
+                      "line": 24,
                       "column": 45
                     },
                     "end": {
-                      "line": 27,
+                      "line": 28,
                       "column": 5
                     }
                   }
@@ -1031,16 +1031,16 @@
                 "generator": false,
                 "expression": false,
                 "range": [
-                  1189,
-                  1331
+                  1284,
+                  1426
                 ],
                 "loc": {
                   "start": {
-                    "line": 23,
+                    "line": 24,
                     "column": 15
                   },
                   "end": {
-                    "line": 27,
+                    "line": 28,
                     "column": 5
                   }
                 }
@@ -1048,26 +1048,26 @@
               "kind": "method",
               "computed": false,
               "range": [
-                1178,
-                1331
+                1273,
+                1426
               ],
               "loc": {
                 "start": {
-                  "line": 23,
+                  "line": 24,
                   "column": 4
                 },
                 "end": {
-                  "line": 27,
+                  "line": 28,
                   "column": 5
                 }
               },
               "leadingComments": [
                 {
                   "type": "Block",
-                  "value": "*\n     * Set the position of the sound\n     * @param {number} azimuth - azimuth @todo values to be defined\n     * @param {number} elevation - elevation @todo values to be defined\n     * @param {number} distance - distance @todo values to be defined\n     ",
+                  "value": "*\n     * Set the position of the sound\n     * @todo only for a unique mono stream\n     * @param {number} azimuth - azimuth @todo values to be defined\n     * @param {number} elevation - elevation @todo values to be defined\n     * @param {number} distance - distance @todo values to be defined\n     ",
                   "range": [
-                    915,
-                    1173
+                    967,
+                    1268
                   ],
                   "loc": {
                     "start": {
@@ -1075,7 +1075,7 @@
                       "column": 4
                     },
                     "end": {
-                      "line": 22,
+                      "line": 23,
                       "column": 7
                     }
                   }
@@ -1086,16 +1086,16 @@
                   "type": "Block",
                   "value": "*\n     * Get the position of the sound\n     * @todo return an array? better I think for setPosition/getPosition homogeneity\n     * @return {array}\n     ",
                   "range": [
-                    1336,
-                    1492
+                    1431,
+                    1587
                   ],
                   "loc": {
                     "start": {
-                      "line": 28,
+                      "line": 29,
                       "column": 4
                     },
                     "end": {
-                      "line": 32,
+                      "line": 33,
                       "column": 7
                     }
                   }
@@ -1109,16 +1109,16 @@
                 "type": "Identifier",
                 "name": "getPosition",
                 "range": [
-                  1497,
-                  1508
+                  1592,
+                  1603
                 ],
                 "loc": {
                   "start": {
-                    "line": 33,
+                    "line": 34,
                     "column": 4
                   },
                   "end": {
-                    "line": 33,
+                    "line": 34,
                     "column": 15
                   }
                 }
@@ -1141,16 +1141,16 @@
                             "object": {
                               "type": "ThisExpression",
                               "range": [
-                                1631,
-                                1635
+                                1726,
+                                1730
                               ],
                               "loc": {
                                 "start": {
-                                  "line": 35,
+                                  "line": 36,
                                   "column": 16
                                 },
                                 "end": {
-                                  "line": 35,
+                                  "line": 36,
                                   "column": 20
                                 }
                               }
@@ -1159,31 +1159,31 @@
                               "type": "Identifier",
                               "name": "_azimuth",
                               "range": [
-                                1636,
-                                1644
+                                1731,
+                                1739
                               ],
                               "loc": {
                                 "start": {
-                                  "line": 35,
+                                  "line": 36,
                                   "column": 21
                                 },
                                 "end": {
-                                  "line": 35,
+                                  "line": 36,
                                   "column": 29
                                 }
                               }
                             },
                             "range": [
-                              1631,
-                              1644
+                              1726,
+                              1739
                             ],
                             "loc": {
                               "start": {
-                                "line": 35,
+                                "line": 36,
                                 "column": 16
                               },
                               "end": {
-                                "line": 35,
+                                "line": 36,
                                 "column": 29
                               }
                             }
@@ -1194,16 +1194,16 @@
                             "object": {
                               "type": "ThisExpression",
                               "range": [
-                                1646,
-                                1650
+                                1741,
+                                1745
                               ],
                               "loc": {
                                 "start": {
-                                  "line": 35,
+                                  "line": 36,
                                   "column": 31
                                 },
                                 "end": {
-                                  "line": 35,
+                                  "line": 36,
                                   "column": 35
                                 }
                               }
@@ -1212,31 +1212,31 @@
                               "type": "Identifier",
                               "name": "_elevation",
                               "range": [
-                                1651,
-                                1661
+                                1746,
+                                1756
                               ],
                               "loc": {
                                 "start": {
-                                  "line": 35,
+                                  "line": 36,
                                   "column": 36
                                 },
                                 "end": {
-                                  "line": 35,
+                                  "line": 36,
                                   "column": 46
                                 }
                               }
                             },
                             "range": [
-                              1646,
-                              1661
+                              1741,
+                              1756
                             ],
                             "loc": {
                               "start": {
-                                "line": 35,
+                                "line": 36,
                                 "column": 31
                               },
                               "end": {
-                                "line": 35,
+                                "line": 36,
                                 "column": 46
                               }
                             }
@@ -1247,16 +1247,16 @@
                             "object": {
                               "type": "ThisExpression",
                               "range": [
-                                1663,
-                                1667
+                                1758,
+                                1762
                               ],
                               "loc": {
                                 "start": {
-                                  "line": 35,
+                                  "line": 36,
                                   "column": 48
                                 },
                                 "end": {
-                                  "line": 35,
+                                  "line": 36,
                                   "column": 52
                                 }
                               }
@@ -1265,62 +1265,62 @@
                               "type": "Identifier",
                               "name": "_distance",
                               "range": [
-                                1668,
-                                1677
+                                1763,
+                                1772
                               ],
                               "loc": {
                                 "start": {
-                                  "line": 35,
+                                  "line": 36,
                                   "column": 53
                                 },
                                 "end": {
-                                  "line": 35,
+                                  "line": 36,
                                   "column": 62
                                 }
                               }
                             },
                             "range": [
-                              1663,
-                              1677
+                              1758,
+                              1772
                             ],
                             "loc": {
                               "start": {
-                                "line": 35,
+                                "line": 36,
                                 "column": 48
                               },
                               "end": {
-                                "line": 35,
+                                "line": 36,
                                 "column": 62
                               }
                             }
                           }
                         ],
                         "range": [
-                          1630,
-                          1678
+                          1725,
+                          1773
                         ],
                         "loc": {
                           "start": {
-                            "line": 35,
+                            "line": 36,
                             "column": 15
                           },
                           "end": {
-                            "line": 35,
+                            "line": 36,
                             "column": 63
                           }
                         }
                       },
                       "range": [
-                        1623,
-                        1679
+                        1718,
+                        1774
                       ],
                       "loc": {
                         "start": {
-                          "line": 35,
+                          "line": 36,
                           "column": 8
                         },
                         "end": {
-                          "line": 35,
+                          "line": 36,
                           "column": 64
                         }
                       },
@@ -1329,16 +1329,16 @@
                           "type": "Line",
                           "value": "return {'azimuth': this._azimuth, 'elevation': this._elevation, 'distance': this._distance};",
                           "range": [
-                            1520,
-                            1614
+                            1615,
+                            1709
                           ],
                           "loc": {
                             "start": {
-                              "line": 34,
+                              "line": 35,
                               "column": 8
                             },
                             "end": {
-                              "line": 34,
+                              "line": 35,
                               "column": 102
                             }
                           }
@@ -1347,16 +1347,16 @@
                     }
                   ],
                   "range": [
-                    1510,
-                    1685
+                    1605,
+                    1780
                   ],
                   "loc": {
                     "start": {
-                      "line": 33,
+                      "line": 34,
                       "column": 17
                     },
                     "end": {
-                      "line": 36,
+                      "line": 37,
                       "column": 5
                     }
                   }
@@ -1364,16 +1364,16 @@
                 "generator": false,
                 "expression": false,
                 "range": [
-                  1508,
-                  1685
+                  1603,
+                  1780
                 ],
                 "loc": {
                   "start": {
-                    "line": 33,
+                    "line": 34,
                     "column": 15
                   },
                   "end": {
-                    "line": 36,
+                    "line": 37,
                     "column": 5
                   }
                 }
@@ -1381,16 +1381,16 @@
               "kind": "method",
               "computed": false,
               "range": [
-                1497,
-                1685
+                1592,
+                1780
               ],
               "loc": {
                 "start": {
-                  "line": 33,
+                  "line": 34,
                   "column": 4
                 },
                 "end": {
-                  "line": 36,
+                  "line": 37,
                   "column": 5
                 }
               },
@@ -1399,16 +1399,16 @@
                   "type": "Block",
                   "value": "*\n     * Get the position of the sound\n     * @todo return an array? better I think for setPosition/getPosition homogeneity\n     * @return {array}\n     ",
                   "range": [
-                    1336,
-                    1492
+                    1431,
+                    1587
                   ],
                   "loc": {
                     "start": {
-                      "line": 28,
+                      "line": 29,
                       "column": 4
                     },
                     "end": {
-                      "line": 32,
+                      "line": 33,
                       "column": 7
                     }
                   }
@@ -1419,16 +1419,16 @@
                   "type": "Block",
                   "value": "*\n     * Process: \"position\" + \"gain\"\n     * @todo: how to automatically set the gain, how to have RMS from \"the other signal\" here\n     ",
                   "range": [
-                    1690,
-                    1831
+                    1785,
+                    1926
                   ],
                   "loc": {
                     "start": {
-                      "line": 37,
+                      "line": 38,
                       "column": 4
                     },
                     "end": {
-                      "line": 40,
+                      "line": 41,
                       "column": 7
                     }
                   }
@@ -1442,16 +1442,16 @@
                 "type": "Identifier",
                 "name": "_process",
                 "range": [
-                  1837,
-                  1845
+                  1932,
+                  1940
                 ],
                 "loc": {
                   "start": {
-                    "line": 41,
+                    "line": 42,
                     "column": 5
                   },
                   "end": {
-                    "line": 41,
+                    "line": 42,
                     "column": 13
                   }
                 }
@@ -1464,16 +1464,16 @@
                   "type": "BlockStatement",
                   "body": [],
                   "range": [
-                    1847,
-                    1855
+                    1942,
+                    1950
                   ],
                   "loc": {
                     "start": {
-                      "line": 41,
+                      "line": 42,
                       "column": 15
                     },
                     "end": {
-                      "line": 42,
+                      "line": 43,
                       "column": 6
                     }
                   }
@@ -1481,16 +1481,16 @@
                 "generator": false,
                 "expression": false,
                 "range": [
-                  1845,
-                  1855
+                  1940,
+                  1950
                 ],
                 "loc": {
                   "start": {
-                    "line": 41,
+                    "line": 42,
                     "column": 13
                   },
                   "end": {
-                    "line": 42,
+                    "line": 43,
                     "column": 6
                   }
                 }
@@ -1498,16 +1498,16 @@
               "kind": "method",
               "computed": false,
               "range": [
-                1837,
-                1855
+                1932,
+                1950
               ],
               "loc": {
                 "start": {
-                  "line": 41,
+                  "line": 42,
                   "column": 5
                 },
                 "end": {
-                  "line": 42,
+                  "line": 43,
                   "column": 6
                 }
               },
@@ -1516,16 +1516,16 @@
                   "type": "Block",
                   "value": "*\n     * Process: \"position\" + \"gain\"\n     * @todo: how to automatically set the gain, how to have RMS from \"the other signal\" here\n     ",
                   "range": [
-                    1690,
-                    1831
+                    1785,
+                    1926
                   ],
                   "loc": {
                     "start": {
-                      "line": 37,
+                      "line": 38,
                       "column": 4
                     },
                     "end": {
-                      "line": 40,
+                      "line": 41,
                       "column": 7
                     }
                   }
@@ -1536,7 +1536,7 @@
           ],
           "range": [
             157,
-            1857
+            1952
           ],
           "loc": {
             "start": {
@@ -1544,14 +1544,14 @@
               "column": 79
             },
             "end": {
-              "line": 43,
+              "line": 44,
               "column": 1
             }
           }
         },
         "range": [
           93,
-          1857
+          1952
         ],
         "loc": {
           "start": {
@@ -1559,7 +1559,7 @@
             "column": 15
           },
           "end": {
-            "line": 43,
+            "line": 44,
             "column": 1
           }
         },
@@ -1568,7 +1568,7 @@
       },
       "range": [
         78,
-        1857
+        1952
       ],
       "loc": {
         "start": {
@@ -1576,7 +1576,7 @@
           "column": 0
         },
         "end": {
-          "line": 43,
+          "line": 44,
           "column": 1
         }
       }
@@ -1585,7 +1585,7 @@
   "sourceType": "module",
   "range": [
     0,
-    1857
+    1952
   ],
   "loc": {
     "start": {
@@ -1593,17 +1593,17 @@
       "column": 0
     },
     "end": {
-      "line": 43,
+      "line": 44,
       "column": 1
     }
   },
   "comments": [
     {
       "type": "Block",
-      "value": "*\n     * @param {AudioContext} audioContext - audioContext instance.\n     * @param {string} outputType - output type \"headphone\" or \"speaker\"\n     * @param {AudioStreamsDescription} audioStreamsDescription - audioStreamsDescription.\n     * @param {HRTF} hrtf - hrtf @todo to be defined\n     * @param {EqPreset} eqPreset - dialog gain @todo to be defined\n     * @param {number} offsetGain - gain @todo value to be defined\n     * @param {number} listeningAxis - angle? @todo value to be defined\n     ",
+      "value": "*\n     * @param {AudioContext} audioContext - audioContext instance.\n     * @param {AudioStreamDescriptionCollection} audioStreamDescriptionCollection - audioStreamDescriptionCollection.\n     * @param {string} outputType - output type \"headphone\" or \"speaker\"\n     * @param {HRTF} hrtf - hrtf @todo to be defined\n     * @param {EqPreset} eqPreset - dialog gain @todo to be defined\n     * @param {number} offsetGain - gain @todo value to be defined\n     * @param {number} listeningAxis - angle? @todo value to be defined\n     ",
       "range": [
         163,
-        665
+        692
       ],
       "loc": {
         "start": {
@@ -1618,10 +1618,10 @@
     },
     {
       "type": "Block",
-      "value": "*\n     * Set the position of the sound\n     * @param {number} azimuth - azimuth @todo values to be defined\n     * @param {number} elevation - elevation @todo values to be defined\n     * @param {number} distance - distance @todo values to be defined\n     ",
+      "value": "*\n     * Set the position of the sound\n     * @todo only for a unique mono stream\n     * @param {number} azimuth - azimuth @todo values to be defined\n     * @param {number} elevation - elevation @todo values to be defined\n     * @param {number} distance - distance @todo values to be defined\n     ",
       "range": [
-        915,
-        1173
+        967,
+        1268
       ],
       "loc": {
         "start": {
@@ -1629,7 +1629,7 @@
           "column": 4
         },
         "end": {
-          "line": 22,
+          "line": 23,
           "column": 7
         }
       }
@@ -1638,16 +1638,16 @@
       "type": "Block",
       "value": "*\n     * Get the position of the sound\n     * @todo return an array? better I think for setPosition/getPosition homogeneity\n     * @return {array}\n     ",
       "range": [
-        1336,
-        1492
+        1431,
+        1587
       ],
       "loc": {
         "start": {
-          "line": 28,
+          "line": 29,
           "column": 4
         },
         "end": {
-          "line": 32,
+          "line": 33,
           "column": 7
         }
       }
@@ -1656,16 +1656,16 @@
       "type": "Line",
       "value": "return {'azimuth': this._azimuth, 'elevation': this._elevation, 'distance': this._distance};",
       "range": [
-        1520,
-        1614
+        1615,
+        1709
       ],
       "loc": {
         "start": {
-          "line": 34,
+          "line": 35,
           "column": 8
         },
         "end": {
-          "line": 34,
+          "line": 35,
           "column": 102
         }
       }
@@ -1674,16 +1674,16 @@
       "type": "Block",
       "value": "*\n     * Process: \"position\" + \"gain\"\n     * @todo: how to automatically set the gain, how to have RMS from \"the other signal\" here\n     ",
       "range": [
-        1690,
-        1831
+        1785,
+        1926
       ],
       "loc": {
         "start": {
-          "line": 37,
+          "line": 38,
           "column": 4
         },
         "end": {
-          "line": 40,
+          "line": 41,
           "column": 7
         }
       }

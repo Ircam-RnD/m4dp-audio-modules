@@ -33,7 +33,8 @@
   <ul>
     
   <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">core</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/lib/core/index.js~AbstractNode.html">AbstractNode</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-AudioStreamsDescription">AudioStreamsDescription</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/lib/core/index.js~AudioStreamDescription.html">AudioStreamDescription</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/lib/core/index.js~AudioStreamDescriptionCollection.html">AudioStreamDescriptionCollection</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-EqPreset">EqPreset</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-HRTF">HRTF</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://developer.mozilla.org/fr/docs/Web/API/AudioContext">AudioContext</a></span></span></li>
@@ -53,17 +54,16 @@
 export default class MultichannelSpatialiser extends AbstractNode {
     /**
      * @param {AudioContext} audioContext - audioContext instance.
+     * @param {AudioStreamDescriptionCollection} audioStreamDescriptionCollection - audioStreamDescriptionCollection.
      * @param {string} outputType - output type &quot;headphone&quot; or &quot;speaker&quot;
-     * @param {AudioStreamsDescription} audioStreamsDescription - audioStreamsDescription.
      * @param {HRTF} hrtf - hrtf @todo to be defined
      * @param {EqPreset} eqPreset - dialog gain @todo to be defined
      * @param {number} offsetGain - gain @todo value to be defined
      * @param {number} listeningAxis - angle? @todo value to be defined
      */
-    constructor(audioContext, outputType = &apos;headphone&apos;, audioStreamsDescription = {}, hrtf, eqPreset, offsetGain, listeningAxis){
-        super(audioContext);
+    constructor(audioContext, audioStreamDescriptionCollection = undefined, outputType = &apos;headphone&apos;, hrtf, eqPreset, offsetGain, listeningAxis){
+        super(audioContext, audioStreamDescriptionCollection);
         this._outputType = outputType;
-        this._audioStreamsDescription = audioStreamsDescription;
         this._hrtf = hrtf;
         this._eqPreset = eqPreset;
         this._offsetGain = offsetGain;
@@ -86,17 +86,17 @@ export default class MultichannelSpatialiser extends AbstractNode {
     }
     /**
      * Set audio streams description (json)
-     * @type {AudioStreamsDescription}
+     * @type {AudioStreamDescriptionCollection}
      */
-    set audioStreamsDescription(value){
+    set audioStreamDescriptionCollection(value){
 
     }
     /**
      * Get audio streams description
-     * @type {AudioStreamsDescription}
+     * @type {AudioStreamDescriptionCollection}
      */
-    get audioStreamsDescription(){
-        return _audioStreamsDescription;
+    get audioStreamDescriptionCollection(){
+        return _audioStreamDescriptionCollection;
     }
     /**
      * Set hrtf

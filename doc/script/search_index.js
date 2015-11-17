@@ -6,6 +6,18 @@ window.esdocSearchIndex = [
     "class"
   ],
   [
+    "m4dp-audio-modules/lib/core/index.js~audiostreamdescription",
+    "class/lib/core/index.js~AudioStreamDescription.html",
+    "<span>AudioStreamDescription</span> <span class=\"search-result-import-path\">m4dp-audio-modules/lib/core/index.js</span>",
+    "class"
+  ],
+  [
+    "m4dp-audio-modules/lib/core/index.js~audiostreamdescriptioncollection",
+    "class/lib/core/index.js~AudioStreamDescriptionCollection.html",
+    "<span>AudioStreamDescriptionCollection</span> <span class=\"search-result-import-path\">m4dp-audio-modules/lib/core/index.js</span>",
+    "class"
+  ],
+  [
     "m4dp-audio-modules/lib/dialog-enhancement/index.js~dialogenhancement",
     "class/lib/dialog-enhancement/index.js~DialogEnhancement.html",
     "<span>DialogEnhancement</span> <span class=\"search-result-import-path\">m4dp-audio-modules/lib/dialog-enhancement/index.js</span>",
@@ -396,10 +408,106 @@ window.esdocSearchIndex = [
     "external"
   ],
   [
-    "lib/core/index.js~audiostreamsdescription",
-    "typedef/index.html#static-typedef-AudioStreamsDescription",
-    "lib/core/index.js~AudioStreamsDescription",
-    "typedef"
+    "lib/core/index.js~audiostreamdescription#active",
+    "class/lib/core/index.js~AudioStreamDescription.html#instance-get-active",
+    "lib/core/index.js~AudioStreamDescription#active",
+    "member"
+  ],
+  [
+    "lib/core/index.js~audiostreamdescription#active",
+    "class/lib/core/index.js~AudioStreamDescription.html#instance-set-active",
+    "lib/core/index.js~AudioStreamDescription#active",
+    "member"
+  ],
+  [
+    "lib/core/index.js~audiostreamdescription#ambiance",
+    "class/lib/core/index.js~AudioStreamDescription.html#instance-get-ambiance",
+    "lib/core/index.js~AudioStreamDescription#ambiance",
+    "member"
+  ],
+  [
+    "lib/core/index.js~audiostreamdescription#ambiance",
+    "class/lib/core/index.js~AudioStreamDescription.html#instance-set-ambiance",
+    "lib/core/index.js~AudioStreamDescription#ambiance",
+    "member"
+  ],
+  [
+    "lib/core/index.js~audiostreamdescription#channelpositions",
+    "class/lib/core/index.js~AudioStreamDescription.html#instance-get-channelPositions",
+    "lib/core/index.js~AudioStreamDescription#channelPositions",
+    "member"
+  ],
+  [
+    "lib/core/index.js~audiostreamdescription#constructor",
+    "class/lib/core/index.js~AudioStreamDescription.html#instance-constructor-constructor",
+    "lib/core/index.js~AudioStreamDescription#constructor",
+    "method"
+  ],
+  [
+    "lib/core/index.js~audiostreamdescription#dialog",
+    "class/lib/core/index.js~AudioStreamDescription.html#instance-get-dialog",
+    "lib/core/index.js~AudioStreamDescription#dialog",
+    "member"
+  ],
+  [
+    "lib/core/index.js~audiostreamdescription#dialog",
+    "class/lib/core/index.js~AudioStreamDescription.html#instance-set-dialog",
+    "lib/core/index.js~AudioStreamDescription#dialog",
+    "member"
+  ],
+  [
+    "lib/core/index.js~audiostreamdescription#loudness",
+    "class/lib/core/index.js~AudioStreamDescription.html#instance-get-loudness",
+    "lib/core/index.js~AudioStreamDescription#loudness",
+    "member"
+  ],
+  [
+    "lib/core/index.js~audiostreamdescription#loudness",
+    "class/lib/core/index.js~AudioStreamDescription.html#instance-set-loudness",
+    "lib/core/index.js~AudioStreamDescription#loudness",
+    "member"
+  ],
+  [
+    "lib/core/index.js~audiostreamdescription#maxtruepeak",
+    "class/lib/core/index.js~AudioStreamDescription.html#instance-get-maxTruePeak",
+    "lib/core/index.js~AudioStreamDescription#maxTruePeak",
+    "member"
+  ],
+  [
+    "lib/core/index.js~audiostreamdescription#maxtruepeak",
+    "class/lib/core/index.js~AudioStreamDescription.html#instance-set-maxTruePeak",
+    "lib/core/index.js~AudioStreamDescription#maxTruePeak",
+    "member"
+  ],
+  [
+    "lib/core/index.js~audiostreamdescriptioncollection#actives",
+    "class/lib/core/index.js~AudioStreamDescriptionCollection.html#instance-get-actives",
+    "lib/core/index.js~AudioStreamDescriptionCollection#actives",
+    "member"
+  ],
+  [
+    "lib/core/index.js~audiostreamdescriptioncollection#constructor",
+    "class/lib/core/index.js~AudioStreamDescriptionCollection.html#instance-constructor-constructor",
+    "lib/core/index.js~AudioStreamDescriptionCollection#constructor",
+    "method"
+  ],
+  [
+    "lib/core/index.js~audiostreamdescriptioncollection#dialog",
+    "class/lib/core/index.js~AudioStreamDescriptionCollection.html#instance-get-dialog",
+    "lib/core/index.js~AudioStreamDescriptionCollection#dialog",
+    "member"
+  ],
+  [
+    "lib/core/index.js~audiostreamdescriptioncollection#streams",
+    "class/lib/core/index.js~AudioStreamDescriptionCollection.html#instance-get-streams",
+    "lib/core/index.js~AudioStreamDescriptionCollection#streams",
+    "member"
+  ],
+  [
+    "lib/core/index.js~audiostreamdescriptioncollection#streams",
+    "class/lib/core/index.js~AudioStreamDescriptionCollection.html#instance-set-streams",
+    "lib/core/index.js~AudioStreamDescriptionCollection#streams",
+    "member"
   ],
   [
     "lib/core/index.js~eqpreset",
@@ -420,15 +528,15 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
-    "lib/dialog-enhancement/index.js~dialogenhancement#audiostreamsdescription",
-    "class/lib/dialog-enhancement/index.js~DialogEnhancement.html#instance-set-audioStreamsDescription",
-    "lib/dialog-enhancement/index.js~DialogEnhancement#audioStreamsDescription",
+    "lib/dialog-enhancement/index.js~dialogenhancement#audiostreamdescriptioncollection",
+    "class/lib/dialog-enhancement/index.js~DialogEnhancement.html#instance-get-audioStreamDescriptionCollection",
+    "lib/dialog-enhancement/index.js~DialogEnhancement#audioStreamDescriptionCollection",
     "member"
   ],
   [
-    "lib/dialog-enhancement/index.js~dialogenhancement#audiostreamsdescription",
-    "class/lib/dialog-enhancement/index.js~DialogEnhancement.html#instance-get-audioStreamsDescription",
-    "lib/dialog-enhancement/index.js~DialogEnhancement#audioStreamsDescription",
+    "lib/dialog-enhancement/index.js~dialogenhancement#audiostreamdescriptioncollection",
+    "class/lib/dialog-enhancement/index.js~DialogEnhancement.html#instance-set-audioStreamDescriptionCollection",
+    "lib/dialog-enhancement/index.js~DialogEnhancement#audioStreamDescriptionCollection",
     "member"
   ],
   [
@@ -439,13 +547,13 @@ window.esdocSearchIndex = [
   ],
   [
     "lib/dialog-enhancement/index.js~dialogenhancement#dialoggain",
-    "class/lib/dialog-enhancement/index.js~DialogEnhancement.html#instance-set-dialogGain",
+    "class/lib/dialog-enhancement/index.js~DialogEnhancement.html#instance-get-dialogGain",
     "lib/dialog-enhancement/index.js~DialogEnhancement#dialogGain",
     "member"
   ],
   [
     "lib/dialog-enhancement/index.js~dialogenhancement#dialoggain",
-    "class/lib/dialog-enhancement/index.js~DialogEnhancement.html#instance-get-dialogGain",
+    "class/lib/dialog-enhancement/index.js~DialogEnhancement.html#instance-set-dialogGain",
     "lib/dialog-enhancement/index.js~DialogEnhancement#dialogGain",
     "member"
   ],
@@ -474,15 +582,15 @@ window.esdocSearchIndex = [
     "file"
   ],
   [
-    "lib/multichannel-spatialiser/index.js~multichannelspatialiser#audiostreamsdescription",
-    "class/lib/multichannel-spatialiser/index.js~MultichannelSpatialiser.html#instance-get-audioStreamsDescription",
-    "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser#audioStreamsDescription",
+    "lib/multichannel-spatialiser/index.js~multichannelspatialiser#audiostreamdescriptioncollection",
+    "class/lib/multichannel-spatialiser/index.js~MultichannelSpatialiser.html#instance-get-audioStreamDescriptionCollection",
+    "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser#audioStreamDescriptionCollection",
     "member"
   ],
   [
-    "lib/multichannel-spatialiser/index.js~multichannelspatialiser#audiostreamsdescription",
-    "class/lib/multichannel-spatialiser/index.js~MultichannelSpatialiser.html#instance-set-audioStreamsDescription",
-    "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser#audioStreamsDescription",
+    "lib/multichannel-spatialiser/index.js~multichannelspatialiser#audiostreamdescriptioncollection",
+    "class/lib/multichannel-spatialiser/index.js~MultichannelSpatialiser.html#instance-set-audioStreamDescriptionCollection",
+    "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser#audioStreamDescriptionCollection",
     "member"
   ],
   [
@@ -505,25 +613,25 @@ window.esdocSearchIndex = [
   ],
   [
     "lib/multichannel-spatialiser/index.js~multichannelspatialiser#hrtf",
-    "class/lib/multichannel-spatialiser/index.js~MultichannelSpatialiser.html#instance-set-hrtf",
-    "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser#hrtf",
-    "member"
-  ],
-  [
-    "lib/multichannel-spatialiser/index.js~multichannelspatialiser#hrtf",
     "class/lib/multichannel-spatialiser/index.js~MultichannelSpatialiser.html#instance-get-hrtf",
     "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser#hrtf",
     "member"
   ],
   [
-    "lib/multichannel-spatialiser/index.js~multichannelspatialiser#listeningaxis",
-    "class/lib/multichannel-spatialiser/index.js~MultichannelSpatialiser.html#instance-set-listeningAxis",
-    "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser#listeningAxis",
+    "lib/multichannel-spatialiser/index.js~multichannelspatialiser#hrtf",
+    "class/lib/multichannel-spatialiser/index.js~MultichannelSpatialiser.html#instance-set-hrtf",
+    "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser#hrtf",
     "member"
   ],
   [
     "lib/multichannel-spatialiser/index.js~multichannelspatialiser#listeningaxis",
     "class/lib/multichannel-spatialiser/index.js~MultichannelSpatialiser.html#instance-get-listeningAxis",
+    "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser#listeningAxis",
+    "member"
+  ],
+  [
+    "lib/multichannel-spatialiser/index.js~multichannelspatialiser#listeningaxis",
+    "class/lib/multichannel-spatialiser/index.js~MultichannelSpatialiser.html#instance-set-listeningAxis",
     "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser#listeningAxis",
     "member"
   ],
@@ -565,13 +673,13 @@ window.esdocSearchIndex = [
   ],
   [
     "lib/noise-adaptation/index.js~noiseadaptation#headphone",
-    "class/lib/noise-adaptation/index.js~NoiseAdaptation.html#instance-set-headphone",
+    "class/lib/noise-adaptation/index.js~NoiseAdaptation.html#instance-get-headphone",
     "lib/noise-adaptation/index.js~NoiseAdaptation#headphone",
     "member"
   ],
   [
     "lib/noise-adaptation/index.js~noiseadaptation#headphone",
-    "class/lib/noise-adaptation/index.js~NoiseAdaptation.html#instance-get-headphone",
+    "class/lib/noise-adaptation/index.js~NoiseAdaptation.html#instance-set-headphone",
     "lib/noise-adaptation/index.js~NoiseAdaptation#headphone",
     "member"
   ],
@@ -613,14 +721,14 @@ window.esdocSearchIndex = [
   ],
   [
     "lib/smart-fader/index.js~smartfader#db",
-    "class/lib/smart-fader/index.js~SmartFader.html#instance-get-db",
-    "lib/smart-fader/index.js~SmartFader#db",
+    "class/lib/smart-fader/index.js~SmartFader.html#instance-get-dB",
+    "lib/smart-fader/index.js~SmartFader#dB",
     "member"
   ],
   [
     "lib/smart-fader/index.js~smartfader#db",
-    "class/lib/smart-fader/index.js~SmartFader.html#instance-set-db",
-    "lib/smart-fader/index.js~SmartFader#db",
+    "class/lib/smart-fader/index.js~SmartFader.html#instance-set-dB",
+    "lib/smart-fader/index.js~SmartFader#dB",
     "member"
   ],
   [
@@ -630,27 +738,15 @@ window.esdocSearchIndex = [
     "member"
   ],
   [
-    "lib/smart-fader/index.js~smartfader#loudness",
-    "class/lib/smart-fader/index.js~SmartFader.html#instance-get-loudness",
-    "lib/smart-fader/index.js~SmartFader#loudness",
+    "lib/smart-fader/index.js~smartfader.dbdefault",
+    "class/lib/smart-fader/index.js~SmartFader.html#static-get-dBDefault",
+    "lib/smart-fader/index.js~SmartFader.dBDefault",
     "member"
   ],
   [
-    "lib/smart-fader/index.js~smartfader#loudness",
-    "class/lib/smart-fader/index.js~SmartFader.html#instance-set-loudness",
-    "lib/smart-fader/index.js~SmartFader#loudness",
-    "member"
-  ],
-  [
-    "lib/smart-fader/index.js~smartfader#maxtruepeak",
-    "class/lib/smart-fader/index.js~SmartFader.html#instance-set-maxTruePeak",
-    "lib/smart-fader/index.js~SmartFader#maxTruePeak",
-    "member"
-  ],
-  [
-    "lib/smart-fader/index.js~smartfader#maxtruepeak",
-    "class/lib/smart-fader/index.js~SmartFader.html#instance-get-maxTruePeak",
-    "lib/smart-fader/index.js~SmartFader#maxTruePeak",
+    "lib/smart-fader/index.js~smartfader.dbrange",
+    "class/lib/smart-fader/index.js~SmartFader.html#static-get-dBRange",
+    "lib/smart-fader/index.js~SmartFader.dBRange",
     "member"
   ]
 ]

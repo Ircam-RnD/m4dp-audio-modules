@@ -10,7 +10,7 @@
     "access": null,
     "description": null,
     "lineNumber": 4,
-    "content": "/**\n * Template for other audio nodes: set the audioContext reference and provide connect/disconnect methods for the audio node.\n */\nexport default class AbstractNode {\n    /**\n     * AbstractNode constructor\n     * @param {AudioContext} audioContext - audioContext instance.\n     */\n    constructor(audioContext){\n        this._audioContext = audioContext;\n        /**\n         * @type {AudioNode}\n         */\n        this.input = this._audioContext.createGain();\n        this._ouput = this._audioContext.createGain();\n    }\n    /**\n     * Connect the audio node\n     * @param {AudioNode} node - an AudioNode to connect to.\n     */\n    connect(node){\n        this._ouput.connect(node)\n    }\n    /**\n     * Disconnect the audio node\n     * @param {AudioNode} node - an AudioNode to disconnect to.\n     */\n    disconnect(node){\n        this._ouput.disconnect(node)\n    }\n}\n\n\n/**\n * AudioStreamsDescription\n * @todo: to be defined\n * @typedef {Object} AudioStreamsDescription\n */\n\n/**\n * HRTF\n * @todo: to be defined\n * @typedef {Object} HRTF\n */\n\n/**\n * EqPreset\n * @todo: to be defined\n * @typedef {Object} EqPreset\n */\n\n /**\n * @external {AudioContext} https://developer.mozilla.org/fr/docs/Web/API/AudioContext\n */\n"
+    "content": "/**\n * Template for other audio nodes: set the audioContext reference and provide connect/disconnect methods for the audio node.\n */\nexport default class AbstractNode {\n    /**\n     * AbstractNode constructor\n     * @param {AudioContext} audioContext - audioContext instance.\n     * @param {AudioStreamDescriptionCollection} audioStreamDescriptionCollection - audioStreamDescriptionCollection instance.\n     */\n    constructor(audioContext, audioStreamDescriptionCollection = undefined){\n        this._audioContext = audioContext;\n        this._audioStreamDescriptionCollection = audioStreamDescriptionCollection;\n        /**\n         * @type {AudioNode}\n         */\n        this.input = this._audioContext.createGain();\n        this._output = this._audioContext.createGain();\n    }\n    /**\n     * Connect the audio node\n     * @param {AudioNode} node - an AudioNode to connect to.\n     */\n    connect(node){\n        this._output.connect(node)\n    }\n    /**\n     * Disconnect the audio node\n     * @param {AudioNode} node - an AudioNode to disconnect to.\n     */\n    disconnect(node){\n        this._output.disconnect(node)\n    }\n}\n\n\n/**\n * Container for AudioStreamDescription\n */\nexport class AudioStreamDescriptionCollection {\n    /**\n     * AudioStreamDescriptionCollection constructor\n     * @param {AudioStreamDescription[]} streams - array of AudioStreamDescription\n     */\n    constructor(streams){\n        this._streams = streams;\n    }\n    /**\n     * Set the stream description collection\n     * @type {AudioStreamDescription[]}\n     */\n    set streams(streams){\n        this._streams = streams;\n    }\n    /**\n     * Get the stream description collection\n     * @type {AudioStreamDescription[]}\n     */\n    get streams(){\n        return this._streams;\n    }\n    /**\n     * Get the current active audio stream descriptions of the collection\n     * @type {AudioStreamDescription[]}\n     */\n    get actives(){\n        let actives = []\n        for (let stream of this._streams){\n            if(stream.active){\n                actives.push(stream)\n            }\n        }\n        return actives;\n    }\n    /**\n     * Get the current dialog audio stream description of the collection\n     * @type {AudioStreamDescription}\n     */\n    get dialog(){\n        for (let stream of this._streams){\n            if(stream.dialog){\n                return stream;\n            }\n        }\n        return undefined\n    }\n}\n\n\n/**\n * AudioStreamDescription describes a stream.\n */\nexport class AudioStreamDescription {\n    /**\n     * AudioStreamDescription constructor\n     * @param {string} type - type.\n     * @param {boolean} active - active.\n     * @param {number} loudness - loudness.\n     * @param {number} maxTruePeak - maxTruePeak.\n     * @param {boolean} dialog - dialog.\n     * @param {boolean} ambiance - ambiance.\n     */\n    constructor(type, active = false, loudness = undefined, maxTruePeak = undefined, dialog = false, ambiance = false){\n        this._type = type;\n        this._active = active;\n        this._loudness = loudness;\n        this._maxTruePeak = maxTruePeak;\n        this._dialog = dialog;\n        this._ambiance = ambiance;\n    }\n    /**\n     * Get channel position based on audio stream type\n     * @type {number[]}\n     */\n    get channelPositions(){\n        switch(this._type){\n            case \"Mono\":\n                return [0];\n            case \"Stereo\":\n                return [-30, 30];\n            case \"MultiWithoutLFE\":\n                return [-30, 0, +30, -110, +110]\n            case \"MultiWithLFE\":\n                // @todo set correct LFE position\n                return [-30, 0, +30, -110, +110, 0]\n            case \"EightChannel\":\n                // @todo set correct positions\n                return [1, 2, 3, 4, 5, 6, 7, 8]\n        }\n    }\n    /**\n     * Set active, if stream is currently playing or not\n     * @type {boolean}\n     */\n    set active(value){\n        this._active = value;\n    }\n    /**\n     * Get active, if stream is currently playing or not\n     * @type {boolean}\n     */\n    get active(){\n        return this._active;\n    }\n    /**\n     * Set the loudness value of audio stream\n     * @type {number}\n     */\n    set loudness(value){\n        this._loudness = value;\n    }\n    /**\n     * Get the loudness of audio stream\n     * @type {number}\n     */\n    get loudness(){\n        return this._loudness\n    }\n    /**\n     * Set the maxTruePeak of audio stream\n     * @type {number}\n     */\n    set maxTruePeak(value){\n        this._maxTruePeak = value;\n    }\n    /**\n     * Get the maxTruePeak of audio stream\n     * @type {number}\n     */\n    get maxTruePeak(){\n        return this._maxTruePeak\n    }\n    /**\n     * Set dialog, if stream is currently a dialog or not\n     * @type {boolean}\n     */\n    set dialog(value){\n        this._dialog = value;\n    }\n    /**\n     * Get dialog, if stream is currently a dialog or not\n     * @type {boolean}\n     */\n    get dialog(){\n        return this._dialog\n    }\n    /**\n     * Set ambiance, if stream is currently an ambiance or not\n     * @type {boolean}\n     */\n    set ambiance(value){\n        this._ambiance = value;\n    }\n    /**\n     * Get ambiance, if stream is currently an ambiance or not\n     * @type {boolean}\n     */\n    get ambiance(){\n        return this._ambiance\n    }\n}\n\n\n/**\n * HRTF\n * @todo: to be defined\n * @typedef {Object} HRTF\n */\n\n/**\n * EqPreset\n * @todo: to be defined\n * @typedef {Object} EqPreset\n */\n\n /**\n * @external {AudioContext} https://developer.mozilla.org/fr/docs/Web/API/AudioContext\n */\n"
   },
   {
     "__docId__": 1,
@@ -30,24 +30,342 @@
   },
   {
     "__docId__": 2,
-    "kind": "typedef",
-    "static": true,
+    "kind": "constructor",
+    "static": false,
     "variation": null,
-    "name": "AudioStreamsDescription",
-    "memberof": "lib/core/index.js",
-    "longname": "lib/core/index.js~AudioStreamsDescription",
+    "name": "constructor",
+    "memberof": "lib/core/index.js~AbstractNode",
+    "longname": "lib/core/index.js~AbstractNode#constructor",
     "access": null,
-    "description": "AudioStreamsDescription\n@todo: to be defined",
-    "type": {
-      "types": [
-        "Object"
-      ],
-      "optional": false,
-      "name": "AudioStreamsDescription"
-    }
+    "description": "AbstractNode constructor",
+    "lineNumber": 10,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "AudioContext"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "audioContext",
+        "description": "audioContext instance."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "AudioStreamDescriptionCollection"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "audioStreamDescriptionCollection",
+        "description": "audioStreamDescriptionCollection instance."
+      }
+    ],
+    "generator": false
   },
   {
     "__docId__": 3,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_audioContext",
+    "memberof": "lib/core/index.js~AbstractNode",
+    "longname": "lib/core/index.js~AbstractNode#_audioContext",
+    "access": null,
+    "description": null,
+    "lineNumber": 11,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 4,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_audioStreamDescriptionCollection",
+    "memberof": "lib/core/index.js~AbstractNode",
+    "longname": "lib/core/index.js~AbstractNode#_audioStreamDescriptionCollection",
+    "access": null,
+    "description": null,
+    "lineNumber": 12,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 5,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "input",
+    "memberof": "lib/core/index.js~AbstractNode",
+    "longname": "lib/core/index.js~AbstractNode#input",
+    "access": null,
+    "description": null,
+    "lineNumber": 16,
+    "type": {
+      "nullable": null,
+      "types": [
+        "AudioNode"
+      ],
+      "spread": false,
+      "description": null
+    }
+  },
+  {
+    "__docId__": 6,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_output",
+    "memberof": "lib/core/index.js~AbstractNode",
+    "longname": "lib/core/index.js~AbstractNode#_output",
+    "access": null,
+    "description": null,
+    "lineNumber": 17,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 7,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "connect",
+    "memberof": "lib/core/index.js~AbstractNode",
+    "longname": "lib/core/index.js~AbstractNode#connect",
+    "access": null,
+    "description": "Connect the audio node",
+    "lineNumber": 23,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "AudioNode"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "node",
+        "description": "an AudioNode to connect to."
+      }
+    ],
+    "generator": false
+  },
+  {
+    "__docId__": 8,
+    "kind": "method",
+    "static": false,
+    "variation": null,
+    "name": "disconnect",
+    "memberof": "lib/core/index.js~AbstractNode",
+    "longname": "lib/core/index.js~AbstractNode#disconnect",
+    "access": null,
+    "description": "Disconnect the audio node",
+    "lineNumber": 30,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "AudioNode"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "node",
+        "description": "an AudioNode to disconnect to."
+      }
+    ],
+    "generator": false
+  },
+  {
+    "__docId__": 9,
+    "kind": "class",
+    "static": true,
+    "variation": null,
+    "name": "AudioStreamDescriptionCollection",
+    "memberof": "lib/core/index.js",
+    "longname": "lib/core/index.js~AudioStreamDescriptionCollection",
+    "access": null,
+    "export": true,
+    "importPath": "m4dp-audio-modules/lib/core/index.js",
+    "importStyle": "{AudioStreamDescriptionCollection}",
+    "description": "Container for AudioStreamDescription",
+    "lineNumber": 39,
+    "interface": false
+  },
+  {
+    "__docId__": 10,
+    "kind": "constructor",
+    "static": false,
+    "variation": null,
+    "name": "constructor",
+    "memberof": "lib/core/index.js~AudioStreamDescriptionCollection",
+    "longname": "lib/core/index.js~AudioStreamDescriptionCollection#constructor",
+    "access": null,
+    "description": "AudioStreamDescriptionCollection constructor",
+    "lineNumber": 44,
+    "params": [
+      {
+        "nullable": null,
+        "types": [
+          "AudioStreamDescription[]"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "streams",
+        "description": "array of AudioStreamDescription"
+      }
+    ],
+    "generator": false
+  },
+  {
+    "__docId__": 11,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_streams",
+    "memberof": "lib/core/index.js~AudioStreamDescriptionCollection",
+    "longname": "lib/core/index.js~AudioStreamDescriptionCollection#_streams",
+    "access": null,
+    "description": null,
+    "lineNumber": 45,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 12,
+    "kind": "set",
+    "static": false,
+    "variation": null,
+    "name": "streams",
+    "memberof": "lib/core/index.js~AudioStreamDescriptionCollection",
+    "longname": "lib/core/index.js~AudioStreamDescriptionCollection#streams",
+    "access": null,
+    "description": "Set the stream description collection",
+    "lineNumber": 51,
+    "type": {
+      "nullable": null,
+      "types": [
+        "AudioStreamDescription[]"
+      ],
+      "spread": false,
+      "description": null
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 13,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_streams",
+    "memberof": "lib/core/index.js~AudioStreamDescriptionCollection",
+    "longname": "lib/core/index.js~AudioStreamDescriptionCollection#_streams",
+    "access": null,
+    "description": null,
+    "lineNumber": 52,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 14,
+    "kind": "get",
+    "static": false,
+    "variation": null,
+    "name": "streams",
+    "memberof": "lib/core/index.js~AudioStreamDescriptionCollection",
+    "longname": "lib/core/index.js~AudioStreamDescriptionCollection#streams",
+    "access": null,
+    "description": "Get the stream description collection",
+    "lineNumber": 58,
+    "type": {
+      "nullable": null,
+      "types": [
+        "AudioStreamDescription[]"
+      ],
+      "spread": false,
+      "description": null
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 15,
+    "kind": "get",
+    "static": false,
+    "variation": null,
+    "name": "actives",
+    "memberof": "lib/core/index.js~AudioStreamDescriptionCollection",
+    "longname": "lib/core/index.js~AudioStreamDescriptionCollection#actives",
+    "access": null,
+    "description": "Get the current active audio stream descriptions of the collection",
+    "lineNumber": 65,
+    "type": {
+      "nullable": null,
+      "types": [
+        "AudioStreamDescription[]"
+      ],
+      "spread": false,
+      "description": null
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 16,
+    "kind": "get",
+    "static": false,
+    "variation": null,
+    "name": "dialog",
+    "memberof": "lib/core/index.js~AudioStreamDescriptionCollection",
+    "longname": "lib/core/index.js~AudioStreamDescriptionCollection#dialog",
+    "access": null,
+    "description": "Get the current dialog audio stream description of the collection",
+    "lineNumber": 78,
+    "type": {
+      "nullable": null,
+      "types": [
+        "AudioStreamDescription"
+      ],
+      "spread": false,
+      "description": null
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 17,
+    "kind": "class",
+    "static": true,
+    "variation": null,
+    "name": "AudioStreamDescription",
+    "memberof": "lib/core/index.js",
+    "longname": "lib/core/index.js~AudioStreamDescription",
+    "access": null,
+    "export": true,
+    "importPath": "m4dp-audio-modules/lib/core/index.js",
+    "importStyle": "{AudioStreamDescription}",
+    "description": "AudioStreamDescription describes a stream.",
+    "lineNumber": 92,
+    "interface": false
+  },
+  {
+    "__docId__": 18,
     "kind": "typedef",
     "static": true,
     "variation": null,
@@ -65,7 +383,7 @@
     }
   },
   {
-    "__docId__": 4,
+    "__docId__": 19,
     "kind": "typedef",
     "static": true,
     "variation": null,
@@ -83,7 +401,7 @@
     }
   },
   {
-    "__docId__": 5,
+    "__docId__": 20,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -95,41 +413,91 @@
     "description": null
   },
   {
-    "__docId__": 6,
+    "__docId__": 21,
     "kind": "constructor",
     "static": false,
     "variation": null,
     "name": "constructor",
-    "memberof": "lib/core/index.js~AbstractNode",
-    "longname": "lib/core/index.js~AbstractNode#constructor",
+    "memberof": "lib/core/index.js~AudioStreamDescription",
+    "longname": "lib/core/index.js~AudioStreamDescription#constructor",
     "access": null,
-    "description": "AbstractNode constructor",
-    "lineNumber": 9,
+    "description": "AudioStreamDescription constructor",
+    "lineNumber": 102,
     "params": [
       {
         "nullable": null,
         "types": [
-          "AudioContext"
+          "string"
         ],
         "spread": false,
         "optional": false,
-        "name": "audioContext",
-        "description": "audioContext instance."
+        "name": "type",
+        "description": "type."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "boolean"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "active",
+        "description": "active."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "number"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "loudness",
+        "description": "loudness."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "number"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "maxTruePeak",
+        "description": "maxTruePeak."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "boolean"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "dialog",
+        "description": "dialog."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "boolean"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "ambiance",
+        "description": "ambiance."
       }
     ],
     "generator": false
   },
   {
-    "__docId__": 7,
+    "__docId__": 22,
     "kind": "member",
     "static": false,
     "variation": null,
-    "name": "_audioContext",
-    "memberof": "lib/core/index.js~AbstractNode",
-    "longname": "lib/core/index.js~AbstractNode#_audioContext",
+    "name": "_type",
+    "memberof": "lib/core/index.js~AudioStreamDescription",
+    "longname": "lib/core/index.js~AudioStreamDescription#_type",
     "access": null,
     "description": null,
-    "lineNumber": 10,
+    "lineNumber": 103,
     "undocument": true,
     "type": {
       "types": [
@@ -138,36 +506,148 @@
     }
   },
   {
-    "__docId__": 8,
+    "__docId__": 23,
     "kind": "member",
     "static": false,
     "variation": null,
-    "name": "input",
-    "memberof": "lib/core/index.js~AbstractNode",
-    "longname": "lib/core/index.js~AbstractNode#input",
+    "name": "_active",
+    "memberof": "lib/core/index.js~AudioStreamDescription",
+    "longname": "lib/core/index.js~AudioStreamDescription#_active",
     "access": null,
     "description": null,
-    "lineNumber": 14,
+    "lineNumber": 104,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 24,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_loudness",
+    "memberof": "lib/core/index.js~AudioStreamDescription",
+    "longname": "lib/core/index.js~AudioStreamDescription#_loudness",
+    "access": null,
+    "description": null,
+    "lineNumber": 105,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 25,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_maxTruePeak",
+    "memberof": "lib/core/index.js~AudioStreamDescription",
+    "longname": "lib/core/index.js~AudioStreamDescription#_maxTruePeak",
+    "access": null,
+    "description": null,
+    "lineNumber": 106,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 26,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_dialog",
+    "memberof": "lib/core/index.js~AudioStreamDescription",
+    "longname": "lib/core/index.js~AudioStreamDescription#_dialog",
+    "access": null,
+    "description": null,
+    "lineNumber": 107,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 27,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_ambiance",
+    "memberof": "lib/core/index.js~AudioStreamDescription",
+    "longname": "lib/core/index.js~AudioStreamDescription#_ambiance",
+    "access": null,
+    "description": null,
+    "lineNumber": 108,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 28,
+    "kind": "get",
+    "static": false,
+    "variation": null,
+    "name": "channelPositions",
+    "memberof": "lib/core/index.js~AudioStreamDescription",
+    "longname": "lib/core/index.js~AudioStreamDescription#channelPositions",
+    "access": null,
+    "description": "Get channel position based on audio stream type",
+    "lineNumber": 114,
     "type": {
       "nullable": null,
       "types": [
-        "AudioNode"
+        "number[]"
       ],
       "spread": false,
       "description": null
-    }
+    },
+    "generator": false
   },
   {
-    "__docId__": 9,
+    "__docId__": 29,
+    "kind": "set",
+    "static": false,
+    "variation": null,
+    "name": "active",
+    "memberof": "lib/core/index.js~AudioStreamDescription",
+    "longname": "lib/core/index.js~AudioStreamDescription#active",
+    "access": null,
+    "description": "Set active, if stream is currently playing or not",
+    "lineNumber": 134,
+    "type": {
+      "nullable": null,
+      "types": [
+        "boolean"
+      ],
+      "spread": false,
+      "description": null
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 30,
     "kind": "member",
     "static": false,
     "variation": null,
-    "name": "_ouput",
-    "memberof": "lib/core/index.js~AbstractNode",
-    "longname": "lib/core/index.js~AbstractNode#_ouput",
+    "name": "_active",
+    "memberof": "lib/core/index.js~AudioStreamDescription",
+    "longname": "lib/core/index.js~AudioStreamDescription#_active",
     "access": null,
     "description": null,
-    "lineNumber": 15,
+    "lineNumber": 135,
     "undocument": true,
     "type": {
       "types": [
@@ -176,57 +656,268 @@
     }
   },
   {
-    "__docId__": 10,
-    "kind": "method",
+    "__docId__": 31,
+    "kind": "get",
     "static": false,
     "variation": null,
-    "name": "connect",
-    "memberof": "lib/core/index.js~AbstractNode",
-    "longname": "lib/core/index.js~AbstractNode#connect",
+    "name": "active",
+    "memberof": "lib/core/index.js~AudioStreamDescription",
+    "longname": "lib/core/index.js~AudioStreamDescription#active",
     "access": null,
-    "description": "Connect the audio node",
-    "lineNumber": 21,
-    "params": [
-      {
-        "nullable": null,
-        "types": [
-          "AudioNode"
-        ],
-        "spread": false,
-        "optional": false,
-        "name": "node",
-        "description": "an AudioNode to connect to."
-      }
-    ],
+    "description": "Get active, if stream is currently playing or not",
+    "lineNumber": 141,
+    "type": {
+      "nullable": null,
+      "types": [
+        "boolean"
+      ],
+      "spread": false,
+      "description": null
+    },
     "generator": false
   },
   {
-    "__docId__": 11,
-    "kind": "method",
+    "__docId__": 32,
+    "kind": "set",
     "static": false,
     "variation": null,
-    "name": "disconnect",
-    "memberof": "lib/core/index.js~AbstractNode",
-    "longname": "lib/core/index.js~AbstractNode#disconnect",
+    "name": "loudness",
+    "memberof": "lib/core/index.js~AudioStreamDescription",
+    "longname": "lib/core/index.js~AudioStreamDescription#loudness",
     "access": null,
-    "description": "Disconnect the audio node",
-    "lineNumber": 28,
-    "params": [
-      {
-        "nullable": null,
-        "types": [
-          "AudioNode"
-        ],
-        "spread": false,
-        "optional": false,
-        "name": "node",
-        "description": "an AudioNode to disconnect to."
-      }
-    ],
+    "description": "Set the loudness value of audio stream",
+    "lineNumber": 148,
+    "type": {
+      "nullable": null,
+      "types": [
+        "number"
+      ],
+      "spread": false,
+      "description": null
+    },
     "generator": false
   },
   {
-    "__docId__": 12,
+    "__docId__": 33,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_loudness",
+    "memberof": "lib/core/index.js~AudioStreamDescription",
+    "longname": "lib/core/index.js~AudioStreamDescription#_loudness",
+    "access": null,
+    "description": null,
+    "lineNumber": 149,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 34,
+    "kind": "get",
+    "static": false,
+    "variation": null,
+    "name": "loudness",
+    "memberof": "lib/core/index.js~AudioStreamDescription",
+    "longname": "lib/core/index.js~AudioStreamDescription#loudness",
+    "access": null,
+    "description": "Get the loudness of audio stream",
+    "lineNumber": 155,
+    "type": {
+      "nullable": null,
+      "types": [
+        "number"
+      ],
+      "spread": false,
+      "description": null
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 35,
+    "kind": "set",
+    "static": false,
+    "variation": null,
+    "name": "maxTruePeak",
+    "memberof": "lib/core/index.js~AudioStreamDescription",
+    "longname": "lib/core/index.js~AudioStreamDescription#maxTruePeak",
+    "access": null,
+    "description": "Set the maxTruePeak of audio stream",
+    "lineNumber": 162,
+    "type": {
+      "nullable": null,
+      "types": [
+        "number"
+      ],
+      "spread": false,
+      "description": null
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 36,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_maxTruePeak",
+    "memberof": "lib/core/index.js~AudioStreamDescription",
+    "longname": "lib/core/index.js~AudioStreamDescription#_maxTruePeak",
+    "access": null,
+    "description": null,
+    "lineNumber": 163,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 37,
+    "kind": "get",
+    "static": false,
+    "variation": null,
+    "name": "maxTruePeak",
+    "memberof": "lib/core/index.js~AudioStreamDescription",
+    "longname": "lib/core/index.js~AudioStreamDescription#maxTruePeak",
+    "access": null,
+    "description": "Get the maxTruePeak of audio stream",
+    "lineNumber": 169,
+    "type": {
+      "nullable": null,
+      "types": [
+        "number"
+      ],
+      "spread": false,
+      "description": null
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 38,
+    "kind": "set",
+    "static": false,
+    "variation": null,
+    "name": "dialog",
+    "memberof": "lib/core/index.js~AudioStreamDescription",
+    "longname": "lib/core/index.js~AudioStreamDescription#dialog",
+    "access": null,
+    "description": "Set dialog, if stream is currently a dialog or not",
+    "lineNumber": 176,
+    "type": {
+      "nullable": null,
+      "types": [
+        "boolean"
+      ],
+      "spread": false,
+      "description": null
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 39,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_dialog",
+    "memberof": "lib/core/index.js~AudioStreamDescription",
+    "longname": "lib/core/index.js~AudioStreamDescription#_dialog",
+    "access": null,
+    "description": null,
+    "lineNumber": 177,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 40,
+    "kind": "get",
+    "static": false,
+    "variation": null,
+    "name": "dialog",
+    "memberof": "lib/core/index.js~AudioStreamDescription",
+    "longname": "lib/core/index.js~AudioStreamDescription#dialog",
+    "access": null,
+    "description": "Get dialog, if stream is currently a dialog or not",
+    "lineNumber": 183,
+    "type": {
+      "nullable": null,
+      "types": [
+        "boolean"
+      ],
+      "spread": false,
+      "description": null
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 41,
+    "kind": "set",
+    "static": false,
+    "variation": null,
+    "name": "ambiance",
+    "memberof": "lib/core/index.js~AudioStreamDescription",
+    "longname": "lib/core/index.js~AudioStreamDescription#ambiance",
+    "access": null,
+    "description": "Set ambiance, if stream is currently an ambiance or not",
+    "lineNumber": 190,
+    "type": {
+      "nullable": null,
+      "types": [
+        "boolean"
+      ],
+      "spread": false,
+      "description": null
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 42,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_ambiance",
+    "memberof": "lib/core/index.js~AudioStreamDescription",
+    "longname": "lib/core/index.js~AudioStreamDescription#_ambiance",
+    "access": null,
+    "description": null,
+    "lineNumber": 191,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 43,
+    "kind": "get",
+    "static": false,
+    "variation": null,
+    "name": "ambiance",
+    "memberof": "lib/core/index.js~AudioStreamDescription",
+    "longname": "lib/core/index.js~AudioStreamDescription#ambiance",
+    "access": null,
+    "description": "Get ambiance, if stream is currently an ambiance or not",
+    "lineNumber": 197,
+    "type": {
+      "nullable": null,
+      "types": [
+        "boolean"
+      ],
+      "spread": false,
+      "description": null
+    },
+    "generator": false
+  },
+  {
+    "__docId__": 44,
     "kind": "file",
     "static": true,
     "variation": null,
@@ -236,10 +927,10 @@
     "access": null,
     "description": null,
     "lineNumber": 1,
-    "content": "import AbstractNode from '../core/index.js';\n\n\nexport default class DialogEnhancement extends AbstractNode {\n    /**\n     * @param {AudioContext} audioContext - audioContext instance.\n     * @param {AudioStreamsDescription} audioStreamsDescription - audioStreamsDescription.\n     * @param {number} mode - mode\n     * @param {number} dialogGain - dialog gain\n     */\n    constructor(audioContext, audioStreamsDescription, mode, dialogGain){\n        super(audioContext);\n        this._mode = mode;\n        this._audioStreamsDescription = audioStreamsDescription;\n    }\n    /**\n     * Set Mode - value is 1, 2 or 3\n     * @type {number}\n     */\n    set mode(value){\n        this._mode = value;\n    }\n    /**\n     * Get Mode - value is 1, 2 or 3\n     * @type {number}\n     */\n    get mode(){\n        return this._mode;\n    }\n    /**\n     * Set audioStreamsDescription\n     * @type {AudioStreamsDescription}\n     */\n    set audioStreamsDescription(value){\n        this._audioStreamsDescription = value;\n    }\n    /**\n     * Get audioStreamsDescription\n     * @type {AudioStreamsDescription}\n     */\n    get audioStreamsDescription(){\n        return this._audioStreamsDescription;\n    }\n    /**\n     * Set dialogGain\n     * @type {number}\n     * @todo give range of accepted values\n     */\n    set dialogGain(value){\n        this._dialogGain = value;\n    }\n    /**\n     * Get dialogGain\n     * @type {number}\n     * @todo give range of accepted values\n     */\n    get dialogGain(){\n        return this._dialogGain;\n    }\n}\n\n"
+    "content": "import AbstractNode from '../core/index.js';\n\n\nexport default class DialogEnhancement extends AbstractNode {\n    /**\n     * @param {AudioContext} audioContext - audioContext instance.\n     * @param {AudioStreamDescriptionCollection} audioStreamDescriptionCollection - audioStreamDescriptionCollection.\n     * @param {number} mode - mode\n     * @param {number} dialogGain - dialog gain\n     */\n    constructor(audioContext, audioStreamDescriptionCollection, mode, dialogGain){\n        super(audioContext, audioStreamDescriptionCollection);\n        this._mode = mode;\n    }\n    /**\n     * Set Mode - value is 1, 2 or 3\n     * @type {number}\n     */\n    set mode(value){\n        // @todo error in some mode: eg. mode 1 and no dialog => \"impossible\"\n        // error mode 2 et pas de 5.0 ou 5.1\n        // error mode 3 et pas de stéréo\n        this._mode = value;\n    }\n    /**\n     * Get Mode - value is 1, 2 or 3\n     * @type {number}\n     */\n    get mode(){\n        return this._mode;\n    }\n    /**\n     * Set audioStreamDescriptionCollection\n     * @type {AudioStreamDescriptionCollection}\n     */\n    set audioStreamDescriptionCollection(value){\n        this._audioStreamDescriptionCollection = value;\n    }\n    /**\n     * Get audioStreamDescriptionCollection\n     * @type {AudioStreamDescriptionCollection}\n     */\n    get audioStreamDescriptionCollection(){\n        return this._audioStreamDescriptionCollection;\n    }\n    /**\n     * Set dialogGain\n     * @type {number}\n     * @todo give range of accepted values\n     */\n    set dialogGain(value){\n        this._dialogGain = value;\n    }\n    /**\n     * Get dialogGain\n     * @type {number}\n     * @todo give range of accepted values\n     */\n    get dialogGain(){\n        return this._dialogGain;\n    }\n}\n\n"
   },
   {
-    "__docId__": 13,
+    "__docId__": 45,
     "kind": "class",
     "static": true,
     "variation": null,
@@ -259,7 +950,7 @@
     ]
   },
   {
-    "__docId__": 14,
+    "__docId__": 46,
     "kind": "constructor",
     "static": false,
     "variation": null,
@@ -283,12 +974,12 @@
       {
         "nullable": null,
         "types": [
-          "AudioStreamsDescription"
+          "AudioStreamDescriptionCollection"
         ],
         "spread": false,
         "optional": false,
-        "name": "audioStreamsDescription",
-        "description": "audioStreamsDescription."
+        "name": "audioStreamDescriptionCollection",
+        "description": "audioStreamDescriptionCollection."
       },
       {
         "nullable": null,
@@ -314,7 +1005,7 @@
     "generator": false
   },
   {
-    "__docId__": 15,
+    "__docId__": 47,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -332,25 +1023,7 @@
     }
   },
   {
-    "__docId__": 16,
-    "kind": "member",
-    "static": false,
-    "variation": null,
-    "name": "_audioStreamsDescription",
-    "memberof": "lib/dialog-enhancement/index.js~DialogEnhancement",
-    "longname": "lib/dialog-enhancement/index.js~DialogEnhancement#_audioStreamsDescription",
-    "access": null,
-    "description": null,
-    "lineNumber": 14,
-    "undocument": true,
-    "type": {
-      "types": [
-        "*"
-      ]
-    }
-  },
-  {
-    "__docId__": 17,
+    "__docId__": 48,
     "kind": "set",
     "static": false,
     "variation": null,
@@ -359,7 +1032,7 @@
     "longname": "lib/dialog-enhancement/index.js~DialogEnhancement#mode",
     "access": null,
     "description": "Set Mode - value is 1, 2 or 3",
-    "lineNumber": 20,
+    "lineNumber": 19,
     "type": {
       "nullable": null,
       "types": [
@@ -371,7 +1044,7 @@
     "generator": false
   },
   {
-    "__docId__": 18,
+    "__docId__": 49,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -380,7 +1053,7 @@
     "longname": "lib/dialog-enhancement/index.js~DialogEnhancement#_mode",
     "access": null,
     "description": null,
-    "lineNumber": 21,
+    "lineNumber": 23,
     "undocument": true,
     "type": {
       "types": [
@@ -389,7 +1062,7 @@
     }
   },
   {
-    "__docId__": 19,
+    "__docId__": 50,
     "kind": "get",
     "static": false,
     "variation": null,
@@ -398,7 +1071,7 @@
     "longname": "lib/dialog-enhancement/index.js~DialogEnhancement#mode",
     "access": null,
     "description": "Get Mode - value is 1, 2 or 3",
-    "lineNumber": 27,
+    "lineNumber": 29,
     "type": {
       "nullable": null,
       "types": [
@@ -410,20 +1083,20 @@
     "generator": false
   },
   {
-    "__docId__": 20,
+    "__docId__": 51,
     "kind": "set",
     "static": false,
     "variation": null,
-    "name": "audioStreamsDescription",
+    "name": "audioStreamDescriptionCollection",
     "memberof": "lib/dialog-enhancement/index.js~DialogEnhancement",
-    "longname": "lib/dialog-enhancement/index.js~DialogEnhancement#audioStreamsDescription",
+    "longname": "lib/dialog-enhancement/index.js~DialogEnhancement#audioStreamDescriptionCollection",
     "access": null,
-    "description": "Set audioStreamsDescription",
-    "lineNumber": 34,
+    "description": "Set audioStreamDescriptionCollection",
+    "lineNumber": 36,
     "type": {
       "nullable": null,
       "types": [
-        "AudioStreamsDescription"
+        "AudioStreamDescriptionCollection"
       ],
       "spread": false,
       "description": null
@@ -431,16 +1104,16 @@
     "generator": false
   },
   {
-    "__docId__": 21,
+    "__docId__": 52,
     "kind": "member",
     "static": false,
     "variation": null,
-    "name": "_audioStreamsDescription",
+    "name": "_audioStreamDescriptionCollection",
     "memberof": "lib/dialog-enhancement/index.js~DialogEnhancement",
-    "longname": "lib/dialog-enhancement/index.js~DialogEnhancement#_audioStreamsDescription",
+    "longname": "lib/dialog-enhancement/index.js~DialogEnhancement#_audioStreamDescriptionCollection",
     "access": null,
     "description": null,
-    "lineNumber": 35,
+    "lineNumber": 37,
     "undocument": true,
     "type": {
       "types": [
@@ -449,20 +1122,20 @@
     }
   },
   {
-    "__docId__": 22,
+    "__docId__": 53,
     "kind": "get",
     "static": false,
     "variation": null,
-    "name": "audioStreamsDescription",
+    "name": "audioStreamDescriptionCollection",
     "memberof": "lib/dialog-enhancement/index.js~DialogEnhancement",
-    "longname": "lib/dialog-enhancement/index.js~DialogEnhancement#audioStreamsDescription",
+    "longname": "lib/dialog-enhancement/index.js~DialogEnhancement#audioStreamDescriptionCollection",
     "access": null,
-    "description": "Get audioStreamsDescription",
-    "lineNumber": 41,
+    "description": "Get audioStreamDescriptionCollection",
+    "lineNumber": 43,
     "type": {
       "nullable": null,
       "types": [
-        "AudioStreamsDescription"
+        "AudioStreamDescriptionCollection"
       ],
       "spread": false,
       "description": null
@@ -470,7 +1143,7 @@
     "generator": false
   },
   {
-    "__docId__": 23,
+    "__docId__": 54,
     "kind": "set",
     "static": false,
     "variation": null,
@@ -479,7 +1152,7 @@
     "longname": "lib/dialog-enhancement/index.js~DialogEnhancement#dialogGain",
     "access": null,
     "description": "Set dialogGain",
-    "lineNumber": 49,
+    "lineNumber": 51,
     "todo": [
       "give range of accepted values"
     ],
@@ -494,7 +1167,7 @@
     "generator": false
   },
   {
-    "__docId__": 24,
+    "__docId__": 55,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -503,7 +1176,7 @@
     "longname": "lib/dialog-enhancement/index.js~DialogEnhancement#_dialogGain",
     "access": null,
     "description": null,
-    "lineNumber": 50,
+    "lineNumber": 52,
     "undocument": true,
     "type": {
       "types": [
@@ -512,7 +1185,7 @@
     }
   },
   {
-    "__docId__": 25,
+    "__docId__": 56,
     "kind": "get",
     "static": false,
     "variation": null,
@@ -521,7 +1194,7 @@
     "longname": "lib/dialog-enhancement/index.js~DialogEnhancement#dialogGain",
     "access": null,
     "description": "Get dialogGain",
-    "lineNumber": 57,
+    "lineNumber": 59,
     "todo": [
       "give range of accepted values"
     ],
@@ -536,7 +1209,7 @@
     "generator": false
   },
   {
-    "__docId__": 26,
+    "__docId__": 57,
     "kind": "file",
     "static": true,
     "variation": null,
@@ -546,10 +1219,10 @@
     "access": null,
     "description": null,
     "lineNumber": 1,
-    "content": "import DialogEnhancement from './dialog-enhancement/index.js';\nimport MultichannelSpatialiser from './multichannel-spatialiser/index.js';\nimport NoiseAdaptation from './noise-adaptation/index.js';\nimport ObjectSpatialiserAndMixer from './object-spatialiser-and-mixer/index.js';\nimport SmartFader from './smart-fader/index.js';\n\n\nconst M4DPAudioModules = {\n    \"DialogEnhancement\": DialogEnhancement,\n    \"MultichannelSpatialiser\": MultichannelSpatialiser,\n    \"NoiseAdaptation\": NoiseAdaptation,\n    \"ObjectSpatialiserAndMixer\": ObjectSpatialiserAndMixer,\n    \"SmartFader\": SmartFader\n};\n\n// @fix, Extra ugly, should use export default M4DPAudioModules;\nwindow.M4DPAudioModules = M4DPAudioModules;\n\n\n\n"
+    "content": "import DialogEnhancement from './dialog-enhancement/index.js';\nimport MultichannelSpatialiser from './multichannel-spatialiser/index.js';\nimport NoiseAdaptation from './noise-adaptation/index.js';\nimport ObjectSpatialiserAndMixer from './object-spatialiser-and-mixer/index.js';\nimport SmartFader from './smart-fader/index.js';\nimport {AudioStreamDescriptionCollection, AudioStreamDescription} from './core/index.js';\n\n\nconst M4DPAudioModules = {\n    \"DialogEnhancement\": DialogEnhancement,\n    \"MultichannelSpatialiser\": MultichannelSpatialiser,\n    \"NoiseAdaptation\": NoiseAdaptation,\n    \"ObjectSpatialiserAndMixer\": ObjectSpatialiserAndMixer,\n    \"SmartFader\": SmartFader,\n    \"AudioStreamDescriptionCollection\": AudioStreamDescriptionCollection,\n    \"AudioStreamDescription\": AudioStreamDescription\n};\n\n// @fix, Extra ugly, should use export default M4DPAudioModules;\nwindow.M4DPAudioModules = M4DPAudioModules;\n"
   },
   {
-    "__docId__": 27,
+    "__docId__": 58,
     "kind": "variable",
     "static": true,
     "variation": null,
@@ -561,7 +1234,7 @@
     "importPath": "m4dp-audio-modules/lib/index.js",
     "importStyle": null,
     "description": null,
-    "lineNumber": 8,
+    "lineNumber": 9,
     "undocument": true,
     "type": {
       "types": [
@@ -570,7 +1243,7 @@
     }
   },
   {
-    "__docId__": 28,
+    "__docId__": 59,
     "kind": "file",
     "static": true,
     "variation": null,
@@ -580,10 +1253,10 @@
     "access": null,
     "description": null,
     "lineNumber": 1,
-    "content": "import AbstractNode from '../core/index.js';\n\n\nexport default class MultichannelSpatialiser extends AbstractNode {\n    /**\n     * @param {AudioContext} audioContext - audioContext instance.\n     * @param {string} outputType - output type \"headphone\" or \"speaker\"\n     * @param {AudioStreamsDescription} audioStreamsDescription - audioStreamsDescription.\n     * @param {HRTF} hrtf - hrtf @todo to be defined\n     * @param {EqPreset} eqPreset - dialog gain @todo to be defined\n     * @param {number} offsetGain - gain @todo value to be defined\n     * @param {number} listeningAxis - angle? @todo value to be defined\n     */\n    constructor(audioContext, outputType = 'headphone', audioStreamsDescription = {}, hrtf, eqPreset, offsetGain, listeningAxis){\n        super(audioContext);\n        this._outputType = outputType;\n        this._audioStreamsDescription = audioStreamsDescription;\n        this._hrtf = hrtf;\n        this._eqPreset = eqPreset;\n        this._offsetGain = offsetGain;\n        this._listeningAxis = listeningAxis;\n    }\n    /**\n     * Set outputType: 'headphone' or 'speaker', 'multicanal'\n     * @todo: automatic for 'multicanal' even if nb of speaker 'wrong'\n     * @type {string}\n     */\n    set outputType(value){\n        this._outputType = value;\n    }\n    /**\n     * Get outputType: 'headphone' or 'speaker'\n     * @type {string}\n     */\n    get outputType(){\n        return this._outputType\n    }\n    /**\n     * Set audio streams description (json)\n     * @type {AudioStreamsDescription}\n     */\n    set audioStreamsDescription(value){\n\n    }\n    /**\n     * Get audio streams description\n     * @type {AudioStreamsDescription}\n     */\n    get audioStreamsDescription(){\n        return _audioStreamsDescription;\n    }\n    /**\n     * Set hrtf\n     * @type {HRTF}\n     * @todo: which kind of value, json?\n     */\n    set hrtf(value){\n        this._hrtf = value;\n    }\n    /**\n     * Get hrtf\n     * @type {HRTF}\n     */\n    get hrtf(){\n        return this._hrtf;\n    }\n    /**\n     * Set eqPreset\n     * @todo: which kind of value, json?\n     * @todo: set it to none to not appy any eq?\n     * @type {EqPreset}\n     */\n    set eqPreset(value){\n        this._eqPreset = value;\n    }\n    /**\n     * Get eqPreset\n     * @type {EqPreset}\n     */\n    get eqPreset(){\n        return this._eqPreset;\n    }\n    /**\n     * Set offsetGain\n     * @todo range\n     * @type {number}\n     */\n    set offsetGain(value){\n        this._offsetGain = value;\n    }\n    /**\n     * Get offsetGain\n     * @todo range\n     * @type {number}\n     */\n    get offsetGain(){\n        return this._offsetGain;\n    }\n    /**\n     * Set listeningAxis\n     * @todo value type? angle?\n     * @type {number}\n     */\n    set listeningAxis(value){\n        this._listeningAxis = value;\n    }\n    /**\n     * Get listeningAxis\n     * @type {number}\n     */\n    get listeningAxis(){\n        return this._listeningAxis;\n    }\n}\n"
+    "content": "import AbstractNode from '../core/index.js';\n\n\nexport default class MultichannelSpatialiser extends AbstractNode {\n    /**\n     * @param {AudioContext} audioContext - audioContext instance.\n     * @param {AudioStreamDescriptionCollection} audioStreamDescriptionCollection - audioStreamDescriptionCollection.\n     * @param {string} outputType - output type \"headphone\" or \"speaker\"\n     * @param {HRTF} hrtf - hrtf @todo to be defined\n     * @param {EqPreset} eqPreset - dialog gain @todo to be defined\n     * @param {number} offsetGain - gain @todo value to be defined\n     * @param {number} listeningAxis - angle? @todo value to be defined\n     */\n    constructor(audioContext, audioStreamDescriptionCollection = undefined, outputType = 'headphone', hrtf, eqPreset, offsetGain, listeningAxis){\n        super(audioContext, audioStreamDescriptionCollection);\n        this._outputType = outputType;\n        this._hrtf = hrtf;\n        this._eqPreset = eqPreset;\n        this._offsetGain = offsetGain;\n        this._listeningAxis = listeningAxis;\n    }\n    /**\n     * Set outputType: 'headphone' or 'speaker', 'multicanal'\n     * @todo: automatic for 'multicanal' even if nb of speaker 'wrong'\n     * @type {string}\n     */\n    set outputType(value){\n        this._outputType = value;\n    }\n    /**\n     * Get outputType: 'headphone' or 'speaker'\n     * @type {string}\n     */\n    get outputType(){\n        return this._outputType\n    }\n    /**\n     * Set audio streams description (json)\n     * @type {AudioStreamDescriptionCollection}\n     */\n    set audioStreamDescriptionCollection(value){\n\n    }\n    /**\n     * Get audio streams description\n     * @type {AudioStreamDescriptionCollection}\n     */\n    get audioStreamDescriptionCollection(){\n        return _audioStreamDescriptionCollection;\n    }\n    /**\n     * Set hrtf\n     * @type {HRTF}\n     * @todo: which kind of value, json?\n     */\n    set hrtf(value){\n        this._hrtf = value;\n    }\n    /**\n     * Get hrtf\n     * @type {HRTF}\n     */\n    get hrtf(){\n        return this._hrtf;\n    }\n    /**\n     * Set eqPreset\n     * @todo: which kind of value, json?\n     * @todo: set it to none to not appy any eq?\n     * @type {EqPreset}\n     */\n    set eqPreset(value){\n        this._eqPreset = value;\n    }\n    /**\n     * Get eqPreset\n     * @type {EqPreset}\n     */\n    get eqPreset(){\n        return this._eqPreset;\n    }\n    /**\n     * Set offsetGain\n     * @todo range\n     * @type {number}\n     */\n    set offsetGain(value){\n        this._offsetGain = value;\n    }\n    /**\n     * Get offsetGain\n     * @todo range\n     * @type {number}\n     */\n    get offsetGain(){\n        return this._offsetGain;\n    }\n    /**\n     * Set listeningAxis\n     * @todo value type? angle?\n     * @type {number}\n     */\n    set listeningAxis(value){\n        this._listeningAxis = value;\n    }\n    /**\n     * Get listeningAxis\n     * @type {number}\n     */\n    get listeningAxis(){\n        return this._listeningAxis;\n    }\n}\n"
   },
   {
-    "__docId__": 29,
+    "__docId__": 60,
     "kind": "class",
     "static": true,
     "variation": null,
@@ -603,7 +1276,7 @@
     ]
   },
   {
-    "__docId__": 30,
+    "__docId__": 61,
     "kind": "constructor",
     "static": false,
     "variation": null,
@@ -627,22 +1300,22 @@
       {
         "nullable": null,
         "types": [
+          "AudioStreamDescriptionCollection"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "audioStreamDescriptionCollection",
+        "description": "audioStreamDescriptionCollection."
+      },
+      {
+        "nullable": null,
+        "types": [
           "string"
         ],
         "spread": false,
         "optional": false,
         "name": "outputType",
         "description": "output type \"headphone\" or \"speaker\""
-      },
-      {
-        "nullable": null,
-        "types": [
-          "AudioStreamsDescription"
-        ],
-        "spread": false,
-        "optional": false,
-        "name": "audioStreamsDescription",
-        "description": "audioStreamsDescription."
       },
       {
         "nullable": null,
@@ -688,7 +1361,7 @@
     "generator": false
   },
   {
-    "__docId__": 31,
+    "__docId__": 62,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -706,13 +1379,13 @@
     }
   },
   {
-    "__docId__": 32,
+    "__docId__": 63,
     "kind": "member",
     "static": false,
     "variation": null,
-    "name": "_audioStreamsDescription",
+    "name": "_hrtf",
     "memberof": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser",
-    "longname": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser#_audioStreamsDescription",
+    "longname": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser#_hrtf",
     "access": null,
     "description": null,
     "lineNumber": 17,
@@ -724,13 +1397,13 @@
     }
   },
   {
-    "__docId__": 33,
+    "__docId__": 64,
     "kind": "member",
     "static": false,
     "variation": null,
-    "name": "_hrtf",
+    "name": "_eqPreset",
     "memberof": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser",
-    "longname": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser#_hrtf",
+    "longname": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser#_eqPreset",
     "access": null,
     "description": null,
     "lineNumber": 18,
@@ -742,13 +1415,13 @@
     }
   },
   {
-    "__docId__": 34,
+    "__docId__": 65,
     "kind": "member",
     "static": false,
     "variation": null,
-    "name": "_eqPreset",
+    "name": "_offsetGain",
     "memberof": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser",
-    "longname": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser#_eqPreset",
+    "longname": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser#_offsetGain",
     "access": null,
     "description": null,
     "lineNumber": 19,
@@ -760,13 +1433,13 @@
     }
   },
   {
-    "__docId__": 35,
+    "__docId__": 66,
     "kind": "member",
     "static": false,
     "variation": null,
-    "name": "_offsetGain",
+    "name": "_listeningAxis",
     "memberof": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser",
-    "longname": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser#_offsetGain",
+    "longname": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser#_listeningAxis",
     "access": null,
     "description": null,
     "lineNumber": 20,
@@ -778,25 +1451,7 @@
     }
   },
   {
-    "__docId__": 36,
-    "kind": "member",
-    "static": false,
-    "variation": null,
-    "name": "_listeningAxis",
-    "memberof": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser",
-    "longname": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser#_listeningAxis",
-    "access": null,
-    "description": null,
-    "lineNumber": 21,
-    "undocument": true,
-    "type": {
-      "types": [
-        "*"
-      ]
-    }
-  },
-  {
-    "__docId__": 37,
+    "__docId__": 67,
     "kind": "set",
     "static": false,
     "variation": null,
@@ -805,7 +1460,7 @@
     "longname": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser#outputType",
     "access": null,
     "description": "Set outputType: 'headphone' or 'speaker', 'multicanal'\n@todo: automatic for 'multicanal' even if nb of speaker 'wrong'",
-    "lineNumber": 28,
+    "lineNumber": 27,
     "type": {
       "nullable": null,
       "types": [
@@ -817,7 +1472,7 @@
     "generator": false
   },
   {
-    "__docId__": 38,
+    "__docId__": 68,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -826,7 +1481,7 @@
     "longname": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser#_outputType",
     "access": null,
     "description": null,
-    "lineNumber": 29,
+    "lineNumber": 28,
     "undocument": true,
     "type": {
       "types": [
@@ -835,7 +1490,7 @@
     }
   },
   {
-    "__docId__": 39,
+    "__docId__": 69,
     "kind": "get",
     "static": false,
     "variation": null,
@@ -844,7 +1499,7 @@
     "longname": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser#outputType",
     "access": null,
     "description": "Get outputType: 'headphone' or 'speaker'",
-    "lineNumber": 35,
+    "lineNumber": 34,
     "type": {
       "nullable": null,
       "types": [
@@ -856,20 +1511,20 @@
     "generator": false
   },
   {
-    "__docId__": 40,
+    "__docId__": 70,
     "kind": "set",
     "static": false,
     "variation": null,
-    "name": "audioStreamsDescription",
+    "name": "audioStreamDescriptionCollection",
     "memberof": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser",
-    "longname": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser#audioStreamsDescription",
+    "longname": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser#audioStreamDescriptionCollection",
     "access": null,
     "description": "Set audio streams description (json)",
-    "lineNumber": 42,
+    "lineNumber": 41,
     "type": {
       "nullable": null,
       "types": [
-        "AudioStreamsDescription"
+        "AudioStreamDescriptionCollection"
       ],
       "spread": false,
       "description": null
@@ -877,20 +1532,20 @@
     "generator": false
   },
   {
-    "__docId__": 41,
+    "__docId__": 71,
     "kind": "get",
     "static": false,
     "variation": null,
-    "name": "audioStreamsDescription",
+    "name": "audioStreamDescriptionCollection",
     "memberof": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser",
-    "longname": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser#audioStreamsDescription",
+    "longname": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser#audioStreamDescriptionCollection",
     "access": null,
     "description": "Get audio streams description",
-    "lineNumber": 49,
+    "lineNumber": 48,
     "type": {
       "nullable": null,
       "types": [
-        "AudioStreamsDescription"
+        "AudioStreamDescriptionCollection"
       ],
       "spread": false,
       "description": null
@@ -898,7 +1553,7 @@
     "generator": false
   },
   {
-    "__docId__": 42,
+    "__docId__": 72,
     "kind": "set",
     "static": false,
     "variation": null,
@@ -907,7 +1562,7 @@
     "longname": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser#hrtf",
     "access": null,
     "description": "Set hrtf",
-    "lineNumber": 57,
+    "lineNumber": 56,
     "type": {
       "nullable": null,
       "types": [
@@ -919,7 +1574,7 @@
     "generator": false
   },
   {
-    "__docId__": 43,
+    "__docId__": 73,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -928,7 +1583,7 @@
     "longname": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser#_hrtf",
     "access": null,
     "description": null,
-    "lineNumber": 58,
+    "lineNumber": 57,
     "undocument": true,
     "type": {
       "types": [
@@ -937,7 +1592,7 @@
     }
   },
   {
-    "__docId__": 44,
+    "__docId__": 74,
     "kind": "get",
     "static": false,
     "variation": null,
@@ -946,7 +1601,7 @@
     "longname": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser#hrtf",
     "access": null,
     "description": "Get hrtf",
-    "lineNumber": 64,
+    "lineNumber": 63,
     "type": {
       "nullable": null,
       "types": [
@@ -958,7 +1613,7 @@
     "generator": false
   },
   {
-    "__docId__": 45,
+    "__docId__": 75,
     "kind": "set",
     "static": false,
     "variation": null,
@@ -967,7 +1622,7 @@
     "longname": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser#eqPreset",
     "access": null,
     "description": "Set eqPreset\n@todo: which kind of value, json?\n@todo: set it to none to not appy any eq?",
-    "lineNumber": 73,
+    "lineNumber": 72,
     "type": {
       "nullable": null,
       "types": [
@@ -979,7 +1634,7 @@
     "generator": false
   },
   {
-    "__docId__": 46,
+    "__docId__": 76,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -988,7 +1643,7 @@
     "longname": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser#_eqPreset",
     "access": null,
     "description": null,
-    "lineNumber": 74,
+    "lineNumber": 73,
     "undocument": true,
     "type": {
       "types": [
@@ -997,7 +1652,7 @@
     }
   },
   {
-    "__docId__": 47,
+    "__docId__": 77,
     "kind": "get",
     "static": false,
     "variation": null,
@@ -1006,7 +1661,7 @@
     "longname": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser#eqPreset",
     "access": null,
     "description": "Get eqPreset",
-    "lineNumber": 80,
+    "lineNumber": 79,
     "type": {
       "nullable": null,
       "types": [
@@ -1018,7 +1673,7 @@
     "generator": false
   },
   {
-    "__docId__": 48,
+    "__docId__": 78,
     "kind": "set",
     "static": false,
     "variation": null,
@@ -1027,7 +1682,7 @@
     "longname": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser#offsetGain",
     "access": null,
     "description": "Set offsetGain",
-    "lineNumber": 88,
+    "lineNumber": 87,
     "todo": [
       "range"
     ],
@@ -1042,7 +1697,7 @@
     "generator": false
   },
   {
-    "__docId__": 49,
+    "__docId__": 79,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -1051,7 +1706,7 @@
     "longname": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser#_offsetGain",
     "access": null,
     "description": null,
-    "lineNumber": 89,
+    "lineNumber": 88,
     "undocument": true,
     "type": {
       "types": [
@@ -1060,7 +1715,7 @@
     }
   },
   {
-    "__docId__": 50,
+    "__docId__": 80,
     "kind": "get",
     "static": false,
     "variation": null,
@@ -1069,7 +1724,7 @@
     "longname": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser#offsetGain",
     "access": null,
     "description": "Get offsetGain",
-    "lineNumber": 96,
+    "lineNumber": 95,
     "todo": [
       "range"
     ],
@@ -1084,7 +1739,7 @@
     "generator": false
   },
   {
-    "__docId__": 51,
+    "__docId__": 81,
     "kind": "set",
     "static": false,
     "variation": null,
@@ -1093,7 +1748,7 @@
     "longname": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser#listeningAxis",
     "access": null,
     "description": "Set listeningAxis",
-    "lineNumber": 104,
+    "lineNumber": 103,
     "todo": [
       "value type? angle?"
     ],
@@ -1108,7 +1763,7 @@
     "generator": false
   },
   {
-    "__docId__": 52,
+    "__docId__": 82,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -1117,7 +1772,7 @@
     "longname": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser#_listeningAxis",
     "access": null,
     "description": null,
-    "lineNumber": 105,
+    "lineNumber": 104,
     "undocument": true,
     "type": {
       "types": [
@@ -1126,7 +1781,7 @@
     }
   },
   {
-    "__docId__": 53,
+    "__docId__": 83,
     "kind": "get",
     "static": false,
     "variation": null,
@@ -1135,7 +1790,7 @@
     "longname": "lib/multichannel-spatialiser/index.js~MultichannelSpatialiser#listeningAxis",
     "access": null,
     "description": "Get listeningAxis",
-    "lineNumber": 111,
+    "lineNumber": 110,
     "type": {
       "nullable": null,
       "types": [
@@ -1147,7 +1802,7 @@
     "generator": false
   },
   {
-    "__docId__": 54,
+    "__docId__": 84,
     "kind": "file",
     "static": true,
     "variation": null,
@@ -1157,10 +1812,10 @@
     "access": null,
     "description": null,
     "lineNumber": 1,
-    "content": "import AbstractNode from '../core/index.js';\n\n\nexport default class NoiseAdaptation extends AbstractNode {\n    /**\n     * @param {AudioContext} audioContext - audioContext instance.\n     * @param {boolean} headphone - true is headphone, else, false.\n     */\n    constructor(audioContext, headphone = false){\n        super(audioContext);\n        this._headphone = headphone;\n    }\n    /**\n     * Process:\n     * @todo: track noise, add compression, improve voice if no headphone\n     */\n    _process(){\n\n    }\n    /**\n     * Set headphone - true is headphone, else, false.\n     * @type {boolean}\n     */\n    set headphone(value){\n        this._headphone = value\n    }\n    /**\n     * Get headphone, return True if headphone is connected, else, false\n     * @type {boolean}\n     */\n    get headphone(){\n        return this._headphone;\n    }\n}\n"
+    "content": "import AbstractNode from '../core/index.js';\n\n\nexport default class NoiseAdaptation extends AbstractNode {\n    /**\n     * @param {AudioContext} audioContext - audioContext instance.\n     * @param {AudioStreamDescriptionCollection} audioStreamDescriptionCollection - audioStreamDescriptionCollection.\n     * @param {boolean} headphone - true is headphone, else, false.\n     */\n    constructor(audioContext, audioStreamDescriptionCollection, headphone = false){\n        super(audioContext, audioStreamDescriptionCollection);\n        this._headphone = headphone;\n    }\n    /**\n     * Process:\n     * @todo: track noise, add compression, improve voice if no headphone\n     */\n    _process(){\n\n    }\n    /**\n     * Set headphone - true is headphone, else, false.\n     * @type {boolean}\n     */\n    set headphone(value){\n        this._headphone = value\n    }\n    /**\n     * Get headphone, return True if headphone is connected, else, false\n     * @type {boolean}\n     */\n    get headphone(){\n        return this._headphone;\n    }\n}\n"
   },
   {
-    "__docId__": 55,
+    "__docId__": 85,
     "kind": "class",
     "static": true,
     "variation": null,
@@ -1180,7 +1835,7 @@
     ]
   },
   {
-    "__docId__": 56,
+    "__docId__": 86,
     "kind": "constructor",
     "static": false,
     "variation": null,
@@ -1189,7 +1844,7 @@
     "longname": "lib/noise-adaptation/index.js~NoiseAdaptation#constructor",
     "access": null,
     "description": null,
-    "lineNumber": 9,
+    "lineNumber": 10,
     "params": [
       {
         "nullable": null,
@@ -1200,6 +1855,16 @@
         "optional": false,
         "name": "audioContext",
         "description": "audioContext instance."
+      },
+      {
+        "nullable": null,
+        "types": [
+          "AudioStreamDescriptionCollection"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "audioStreamDescriptionCollection",
+        "description": "audioStreamDescriptionCollection."
       },
       {
         "nullable": null,
@@ -1215,7 +1880,7 @@
     "generator": false
   },
   {
-    "__docId__": 57,
+    "__docId__": 87,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -1224,7 +1889,7 @@
     "longname": "lib/noise-adaptation/index.js~NoiseAdaptation#_headphone",
     "access": null,
     "description": null,
-    "lineNumber": 11,
+    "lineNumber": 12,
     "undocument": true,
     "type": {
       "types": [
@@ -1233,7 +1898,7 @@
     }
   },
   {
-    "__docId__": 58,
+    "__docId__": 88,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -1242,12 +1907,12 @@
     "longname": "lib/noise-adaptation/index.js~NoiseAdaptation#_process",
     "access": null,
     "description": "Process:\n@todo: track noise, add compression, improve voice if no headphone",
-    "lineNumber": 17,
+    "lineNumber": 18,
     "params": [],
     "generator": false
   },
   {
-    "__docId__": 59,
+    "__docId__": 89,
     "kind": "set",
     "static": false,
     "variation": null,
@@ -1256,7 +1921,7 @@
     "longname": "lib/noise-adaptation/index.js~NoiseAdaptation#headphone",
     "access": null,
     "description": "Set headphone - true is headphone, else, false.",
-    "lineNumber": 24,
+    "lineNumber": 25,
     "type": {
       "nullable": null,
       "types": [
@@ -1268,7 +1933,7 @@
     "generator": false
   },
   {
-    "__docId__": 60,
+    "__docId__": 90,
     "kind": "member",
     "static": false,
     "variation": null,
@@ -1277,7 +1942,7 @@
     "longname": "lib/noise-adaptation/index.js~NoiseAdaptation#_headphone",
     "access": null,
     "description": null,
-    "lineNumber": 25,
+    "lineNumber": 26,
     "undocument": true,
     "type": {
       "types": [
@@ -1286,7 +1951,7 @@
     }
   },
   {
-    "__docId__": 61,
+    "__docId__": 91,
     "kind": "get",
     "static": false,
     "variation": null,
@@ -1295,7 +1960,7 @@
     "longname": "lib/noise-adaptation/index.js~NoiseAdaptation#headphone",
     "access": null,
     "description": "Get headphone, return True if headphone is connected, else, false",
-    "lineNumber": 31,
+    "lineNumber": 32,
     "type": {
       "nullable": null,
       "types": [
@@ -1307,7 +1972,7 @@
     "generator": false
   },
   {
-    "__docId__": 62,
+    "__docId__": 92,
     "kind": "file",
     "static": true,
     "variation": null,
@@ -1317,10 +1982,10 @@
     "access": null,
     "description": null,
     "lineNumber": 1,
-    "content": "import MultichannelSpatialiser from '../multichannel-spatialiser/index.js';\n\n\nexport default class ObjectSpatialiserAndMixer extends MultichannelSpatialiser {\n    /**\n     * @param {AudioContext} audioContext - audioContext instance.\n     * @param {string} outputType - output type \"headphone\" or \"speaker\"\n     * @param {AudioStreamsDescription} audioStreamsDescription - audioStreamsDescription.\n     * @param {HRTF} hrtf - hrtf @todo to be defined\n     * @param {EqPreset} eqPreset - dialog gain @todo to be defined\n     * @param {number} offsetGain - gain @todo value to be defined\n     * @param {number} listeningAxis - angle? @todo value to be defined\n     */\n    constructor(audioContext, outputType = 'headphone', audioStreamsDescription = {}, hrtf, eqPreset, offsetGain, listeningAxis){\n        super(audioContext, outputType, audioStreamsDescription, hrtf, eqPreset, offsetGain, listeningAxis);\n    }\n    /**\n     * Set the position of the sound\n     * @param {number} azimuth - azimuth @todo values to be defined\n     * @param {number} elevation - elevation @todo values to be defined\n     * @param {number} distance - distance @todo values to be defined\n     */\n    setPosition(azimuth, elevation, distance){\n        this._azimuth = azimuth;\n        this._elevation = elevation;\n        this._distance = distance;\n    }\n    /**\n     * Get the position of the sound\n     * @todo return an array? better I think for setPosition/getPosition homogeneity\n     * @return {array}\n     */\n    getPosition(){\n        //return {'azimuth': this._azimuth, 'elevation': this._elevation, 'distance': this._distance};\n        return [this._azimuth, this._elevation, this._distance];\n    }\n    /**\n     * Process: \"position\" + \"gain\"\n     * @todo: how to automatically set the gain, how to have RMS from \"the other signal\" here\n     */\n     _process(){\n     }\n}\n"
+    "content": "import MultichannelSpatialiser from '../multichannel-spatialiser/index.js';\n\n\nexport default class ObjectSpatialiserAndMixer extends MultichannelSpatialiser {\n    /**\n     * @param {AudioContext} audioContext - audioContext instance.\n     * @param {AudioStreamDescriptionCollection} audioStreamDescriptionCollection - audioStreamDescriptionCollection.\n     * @param {string} outputType - output type \"headphone\" or \"speaker\"\n     * @param {HRTF} hrtf - hrtf @todo to be defined\n     * @param {EqPreset} eqPreset - dialog gain @todo to be defined\n     * @param {number} offsetGain - gain @todo value to be defined\n     * @param {number} listeningAxis - angle? @todo value to be defined\n     */\n    constructor(audioContext, audioStreamDescriptionCollection = undefined, outputType = 'headphone', hrtf, eqPreset, offsetGain, listeningAxis){\n        super(audioContext, audioStreamDescriptionCollection, outputType, hrtf, eqPreset, offsetGain, listeningAxis);\n    }\n    /**\n     * Set the position of the sound\n     * @todo only for a unique mono stream\n     * @param {number} azimuth - azimuth @todo values to be defined\n     * @param {number} elevation - elevation @todo values to be defined\n     * @param {number} distance - distance @todo values to be defined\n     */\n    setPosition(azimuth, elevation, distance){\n        this._azimuth = azimuth;\n        this._elevation = elevation;\n        this._distance = distance;\n    }\n    /**\n     * Get the position of the sound\n     * @todo return an array? better I think for setPosition/getPosition homogeneity\n     * @return {array}\n     */\n    getPosition(){\n        //return {'azimuth': this._azimuth, 'elevation': this._elevation, 'distance': this._distance};\n        return [this._azimuth, this._elevation, this._distance];\n    }\n    /**\n     * Process: \"position\" + \"gain\"\n     * @todo: how to automatically set the gain, how to have RMS from \"the other signal\" here\n     */\n     _process(){\n     }\n}\n"
   },
   {
-    "__docId__": 63,
+    "__docId__": 93,
     "kind": "class",
     "static": true,
     "variation": null,
@@ -1340,7 +2005,7 @@
     ]
   },
   {
-    "__docId__": 64,
+    "__docId__": 94,
     "kind": "constructor",
     "static": false,
     "variation": null,
@@ -1364,22 +2029,22 @@
       {
         "nullable": null,
         "types": [
+          "AudioStreamDescriptionCollection"
+        ],
+        "spread": false,
+        "optional": false,
+        "name": "audioStreamDescriptionCollection",
+        "description": "audioStreamDescriptionCollection."
+      },
+      {
+        "nullable": null,
+        "types": [
           "string"
         ],
         "spread": false,
         "optional": false,
         "name": "outputType",
         "description": "output type \"headphone\" or \"speaker\""
-      },
-      {
-        "nullable": null,
-        "types": [
-          "AudioStreamsDescription"
-        ],
-        "spread": false,
-        "optional": false,
-        "name": "audioStreamsDescription",
-        "description": "audioStreamsDescription."
       },
       {
         "nullable": null,
@@ -1425,7 +2090,7 @@
     "generator": false
   },
   {
-    "__docId__": 65,
+    "__docId__": 95,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -1434,7 +2099,10 @@
     "longname": "lib/object-spatialiser-and-mixer/index.js~ObjectSpatialiserAndMixer#setPosition",
     "access": null,
     "description": "Set the position of the sound",
-    "lineNumber": 23,
+    "lineNumber": 24,
+    "todo": [
+      "only for a unique mono stream"
+    ],
     "params": [
       {
         "nullable": null,
@@ -1470,31 +2138,13 @@
     "generator": false
   },
   {
-    "__docId__": 66,
+    "__docId__": 96,
     "kind": "member",
     "static": false,
     "variation": null,
     "name": "_azimuth",
     "memberof": "lib/object-spatialiser-and-mixer/index.js~ObjectSpatialiserAndMixer",
     "longname": "lib/object-spatialiser-and-mixer/index.js~ObjectSpatialiserAndMixer#_azimuth",
-    "access": null,
-    "description": null,
-    "lineNumber": 24,
-    "undocument": true,
-    "type": {
-      "types": [
-        "*"
-      ]
-    }
-  },
-  {
-    "__docId__": 67,
-    "kind": "member",
-    "static": false,
-    "variation": null,
-    "name": "_elevation",
-    "memberof": "lib/object-spatialiser-and-mixer/index.js~ObjectSpatialiserAndMixer",
-    "longname": "lib/object-spatialiser-and-mixer/index.js~ObjectSpatialiserAndMixer#_elevation",
     "access": null,
     "description": null,
     "lineNumber": 25,
@@ -1506,13 +2156,13 @@
     }
   },
   {
-    "__docId__": 68,
+    "__docId__": 97,
     "kind": "member",
     "static": false,
     "variation": null,
-    "name": "_distance",
+    "name": "_elevation",
     "memberof": "lib/object-spatialiser-and-mixer/index.js~ObjectSpatialiserAndMixer",
-    "longname": "lib/object-spatialiser-and-mixer/index.js~ObjectSpatialiserAndMixer#_distance",
+    "longname": "lib/object-spatialiser-and-mixer/index.js~ObjectSpatialiserAndMixer#_elevation",
     "access": null,
     "description": null,
     "lineNumber": 26,
@@ -1524,7 +2174,25 @@
     }
   },
   {
-    "__docId__": 69,
+    "__docId__": 98,
+    "kind": "member",
+    "static": false,
+    "variation": null,
+    "name": "_distance",
+    "memberof": "lib/object-spatialiser-and-mixer/index.js~ObjectSpatialiserAndMixer",
+    "longname": "lib/object-spatialiser-and-mixer/index.js~ObjectSpatialiserAndMixer#_distance",
+    "access": null,
+    "description": null,
+    "lineNumber": 27,
+    "undocument": true,
+    "type": {
+      "types": [
+        "*"
+      ]
+    }
+  },
+  {
+    "__docId__": 99,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -1533,7 +2201,7 @@
     "longname": "lib/object-spatialiser-and-mixer/index.js~ObjectSpatialiserAndMixer#getPosition",
     "access": null,
     "description": "Get the position of the sound",
-    "lineNumber": 33,
+    "lineNumber": 34,
     "todo": [
       "return an array? better I think for setPosition/getPosition homogeneity"
     ],
@@ -1549,7 +2217,7 @@
     "generator": false
   },
   {
-    "__docId__": 70,
+    "__docId__": 100,
     "kind": "method",
     "static": false,
     "variation": null,
@@ -1558,12 +2226,12 @@
     "longname": "lib/object-spatialiser-and-mixer/index.js~ObjectSpatialiserAndMixer#_process",
     "access": null,
     "description": "Process: \"position\" + \"gain\"\n@todo: how to automatically set the gain, how to have RMS from \"the other signal\" here",
-    "lineNumber": 41,
+    "lineNumber": 42,
     "params": [],
     "generator": false
   },
   {
-    "__docId__": 71,
+    "__docId__": 101,
     "kind": "file",
     "static": true,
     "variation": null,
@@ -1573,10 +2241,10 @@
     "access": null,
     "description": null,
     "lineNumber": 1,
-    "content": "import AbstractNode from '../core/index.js';\n\n\nexport default class SmartFader extends AbstractNode {\n    /**\n     * @param {AudioContext} audioContext - audioContext instance.\n     * @param {number} db - db value for the SmartFader.\n     * @param {number} loudness - loudness value.\n     * @param {number} maxTruePeak - maxTruePeak value.\n     * @todo give range of accepted values\n     */\n    constructor(audioContext, db = undefined, loudness = undefined, maxTruePeak = undefined){\n        super(audioContext);\n        this._db = db;\n        this._loudness = loudness;\n        this._maxTruePeak = maxTruePeak;\n        this._dynamicCompressionState = undefined;\n    }\n    /**\n     * Set the db value\n     * @todo give range of accepted values\n     * @type {number}\n     */\n    set db(value){\n        this._db = value;\n    }\n    /**\n     * Get the db value\n     * @type {number}\n     */\n    get db(){\n        return this._db;\n    }\n    /**\n     * Set the loudness value\n     * @todo give range of accepted values\n     * @type {number}\n     */\n    set loudness(value){\n        this._loudness = value;\n    }\n    /**\n     * Get the loudness value\n     * @type {number}\n     */\n    get loudness(){\n        return this._loudness\n    }\n    /**\n     * Set the MaxTruePeak value\n     * @todo give range of accepted values\n     * @type {number}\n     */\n    set maxTruePeak(value){\n        this._maxTruePeak = value;\n    }\n    /**\n     * Get the MaxTruePeak value\n     * @type {number}\n     */\n    get maxTruePeak(){\n        return this._maxTruePeak;\n    }\n    /**\n     * Get the dynamic compression state\n     * @type {number}\n     */\n    get dynamicCompressionState(){\n        return this._dynamicCompressionState;\n    }\n    _process(){\n\n    }\n}\n"
+    "content": "import AbstractNode from '../core/index.js';\n\n\nexport default class SmartFader extends AbstractNode {\n    /**\n     * @param {AudioContext} audioContext - audioContext instance.\n     * @param {AudioStreamDescriptionCollection} audioStreamDescriptionCollection - audioStreamDescriptionCollection\n     * @param {number} dB - dB value for the SmartFader.\n     * @todo give range of accepted values\n     */\n    constructor(audioContext, audioStreamDescriptionCollection = undefined, dB = undefined){\n        super(audioContext, audioStreamDescriptionCollection);\n        this._dB = dB;\n\n        // AudioGraph connect\n        // @todo: DynamicsCompressorNode accept n channels input\n        this._dynamicCompressorNode = audioContext.createDynamicsCompressor();\n        this.input.connect(this._dynamicCompressorNode)\n        this._dynamicCompressorNode.connect(this._output)\n    }\n    /**\n     * Set the dB value\n     * @todo give range of accepted values\n     * @type {number}\n     */\n    set dB(value){\n        // @todo clip value\n        this._dB = value;\n        this._update();\n    }\n    /**\n     * Get the dB value\n     * @type {number}\n     */\n    get dB(){\n        return this._dB;\n    }\n    // @todo Mathieu -80dB => +20dB\n    /**\n     * Get the dB range\n     * @type {array}\n     */\n    static get dBRange(){\n        return [-80, 20]\n    }\n    static get dBDefault(){\n        return 0\n    }\n    /**\n     * Get the dynamic compression state\n     * @type {boolean}\n     */\n    get dynamicCompressionState(){\n        if(this._dynamicCompressorNode.reduction > 0){\n            return true\n        } else {\n            return false\n        }\n    }\n    _update(){\n        // @todo éclaircir régles d'activation avec Matthieu\n        // this._dynamicCompressorNode.threshold\n        // this._dynamicCompressorNode.knee\n        // this._dynamicCompressorNode.ratio\n        // this._dynamicCompressorNode.attack\n        // this._dynamicCompressorNode.release\n    }\n}\n"
   },
   {
-    "__docId__": 72,
+    "__docId__": 102,
     "kind": "class",
     "static": true,
     "variation": null,
@@ -1596,7 +2264,7 @@
     ]
   },
   {
-    "__docId__": 73,
+    "__docId__": 103,
     "kind": "constructor",
     "static": false,
     "variation": null,
@@ -1605,7 +2273,7 @@
     "longname": "lib/smart-fader/index.js~SmartFader#constructor",
     "access": null,
     "description": null,
-    "lineNumber": 12,
+    "lineNumber": 11,
     "todo": [
       "give range of accepted values"
     ],
@@ -1623,12 +2291,12 @@
       {
         "nullable": null,
         "types": [
-          "number"
+          "AudioStreamDescriptionCollection"
         ],
         "spread": false,
         "optional": false,
-        "name": "db",
-        "description": "db value for the SmartFader."
+        "name": "audioStreamDescriptionCollection",
+        "description": "audioStreamDescriptionCollection"
       },
       {
         "nullable": null,
@@ -1637,33 +2305,23 @@
         ],
         "spread": false,
         "optional": false,
-        "name": "loudness",
-        "description": "loudness value."
-      },
-      {
-        "nullable": null,
-        "types": [
-          "number"
-        ],
-        "spread": false,
-        "optional": false,
-        "name": "maxTruePeak",
-        "description": "maxTruePeak value."
+        "name": "dB",
+        "description": "dB value for the SmartFader."
       }
     ],
     "generator": false
   },
   {
-    "__docId__": 74,
+    "__docId__": 104,
     "kind": "member",
     "static": false,
     "variation": null,
-    "name": "_db",
+    "name": "_dB",
     "memberof": "lib/smart-fader/index.js~SmartFader",
-    "longname": "lib/smart-fader/index.js~SmartFader#_db",
+    "longname": "lib/smart-fader/index.js~SmartFader#_dB",
     "access": null,
     "description": null,
-    "lineNumber": 14,
+    "lineNumber": 13,
     "undocument": true,
     "type": {
       "types": [
@@ -1672,49 +2330,13 @@
     }
   },
   {
-    "__docId__": 75,
+    "__docId__": 105,
     "kind": "member",
     "static": false,
     "variation": null,
-    "name": "_loudness",
+    "name": "_dynamicCompressorNode",
     "memberof": "lib/smart-fader/index.js~SmartFader",
-    "longname": "lib/smart-fader/index.js~SmartFader#_loudness",
-    "access": null,
-    "description": null,
-    "lineNumber": 15,
-    "undocument": true,
-    "type": {
-      "types": [
-        "*"
-      ]
-    }
-  },
-  {
-    "__docId__": 76,
-    "kind": "member",
-    "static": false,
-    "variation": null,
-    "name": "_maxTruePeak",
-    "memberof": "lib/smart-fader/index.js~SmartFader",
-    "longname": "lib/smart-fader/index.js~SmartFader#_maxTruePeak",
-    "access": null,
-    "description": null,
-    "lineNumber": 16,
-    "undocument": true,
-    "type": {
-      "types": [
-        "*"
-      ]
-    }
-  },
-  {
-    "__docId__": 77,
-    "kind": "member",
-    "static": false,
-    "variation": null,
-    "name": "_dynamicCompressionState",
-    "memberof": "lib/smart-fader/index.js~SmartFader",
-    "longname": "lib/smart-fader/index.js~SmartFader#_dynamicCompressionState",
+    "longname": "lib/smart-fader/index.js~SmartFader#_dynamicCompressorNode",
     "access": null,
     "description": null,
     "lineNumber": 17,
@@ -1726,16 +2348,16 @@
     }
   },
   {
-    "__docId__": 78,
+    "__docId__": 106,
     "kind": "set",
     "static": false,
     "variation": null,
-    "name": "db",
+    "name": "dB",
     "memberof": "lib/smart-fader/index.js~SmartFader",
-    "longname": "lib/smart-fader/index.js~SmartFader#db",
+    "longname": "lib/smart-fader/index.js~SmartFader#dB",
     "access": null,
-    "description": "Set the db value",
-    "lineNumber": 24,
+    "description": "Set the dB value",
+    "lineNumber": 26,
     "todo": [
       "give range of accepted values"
     ],
@@ -1750,16 +2372,16 @@
     "generator": false
   },
   {
-    "__docId__": 79,
+    "__docId__": 107,
     "kind": "member",
     "static": false,
     "variation": null,
-    "name": "_db",
+    "name": "_dB",
     "memberof": "lib/smart-fader/index.js~SmartFader",
-    "longname": "lib/smart-fader/index.js~SmartFader#_db",
+    "longname": "lib/smart-fader/index.js~SmartFader#_dB",
     "access": null,
     "description": null,
-    "lineNumber": 25,
+    "lineNumber": 28,
     "undocument": true,
     "type": {
       "types": [
@@ -1768,16 +2390,16 @@
     }
   },
   {
-    "__docId__": 80,
+    "__docId__": 108,
     "kind": "get",
     "static": false,
     "variation": null,
-    "name": "db",
+    "name": "dB",
     "memberof": "lib/smart-fader/index.js~SmartFader",
-    "longname": "lib/smart-fader/index.js~SmartFader#db",
+    "longname": "lib/smart-fader/index.js~SmartFader#dB",
     "access": null,
-    "description": "Get the db value",
-    "lineNumber": 31,
+    "description": "Get the dB value",
+    "lineNumber": 35,
     "type": {
       "nullable": null,
       "types": [
@@ -1789,23 +2411,20 @@
     "generator": false
   },
   {
-    "__docId__": 81,
-    "kind": "set",
-    "static": false,
+    "__docId__": 109,
+    "kind": "get",
+    "static": true,
     "variation": null,
-    "name": "loudness",
+    "name": "dBRange",
     "memberof": "lib/smart-fader/index.js~SmartFader",
-    "longname": "lib/smart-fader/index.js~SmartFader#loudness",
+    "longname": "lib/smart-fader/index.js~SmartFader.dBRange",
     "access": null,
-    "description": "Set the loudness value",
-    "lineNumber": 39,
-    "todo": [
-      "give range of accepted values"
-    ],
+    "description": "Get the dB range",
+    "lineNumber": 43,
     "type": {
       "nullable": null,
       "types": [
-        "number"
+        "array"
       ],
       "spread": false,
       "description": null
@@ -1813,109 +2432,26 @@
     "generator": false
   },
   {
-    "__docId__": 82,
-    "kind": "member",
-    "static": false,
+    "__docId__": 110,
+    "kind": "get",
+    "static": true,
     "variation": null,
-    "name": "_loudness",
+    "name": "dBDefault",
     "memberof": "lib/smart-fader/index.js~SmartFader",
-    "longname": "lib/smart-fader/index.js~SmartFader#_loudness",
+    "longname": "lib/smart-fader/index.js~SmartFader.dBDefault",
     "access": null,
     "description": null,
-    "lineNumber": 40,
-    "undocument": true,
-    "type": {
-      "types": [
-        "*"
-      ]
-    }
-  },
-  {
-    "__docId__": 83,
-    "kind": "get",
-    "static": false,
-    "variation": null,
-    "name": "loudness",
-    "memberof": "lib/smart-fader/index.js~SmartFader",
-    "longname": "lib/smart-fader/index.js~SmartFader#loudness",
-    "access": null,
-    "description": "Get the loudness value",
     "lineNumber": 46,
-    "type": {
-      "nullable": null,
-      "types": [
-        "number"
-      ],
-      "spread": false,
-      "description": null
-    },
-    "generator": false
-  },
-  {
-    "__docId__": 84,
-    "kind": "set",
-    "static": false,
-    "variation": null,
-    "name": "maxTruePeak",
-    "memberof": "lib/smart-fader/index.js~SmartFader",
-    "longname": "lib/smart-fader/index.js~SmartFader#maxTruePeak",
-    "access": null,
-    "description": "Set the MaxTruePeak value",
-    "lineNumber": 54,
-    "todo": [
-      "give range of accepted values"
-    ],
-    "type": {
-      "nullable": null,
-      "types": [
-        "number"
-      ],
-      "spread": false,
-      "description": null
-    },
-    "generator": false
-  },
-  {
-    "__docId__": 85,
-    "kind": "member",
-    "static": false,
-    "variation": null,
-    "name": "_maxTruePeak",
-    "memberof": "lib/smart-fader/index.js~SmartFader",
-    "longname": "lib/smart-fader/index.js~SmartFader#_maxTruePeak",
-    "access": null,
-    "description": null,
-    "lineNumber": 55,
     "undocument": true,
     "type": {
       "types": [
-        "*"
-      ]
-    }
-  },
-  {
-    "__docId__": 86,
-    "kind": "get",
-    "static": false,
-    "variation": null,
-    "name": "maxTruePeak",
-    "memberof": "lib/smart-fader/index.js~SmartFader",
-    "longname": "lib/smart-fader/index.js~SmartFader#maxTruePeak",
-    "access": null,
-    "description": "Get the MaxTruePeak value",
-    "lineNumber": 61,
-    "type": {
-      "nullable": null,
-      "types": [
         "number"
-      ],
-      "spread": false,
-      "description": null
+      ]
     },
     "generator": false
   },
   {
-    "__docId__": 87,
+    "__docId__": 111,
     "kind": "get",
     "static": false,
     "variation": null,
@@ -1924,11 +2460,11 @@
     "longname": "lib/smart-fader/index.js~SmartFader#dynamicCompressionState",
     "access": null,
     "description": "Get the dynamic compression state",
-    "lineNumber": 68,
+    "lineNumber": 53,
     "type": {
       "nullable": null,
       "types": [
-        "number"
+        "boolean"
       ],
       "spread": false,
       "description": null
@@ -1936,22 +2472,22 @@
     "generator": false
   },
   {
-    "__docId__": 88,
+    "__docId__": 112,
     "kind": "method",
     "static": false,
     "variation": null,
-    "name": "_process",
+    "name": "_update",
     "memberof": "lib/smart-fader/index.js~SmartFader",
-    "longname": "lib/smart-fader/index.js~SmartFader#_process",
+    "longname": "lib/smart-fader/index.js~SmartFader#_update",
     "access": null,
     "description": null,
-    "lineNumber": 71,
+    "lineNumber": 60,
     "undocument": true,
     "params": [],
     "generator": false
   },
   {
-    "__docId__": 90,
+    "__docId__": 114,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1964,7 +2500,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 91,
+    "__docId__": 115,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1977,7 +2513,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 92,
+    "__docId__": 116,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -1990,7 +2526,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 93,
+    "__docId__": 117,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2003,7 +2539,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 94,
+    "__docId__": 118,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2016,7 +2552,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 95,
+    "__docId__": 119,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2029,7 +2565,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 96,
+    "__docId__": 120,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2042,7 +2578,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 97,
+    "__docId__": 121,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2055,7 +2591,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 98,
+    "__docId__": 122,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2068,7 +2604,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 99,
+    "__docId__": 123,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2081,7 +2617,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 100,
+    "__docId__": 124,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2094,7 +2630,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 101,
+    "__docId__": 125,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2107,7 +2643,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 102,
+    "__docId__": 126,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2120,7 +2656,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 103,
+    "__docId__": 127,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2133,7 +2669,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 104,
+    "__docId__": 128,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2146,7 +2682,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 105,
+    "__docId__": 129,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2159,7 +2695,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 106,
+    "__docId__": 130,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2172,7 +2708,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 107,
+    "__docId__": 131,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2185,7 +2721,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 108,
+    "__docId__": 132,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2198,7 +2734,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 109,
+    "__docId__": 133,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2211,7 +2747,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 110,
+    "__docId__": 134,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2224,7 +2760,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 111,
+    "__docId__": 135,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2237,7 +2773,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 112,
+    "__docId__": 136,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2250,7 +2786,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 113,
+    "__docId__": 137,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2263,7 +2799,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 114,
+    "__docId__": 138,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2276,7 +2812,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 115,
+    "__docId__": 139,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2289,7 +2825,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 116,
+    "__docId__": 140,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2302,7 +2838,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 117,
+    "__docId__": 141,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2315,7 +2851,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 118,
+    "__docId__": 142,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2328,7 +2864,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 119,
+    "__docId__": 143,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2341,7 +2877,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 120,
+    "__docId__": 144,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2354,7 +2890,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 121,
+    "__docId__": 145,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2367,7 +2903,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 122,
+    "__docId__": 146,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2380,7 +2916,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 123,
+    "__docId__": 147,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2393,7 +2929,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 124,
+    "__docId__": 148,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2406,7 +2942,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 125,
+    "__docId__": 149,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2419,7 +2955,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 126,
+    "__docId__": 150,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2432,7 +2968,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 127,
+    "__docId__": 151,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2445,7 +2981,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 128,
+    "__docId__": 152,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2458,7 +2994,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 129,
+    "__docId__": 153,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2471,7 +3007,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 130,
+    "__docId__": 154,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2484,7 +3020,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 131,
+    "__docId__": 155,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2497,7 +3033,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 132,
+    "__docId__": 156,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2510,7 +3046,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 133,
+    "__docId__": 157,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2523,7 +3059,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 134,
+    "__docId__": 158,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2536,7 +3072,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 135,
+    "__docId__": 159,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2549,7 +3085,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 136,
+    "__docId__": 160,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2562,7 +3098,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 138,
+    "__docId__": 162,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2575,7 +3111,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 139,
+    "__docId__": 163,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2588,7 +3124,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 140,
+    "__docId__": 164,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2601,7 +3137,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 141,
+    "__docId__": 165,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2614,7 +3150,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 142,
+    "__docId__": 166,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2627,7 +3163,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 143,
+    "__docId__": 167,
     "kind": "external",
     "static": true,
     "variation": null,
@@ -2640,7 +3176,7 @@
     "builtinExternal": true
   },
   {
-    "__docId__": 144,
+    "__docId__": 168,
     "kind": "external",
     "static": true,
     "variation": null,

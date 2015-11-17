@@ -33,7 +33,8 @@
   <ul>
     
   <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">core</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/lib/core/index.js~AbstractNode.html">AbstractNode</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-AudioStreamsDescription">AudioStreamsDescription</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/lib/core/index.js~AudioStreamDescription.html">AudioStreamDescription</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/lib/core/index.js~AudioStreamDescriptionCollection.html">AudioStreamDescriptionCollection</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-EqPreset">EqPreset</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-HRTF">HRTF</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://developer.mozilla.org/fr/docs/Web/API/AudioContext">AudioContext</a></span></span></li>
@@ -53,18 +54,19 @@
 export default class ObjectSpatialiserAndMixer extends MultichannelSpatialiser {
     /**
      * @param {AudioContext} audioContext - audioContext instance.
+     * @param {AudioStreamDescriptionCollection} audioStreamDescriptionCollection - audioStreamDescriptionCollection.
      * @param {string} outputType - output type &quot;headphone&quot; or &quot;speaker&quot;
-     * @param {AudioStreamsDescription} audioStreamsDescription - audioStreamsDescription.
      * @param {HRTF} hrtf - hrtf @todo to be defined
      * @param {EqPreset} eqPreset - dialog gain @todo to be defined
      * @param {number} offsetGain - gain @todo value to be defined
      * @param {number} listeningAxis - angle? @todo value to be defined
      */
-    constructor(audioContext, outputType = &apos;headphone&apos;, audioStreamsDescription = {}, hrtf, eqPreset, offsetGain, listeningAxis){
-        super(audioContext, outputType, audioStreamsDescription, hrtf, eqPreset, offsetGain, listeningAxis);
+    constructor(audioContext, audioStreamDescriptionCollection = undefined, outputType = &apos;headphone&apos;, hrtf, eqPreset, offsetGain, listeningAxis){
+        super(audioContext, audioStreamDescriptionCollection, outputType, hrtf, eqPreset, offsetGain, listeningAxis);
     }
     /**
      * Set the position of the sound
+     * @todo only for a unique mono stream
      * @param {number} azimuth - azimuth @todo values to be defined
      * @param {number} elevation - elevation @todo values to be defined
      * @param {number} distance - distance @todo values to be defined

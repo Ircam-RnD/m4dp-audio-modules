@@ -33,7 +33,8 @@
   <ul>
     
   <li data-ice="doc"><div data-ice="dirPath" class="nav-dir-path">core</div><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/lib/core/index.js~AbstractNode.html">AbstractNode</a></span></span></li>
-<li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-AudioStreamsDescription">AudioStreamsDescription</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/lib/core/index.js~AudioStreamDescription.html">AudioStreamDescription</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/lib/core/index.js~AudioStreamDescriptionCollection.html">AudioStreamDescriptionCollection</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-EqPreset">EqPreset</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-typedef">T</span><span data-ice="name"><span><a href="typedef/index.html#static-typedef-HRTF">HRTF</a></span></span></li>
 <li data-ice="doc"><span data-ice="kind" class="kind-external">E</span><span data-ice="name"><span><a href="https://developer.mozilla.org/fr/docs/Web/API/AudioContext">AudioContext</a></span></span></li>
@@ -101,7 +102,7 @@
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/lib/dialog-enhancement/index.js~DialogEnhancement.html#instance-constructor-constructor">constructor</a></span></span><span data-ice="signature">(audioContext: <span><a href="https://developer.mozilla.org/fr/docs/Web/API/AudioContext">AudioContext</a></span>, audioStreamsDescription: <span><a href="typedef/index.html#static-typedef-AudioStreamsDescription">AudioStreamsDescription</a></span>, mode: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>, dialogGain: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>)</span>
+           <span data-ice="name"><span><a href="class/lib/dialog-enhancement/index.js~DialogEnhancement.html#instance-constructor-constructor">constructor</a></span></span><span data-ice="signature">(audioContext: <span><a href="https://developer.mozilla.org/fr/docs/Web/API/AudioContext">AudioContext</a></span>, audioStreamDescriptionCollection: <span><a href="class/lib/core/index.js~AudioStreamDescriptionCollection.html">AudioStreamDescriptionCollection</a></span>, mode: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>, dialogGain: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>)</span>
         </p>
       </div>
       <div>
@@ -133,13 +134,13 @@
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/lib/dialog-enhancement/index.js~DialogEnhancement.html#instance-set-audioStreamsDescription">audioStreamsDescription</a></span></span><span data-ice="signature">: <span><a href="typedef/index.html#static-typedef-AudioStreamsDescription">AudioStreamsDescription</a></span></span>
+           <span data-ice="name"><span><a href="class/lib/dialog-enhancement/index.js~DialogEnhancement.html#instance-set-audioStreamDescriptionCollection">audioStreamDescriptionCollection</a></span></span><span data-ice="signature">: <span><a href="class/lib/core/index.js~AudioStreamDescriptionCollection.html">AudioStreamDescriptionCollection</a></span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Set audioStreamsDescription</p>
+        <div data-ice="description"><p>Set audioStreamDescriptionCollection</p>
 </div>
       </div>
     </td>
@@ -159,13 +160,13 @@
     <td>
       <div>
         <p>
-           <span data-ice="name"><span><a href="class/lib/dialog-enhancement/index.js~DialogEnhancement.html#instance-get-audioStreamsDescription">audioStreamsDescription</a></span></span><span data-ice="signature">: <span><a href="typedef/index.html#static-typedef-AudioStreamsDescription">AudioStreamsDescription</a></span></span>
+           <span data-ice="name"><span><a href="class/lib/dialog-enhancement/index.js~DialogEnhancement.html#instance-get-audioStreamDescriptionCollection">audioStreamDescriptionCollection</a></span></span><span data-ice="signature">: <span><a href="class/lib/core/index.js~AudioStreamDescriptionCollection.html">AudioStreamDescriptionCollection</a></span></span>
         </p>
       </div>
       <div>
         
         
-        <div data-ice="description"><p>Get audioStreamsDescription</p>
+        <div data-ice="description"><p>Get audioStreamDescriptionCollection</p>
 </div>
       </div>
     </td>
@@ -379,7 +380,7 @@
     
     
     
-    <span data-ice="name">constructor</span><span data-ice="signature">(audioContext: <span><a href="https://developer.mozilla.org/fr/docs/Web/API/AudioContext">AudioContext</a></span>, audioStreamsDescription: <span><a href="typedef/index.html#static-typedef-AudioStreamsDescription">AudioStreamsDescription</a></span>, mode: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>, dialogGain: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>)</span>
+    <span data-ice="name">constructor</span><span data-ice="signature">(audioContext: <span><a href="https://developer.mozilla.org/fr/docs/Web/API/AudioContext">AudioContext</a></span>, audioStreamDescriptionCollection: <span><a href="class/lib/core/index.js~AudioStreamDescriptionCollection.html">AudioStreamDescriptionCollection</a></span>, mode: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>, dialogGain: <span><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number">number</a></span>)</span>
     <span class="right-info">
       
       
@@ -410,10 +411,10 @@
 </td>
     </tr>
 <tr data-ice="property" data-depth="0">
-      <td data-ice="name" data-depth="0">audioStreamsDescription</td>
-      <td data-ice="type"><span><a href="typedef/index.html#static-typedef-AudioStreamsDescription">AudioStreamsDescription</a></span></td>
+      <td data-ice="name" data-depth="0">audioStreamDescriptionCollection</td>
+      <td data-ice="type"><span><a href="class/lib/core/index.js~AudioStreamDescriptionCollection.html">AudioStreamDescriptionCollection</a></span></td>
       <td data-ice="appendix"></td>
-      <td data-ice="description"><p>audioStreamsDescription.</p>
+      <td data-ice="description"><p>audioStreamDescriptionCollection.</p>
 </td>
     </tr>
 <tr data-ice="property" data-depth="0">
@@ -454,24 +455,24 @@
 <div data-ice="memberDetails"><h2 data-ice="title">Public Members</h2>
 
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-set-audioStreamsDescription">
+  <h3 data-ice="anchor" id="instance-set-audioStreamDescriptionCollection">
     <span class="access" data-ice="access">public</span>
     
     <span class="kind" data-ice="kind">set</span>
     
     
-    <span data-ice="name">audioStreamsDescription</span><span data-ice="signature">: <span><a href="typedef/index.html#static-typedef-AudioStreamsDescription">AudioStreamsDescription</a></span></span>
+    <span data-ice="name">audioStreamDescriptionCollection</span><span data-ice="signature">: <span><a href="class/lib/core/index.js~AudioStreamDescriptionCollection.html">AudioStreamDescriptionCollection</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/lib/dialog-enhancement/index.js.html#lineNumber34">source</a></span></span>
+      <span data-ice="source"><span><a href="file/lib/dialog-enhancement/index.js.html#lineNumber36">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Set audioStreamsDescription</p>
+  <div data-ice="description"><p>Set audioStreamDescriptionCollection</p>
 </div>
 
   
@@ -495,24 +496,24 @@
   
 </div>
 <div class="detail" data-ice="detail">
-  <h3 data-ice="anchor" id="instance-get-audioStreamsDescription">
+  <h3 data-ice="anchor" id="instance-get-audioStreamDescriptionCollection">
     <span class="access" data-ice="access">public</span>
     
     <span class="kind" data-ice="kind">get</span>
     
     
-    <span data-ice="name">audioStreamsDescription</span><span data-ice="signature">: <span><a href="typedef/index.html#static-typedef-AudioStreamsDescription">AudioStreamsDescription</a></span></span>
+    <span data-ice="name">audioStreamDescriptionCollection</span><span data-ice="signature">: <span><a href="class/lib/core/index.js~AudioStreamDescriptionCollection.html">AudioStreamDescriptionCollection</a></span></span>
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/lib/dialog-enhancement/index.js.html#lineNumber41">source</a></span></span>
+      <span data-ice="source"><span><a href="file/lib/dialog-enhancement/index.js.html#lineNumber43">source</a></span></span>
     </span>
   </h3>
 
   
   
   
-  <div data-ice="description"><p>Get audioStreamsDescription</p>
+  <div data-ice="description"><p>Get audioStreamDescriptionCollection</p>
 </div>
 
   
@@ -546,7 +547,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/lib/dialog-enhancement/index.js.html#lineNumber49">source</a></span></span>
+      <span data-ice="source"><span><a href="file/lib/dialog-enhancement/index.js.html#lineNumber51">source</a></span></span>
     </span>
   </h3>
 
@@ -587,7 +588,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/lib/dialog-enhancement/index.js.html#lineNumber57">source</a></span></span>
+      <span data-ice="source"><span><a href="file/lib/dialog-enhancement/index.js.html#lineNumber59">source</a></span></span>
     </span>
   </h3>
 
@@ -628,7 +629,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/lib/dialog-enhancement/index.js.html#lineNumber20">source</a></span></span>
+      <span data-ice="source"><span><a href="file/lib/dialog-enhancement/index.js.html#lineNumber19">source</a></span></span>
     </span>
   </h3>
 
@@ -669,7 +670,7 @@
     <span class="right-info">
       
       
-      <span data-ice="source"><span><a href="file/lib/dialog-enhancement/index.js.html#lineNumber27">source</a></span></span>
+      <span data-ice="source"><span><a href="file/lib/dialog-enhancement/index.js.html#lineNumber29">source</a></span></span>
     </span>
   </h3>
 
