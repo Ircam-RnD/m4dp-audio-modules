@@ -7,7 +7,7 @@ TODO
 * JP : binaural
 * T : compressor smart fader (que veut matthieu dans son réglage de volume, loudness pas utilisé)
 * T : transaural, comment le faire et quelle paire de filtre ?
-* T : mode 3 du dialog enhancement
+* T : mode 3 du dialog enhancement (la voix est toujours au centre ? qu'espérez vous comme analyse ? traitement dynamique == compression dynamique ou traitement dynamique au fur et à mesure du temps / ou type fonction karaoké des chaînes hifi en 1990)
 * T + JP : reverb pour distance dans le binaural
 * T + ftv : clarifier gain d'offset subjectif
 * T + ftv : clarifier axe d'écoute (combien d'axe ? et en degré ou radian ?)
