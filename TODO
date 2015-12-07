@@ -12,3 +12,4 @@ TODO
 * T + ftv : clarifier gain d'offset subjectif
 * T + ftv : clarifier axe d'écoute (combien d'axe ? et en degré ou radian ?)
 * T + ftv : reverb ? quelle convolution 5.1 ?
+* T + ftv : clarifier histoire de RMS sur commentaire (à partir de la loudness pré-calculée)
