@@ -1,0 +1,77 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Dotscreen - IRCAM - sandbox</title>
+        <style text="text/javascript">
+    		body { padding:0px; margin:0px; background-color:#333333; }
+			    .mainPlayer { 
+			    	position:absolute; 
+			    	top:0;
+			    	left:0; 
+			    	width:100%; 
+			    	height:100%; 
+			    	z-index:0;
+			    }
+			    .pipPlayer {
+			    	position:absolute;
+			    	right:10px;
+			    	bottom:40px;
+			    	width:128px;
+			    	height:128px;
+			    	z-index:2147483648;
+			    }
+			    .audioPlayer {
+			    	position:absolute;
+			    	top:0px;
+			    	left:0px;
+			    	width:0px;
+			    	height:0px;
+			    	z-index:2147483648;
+			    }
+			    .checkboxStyle {
+			    	position:absolute;
+			    	top:0px;
+			    	left:0px;
+			    	z-index:2147483648;
+			    	padding:10px;
+			    	background-color:rgba(0, 0, 0, 0.7);
+			    }
+			    ::cue {
+			    	color: yellow;
+			    }
+			    ::cue-region {
+			    	color: blue;
+			    	background-color:rgba(128, 0, 0, 0.7);
+			    }
+			    ::cue(c.cyan) {
+			    	color: white;
+			    }
+	    </style>
+	    
+    </head>
+    <body>
+    
+		
+        <video class="mainPlayer" id="videoPlayerMain" autoplay controls>
+		</video>
+        <video class="pipPlayer" id="videoPlayerPip" muted="true" autoplay>
+		</video>
+        <video class="audioPlayer" id="videoPlayerAudio" autoplay>
+		</video>
+
+	    <div class="checkboxStyle">
+			<input type="checkbox" id="checkbox-video" name="checkbox-video" value="Video" onClick="onCheckVideo();"/><span style="color:#fff">Main audio</span><br/>		
+			<input type="checkbox" id="checkbox-extended-ambience" name="checkbox-extended-ambience" value="ExAmbience" onClick="onCheckExAmbience();"/><span style="color:#fff">Extended ambiance</span><br/>		
+			<input type="checkbox" id="checkbox-extended-comments" name="checkbox-extended-comments" value="ExComments" onClick="onCheckExComments();"/><span style="color:#fff">Extended comments</span><br/>		
+			<input type="checkbox" id="checkbox-extended-dialogs" name="checkbox-extended-dialogs" value="ExDialogs" onClick="onCheckExDialogs();"/><span style="color:#fff">Extended dialogs</span><br/>		
+			<input type="checkbox" id="checkbox-lsf" name="checkbox-lsf" value="LSF" onClick="onCheckLSF();"/><span style="color:#fff">LSF</span><br/>		
+		</div>
+
+        <script src="http://cdn.dashjs.org/latest/dash.all.js"></script>
+    	    
+    	<script src="../bundle.js"></script>
+    	    
+	    <script src="ircam-sandbox.js"></script>
+	    
+    </body>
+</html>
