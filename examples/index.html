@@ -1,12 +1,27 @@
 <!doctype html>
 <html>
 <head>
-    <meta charset="utf-8">
-    <title>M4DP Audio Modules tests</title>
-    <script src="../bundle.js"></script>
-    <script src="./app.js"></script>
+  <meta charset="utf-8">
+	<title>Dotscreen - IRCAM - sandbox</title>
+	<link rel="stylesheet" type="text/css" href="./style.css">	    
 </head>
 <body>
-    <h1>M4DP Audio Modules tests</h1>
+	<video class="mainPlayer" id="videoPlayerMain" autoplay controls>
+	</video>
+	<video class="pipPlayer" id="videoPlayerPip" muted="true" autoplay>
+	</video>
+	<video class="audioPlayer" id="videoPlayerAudio" autoplay>
+	</video>
+	<div class="checkboxStyle">
+		<input type="checkbox" id="checkbox-video" name="checkbox-video" value="Video" onClick="onCheckVideo();"/><span style="color:#fff">Main audio</span><br/>		
+		<input type="checkbox" id="checkbox-extended-ambience" name="checkbox-extended-ambience" value="ExAmbience" onClick="onCheckExAmbience();"/><span style="color:#fff">Extended ambiance</span><br/>		
+		<input type="checkbox" id="checkbox-extended-comments" name="checkbox-extended-comments" value="ExComments" onClick="onCheckExComments();"/><span style="color:#fff">Extended comments</span><br/>		
+		<input type="checkbox" id="checkbox-extended-dialogs" name="checkbox-extended-dialogs" value="ExDialogs" onClick="onCheckExDialogs();"/><span style="color:#fff">Extended dialogs</span><br/>		
+		<input type="checkbox" id="checkbox-lsf" name="checkbox-lsf" value="LSF" onClick="onCheckLSF();"/><span style="color:#fff">LSF</span><br/>		
+	</div>
+
+	<script src="http://cdn.dashjs.org/latest/dash.all.js"></script>
+	<script src="../bundle.js"></script>
+	<script src="./app.js"></script>
 </body>
 </html>
