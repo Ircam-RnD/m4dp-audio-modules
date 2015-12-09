@@ -1,0 +1,43 @@
+body { padding:0px; margin:0px; background-color:#333333; }
+.mainPlayer { 
+	position:absolute; 
+	top:0;
+	left:0; 
+	width:100%; 
+	height:100%; 
+	z-index:0;
+}
+.pipPlayer {
+	position:absolute;
+	right:10px;
+	bottom:40px;
+	width:128px;
+	height:128px;
+	z-index:2147483648;
+}
+.audioPlayer {
+	position:absolute;
+	top:0px;
+	left:0px;
+	width:0px;
+	height:0px;
+	z-index:2147483648;
+}
+.checkboxStyle {
+	position:absolute;
+	top:0px;
+	left:0px;
+	z-index:2147483648;
+	padding:10px;
+	background-color:rgba(0, 0, 0, 0.7);
+}
+::cue {
+	color: yellow;
+}
+::cue-region {
+	color: blue;
+	background-color:rgba(128, 0, 0, 0.7);
+}
+::cue(c.cyan) {
+	color: white;
+}
