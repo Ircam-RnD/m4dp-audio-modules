@@ -1,39 +1,38 @@
 'use strict';
 
-var _interopRequireDefault = require('babel-runtime/helpers/interop-require-default')['default'];
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.AudioStreamDescription = exports.AudioStreamDescriptionCollection = exports.SmartFader = exports.ObjectSpatialiserAndMixer = exports.NoiseAdaptation = exports.MultichannelSpatialiser = exports.DialogEnhancement = undefined;
 
-var _dialogEnhancementIndexJs = require('./dialog-enhancement/index.js');
+var _index = require('./dialog-enhancement/index.js');
 
-var _dialogEnhancementIndexJs2 = _interopRequireDefault(_dialogEnhancementIndexJs);
+var _index2 = _interopRequireDefault(_index);
 
-var _multichannelSpatialiserIndexJs = require('./multichannel-spatialiser/index.js');
+var _index3 = require('./multichannel-spatialiser/index.js');
 
-var _multichannelSpatialiserIndexJs2 = _interopRequireDefault(_multichannelSpatialiserIndexJs);
+var _index4 = _interopRequireDefault(_index3);
 
-var _noiseAdaptationIndexJs = require('./noise-adaptation/index.js');
+var _index5 = require('./noise-adaptation/index.js');
 
-var _noiseAdaptationIndexJs2 = _interopRequireDefault(_noiseAdaptationIndexJs);
+var _index6 = _interopRequireDefault(_index5);
 
-var _objectSpatialiserAndMixerIndexJs = require('./object-spatialiser-and-mixer/index.js');
+var _index7 = require('./object-spatialiser-and-mixer/index.js');
 
-var _objectSpatialiserAndMixerIndexJs2 = _interopRequireDefault(_objectSpatialiserAndMixerIndexJs);
+var _index8 = _interopRequireDefault(_index7);
 
-var _smartFaderIndexJs = require('./smart-fader/index.js');
+var _index9 = require('./smart-fader/index.js');
 
-var _smartFaderIndexJs2 = _interopRequireDefault(_smartFaderIndexJs);
+var _index10 = _interopRequireDefault(_index9);
 
-var _coreIndexJs = require('./core/index.js');
+var _index11 = require('./core/index.js');
 
-var M4DPAudioModules = {
-    'DialogEnhancement': _dialogEnhancementIndexJs2['default'],
-    'MultichannelSpatialiser': _multichannelSpatialiserIndexJs2['default'],
-    'NoiseAdaptation': _noiseAdaptationIndexJs2['default'],
-    'ObjectSpatialiserAndMixer': _objectSpatialiserAndMixerIndexJs2['default'],
-    'SmartFader': _smartFaderIndexJs2['default'],
-    'AudioStreamDescriptionCollection': _coreIndexJs.AudioStreamDescriptionCollection,
-    'AudioStreamDescription': _coreIndexJs.AudioStreamDescription
-};
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// @fix, Extra ugly, should use export default M4DPAudioModules;
-window.M4DPAudioModules = M4DPAudioModules;
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImxpYi9zbWFydC1mYWRlci9pbmRleC5qcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7O3dDQUE4QiwrQkFBK0I7Ozs7OENBQ3pCLHFDQUFxQzs7OztzQ0FDN0MsNkJBQTZCOzs7O2dEQUNuQix5Q0FBeUM7Ozs7aUNBQ3hELHdCQUF3Qjs7OzsyQkFDd0IsaUJBQWlCOztBQUd4RixJQUFNLGdCQUFnQixHQUFHO0FBQ3JCLHVCQUFtQix1Q0FBbUI7QUFDdEMsNkJBQXlCLDZDQUF5QjtBQUNsRCxxQkFBaUIscUNBQWlCO0FBQ2xDLCtCQUEyQiwrQ0FBMkI7QUFDdEQsZ0JBQVksZ0NBQVk7QUFDeEIsc0NBQWtDLGVBVDlCLGdDQUFnQyxBQVNnQztBQUNwRSw0QkFBd0IsZUFWYyxzQkFBc0IsQUFVWjtDQUNuRCxDQUFDOzs7QUFHRixNQUFNLENBQUMsZ0JBQWdCLEdBQUcsZ0JBQWdCLENBQUMiLCJmaWxlIjoibGliL3NtYXJ0LWZhZGVyL2luZGV4LmpzIiwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IERpYWxvZ0VuaGFuY2VtZW50IGZyb20gJy4vZGlhbG9nLWVuaGFuY2VtZW50L2luZGV4LmpzJztcbmltcG9ydCBNdWx0aWNoYW5uZWxTcGF0aWFsaXNlciBmcm9tICcuL211bHRpY2hhbm5lbC1zcGF0aWFsaXNlci9pbmRleC5qcyc7XG5pbXBvcnQgTm9pc2VBZGFwdGF0aW9uIGZyb20gJy4vbm9pc2UtYWRhcHRhdGlvbi9pbmRleC5qcyc7XG5pbXBvcnQgT2JqZWN0U3BhdGlhbGlzZXJBbmRNaXhlciBmcm9tICcuL29iamVjdC1zcGF0aWFsaXNlci1hbmQtbWl4ZXIvaW5kZXguanMnO1xuaW1wb3J0IFNtYXJ0RmFkZXIgZnJvbSAnLi9zbWFydC1mYWRlci9pbmRleC5qcyc7XG5pbXBvcnQge0F1ZGlvU3RyZWFtRGVzY3JpcHRpb25Db2xsZWN0aW9uLCBBdWRpb1N0cmVhbURlc2NyaXB0aW9ufSBmcm9tICcuL2NvcmUvaW5kZXguanMnO1xuXG5cbmNvbnN0IE00RFBBdWRpb01vZHVsZXMgPSB7XG4gICAgXCJEaWFsb2dFbmhhbmNlbWVudFwiOiBEaWFsb2dFbmhhbmNlbWVudCxcbiAgICBcIk11bHRpY2hhbm5lbFNwYXRpYWxpc2VyXCI6IE11bHRpY2hhbm5lbFNwYXRpYWxpc2VyLFxuICAgIFwiTm9pc2VBZGFwdGF0aW9uXCI6IE5vaXNlQWRhcHRhdGlvbixcbiAgICBcIk9iamVjdFNwYXRpYWxpc2VyQW5kTWl4ZXJcIjogT2JqZWN0U3BhdGlhbGlzZXJBbmRNaXhlcixcbiAgICBcIlNtYXJ0RmFkZXJcIjogU21hcnRGYWRlcixcbiAgICBcIkF1ZGlvU3RyZWFtRGVzY3JpcHRpb25Db2xsZWN0aW9uXCI6IEF1ZGlvU3RyZWFtRGVzY3JpcHRpb25Db2xsZWN0aW9uLFxuICAgIFwiQXVkaW9TdHJlYW1EZXNjcmlwdGlvblwiOiBBdWRpb1N0cmVhbURlc2NyaXB0aW9uXG59O1xuXG4vLyBAZml4LCBFeHRyYSB1Z2x5LCBzaG91bGQgdXNlIGV4cG9ydCBkZWZhdWx0IE00RFBBdWRpb01vZHVsZXM7XG53aW5kb3cuTTREUEF1ZGlvTW9kdWxlcyA9IE00RFBBdWRpb01vZHVsZXM7XG4iXX0=
+exports.DialogEnhancement = _index2.default;
+exports.MultichannelSpatialiser = _index4.default;
+exports.NoiseAdaptation = _index6.default;
+exports.ObjectSpatialiserAndMixer = _index8.default;
+exports.SmartFader = _index10.default;
+exports.AudioStreamDescriptionCollection = _index11.AudioStreamDescriptionCollection;
+exports.AudioStreamDescription = _index11.AudioStreamDescription;

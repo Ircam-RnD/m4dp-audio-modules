@@ -1,4 +1,3 @@
- 
 var dumpObject = function(obj) {
 	console.debug("Dumping: "+obj);
 	for (var name in obj) {
@@ -86,7 +85,7 @@ var mainAudioASD = new M4DPAudioModules.AudioStreamDescription(
 		loudness = 1,
 		maxTruePeak = 1,
 		dialog = true,
-		ambiance = true, 
+		ambiance = true,
 		commentary = false);
 var extendedAmbienceASD = new M4DPAudioModules.AudioStreamDescription(
 		type = "MultiWithLFE",
@@ -94,7 +93,7 @@ var extendedAmbienceASD = new M4DPAudioModules.AudioStreamDescription(
 		loudness = 1,
 		maxTruePeak = 1,
 		dialog = false,
-		ambiance = true, 
+		ambiance = true,
 		commentary = false);
 var extendedCommentsASD = new M4DPAudioModules.AudioStreamDescription(
 		type = "Mono",
@@ -110,7 +109,7 @@ var extendedDialogsASD = new M4DPAudioModules.AudioStreamDescription(
 		loudness = 1,
 		maxTruePeak = 1,
 		dialog = true,
-		ambiance = false, 
+		ambiance = false,
 		commentary = false);
 
 var asdc = new M4DPAudioModules.AudioStreamDescriptionCollection(
