@@ -63,10 +63,10 @@ var SmartFader = function (_AbstractNode) {
             var asdc = this._audioStreamDescriptionCollection;
 
             /// retrieves the active AudioStreamDescription(s)
-            var asd = asdc.actives();
+            var asd = asdc.actives;
 
             /// retrieves the MaxTruePeak (ITU­R BS.1770­3) of the active AudioStreamDescription
-            var maxTruePeak = asd.maxTruePeak();
+            var maxTruePeak = asd.maxTruePeak;
 
             /**
             Le reglage du volume doit se comporter de la facon suivante :
@@ -86,7 +86,7 @@ var SmartFader = function (_AbstractNode) {
     }, {
         key: "dB",
         set: function set(value) {
-            this._dB = clampdB(value);
+            this._dB = SmartFader.clampdB(value);
             this._update();
         }
 
@@ -147,14 +147,12 @@ var SmartFader = function (_AbstractNode) {
     }, {
         key: "clampdB",
         value: function clampdB(value) {
-            var _dBRange = dBRange();
+            var _SmartFader$dBRange = _slicedToArray(SmartFader.dBRange, 2);
 
-            var _dBRange2 = _slicedToArray(_dBRange, 2);
+            var minValue = _SmartFader$dBRange[0];
+            var maxValue = _SmartFader$dBRange[1];
 
-            var minValue = _dBRange2[0];
-            var maxValue = _dBRange2[1];
-
-            return clamp(value, minValue, maxValue);
+            return SmartFader.clamp(value, minValue, maxValue);
         }
     }, {
         key: "dBRange",
