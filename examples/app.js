@@ -140,6 +140,7 @@ var checkboxExAmbience = document.getElementById('checkbox-extended-ambience');
 var checkboxExComments = document.getElementById('checkbox-extended-comments');
 var checkboxExDialogs = document.getElementById('checkbox-extended-dialogs');
 var checkboxLSF = document.getElementById('checkbox-lsf');
+var smartFaderDB = document.getElementById('smartFaderDB');
 
 checkboxVideo.checked = true;
 checkboxExAmbience.checked = false;
@@ -201,4 +202,8 @@ function onCheckLSF() {
 	}
 }
 
+
+smartFaderDB.addEventListener('input', function(){
+	console.log(smartFaderDB.value) // smartFader.dB = smartFaderDB.value
+})
 
