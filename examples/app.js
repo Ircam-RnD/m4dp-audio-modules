@@ -82,32 +82,32 @@ extendedChannelSplitterNode.connect(channelMerger, 7, i++);
 var mainAudioASD = new M4DPAudioModules.AudioStreamDescription(
 		type = "Stereo",
 		active = true,
-		loudness = 1,
-		maxTruePeak = 1,
+		loudness = -23,
+		maxTruePeak = -1,
 		dialog = true,
 		ambiance = true,
 		commentary = false);
 var extendedAmbienceASD = new M4DPAudioModules.AudioStreamDescription(
 		type = "MultiWithLFE",
 		active = false,
-		loudness = 1,
-		maxTruePeak = 1,
+		loudness = -23,
+		maxTruePeak = -1,
 		dialog = false,
 		ambiance = true,
 		commentary = false);
 var extendedCommentsASD = new M4DPAudioModules.AudioStreamDescription(
 		type = "Mono",
 		active = false,
-		loudness = 1,
-		maxTruePeak = 1,
+		loudness = -23,
+		maxTruePeak = -1,
 		dialog = false,
 		ambiance = false,
 		commentary = true);
 var extendedDialogsASD = new M4DPAudioModules.AudioStreamDescription(
 		type = "Mono",
 		active = false,
-		loudness = 1,
-		maxTruePeak = 1,
+		loudness = -23,
+		maxTruePeak = -1,
 		dialog = true,
 		ambiance = false,
 		commentary = false);
@@ -148,6 +148,13 @@ checkboxExComments.checked = false;
 checkboxExDialogs.checked = false;
 checkboxLSF.checked = true;
 
+
+
+function updateActiveStreams(){
+	/// notify the modification of active streams
+	smartFader.activeStreamsChanged();
+}
+
 function onCheckVideo() {
 	console.debug("######### onCheckVideo: "+checkboxVideo.checked);
 	if (checkboxVideo.checked) {
@@ -155,36 +162,40 @@ function onCheckVideo() {
 	} else {
 		mainAudioASD.active = false;
 	}
+	updateActiveStreams();
 }
 
 function onCheckExAmbience() {
 	console.debug("######### onCheckExAmbience: "+checkboxExAmbience.checked);
-	onCheckEx();
+	//onCheckEx();
 	if (checkboxExAmbience.checked) {
 		extendedAmbienceASD.active = true;
 	} else {
 		extendedAmbienceASD.active = false;
 	}
+	updateActiveStreams();
 }
 
 function onCheckExComments() {
 	console.debug("######### onCheckExComments: "+checkboxExComments.checked);
-	onCheckEx();
+	//onCheckEx();
 	if (checkboxExComments.checked) {
 		extendedCommentsASD.active = true;
 	} else {
 		extendedCommentsASD.active = false;
 	}
+	updateActiveStreams();
 }
 
 function onCheckExDialogs() {
 	console.debug("######### onCheckExDialogs: "+checkboxExDialogs.checked);
-	onCheckEx();
+	//onCheckEx();
 	if (checkboxExDialogs.checked) {
 		extendedDialogsASD.active = true;
 	} else {
 		extendedDialogsASD.active = false;
 	}
+	updateActiveStreams();
 }
 
 function onCheckLSF() {
@@ -203,7 +214,39 @@ function onCheckLSF() {
 }
 
 
+/**
+ * Callback when the dB slider changes
+ */
 smartFaderDB.addEventListener('input', function(){
-	console.log(smartFaderDB.value) // smartFader.dB = smartFaderDB.value
+
+	//console.log( "smartFaderDB = " + smartFaderDB.value ); 
+
+	const valueFader = smartFaderDB.value;
+
+	const minFader = smartFaderDB.min;
+	const maxFader = smartFaderDB.max;
+
+	//const [minValue, maxValue] = M4DPAudioModules.SmartFader.dBRange();
+	const minValue = -60;
+	const maxValue = 8;
+
+	/// scale from GUI to DSP
+	const value = M4DPAudioModules.utilities.scale( valueFader, minFader, maxFader, minValue, maxValue );
+
+	//console.log( "smartFaderDB (scaled) = " + value ); 
+
+	/// sets the smart fader dB gain
+	smartFader.dB = value;
 })
+
+setInterval(function(){
+   	const isCompressed = smartFader.dynamicCompressionState;
+
+	if( isCompressed === true){
+		console.log( "compression active" ); 
+	}	
+	else{
+		console.log( "compression inactive" ); 
+	}
+}, 500);
 

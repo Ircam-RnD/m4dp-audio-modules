@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
@@ -8,9 +8,13 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _index = require("../core/index.js");
+var _index = require('../core/index.js');
 
 var _index2 = _interopRequireDefault(_index);
+
+var _utils = require('../core/utils.js');
+
+var _utils2 = _interopRequireDefault(_utils);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -42,11 +46,16 @@ var SmartFader = function (_AbstractNode) {
 
         // AudioGraph connect
         // @todo: DynamicsCompressorNode accept n channels input
+        _this._gainNode = audioContext.createGain();
         _this._dynamicCompressorNode = audioContext.createDynamicsCompressor();
-        _this.input.connect(_this._dynamicCompressorNode);
+
+        _this.input.connect(_this._gainNode);
+        _this._gainNode.connect(_this._dynamicCompressorNode);
         _this._dynamicCompressorNode.connect(_this._output);
 
         _this.dB = dB;
+
+        _this._updateCompressorSettings();
         return _this;
     }
 
@@ -56,47 +65,92 @@ var SmartFader = function (_AbstractNode) {
      */
 
     _createClass(SmartFader, [{
-        key: "_update",
-        value: function _update() {
+        key: 'activeStreamsChanged',
+
+        /**
+         * Notification when the active stream(s) changes
+         */
+        value: function activeStreamsChanged() {
+            this._updateCompressorSettings();
+        }
+    }, {
+        key: '_updateCompressorSettings',
+        value: function _updateCompressorSettings() {
 
             /// retrieves the AudioStreamDescriptionCollection
             var asdc = this._audioStreamDescriptionCollection;
 
+            if (asdc.hasActiveStream === false) {
+                //console.log( "no active streams !!");
+                return;
+            }
+
+            ///@todo : que faire si plusieurs streams sont actifs ??
+
             /// retrieves the active AudioStreamDescription(s)
             var asd = asdc.actives;
 
-            /// retrieves the MaxTruePeak (ITU­R BS.1770­3) of the active AudioStreamDescription
-            var maxTruePeak = asd.maxTruePeak;
+            //console.log( "number of actives streams = " + asd.length );
+
+            /// use the first active stream (???)
+            var activeStream = asd[0];
 
             /**
             Le reglage du volume doit se comporter de la facon suivante :
             - attenuation classique du volume sonore entre le niveau nominal (gain = 0) et en deca
             - augmentation classique du volume sonore entre le niveau nominal et le niveau max (niveau max = niveau nominal + I MaxTruePeak I)
             - limiteur/compresseur multicanal au dela du niveau max
-             NB : la donnee de loudness integree n'est pas utilisee
             */
 
-            // @todo éclaircir régles d'activation avec Matthieu
-            // this._dynamicCompressorNode.threshold
-            // this._dynamicCompressorNode.knee
-            // this._dynamicCompressorNode.ratio
-            // this._dynamicCompressorNode.attack
-            // this._dynamicCompressorNode.release
+            /// retrieves the MaxTruePeak (ITU­R BS.1770­3) of the active AudioStreamDescription
+            /// (expressed in dBTP)
+            var maxTruePeak = activeStream.maxTruePeak;
+
+            /// integrated loudness (in LUFS)
+            var nominal = activeStream.loudness;
+
+            var threshold = nominal + Math.abs(maxTruePeak);
+
+            /// representing the decibel value above which the compression will start taking effect
+            this._dynamicCompressorNode.threshold.value = threshold;
+
+            /// representing the amount of change, in dB, needed in the input for a 1 dB change in the output
+            this._dynamicCompressorNode.ratio.value = 3;
+
+            /// representing the amount of time, in seconds, required to reduce the gain by 10 dB
+            this._dynamicCompressorNode.attack.value = 0.1;
+
+            /// representing the amount of time, in seconds, required to increase the gain by 10 dB
+            this._dynamicCompressorNode.release.value = 0.25;
         }
     }, {
-        key: "dB",
+        key: '_update',
+        value: function _update() {
+
+            //console.log( "_update" );
+
+            /// the current fader value, in dB
+            var fader = this._dB;
+
+            if (typeof fader === "undefined" || isNaN(fader) === true) {
+                /// this can happen during the construction...
+                return;
+            }
+
+            var lin = _utils2.default.dB2lin(fader);
+
+            this._gainNode.gain.value = lin;
+        }
+    }, {
+        key: 'dB',
         set: function set(value) {
             this._dB = SmartFader.clampdB(value);
             this._update();
         }
 
         /**
-         * Clips a value within a given range
+         * Clips a value within the proper dB range
          * @type {number} value the value to be clipped
-         * @type {number} min the lower bound
-         * @type {number} max the upper bound
-         *
-         * @todo move this function into a common file
          */
         ,
 
@@ -115,49 +169,43 @@ var SmartFader = function (_AbstractNode) {
          */
 
     }, {
-        key: "dynamicCompressionState",
+        key: 'dynamicCompressionState',
 
         /**
          * Returns the dynamic compression state
          * @type {boolean}
          */
         get: function get() {
-            if (this._dynamicCompressorNode.reduction > 0) {
+
+            /// representing the amount of gain reduction currently applied by the compressor to the signal.
+
+            /**
+            Intended for metering purposes, it returns a value in dB, or 0 (no gain reduction) if no signal is fed
+            into the DynamicsCompressorNode. The range of this value is between -20 and 0 (in dB).
+            */
+
+            var reduction = this._dynamicCompressorNode.reduction.value;
+
+            if (reduction < -0.5) {
                 return true;
             } else {
                 return false;
             }
         }
     }], [{
-        key: "clamp",
-        value: function clamp(value, min, max) {
-
-            if (max < min) {
-                throw new Error("pas bon");
-            }
-
-            return Math.max(min, Math.min(value, max));
-        }
-
-        /**
-         * Clips a value within the proper dB range
-         * @type {number} value the value to be clipped
-         */
-
-    }, {
-        key: "clampdB",
+        key: 'clampdB',
         value: function clampdB(value) {
             var _SmartFader$dBRange = _slicedToArray(SmartFader.dBRange, 2);
 
             var minValue = _SmartFader$dBRange[0];
             var maxValue = _SmartFader$dBRange[1];
 
-            return SmartFader.clamp(value, minValue, maxValue);
+            return _utils2.default.clamp(value, minValue, maxValue);
         }
     }, {
-        key: "dBRange",
+        key: 'dBRange',
         get: function get() {
-            return [0, 8];
+            return [-60, 8];
         }
 
         /**
@@ -166,7 +214,7 @@ var SmartFader = function (_AbstractNode) {
          */
 
     }, {
-        key: "dBDefault",
+        key: 'dBDefault',
         get: function get() {
             return 0;
         }

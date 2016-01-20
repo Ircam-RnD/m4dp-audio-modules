@@ -5,8 +5,30 @@ var _createClass = function () { function defineProperties(target, props) { for 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+exports.clamp = clamp;
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * Utilities functions
+ */
+
+/**
+ * Clips a value within a given range
+ * @type {number} value the value to be clipped
+ * @type {number} min the lower bound
+ * @type {number} max the upper bound
+ *
+ * @todo move this function into a common file
+ */
+function clamp(value, min, max) {
+
+    if (max < min) {
+        throw new Error("pas bon");
+    }
+
+    return Math.max(min, Math.min(value, max));
+}
 
 /**
  * Template for other audio nodes: set the audioContext reference and provide connect/disconnect methods for the audio node.
