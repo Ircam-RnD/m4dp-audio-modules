@@ -1,3 +1,72 @@
+/*
+var sampleRate = 44100;
+var bufferSize = 5 * 44100;
+var channels = 32;
+
+var audioContext1 = new OfflineAudioContext(channels, bufferSize, sampleRate);
+
+var buffer = audioContext1.createBuffer(channels, bufferSize, sampleRate);
+
+for(var j = 0 ; j < buffer.numberOfChannels; j++){
+	
+	var data_ = buffer.getChannelData(j);
+
+	for(var i = 0; i < bufferSize; ++i) {
+		data_[i] = j + 1;//Math.random() * 2 - 1; 
+	}
+}
+
+for(var i = 0; i < buffer.numberOfChannels; i++) {
+		
+		var data = buffer.getChannelData(i);		
+		var sample_ = data[0];
+		
+		console.log("i = " + i );
+		console.log("sample = " + sample_ );
+		
+		console.log("sample = " + buffer.getChannelData(i)[0] );
+
+		//console.log(`IN${i}: ${sample}`);
+	}
+
+var bufferSource = audioContext1.createBufferSource();
+
+bufferSource.buffer = buffer;
+
+var compressorNode = audioContext1.createDynamicsCompressor ();
+/// representing the decibel value above which the compression will start taking effect
+compressorNode.threshold.value = M4DPAudioModules.utilities.dB2lin( 0 );
+
+/// representing the amount of change, in dB, needed in the input for a 1 dB change in the output
+compressorNode.ratio.value = 3;  
+
+/// representing the amount of time, in seconds, required to reduce the gain by 10 dB
+compressorNode.attack.value = 0.1;  
+
+/// representing the amount of time, in seconds, required to increase the gain by 10 dB
+compressorNode.release.value = 0.25;
+
+bufferSource.connect(gainNode);
+compressorNode.connect(audioContext1.destination);
+
+var localTime = 0;
+bufferSource.start( localTime );
+
+audioContext1.oncomplete = (output) => {
+	var buf = output.renderedBuffer;
+	for(var i = 0; i < buf.numberOfChannels; ++i) {
+		var sample_ = buf.getChannelData(i)[0];
+		console.log(`channel${i}: ${sample_}`);
+		debugger;
+	}
+	//debugger;
+};
+
+audioContext1.startRendering();
+*/
+
+
+
 var dumpObject = function(obj) {
 	console.debug("Dumping: "+obj);
 	for (var name in obj) {
@@ -147,6 +216,9 @@ checkboxExAmbience.checked = false;
 checkboxExComments.checked = false;
 checkboxExDialogs.checked = false;
 checkboxLSF.checked = true;
+
+
+
 
 
 
