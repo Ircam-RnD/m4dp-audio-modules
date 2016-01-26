@@ -1,6 +1,6 @@
 /*
 var sampleRate = 44100;
-var bufferSize = 5 * 44100;
+var bufferSize = 512;
 var channels = 32;
 
 var audioContext1 = new OfflineAudioContext(channels, bufferSize, sampleRate);
@@ -41,12 +41,12 @@ compressorNode.threshold.value = M4DPAudioModules.utilities.dB2lin( 0 );
 compressorNode.ratio.value = 3;  
 
 /// representing the amount of time, in seconds, required to reduce the gain by 10 dB
-compressorNode.attack.value = 0.1;  
+compressorNode.attack.value = 0.0;  
 
 /// representing the amount of time, in seconds, required to increase the gain by 10 dB
 compressorNode.release.value = 0.25;
 
-bufferSource.connect(gainNode);
+bufferSource.connect( compressorNode );
 compressorNode.connect(audioContext1.destination);
 
 var localTime = 0;
@@ -64,8 +64,6 @@ audioContext1.oncomplete = (output) => {
 
 audioContext1.startRendering();
 */
-
-
 
 var dumpObject = function(obj) {
 	console.debug("Dumping: "+obj);
@@ -127,26 +125,26 @@ videoAudioSource.connect(mainChannelSplitterNode);
 var extendedChannelSplitterNode = audioContext.createChannelSplitter(8);
 extendedAudioSource.connect(extendedChannelSplitterNode);
 
+/// create a 10-channel stream containing all audio materials
 var channelMerger = audioContext.createChannelMerger(10);
 
-var i=0;
 // main video (stereo)
-mainChannelSplitterNode.connect(channelMerger, 0, i++);
-mainChannelSplitterNode.connect(channelMerger, 1, i++);
+mainChannelSplitterNode.connect(channelMerger, 0, 0);
+mainChannelSplitterNode.connect(channelMerger, 1, 1);
 
 // extended audio ambience (5.1)
-extendedChannelSplitterNode.connect(channelMerger, 0, i++);
-extendedChannelSplitterNode.connect(channelMerger, 1, i++);
-extendedChannelSplitterNode.connect(channelMerger, 2, i++);
-extendedChannelSplitterNode.connect(channelMerger, 3, i++);
-extendedChannelSplitterNode.connect(channelMerger, 4, i++);
-extendedChannelSplitterNode.connect(channelMerger, 5, i++);
+extendedChannelSplitterNode.connect(channelMerger, 0, 2);
+extendedChannelSplitterNode.connect(channelMerger, 1, 3);
+extendedChannelSplitterNode.connect(channelMerger, 2, 4);
+extendedChannelSplitterNode.connect(channelMerger, 3, 5);
+extendedChannelSplitterNode.connect(channelMerger, 4, 6);
+extendedChannelSplitterNode.connect(channelMerger, 5, 7);
 
 // extended audio comments (mono)
-extendedChannelSplitterNode.connect(channelMerger, 6, i++);
+extendedChannelSplitterNode.connect(channelMerger, 6, 8);
 
 // extended audio dialogs (mono)
-extendedChannelSplitterNode.connect(channelMerger, 7, i++);
+extendedChannelSplitterNode.connect(channelMerger, 7, 9);
 
 var mainAudioASD = new M4DPAudioModules.AudioStreamDescription(
 		type = "Stereo",
@@ -186,14 +184,23 @@ var asdc = new M4DPAudioModules.AudioStreamDescriptionCollection(
 		);
 
 // M4DPAudioModules
-var smartFader = new M4DPAudioModules.SmartFader(audioContext, asdc);
+var streamSelector = new M4DPAudioModules.StreamSelector( audioContext, asdc );
+var smartFader = new M4DPAudioModules.SmartFader( audioContext, asdc );
 //var objectSpatialiserAndMixer = new M4DPAudioModules.ObjectSpatialiserAndMixer(audioContext);
 //var noiseAdaptation = new M4DPAudioModules.NoiseAdaptation(audioContext);
 //var multichannelSpatialiser = new M4DPAudioModules.MultichannelSpatialiser(audioContext);
 //var dialogEnhancement = new M4DPAudioModules.DialogEnhancement(audioContext);
 
-channelMerger.connect(smartFader.input);
-smartFader.connect(audioContext.destination);
+/// receives 4 ADSC with 10 channels in total
+channelMerger.connect( streamSelector.input );
+
+/// mute or unmute the inactive streams
+/// (process 10 channels in total)
+streamSelector.connect( smartFader.input );
+
+/// apply the smart fader 
+/// (process 10 channels in total)
+smartFader.connect( audioContext.destination );
 
 
 playerMain.attachSource(urlMain);
@@ -220,11 +227,10 @@ checkboxLSF.checked = true;
 
 
 
-
-
 function updateActiveStreams(){
 	/// notify the modification of active streams
-	smartFader.activeStreamsChanged();
+	streamSelector.activeStreamsChanged();
+	smartFader.activeStreamsChanged();	
 }
 
 function onCheckVideo() {

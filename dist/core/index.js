@@ -280,6 +280,28 @@ var AudioStreamDescription = exports.AudioStreamDescription = function () {
         }
 
         /**
+         * Returns the number of channels of the stream
+         * @type {number}
+         */
+
+    }, {
+        key: "numChannels",
+        get: function get() {
+            switch (this._type) {
+                case "Mono":
+                    return 1;
+                case "Stereo":
+                    return 2;
+                case "MultiWithoutLFE":
+                    return 5;
+                case "MultiWithLFE":
+                    return 6;
+                case "EightChannel":
+                    return 8;
+            }
+        }
+
+        /**
          * Returns the type of the stream
          * @type {string}
          */
