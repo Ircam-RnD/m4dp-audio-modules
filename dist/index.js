@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
 		value: true
 });
-exports.utilities = exports.AudioStreamDescription = exports.AudioStreamDescriptionCollection = exports.SmartFader = exports.ObjectSpatialiserAndMixer = exports.NoiseAdaptation = exports.MultichannelSpatialiser = exports.DialogEnhancement = exports.StreamSelector = exports.HeadphonesEqualization = exports.CascadeNode = undefined;
+exports.unittests = exports.utilities = exports.AudioStreamDescription = exports.AudioStreamDescriptionCollection = exports.SmartFader = exports.ObjectSpatialiserAndMixer = exports.NoiseAdaptation = exports.MultichannelSpatialiser = exports.DialogEnhancement = exports.StreamSelector = exports.HeadphonesEqualization = exports.CascadeNode = undefined;
 
 var _index = require('./dialog-enhancement/index.js');
 
@@ -31,11 +31,15 @@ var _index12 = require('./stream-selector/index.js');
 
 var _index13 = _interopRequireDefault(_index12);
 
+var _index14 = require('./dsp/index.js');
+
 var _utils = require('./core/utils.js');
 
 var _utils2 = _interopRequireDefault(_utils);
 
-var _index14 = require('./dsp/index.js');
+var _index15 = require('./testing/index.js');
+
+var _index16 = _interopRequireDefault(_index15);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -50,3 +54,4 @@ exports.SmartFader = _index10.default;
 exports.AudioStreamDescriptionCollection = _index11.AudioStreamDescriptionCollection;
 exports.AudioStreamDescription = _index11.AudioStreamDescription;
 exports.utilities = _utils2.default;
+exports.unittests = _index16.default;

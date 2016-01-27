@@ -711,7 +711,7 @@ var CascadeNode = function (_AbstractNode) {
 
         /// by default, 0 cascades.
         /// this will also update the audio graph
-        numCascades(0);
+        _this.numCascades = 0;
         return _this;
     }
 
@@ -733,7 +733,7 @@ var CascadeNode = function (_AbstractNode) {
         value: function setFrequency(biquadIndex, value) {
 
             /// boundary check
-            if (biquadIndex <= 0 || biquadIndex >= numCascades) {
+            if (biquadIndex < 0 || biquadIndex >= this.numCascades) {
                 throw new Error("Invalid biquadIndex");
             }
 
@@ -750,7 +750,7 @@ var CascadeNode = function (_AbstractNode) {
         value: function getFrequency(biquadIndex) {
 
             /// boundary check
-            if (biquadIndex <= 0 || biquadIndex >= numCascades) {
+            if (biquadIndex < 0 || biquadIndex >= this.numCascades) {
                 throw new Error("Invalid biquadIndex");
             }
 
@@ -769,7 +769,7 @@ var CascadeNode = function (_AbstractNode) {
         value: function setQ(biquadIndex, value) {
 
             /// boundary check
-            if (biquadIndex <= 0 || biquadIndex >= numCascades) {
+            if (biquadIndex < 0 || biquadIndex >= this.numCascades) {
                 throw new Error("Invalid biquadIndex");
             }
 
@@ -786,7 +786,7 @@ var CascadeNode = function (_AbstractNode) {
         value: function getQ(biquadIndex) {
 
             /// boundary check
-            if (biquadIndex <= 0 || biquadIndex >= numCascades) {
+            if (biquadIndex < 0 || biquadIndex >= this.numCascades) {
                 throw new Error("Invalid biquadIndex");
             }
 
@@ -805,7 +805,7 @@ var CascadeNode = function (_AbstractNode) {
         value: function setGain(biquadIndex, value) {
 
             /// boundary check
-            if (biquadIndex <= 0 || biquadIndex >= numCascades) {
+            if (biquadIndex < 0 || biquadIndex >= this.numCascades) {
                 throw new Error("Invalid biquadIndex");
             }
 
@@ -822,7 +822,7 @@ var CascadeNode = function (_AbstractNode) {
         value: function getGain(biquadIndex) {
 
             /// boundary check
-            if (biquadIndex <= 0 || biquadIndex >= numCascades) {
+            if (biquadIndex < 0 || biquadIndex >= this.numCascades) {
                 throw new Error("Invalid biquadIndex");
             }
 
@@ -841,7 +841,7 @@ var CascadeNode = function (_AbstractNode) {
         value: function setType(biquadIndex, value) {
 
             /// boundary check
-            if (biquadIndex <= 0 || biquadIndex >= numCascades) {
+            if (biquadIndex < 0 || biquadIndex >= this.numCascades) {
                 throw new Error("Invalid biquadIndex");
             }
 
@@ -858,7 +858,7 @@ var CascadeNode = function (_AbstractNode) {
         value: function getType(biquadIndex) {
 
             /// boundary check
-            if (biquadIndex <= 0 || biquadIndex >= numCascades) {
+            if (biquadIndex < 0 || biquadIndex >= this.numCascades) {
                 throw new Error("Invalid biquadIndex");
             }
 
@@ -879,7 +879,9 @@ var CascadeNode = function (_AbstractNode) {
          */
         value: function _updateAudioGraph() {
 
-            if (numCascades === 0 || bypass === true) {
+            var numCascades = this.numCascades;
+
+            if (numCascades === 0 || this.bypass === true) {
                 this.input.connect(this._output);
             } else {
                 /// connect the last element to the output
@@ -921,13 +923,13 @@ var CascadeNode = function (_AbstractNode) {
         ,
         set: function set(newNumCascades) {
 
-            var currentNumCascades = numCascades;
+            var currentNumCascades = this.numCascades;
 
             if (newNumCascades > currentNumCascades) {
 
                 for (var i = currentNumCascades; i < newNumCascades; i++) {
 
-                    var newBiquadNode = audioContext.createBiquadFilter();
+                    var newBiquadNode = this._audioContext.createBiquadFilter();
 
                     this._biquadNodes.push(newBiquadNode);
                 }
@@ -1046,7 +1048,7 @@ exports.HeadphonesEqualization = _headphoneequalization2.default;
 Object.defineProperty(exports, "__esModule", {
 		value: true
 });
-exports.utilities = exports.AudioStreamDescription = exports.AudioStreamDescriptionCollection = exports.SmartFader = exports.ObjectSpatialiserAndMixer = exports.NoiseAdaptation = exports.MultichannelSpatialiser = exports.DialogEnhancement = exports.StreamSelector = exports.HeadphonesEqualization = exports.CascadeNode = undefined;
+exports.unittests = exports.utilities = exports.AudioStreamDescription = exports.AudioStreamDescriptionCollection = exports.SmartFader = exports.ObjectSpatialiserAndMixer = exports.NoiseAdaptation = exports.MultichannelSpatialiser = exports.DialogEnhancement = exports.StreamSelector = exports.HeadphonesEqualization = exports.CascadeNode = undefined;
 
 var _index = require('./dialog-enhancement/index.js');
 
@@ -1074,11 +1076,15 @@ var _index12 = require('./stream-selector/index.js');
 
 var _index13 = _interopRequireDefault(_index12);
 
+var _index14 = require('./dsp/index.js');
+
 var _utils = require('./core/utils.js');
 
 var _utils2 = _interopRequireDefault(_utils);
 
-var _index14 = require('./dsp/index.js');
+var _index15 = require('./testing/index.js');
+
+var _index16 = _interopRequireDefault(_index15);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -1093,7 +1099,8 @@ exports.SmartFader = _index10.default;
 exports.AudioStreamDescriptionCollection = _index11.AudioStreamDescriptionCollection;
 exports.AudioStreamDescription = _index11.AudioStreamDescription;
 exports.utilities = _utils2.default;
-},{"./core/index.js":1,"./core/utils.js":2,"./dialog-enhancement/index.js":3,"./dsp/index.js":6,"./multichannel-spatialiser/index.js":8,"./noise-adaptation/index.js":9,"./object-spatialiser-and-mixer/index.js":10,"./smart-fader/index.js":11,"./stream-selector/index.js":12}],8:[function(require,module,exports){
+exports.unittests = _index16.default;
+},{"./core/index.js":1,"./core/utils.js":2,"./dialog-enhancement/index.js":3,"./dsp/index.js":6,"./multichannel-spatialiser/index.js":8,"./noise-adaptation/index.js":9,"./object-spatialiser-and-mixer/index.js":10,"./smart-fader/index.js":11,"./stream-selector/index.js":12,"./testing/index.js":13}],8:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -1819,5 +1826,343 @@ var StreamSelector = function (_AbstractNode) {
 }(_index2.default);
 
 exports.default = StreamSelector;
-},{"../core/index.js":1}]},{},[7])(7)
+},{"../core/index.js":1}],13:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.testBiquadNode = testBiquadNode;
+exports.testCascadeNode = testCascadeNode;
+
+var _index = require('../index.js');
+
+var _index2 = _interopRequireDefault(_index);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+//==============================================================================
+/**
+ * Writes some text into a file.
+ * The file can later be downloaded
+ * The function returns the download URL
+ */
+function writeTextDataToFile(text) {
+    var textFile = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
+
+    var data = new Blob([text], { type: 'text/plain' });
+
+    // If we are replacing a previously generated file we need to
+    // manually revoke the object URL to avoid memory leaks.
+    if (textFile !== null) {
+        window.URL.revokeObjectURL(textFile);
+    }
+
+    textFile = window.URL.createObjectURL(data);
+
+    // returns a URL you can use as a href
+    return textFile;
+} /**
+   * Some test functions
+   * For debug purposes only
+   */
+
+;
+
+//==============================================================================
+/**
+ * Writes a buffer to a text file and returns the URL of the downloadable file
+ * The text file is formatted so that it can be easily copy/paste into Matlab
+ * 
+ * @type {AudioBuffer} buffer
+ */
+function writeBufferToTextFileWithMatlabFormat(buffer) {
+
+    var numChannels = buffer.numberOfChannels;
+    var numSamples = buffer.length;
+
+    var text = "";
+
+    text += "printing buffer :" + "\n";
+    text += "numChannels = " + numChannels + "\n";
+    text += "numSamples  = " + numSamples + "\n";
+
+    var numDecimals = 9;
+
+    for (var i = 0; i < numChannels; i++) {
+
+        var channel_ = buffer.getChannelData(i);
+
+        text += "channel(" + (i + 1) + ", 1:" + numSamples + ") = ";
+        text += "...\n";
+
+        text += "[ ";
+
+        for (var j = 0; j < numSamples; j++) {
+            var value = channel_[j];
+
+            var valueAsString = value.toFixed(numDecimals);
+
+            text += valueAsString;
+            text += " ";
+        }
+        text += " ];";
+
+        text += "\n";
+    }
+
+    return writeTextDataToFile(text);
+}
+
+/**
+ * Writes a buffer to a text file and returns the URL of the downloadable file
+ * @type {AudioBuffer} buffer
+ */
+function writeBufferToTextFile(buffer) {
+
+    var numChannels = buffer.numberOfChannels;
+    var numSamples = buffer.length;
+
+    var text = "";
+
+    text += "printing buffer :" + "\n";
+    text += "numChannels = " + numChannels + "\n";
+    text += "numSamples  = " + numSamples + "\n";
+
+    var numDecimals = 9;
+
+    for (var i = 0; i < numChannels; i++) {
+
+        var channel_ = buffer.getChannelData(i);
+
+        text += "channel[" + i + "] = ";
+        text += "\n";
+
+        for (var j = 0; j < numSamples; j++) {
+            var value = channel_[j];
+
+            var valueAsString = value.toFixed(numDecimals);
+
+            text += valueAsString;
+            text += " ";
+        }
+        text += "\n";
+    }
+
+    return writeTextDataToFile(text);
+}
+
+//==============================================================================
+/**
+ * Fills one channel of a buffer with 0
+ * @type {AudioBuffer} buffer
+ */
+function clearBufferChannel(buffer, channelIndex) {
+
+    var numChannels = buffer.numberOfChannels;
+    var numSamples = buffer.length;
+
+    /// boundary check
+    if (channelIndex < 0 || channelIndex >= numChannels) {
+        throw new Error("Invalid channelIndex");
+    }
+
+    var channel_ = buffer.getChannelData(channelIndex);
+
+    for (var j = 0; j < numSamples; j++) {
+        channel_[j] = 0.0;
+    }
+}
+
+/**
+ * Fills all channel of a buffer with 0
+ * @type {AudioBuffer} buffer
+ */
+function clearBuffer(buffer) {
+
+    var numChannels = buffer.numberOfChannels;
+
+    for (var i = 0; i < numChannels; i++) {
+
+        clearBufferChannel(buffer, i);
+    }
+}
+
+/**
+ * Creates a Dirac in one given channel of the AudioBuffer
+ * @type {AudioBuffer} buffer
+ * @type {int} channelIndex
+ * @type {int} sampleIndex
+ */
+function makeImpulse(buffer) {
+    var channelIndex = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
+    var sampleIndex = arguments.length <= 2 || arguments[2] === undefined ? 0 : arguments[2];
+
+    var numChannels = buffer.numberOfChannels;
+    var numSamples = buffer.length;
+
+    /// boundary check
+    if (channelIndex < 0 || channelIndex >= numChannels) {
+        throw new Error("Invalid channelIndex");
+    }
+
+    /// boundary check
+    if (sampleIndex < 0 || sampleIndex >= numSamples) {
+        throw new Error("Invalid sampleIndex");
+    }
+
+    /// first clear the channel
+    clearBufferChannel(buffer, channelIndex);
+
+    /// then create a Dirac
+    var channel_ = buffer.getChannelData(channelIndex);
+    channel_[sampleIndex] = 1.0;
+}
+
+//==============================================================================
+function testBiquadNode() {
+
+    var sampleRate = 44100;
+    var bufferSize = 512;
+    var numChannels = 4;
+
+    /// create an offline audio context
+    var audioContext1 = new OfflineAudioContext(numChannels, bufferSize, sampleRate);
+
+    /// create a test buffer
+    var buffer = audioContext1.createBuffer(numChannels, bufferSize, sampleRate);
+
+    /// just a precaution
+    clearBuffer(buffer);
+    makeImpulse(buffer, 0, 0);
+    makeImpulse(buffer, 1, 10);
+
+    /// create a buffer source
+    var bufferSource = audioContext1.createBufferSource();
+
+    /// reference the test buffer with the buffer source
+    bufferSource.buffer = buffer;
+
+    /// create a node
+    var biquadNode = audioContext1.createBiquadFilter();
+
+    /// configure the biquad filter
+    {
+        biquadNode.type = "lowpass";
+
+        /// It is expressed in dB, has a default value of 0 and can take a value in a nominal range of -40 to 40
+        biquadNode.gain.value = 10;
+
+        /// measured in hertz (Hz)
+        biquadNode.frequency.value = 1000;
+
+        /// It is a dimensionless value with a default value of 1 and a nominal range of 0.0001 to 1000.
+        biquadNode.Q.value = 10;
+    }
+
+    /// connect the node to the buffer source
+    bufferSource.connect(biquadNode);
+
+    /// connect the node to the destination of the audio context
+    biquadNode.connect(audioContext1.destination);
+
+    /// prepare the rendering
+    var localTime = 0;
+    bufferSource.start(localTime);
+
+    /// receive notification when the rendering is completed
+    audioContext1.oncomplete = function (output) {
+
+        var buf = output.renderedBuffer;
+
+        var bufUrl = writeBufferToTextFileWithMatlabFormat(buf);
+        console.log("buffer URL :  " + bufUrl);
+
+        debugger;
+    };
+
+    /// start rendering
+    audioContext1.startRendering();
+}
+
+//==============================================================================
+function testCascadeNode() {
+
+    var sampleRate = 44100;
+    var bufferSize = 512;
+    var numChannels = 4;
+
+    /// create an offline audio context
+    var audioContext1 = new OfflineAudioContext(numChannels, bufferSize, sampleRate);
+
+    /// create a test buffer
+    var buffer = audioContext1.createBuffer(numChannels, bufferSize, sampleRate);
+
+    /// just a precaution
+    clearBuffer(buffer);
+    makeImpulse(buffer, 0, 0);
+    //makeImpulse( buffer, 1, 10 );
+
+    /// create a buffer source
+    var bufferSource = audioContext1.createBufferSource();
+
+    /// reference the test buffer with the buffer source
+    bufferSource.buffer = buffer;
+
+    /// create a node
+    var cascadeNode = new M4DPAudioModules.CascadeNode(audioContext1);
+
+    /// configure the cascade filter
+    {
+        cascadeNode.numCascades = 2;
+
+        cascadeNode.setType(0, "peaking");
+        cascadeNode.setType(1, "peaking");
+
+        /// It is expressed in dB, has a default value of 0 and can take a value in a nominal range of -40 to 40
+        cascadeNode.setGain(0, 6);
+        cascadeNode.setGain(1, 6);
+
+        /// measured in hertz (Hz)
+        cascadeNode.setFrequency(0, 1000);
+        cascadeNode.setFrequency(1, 8000);
+
+        /// It is a dimensionless value with a default value of 1 and a nominal range of 0.0001 to 1000.
+        cascadeNode.setQ(0, 10);
+        cascadeNode.setQ(1, 10);
+    }
+
+    /// connect the node to the buffer source
+    bufferSource.connect(cascadeNode.input);
+
+    /// connect the node to the destination of the audio context
+    cascadeNode._output.connect(audioContext1.destination);
+
+    /// prepare the rendering
+    var localTime = 0;
+    bufferSource.start(localTime);
+
+    /// receive notification when the rendering is completed
+    audioContext1.oncomplete = function (output) {
+
+        var buf = output.renderedBuffer;
+
+        var bufUrl = writeBufferToTextFileWithMatlabFormat(buf);
+        console.log("buffer URL :  " + bufUrl);
+
+        debugger;
+    };
+
+    /// start rendering
+    audioContext1.startRendering();
+}
+
+/// @n technique pour avoir un pseudo-namespace
+var unittests = {
+    testBiquadNode: testBiquadNode,
+    testCascadeNode: testCascadeNode
+};
+
+exports.default = unittests;
+},{"../index.js":7}]},{},[7])(7)
 });

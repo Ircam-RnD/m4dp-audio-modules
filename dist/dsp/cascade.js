@@ -37,7 +37,7 @@ var CascadeNode = function (_AbstractNode) {
 
         /// by default, 0 cascades.
         /// this will also update the audio graph
-        numCascades(0);
+        _this.numCascades = 0;
         return _this;
     }
 
@@ -59,7 +59,7 @@ var CascadeNode = function (_AbstractNode) {
         value: function setFrequency(biquadIndex, value) {
 
             /// boundary check
-            if (biquadIndex <= 0 || biquadIndex >= numCascades) {
+            if (biquadIndex < 0 || biquadIndex >= this.numCascades) {
                 throw new Error("Invalid biquadIndex");
             }
 
@@ -76,7 +76,7 @@ var CascadeNode = function (_AbstractNode) {
         value: function getFrequency(biquadIndex) {
 
             /// boundary check
-            if (biquadIndex <= 0 || biquadIndex >= numCascades) {
+            if (biquadIndex < 0 || biquadIndex >= this.numCascades) {
                 throw new Error("Invalid biquadIndex");
             }
 
@@ -95,7 +95,7 @@ var CascadeNode = function (_AbstractNode) {
         value: function setQ(biquadIndex, value) {
 
             /// boundary check
-            if (biquadIndex <= 0 || biquadIndex >= numCascades) {
+            if (biquadIndex < 0 || biquadIndex >= this.numCascades) {
                 throw new Error("Invalid biquadIndex");
             }
 
@@ -112,7 +112,7 @@ var CascadeNode = function (_AbstractNode) {
         value: function getQ(biquadIndex) {
 
             /// boundary check
-            if (biquadIndex <= 0 || biquadIndex >= numCascades) {
+            if (biquadIndex < 0 || biquadIndex >= this.numCascades) {
                 throw new Error("Invalid biquadIndex");
             }
 
@@ -131,7 +131,7 @@ var CascadeNode = function (_AbstractNode) {
         value: function setGain(biquadIndex, value) {
 
             /// boundary check
-            if (biquadIndex <= 0 || biquadIndex >= numCascades) {
+            if (biquadIndex < 0 || biquadIndex >= this.numCascades) {
                 throw new Error("Invalid biquadIndex");
             }
 
@@ -148,7 +148,7 @@ var CascadeNode = function (_AbstractNode) {
         value: function getGain(biquadIndex) {
 
             /// boundary check
-            if (biquadIndex <= 0 || biquadIndex >= numCascades) {
+            if (biquadIndex < 0 || biquadIndex >= this.numCascades) {
                 throw new Error("Invalid biquadIndex");
             }
 
@@ -167,7 +167,7 @@ var CascadeNode = function (_AbstractNode) {
         value: function setType(biquadIndex, value) {
 
             /// boundary check
-            if (biquadIndex <= 0 || biquadIndex >= numCascades) {
+            if (biquadIndex < 0 || biquadIndex >= this.numCascades) {
                 throw new Error("Invalid biquadIndex");
             }
 
@@ -184,7 +184,7 @@ var CascadeNode = function (_AbstractNode) {
         value: function getType(biquadIndex) {
 
             /// boundary check
-            if (biquadIndex <= 0 || biquadIndex >= numCascades) {
+            if (biquadIndex < 0 || biquadIndex >= this.numCascades) {
                 throw new Error("Invalid biquadIndex");
             }
 
@@ -205,7 +205,9 @@ var CascadeNode = function (_AbstractNode) {
          */
         value: function _updateAudioGraph() {
 
-            if (numCascades === 0 || bypass === true) {
+            var numCascades = this.numCascades;
+
+            if (numCascades === 0 || this.bypass === true) {
                 this.input.connect(this._output);
             } else {
                 /// connect the last element to the output
@@ -247,13 +249,13 @@ var CascadeNode = function (_AbstractNode) {
         ,
         set: function set(newNumCascades) {
 
-            var currentNumCascades = numCascades;
+            var currentNumCascades = this.numCascades;
 
             if (newNumCascades > currentNumCascades) {
 
                 for (var i = currentNumCascades; i < newNumCascades; i++) {
 
-                    var newBiquadNode = audioContext.createBiquadFilter();
+                    var newBiquadNode = this._audioContext.createBiquadFilter();
 
                     this._biquadNodes.push(newBiquadNode);
                 }
