@@ -1,5 +1,7 @@
+// fonctions de tests "unitaires"
 //M4DPAudioModules.unittests.testBiquadNode();
-M4DPAudioModules.unittests.testCascadeNode();
+//M4DPAudioModules.unittests.testCascadeNode();
+
 
 var dumpObject = function(obj) {
 	console.debug("Dumping: "+obj);
@@ -126,6 +128,7 @@ var smartFader = new M4DPAudioModules.SmartFader( audioContext, asdc );
 //var noiseAdaptation = new M4DPAudioModules.NoiseAdaptation(audioContext);
 //var multichannelSpatialiser = new M4DPAudioModules.MultichannelSpatialiser(audioContext);
 //var dialogEnhancement = new M4DPAudioModules.DialogEnhancement(audioContext);
+var headphonesEqualization = new M4DPAudioModules.HeadphonesEqualization( audioContext );
 
 /// receives 4 ADSC with 10 channels in total
 channelMerger.connect( streamSelector.input );
@@ -136,7 +139,10 @@ streamSelector.connect( smartFader.input );
 
 /// apply the smart fader 
 /// (process 10 channels in total)
-smartFader.connect( audioContext.destination );
+smartFader.connect( headphonesEqualization.input );
+
+/// apply the headphones equalization
+headphonesEqualization.connect( audioContext.destination );
 
 
 playerMain.attachSource(urlMain);
@@ -153,15 +159,16 @@ var checkboxExComments = document.getElementById('checkbox-extended-comments');
 var checkboxExDialogs = document.getElementById('checkbox-extended-dialogs');
 var checkboxLSF = document.getElementById('checkbox-lsf');
 var smartFaderDB = document.getElementById('smartFaderDB');
+var checkboxEqualization = document.getElementById('checkbox-equalization');
 
 checkboxVideo.checked = true;
 checkboxExAmbience.checked = false;
 checkboxExComments.checked = false;
 checkboxExDialogs.checked = false;
 checkboxLSF.checked = true;
+checkboxEqualization.checked = false;
 
-
-
+///@otodo : need to properly initialize the smartFader (slider) and other checkboxes
 
 function updateActiveStreams(){
 	/// notify the modification of active streams
@@ -210,6 +217,18 @@ function onCheckExDialogs() {
 		extendedDialogsASD.active = false;
 	}
 	updateActiveStreams();
+}
+
+function onCheckEqualization() {
+	console.debug("######### onCheckEqualization: "+checkboxEqualization.checked);
+	
+	headphonesEqualization.eqPreset = "eq1";
+
+	if (checkboxEqualization.checked) {
+		headphonesEqualization.bypass = false;
+	} else {
+		headphonesEqualization.bypass = true;
+	}	
 }
 
 function onCheckLSF() {

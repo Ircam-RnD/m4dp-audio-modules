@@ -194,6 +194,42 @@ var CascadeNode = function (_AbstractNode) {
 
         //==============================================================================
         /**
+         * Resets one biquad to its default
+         * @param {int} biquadIndex
+         */
+
+    }, {
+        key: "resetBiquad",
+        value: function resetBiquad(biquadIndex) {
+
+            /// boundary check
+            if (biquadIndex < 0 || biquadIndex >= this.numCascades) {
+                throw new Error("Invalid biquadIndex");
+            }
+
+            this.setType(biquadIndex, "lowpass");
+            this.setGain(biquadIndex, 0.0);
+            this.setFrequency(biquadIndex, 350);
+            this.setQ(biquadIndex, 1);
+        }
+
+        /**
+         * Resets all biquads
+         */
+
+    }, {
+        key: "resetAllBiquads",
+        value: function resetAllBiquads() {
+
+            var numCascades = this.numCascades;
+
+            for (var i = 0; i < numCascades; i++) {
+                this.resetBiquad(i);
+            }
+        }
+
+        //==============================================================================
+        /**
          * Returns the number of biquads in the cascade
          */
 
@@ -206,22 +242,22 @@ var CascadeNode = function (_AbstractNode) {
          */
         value: function _updateAudioGraph() {
 
-            var numCascades = this.numCascades;
+            var numCascades_ = this.numCascades;
 
             /// first of all, disconnect everything
             this.input.disconnect();
-            for (var i = numCascades - 1; i > 0; i--) {
-                this._biquadNodes[i - 1].connect(this._biquadNodes[i]);
+            for (var i = 0; i < numCascades_; i++) {
+                this._biquadNodes[i].disconnect();
             }
 
-            if (numCascades === 0 || this.bypass === true) {
+            if (this.bypass === true || numCascades_ === 0) {
                 this.input.connect(this._output);
             } else {
                 /// connect the last element to the output
-                this._biquadNodes[numCascades - 1].connect(this._output);
+                this._biquadNodes[numCascades_ - 1].connect(this._output);
 
                 /// connect the cascades
-                for (var i = numCascades - 1; i > 0; i--) {
+                for (var i = numCascades_ - 1; i > 0; i--) {
                     this._biquadNodes[i - 1].connect(this._biquadNodes[i]);
                 }
 
@@ -232,9 +268,11 @@ var CascadeNode = function (_AbstractNode) {
     }, {
         key: "bypass",
         set: function set(value) {
-            this._isBypass = value;
 
-            this._updateAudioGraph();
+            if (value !== this._isBypass) {
+                this._isBypass = value;
+                this._updateAudioGraph();
+            }
         }
 
         /**

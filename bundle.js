@@ -868,6 +868,42 @@ var CascadeNode = function (_AbstractNode) {
 
         //==============================================================================
         /**
+         * Resets one biquad to its default
+         * @param {int} biquadIndex
+         */
+
+    }, {
+        key: "resetBiquad",
+        value: function resetBiquad(biquadIndex) {
+
+            /// boundary check
+            if (biquadIndex < 0 || biquadIndex >= this.numCascades) {
+                throw new Error("Invalid biquadIndex");
+            }
+
+            this.setType(biquadIndex, "lowpass");
+            this.setGain(biquadIndex, 0.0);
+            this.setFrequency(biquadIndex, 350);
+            this.setQ(biquadIndex, 1);
+        }
+
+        /**
+         * Resets all biquads
+         */
+
+    }, {
+        key: "resetAllBiquads",
+        value: function resetAllBiquads() {
+
+            var numCascades = this.numCascades;
+
+            for (var i = 0; i < numCascades; i++) {
+                this.resetBiquad(i);
+            }
+        }
+
+        //==============================================================================
+        /**
          * Returns the number of biquads in the cascade
          */
 
@@ -880,22 +916,22 @@ var CascadeNode = function (_AbstractNode) {
          */
         value: function _updateAudioGraph() {
 
-            var numCascades = this.numCascades;
+            var numCascades_ = this.numCascades;
 
             /// first of all, disconnect everything
             this.input.disconnect();
-            for (var i = numCascades - 1; i > 0; i--) {
-                this._biquadNodes[i - 1].connect(this._biquadNodes[i]);
+            for (var i = 0; i < numCascades_; i++) {
+                this._biquadNodes[i].disconnect();
             }
 
-            if (numCascades === 0 || this.bypass === true) {
+            if (this.bypass === true || numCascades_ === 0) {
                 this.input.connect(this._output);
             } else {
                 /// connect the last element to the output
-                this._biquadNodes[numCascades - 1].connect(this._output);
+                this._biquadNodes[numCascades_ - 1].connect(this._output);
 
                 /// connect the cascades
-                for (var i = numCascades - 1; i > 0; i--) {
+                for (var i = numCascades_ - 1; i > 0; i--) {
                     this._biquadNodes[i - 1].connect(this._biquadNodes[i]);
                 }
 
@@ -906,9 +942,11 @@ var CascadeNode = function (_AbstractNode) {
     }, {
         key: "bypass",
         set: function set(value) {
-            this._isBypass = value;
 
-            this._updateAudioGraph();
+            if (value !== this._isBypass) {
+                this._isBypass = value;
+                this._updateAudioGraph();
+            }
         }
 
         /**
@@ -959,6 +997,10 @@ exports.default = CascadeNode;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
+
+var _set = function set(object, property, value, receiver) { var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent !== null) { set(parent, property, value, receiver); } } else if ("value" in desc && desc.writable) { desc.value = value; } else { var setter = desc.set; if (setter !== undefined) { setter.call(receiver, value); } } return value; };
+
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
@@ -966,10 +1008,6 @@ Object.defineProperty(exports, "__esModule", {
 var _index = require('../core/index.js');
 
 var _index2 = _interopRequireDefault(_index);
-
-var _utils = require('../core/utils.js');
-
-var _utils2 = _interopRequireDefault(_utils);
 
 var _cascade = require('../dsp/cascade.js');
 
@@ -983,8 +1021,8 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var HeadphonesEqualization = function (_AbstractNode) {
-    _inherits(HeadphonesEqualization, _AbstractNode);
+var HeadphonesEqualization = function (_CascadeNode) {
+    _inherits(HeadphonesEqualization, _CascadeNode);
 
     /**
      * @brief This class implements the headphone equalization.
@@ -999,37 +1037,81 @@ var HeadphonesEqualization = function (_AbstractNode) {
 
         var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(HeadphonesEqualization).call(this, audioContext));
 
-        _this._isBypass = true;
+        _this._eqPreset = "none";
+
+        //this.input.connect( this._output );
         return _this;
     }
 
+    //==============================================================================
     /**
-     * Enable or bypass the headphone equalization
-     * @type {boolean}
+     * Set eqPreset
+     * @todo: which kind of value, json?
+     * @todo: set it to none to not appy any eq?
+     * @type {EqPreset}
      */
 
     _createClass(HeadphonesEqualization, [{
-        key: 'bypass',
-        set: function set(value) {
-            this._isBypass = value;
+        key: '_updateCascade',
 
-            ///@todo a completer
+        //==============================================================================
+        value: function _updateCascade() {
+
+            var preset = this.eqPreset;
+
+            if (preset == "none") {
+                _set(Object.getPrototypeOf(HeadphonesEqualization.prototype), 'numCascades', 0, this);
+                _get(Object.getPrototypeOf(HeadphonesEqualization.prototype), 'resetAllBiquads', this).call(this);
+            } else if (preset == "eq1") {
+
+                /// whatever settings... waiting for FTV to communicate their specifications
+
+                _set(Object.getPrototypeOf(HeadphonesEqualization.prototype), 'numCascades', 3, this);
+                _get(Object.getPrototypeOf(HeadphonesEqualization.prototype), 'resetAllBiquads', this).call(this);
+
+                _get(Object.getPrototypeOf(HeadphonesEqualization.prototype), 'setType', this).call(this, 0, "highpass");
+                _get(Object.getPrototypeOf(HeadphonesEqualization.prototype), 'setType', this).call(this, 1, "peaking");
+                _get(Object.getPrototypeOf(HeadphonesEqualization.prototype), 'setType', this).call(this, 2, "lowpass");
+
+                /// It is expressed in dB, has a default value of 0 and can take a value in a nominal range of -40 to 40
+                _get(Object.getPrototypeOf(HeadphonesEqualization.prototype), 'setGain', this).call(this, 0, -12);
+                _get(Object.getPrototypeOf(HeadphonesEqualization.prototype), 'setGain', this).call(this, 1, 6);
+                _get(Object.getPrototypeOf(HeadphonesEqualization.prototype), 'setGain', this).call(this, 2, -16);
+
+                /// measured in hertz (Hz)
+                _get(Object.getPrototypeOf(HeadphonesEqualization.prototype), 'setFrequency', this).call(this, 0, 200);
+                _get(Object.getPrototypeOf(HeadphonesEqualization.prototype), 'setFrequency', this).call(this, 1, 1000);
+                _get(Object.getPrototypeOf(HeadphonesEqualization.prototype), 'setFrequency', this).call(this, 2, 4000);
+
+                /// It is a dimensionless value with a default value of 1 and a nominal range of 0.0001 to 1000.
+                _get(Object.getPrototypeOf(HeadphonesEqualization.prototype), 'setQ', this).call(this, 0, 1);
+                _get(Object.getPrototypeOf(HeadphonesEqualization.prototype), 'setQ', this).call(this, 1, 2);
+                _get(Object.getPrototypeOf(HeadphonesEqualization.prototype), 'setQ', this).call(this, 2, 1);
+            } else {
+                throw new Error("Invalid preset name " + preset);
+            }
         }
-
+    }, {
+        key: 'eqPreset',
+        set: function set(value) {
+            this._eqPreset = value;
+            this._updateCascade();
+        }
         /**
-         * Returns true if the headphone equalization is bypassed
+         * Get eqPreset
+         * @type {EqPreset}
          */
         ,
         get: function get() {
-            return this._isBypass;
+            return this._eqPreset;
         }
     }]);
 
     return HeadphonesEqualization;
-}(_index2.default);
+}(_cascade2.default);
 
 exports.default = HeadphonesEqualization;
-},{"../core/index.js":1,"../core/utils.js":2,"../dsp/cascade.js":4}],6:[function(require,module,exports){
+},{"../core/index.js":1,"../dsp/cascade.js":4}],6:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
