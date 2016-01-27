@@ -29,6 +29,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var HeadphonesEqualization = function (_CascadeNode) {
     _inherits(HeadphonesEqualization, _CascadeNode);
 
+    //==============================================================================
     /**
      * @brief This class implements the headphone equalization.
      *        It thus applies filtering on 2 channels (2 in, 2 out)
@@ -43,8 +44,6 @@ var HeadphonesEqualization = function (_CascadeNode) {
         var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(HeadphonesEqualization).call(this, audioContext));
 
         _this._eqPreset = "none";
-
-        //this.input.connect( this._output );
         return _this;
     }
 

@@ -21,6 +21,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var StreamSelector = function (_AbstractNode) {
     _inherits(StreamSelector, _AbstractNode);
 
+    //==============================================================================
     /**
      * @brief This class mutes/unmutes the incoming streams according to the checkbox selections
      * @param {AudioContext} audioContext - audioContext instance.
@@ -96,6 +97,7 @@ var StreamSelector = function (_AbstractNode) {
             this._update();
         }
 
+        //==============================================================================
         /**
          * Mute/unmute the streams, depending on the user selection
          * in the check boxes

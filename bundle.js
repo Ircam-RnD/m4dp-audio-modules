@@ -9,6 +9,7 @@ Object.defineProperty(exports, "__esModule", {
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+//==============================================================================
 /**
  * Template for other audio nodes: set the audioContext reference and provide connect/disconnect methods for the audio node.
  */
@@ -58,6 +59,7 @@ var AbstractNode = function () {
     return AbstractNode;
 }();
 
+//==============================================================================
 /**
  * Container for AudioStreamDescription
  */
@@ -268,6 +270,7 @@ var AudioStreamDescriptionCollection = exports.AudioStreamDescriptionCollection 
     return AudioStreamDescriptionCollection;
 }();
 
+//==============================================================================
 /**
  * AudioStreamDescription describes a stream.
  */
@@ -1024,6 +1027,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var HeadphonesEqualization = function (_CascadeNode) {
     _inherits(HeadphonesEqualization, _CascadeNode);
 
+    //==============================================================================
     /**
      * @brief This class implements the headphone equalization.
      *        It thus applies filtering on 2 channels (2 in, 2 out)
@@ -1038,8 +1042,6 @@ var HeadphonesEqualization = function (_CascadeNode) {
         var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(HeadphonesEqualization).call(this, audioContext));
 
         _this._eqPreset = "none";
-
-        //this.input.connect( this._output );
         return _this;
     }
 
@@ -1777,6 +1779,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var StreamSelector = function (_AbstractNode) {
     _inherits(StreamSelector, _AbstractNode);
 
+    //==============================================================================
     /**
      * @brief This class mutes/unmutes the incoming streams according to the checkbox selections
      * @param {AudioContext} audioContext - audioContext instance.
@@ -1852,6 +1855,7 @@ var StreamSelector = function (_AbstractNode) {
             this._update();
         }
 
+        //==============================================================================
         /**
          * Mute/unmute the streams, depending on the user selection
          * in the check boxes

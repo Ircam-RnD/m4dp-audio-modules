@@ -8,6 +8,7 @@ Object.defineProperty(exports, "__esModule", {
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+//==============================================================================
 /**
  * Template for other audio nodes: set the audioContext reference and provide connect/disconnect methods for the audio node.
  */
@@ -57,6 +58,7 @@ var AbstractNode = function () {
     return AbstractNode;
 }();
 
+//==============================================================================
 /**
  * Container for AudioStreamDescription
  */
@@ -267,6 +269,7 @@ var AudioStreamDescriptionCollection = exports.AudioStreamDescriptionCollection 
     return AudioStreamDescriptionCollection;
 }();
 
+//==============================================================================
 /**
  * AudioStreamDescription describes a stream.
  */
