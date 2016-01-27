@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _index = require('../core/index.js');
+var _index = require("../core/index.js");
 
 var _index2 = _interopRequireDefault(_index);
 
@@ -42,9 +42,25 @@ var StreamSelector = function (_AbstractNode) {
         /// (mainAudio, extendedAmbience, extendedComments and extendedDialogs)
         var totalNumberOfChannels_ = _this._audioStreamDescriptionCollection.totalNumberOfChannels;
 
+        /// sanity check
+        /// mainAudio (2) + extendedAmbience (6) + extendedComments (1) + extendedDialogs (1) = 10
+        if (totalNumberOfChannels_ != 10) {
+            throw new Error("Ca parait pas bon...");
+        }
+
         _this._splitterNode = audioContext.createChannelSplitter(totalNumberOfChannels_);
 
         _this._mergerNode = audioContext.createChannelMerger(totalNumberOfChannels_);
+
+        /// sanity checks
+        if (_this._splitterNode.numberOfInputs != 1 || _this._splitterNode.numberOfOutputs != totalNumberOfChannels_) {
+            throw new Error("Pas bon");
+        }
+
+        /// sanity checks
+        if (_this._mergerNode.numberOfInputs != totalNumberOfChannels_ || _this._mergerNode.numberOfOutputs != 1) {
+            throw new Error("Pas bon");
+        }
 
         /// create 10 gainNodes
         for (var i = 0; i < totalNumberOfChannels_; i++) {
@@ -75,7 +91,7 @@ var StreamSelector = function (_AbstractNode) {
      */
 
     _createClass(StreamSelector, [{
-        key: 'activeStreamsChanged',
+        key: "activeStreamsChanged",
         value: function activeStreamsChanged() {
             this._update();
         }
@@ -86,10 +102,11 @@ var StreamSelector = function (_AbstractNode) {
          */
 
     }, {
-        key: '_update',
+        key: "_update",
         value: function _update() {
 
             /// retrieves the AudioStreamDescriptionCollection
+            /// (mainAudio, extendedAmbience, extendedComments and extendedDialogs)
             var asdc = this._audioStreamDescriptionCollection.streams;
 
             var channelIndex = 0;
@@ -105,11 +122,16 @@ var StreamSelector = function (_AbstractNode) {
 
                     var isActive = stream.active;
 
+                    /// linear gain value
                     var gainValue = isActive ? 1.0 : 0.0;
 
                     var numChannelsForThisStream = stream.numChannels;
 
                     for (var i = 0; i < numChannelsForThisStream; i++) {
+
+                        if (channelIndex >= this._gainNode.length) {
+                            throw new Error("Y'a un bug qq part...");
+                        }
 
                         this._gainNode[channelIndex].gain.value = gainValue;
 

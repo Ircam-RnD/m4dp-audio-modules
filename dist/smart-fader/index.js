@@ -90,7 +90,10 @@ var SmartFader = function (_AbstractNode) {
             /// retrieves the active AudioStreamDescription(s)
             var asd = asdc.actives;
 
-            //console.log( "number of actives streams = " + asd.length );
+            /// sanity check
+            if (asd.length <= 0) {
+                throw new Error("Y'a un bug qq part...");
+            }
 
             /// use the first active stream (???)
             var activeStream = asd[0];
@@ -108,6 +111,11 @@ var SmartFader = function (_AbstractNode) {
 
             /// integrated loudness (in LUFS)
             var nominal = activeStream.loudness;
+
+            /// sanity check
+            if (nominal >= 0.0) {
+                throw new Error("Ca parait pas bon...");
+            }
 
             var threshold = nominal + Math.abs(maxTruePeak);
 
@@ -186,11 +194,9 @@ var SmartFader = function (_AbstractNode) {
 
             var reduction = this._dynamicCompressorNode.reduction.value;
 
-            if (reduction < -0.5) {
-                return true;
-            } else {
-                return false;
-            }
+            var state = reduction < -0.5 ? true : false;
+
+            return state;
         }
     }], [{
         key: 'clampdB',

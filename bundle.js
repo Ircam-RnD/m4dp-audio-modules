@@ -1144,7 +1144,10 @@ var SmartFader = function (_AbstractNode) {
             /// retrieves the active AudioStreamDescription(s)
             var asd = asdc.actives;
 
-            //console.log( "number of actives streams = " + asd.length );
+            /// sanity check
+            if (asd.length <= 0) {
+                throw new Error("Y'a un bug qq part...");
+            }
 
             /// use the first active stream (???)
             var activeStream = asd[0];
@@ -1162,6 +1165,11 @@ var SmartFader = function (_AbstractNode) {
 
             /// integrated loudness (in LUFS)
             var nominal = activeStream.loudness;
+
+            /// sanity check
+            if (nominal >= 0.0) {
+                throw new Error("Ca parait pas bon...");
+            }
 
             var threshold = nominal + Math.abs(maxTruePeak);
 
@@ -1240,11 +1248,9 @@ var SmartFader = function (_AbstractNode) {
 
             var reduction = this._dynamicCompressorNode.reduction.value;
 
-            if (reduction < -0.5) {
-                return true;
-            } else {
-                return false;
-            }
+            var state = reduction < -0.5 ? true : false;
+
+            return state;
         }
     }], [{
         key: 'clampdB',
@@ -1279,7 +1285,7 @@ var SmartFader = function (_AbstractNode) {
 
 exports.default = SmartFader;
 },{"../core/index.js":1,"../core/utils.js":2}],9:[function(require,module,exports){
-'use strict';
+"use strict";
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -1287,7 +1293,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _index = require('../core/index.js');
+var _index = require("../core/index.js");
 
 var _index2 = _interopRequireDefault(_index);
 
@@ -1323,9 +1329,25 @@ var StreamSelector = function (_AbstractNode) {
         /// (mainAudio, extendedAmbience, extendedComments and extendedDialogs)
         var totalNumberOfChannels_ = _this._audioStreamDescriptionCollection.totalNumberOfChannels;
 
+        /// sanity check
+        /// mainAudio (2) + extendedAmbience (6) + extendedComments (1) + extendedDialogs (1) = 10
+        if (totalNumberOfChannels_ != 10) {
+            throw new Error("Ca parait pas bon...");
+        }
+
         _this._splitterNode = audioContext.createChannelSplitter(totalNumberOfChannels_);
 
         _this._mergerNode = audioContext.createChannelMerger(totalNumberOfChannels_);
+
+        /// sanity checks
+        if (_this._splitterNode.numberOfInputs != 1 || _this._splitterNode.numberOfOutputs != totalNumberOfChannels_) {
+            throw new Error("Pas bon");
+        }
+
+        /// sanity checks
+        if (_this._mergerNode.numberOfInputs != totalNumberOfChannels_ || _this._mergerNode.numberOfOutputs != 1) {
+            throw new Error("Pas bon");
+        }
 
         /// create 10 gainNodes
         for (var i = 0; i < totalNumberOfChannels_; i++) {
@@ -1356,7 +1378,7 @@ var StreamSelector = function (_AbstractNode) {
      */
 
     _createClass(StreamSelector, [{
-        key: 'activeStreamsChanged',
+        key: "activeStreamsChanged",
         value: function activeStreamsChanged() {
             this._update();
         }
@@ -1367,10 +1389,11 @@ var StreamSelector = function (_AbstractNode) {
          */
 
     }, {
-        key: '_update',
+        key: "_update",
         value: function _update() {
 
             /// retrieves the AudioStreamDescriptionCollection
+            /// (mainAudio, extendedAmbience, extendedComments and extendedDialogs)
             var asdc = this._audioStreamDescriptionCollection.streams;
 
             var channelIndex = 0;
@@ -1386,11 +1409,16 @@ var StreamSelector = function (_AbstractNode) {
 
                     var isActive = stream.active;
 
+                    /// linear gain value
                     var gainValue = isActive ? 1.0 : 0.0;
 
                     var numChannelsForThisStream = stream.numChannels;
 
                     for (var i = 0; i < numChannelsForThisStream; i++) {
+
+                        if (channelIndex >= this._gainNode.length) {
+                            throw new Error("Y'a un bug qq part...");
+                        }
 
                         this._gainNode[channelIndex].gain.value = gainValue;
 
