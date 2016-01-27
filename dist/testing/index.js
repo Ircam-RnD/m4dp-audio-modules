@@ -272,7 +272,7 @@ function testCascadeNode() {
     /// just a precaution
     clearBuffer(buffer);
     makeImpulse(buffer, 0, 0);
-    //makeImpulse( buffer, 1, 10 );
+    makeImpulse(buffer, 1, 10);
 
     /// create a buffer source
     var bufferSource = audioContext1.createBufferSource();
@@ -308,6 +308,8 @@ function testCascadeNode() {
 
     /// connect the node to the destination of the audio context
     cascadeNode._output.connect(audioContext1.destination);
+
+    cascadeNode.bypass = true;
 
     /// prepare the rendering
     var localTime = 0;

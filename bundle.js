@@ -697,6 +697,7 @@ var CascadeNode = function (_AbstractNode) {
 
     /**
      * @brief This class implements a cascade of BiquadFilterNodes
+     *        The filtering affects all channel similarly
      *
      * @param {AudioContext} audioContext - audioContext instance.
      */
@@ -880,6 +881,12 @@ var CascadeNode = function (_AbstractNode) {
         value: function _updateAudioGraph() {
 
             var numCascades = this.numCascades;
+
+            /// first of all, disconnect everything
+            this.input.disconnect();
+            for (var i = numCascades - 1; i > 0; i--) {
+                this._biquadNodes[i - 1].connect(this._biquadNodes[i]);
+            }
 
             if (numCascades === 0 || this.bypass === true) {
                 this.input.connect(this._output);
@@ -2101,7 +2108,7 @@ function testCascadeNode() {
     /// just a precaution
     clearBuffer(buffer);
     makeImpulse(buffer, 0, 0);
-    //makeImpulse( buffer, 1, 10 );
+    makeImpulse(buffer, 1, 10);
 
     /// create a buffer source
     var bufferSource = audioContext1.createBufferSource();
@@ -2137,6 +2144,8 @@ function testCascadeNode() {
 
     /// connect the node to the destination of the audio context
     cascadeNode._output.connect(audioContext1.destination);
+
+    cascadeNode.bypass = true;
 
     /// prepare the rendering
     var localTime = 0;
