@@ -672,12 +672,381 @@ var DialogEnhancement = function (_AbstractNode) {
 
 exports.default = DialogEnhancement;
 },{"../core/index.js":1}],4:[function(require,module,exports){
+"use strict";
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _index = require("../core/index.js");
+
+var _index2 = _interopRequireDefault(_index);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var CascadeNode = function (_AbstractNode) {
+    _inherits(CascadeNode, _AbstractNode);
+
+    /**
+     * @brief This class implements a cascade of BiquadFilterNodes
+     *
+     * @param {AudioContext} audioContext - audioContext instance.
+     */
+
+    function CascadeNode(audioContext) {
+        _classCallCheck(this, CascadeNode);
+
+        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(CascadeNode).call(this, audioContext));
+
+        _this._isBypass = false;
+        _this._biquadNodes = [];
+
+        /// by default, 0 cascades.
+        /// this will also update the audio graph
+        numCascades(0);
+        return _this;
+    }
+
+    //==============================================================================
+    /**
+     * Enable or bypass the processor
+     * @type {boolean}
+     */
+
+    _createClass(CascadeNode, [{
+        key: "setFrequency",
+
+        //==============================================================================
+        /**
+         * Sets the frequency of the i-th biquad in the cascade
+         * @param {int} biquadIndex
+         * @param {float} value
+         */
+        value: function setFrequency(biquadIndex, value) {
+
+            /// boundary check
+            if (biquadIndex <= 0 || biquadIndex >= numCascades) {
+                throw new Error("Invalid biquadIndex");
+            }
+
+            this._biquadNodes[biquadIndex].frequency.value = value;
+        }
+
+        /**
+         * Returns the frequency of the i-th biquad in the cascade
+         * @param {int} biquadIndex
+         */
+
+    }, {
+        key: "getFrequency",
+        value: function getFrequency(biquadIndex) {
+
+            /// boundary check
+            if (biquadIndex <= 0 || biquadIndex >= numCascades) {
+                throw new Error("Invalid biquadIndex");
+            }
+
+            return this._biquadNodes[biquadIndex].frequency;
+        }
+
+        //==============================================================================
+        /**
+         * Sets the Q of the i-th biquad in the cascade
+         * @param {int} biquadIndex
+         * @param {float} value
+         */
+
+    }, {
+        key: "setQ",
+        value: function setQ(biquadIndex, value) {
+
+            /// boundary check
+            if (biquadIndex <= 0 || biquadIndex >= numCascades) {
+                throw new Error("Invalid biquadIndex");
+            }
+
+            this._biquadNodes[biquadIndex].Q.value = value;
+        }
+
+        /**
+         * Returns the Q of the i-th biquad in the cascade
+         * @param {int} biquadIndex
+         */
+
+    }, {
+        key: "getQ",
+        value: function getQ(biquadIndex) {
+
+            /// boundary check
+            if (biquadIndex <= 0 || biquadIndex >= numCascades) {
+                throw new Error("Invalid biquadIndex");
+            }
+
+            return this._biquadNodes[biquadIndex].Q;
+        }
+
+        //==============================================================================
+        /**
+         * Sets the gain of the i-th biquad in the cascade
+         * @param {int} biquadIndex
+         * @param {float} value
+         */
+
+    }, {
+        key: "setGain",
+        value: function setGain(biquadIndex, value) {
+
+            /// boundary check
+            if (biquadIndex <= 0 || biquadIndex >= numCascades) {
+                throw new Error("Invalid biquadIndex");
+            }
+
+            this._biquadNodes[biquadIndex].gain.value = value;
+        }
+
+        /**
+         * Returns the gain of the i-th biquad in the cascade
+         * @param {int} biquadIndex
+         */
+
+    }, {
+        key: "getGain",
+        value: function getGain(biquadIndex) {
+
+            /// boundary check
+            if (biquadIndex <= 0 || biquadIndex >= numCascades) {
+                throw new Error("Invalid biquadIndex");
+            }
+
+            return this._biquadNodes[biquadIndex].gain;
+        }
+
+        //==============================================================================
+        /**
+         * Sets the type of the i-th biquad in the cascade
+         * @param {int} biquadIndex
+         * @param {string} value
+         */
+
+    }, {
+        key: "setType",
+        value: function setType(biquadIndex, value) {
+
+            /// boundary check
+            if (biquadIndex <= 0 || biquadIndex >= numCascades) {
+                throw new Error("Invalid biquadIndex");
+            }
+
+            this._biquadNodes[biquadIndex].type = value;
+        }
+
+        /**
+         * Returns the type of the i-th biquad in the cascade
+         * @param {int} biquadIndex
+         */
+
+    }, {
+        key: "getType",
+        value: function getType(biquadIndex) {
+
+            /// boundary check
+            if (biquadIndex <= 0 || biquadIndex >= numCascades) {
+                throw new Error("Invalid biquadIndex");
+            }
+
+            return this._biquadNodes[biquadIndex].type;
+        }
+
+        //==============================================================================
+        /**
+         * Returns the number of biquads in the cascade
+         */
+
+    }, {
+        key: "_updateAudioGraph",
+
+        //==============================================================================
+        /**
+         * Updates the connections of the audio graph
+         */
+        value: function _updateAudioGraph() {
+
+            if (numCascades === 0 || bypass === true) {
+                this.input.connect(this._output);
+            } else {
+                /// connect the last element to the output
+                this._biquadNodes[numCascades - 1].connect(this._output);
+
+                /// connect the cascades
+                for (var i = numCascades - 1; i > 0; i--) {
+                    this._biquadNodes[i - 1].connect(this._biquadNodes[i]);
+                }
+
+                /// connect the 1st biquad to the input
+                this.input.connect(this._biquadNodes[0]);
+            }
+        }
+    }, {
+        key: "bypass",
+        set: function set(value) {
+            this._isBypass = value;
+
+            this._updateAudioGraph();
+        }
+
+        /**
+         * Returns true if the processor is bypassed
+         */
+        ,
+        get: function get() {
+            return this._isBypass;
+        }
+    }, {
+        key: "numCascades",
+        get: function get() {
+            return this._biquadNodes.length;
+        }
+
+        /**
+         * Sets the number of cascades
+         */
+        ,
+        set: function set(newNumCascades) {
+
+            var currentNumCascades = numCascades;
+
+            if (newNumCascades > currentNumCascades) {
+
+                for (var i = currentNumCascades; i < newNumCascades; i++) {
+
+                    var newBiquadNode = audioContext.createBiquadFilter();
+
+                    this._biquadNodes.push(newBiquadNode);
+                }
+            } else if (newNumCascades < currentNumCascades) {
+
+                this._biquadNodes.length = newNumCascades;
+            }
+
+            /// now update the audio connections
+            this._updateAudioGraph();
+        }
+    }]);
+
+    return CascadeNode;
+}(_index2.default);
+
+exports.default = CascadeNode;
+},{"../core/index.js":1}],5:[function(require,module,exports){
+'use strict';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _index = require('../core/index.js');
+
+var _index2 = _interopRequireDefault(_index);
+
+var _utils = require('../core/utils.js');
+
+var _utils2 = _interopRequireDefault(_utils);
+
+var _cascade = require('../dsp/cascade.js');
+
+var _cascade2 = _interopRequireDefault(_cascade);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var HeadphonesEqualization = function (_AbstractNode) {
+    _inherits(HeadphonesEqualization, _AbstractNode);
+
+    /**
+     * @brief This class implements the headphone equalization.
+     *        It thus applies filtering on 2 channels (2 in, 2 out)
+     *        The filtering is based on parametric filters (BiquadFilterNode); various settings are hard-coded
+     *
+     * @param {AudioContext} audioContext - audioContext instance.
+     */
+
+    function HeadphonesEqualization(audioContext) {
+        _classCallCheck(this, HeadphonesEqualization);
+
+        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(HeadphonesEqualization).call(this, audioContext));
+
+        _this._isBypass = true;
+        return _this;
+    }
+
+    /**
+     * Enable or bypass the headphone equalization
+     * @type {boolean}
+     */
+
+    _createClass(HeadphonesEqualization, [{
+        key: 'bypass',
+        set: function set(value) {
+            this._isBypass = value;
+
+            ///@todo a completer
+        }
+
+        /**
+         * Returns true if the headphone equalization is bypassed
+         */
+        ,
+        get: function get() {
+            return this._isBypass;
+        }
+    }]);
+
+    return HeadphonesEqualization;
+}(_index2.default);
+
+exports.default = HeadphonesEqualization;
+},{"../core/index.js":1,"../core/utils.js":2,"../dsp/cascade.js":4}],6:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.utilities = exports.AudioStreamDescription = exports.AudioStreamDescriptionCollection = exports.SmartFader = exports.ObjectSpatialiserAndMixer = exports.NoiseAdaptation = exports.MultichannelSpatialiser = exports.DialogEnhancement = exports.StreamSelector = undefined;
+exports.HeadphonesEqualization = exports.CascadeNode = undefined;
+
+var _cascade = require('./cascade.js');
+
+var _cascade2 = _interopRequireDefault(_cascade);
+
+var _headphoneequalization = require('./headphoneequalization.js');
+
+var _headphoneequalization2 = _interopRequireDefault(_headphoneequalization);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.CascadeNode = _cascade2.default;
+exports.HeadphonesEqualization = _headphoneequalization2.default;
+},{"./cascade.js":4,"./headphoneequalization.js":5}],7:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+		value: true
+});
+exports.utilities = exports.AudioStreamDescription = exports.AudioStreamDescriptionCollection = exports.SmartFader = exports.ObjectSpatialiserAndMixer = exports.NoiseAdaptation = exports.MultichannelSpatialiser = exports.DialogEnhancement = exports.StreamSelector = exports.HeadphonesEqualization = exports.CascadeNode = undefined;
 
 var _index = require('./dialog-enhancement/index.js');
 
@@ -709,8 +1078,12 @@ var _utils = require('./core/utils.js');
 
 var _utils2 = _interopRequireDefault(_utils);
 
+var _index14 = require('./dsp/index.js');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+exports.CascadeNode = _index14.CascadeNode;
+exports.HeadphonesEqualization = _index14.HeadphonesEqualization;
 exports.StreamSelector = _index13.default;
 exports.DialogEnhancement = _index2.default;
 exports.MultichannelSpatialiser = _index4.default;
@@ -720,7 +1093,7 @@ exports.SmartFader = _index10.default;
 exports.AudioStreamDescriptionCollection = _index11.AudioStreamDescriptionCollection;
 exports.AudioStreamDescription = _index11.AudioStreamDescription;
 exports.utilities = _utils2.default;
-},{"./core/index.js":1,"./core/utils.js":2,"./dialog-enhancement/index.js":3,"./multichannel-spatialiser/index.js":5,"./noise-adaptation/index.js":6,"./object-spatialiser-and-mixer/index.js":7,"./smart-fader/index.js":8,"./stream-selector/index.js":9}],5:[function(require,module,exports){
+},{"./core/index.js":1,"./core/utils.js":2,"./dialog-enhancement/index.js":3,"./dsp/index.js":6,"./multichannel-spatialiser/index.js":8,"./noise-adaptation/index.js":9,"./object-spatialiser-and-mixer/index.js":10,"./smart-fader/index.js":11,"./stream-selector/index.js":12}],8:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -892,7 +1265,7 @@ var MultichannelSpatialiser = function (_AbstractNode) {
 }(_index2.default);
 
 exports.default = MultichannelSpatialiser;
-},{"../core/index.js":1}],6:[function(require,module,exports){
+},{"../core/index.js":1}],9:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -964,7 +1337,7 @@ var NoiseAdaptation = function (_AbstractNode) {
 }(_index2.default);
 
 exports.default = NoiseAdaptation;
-},{"../core/index.js":1}],7:[function(require,module,exports){
+},{"../core/index.js":1}],10:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -1051,7 +1424,7 @@ var ObjectSpatialiserAndMixer = function (_MultichannelSpatiali) {
 }(_index2.default);
 
 exports.default = ObjectSpatialiserAndMixer;
-},{"../multichannel-spatialiser/index.js":5}],8:[function(require,module,exports){
+},{"../multichannel-spatialiser/index.js":8}],11:[function(require,module,exports){
 'use strict';
 
 var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
@@ -1284,7 +1657,7 @@ var SmartFader = function (_AbstractNode) {
 }(_index2.default);
 
 exports.default = SmartFader;
-},{"../core/index.js":1,"../core/utils.js":2}],9:[function(require,module,exports){
+},{"../core/index.js":1,"../core/utils.js":2}],12:[function(require,module,exports){
 "use strict";
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -1446,5 +1819,5 @@ var StreamSelector = function (_AbstractNode) {
 }(_index2.default);
 
 exports.default = StreamSelector;
-},{"../core/index.js":1}]},{},[4])(4)
+},{"../core/index.js":1}]},{},[7])(7)
 });
