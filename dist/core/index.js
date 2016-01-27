@@ -109,14 +109,23 @@ var AudioStreamDescriptionCollection = exports.AudioStreamDescriptionCollection 
         }
 
         /**
-         * Get the current active audio stream descriptions of the collection
-         * @type {AudioStreamDescription[]}
+         * Returns the number of streams in the collection
          */
 
     }, {
-        key: "actives",
+        key: "numStreams",
         get: function get() {
-            var actives = [];
+            return this._streams.length;
+        }
+
+        /**
+         * Returns the total number of channels (i.e. for all the streams)
+         */
+
+    }, {
+        key: "totalNumberOfChannels",
+        get: function get() {
+            var totalNumberOfChannels_ = 0;
             var _iteratorNormalCompletion = true;
             var _didIteratorError = false;
             var _iteratorError = undefined;
@@ -125,9 +134,7 @@ var AudioStreamDescriptionCollection = exports.AudioStreamDescriptionCollection 
                 for (var _iterator = this._streams[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
                     var stream = _step.value;
 
-                    if (stream.active) {
-                        actives.push(stream);
-                    }
+                    totalNumberOfChannels_ += stream.numChannels;
                 }
             } catch (err) {
                 _didIteratorError = true;
@@ -144,17 +151,18 @@ var AudioStreamDescriptionCollection = exports.AudioStreamDescriptionCollection 
                 }
             }
 
-            return actives;
+            return totalNumberOfChannels_;
         }
 
         /**
-         * Returns true if at least one stream is currently active
-         * @type {boolean}
+         * Get the current active audio stream descriptions of the collection
+         * @type {AudioStreamDescription[]}
          */
 
     }, {
-        key: "hasActiveStream",
+        key: "actives",
         get: function get() {
+            var actives = [];
             var _iteratorNormalCompletion2 = true;
             var _didIteratorError2 = false;
             var _iteratorError2 = undefined;
@@ -164,7 +172,7 @@ var AudioStreamDescriptionCollection = exports.AudioStreamDescriptionCollection 
                     var stream = _step2.value;
 
                     if (stream.active) {
-                        return true;
+                        actives.push(stream);
                     }
                 }
             } catch (err) {
@@ -182,10 +190,16 @@ var AudioStreamDescriptionCollection = exports.AudioStreamDescriptionCollection 
                 }
             }
 
-            return false;
+            return actives;
         }
+
+        /**
+         * Returns true if at least one stream is currently active
+         * @type {boolean}
+         */
+
     }, {
-        key: "dialog",
+        key: "hasActiveStream",
         get: function get() {
             var _iteratorNormalCompletion3 = true;
             var _didIteratorError3 = false;
@@ -195,8 +209,8 @@ var AudioStreamDescriptionCollection = exports.AudioStreamDescriptionCollection 
                 for (var _iterator3 = this._streams[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
                     var stream = _step3.value;
 
-                    if (stream.dialog) {
-                        return stream;
+                    if (stream.active) {
+                        return true;
                     }
                 }
             } catch (err) {
@@ -210,6 +224,38 @@ var AudioStreamDescriptionCollection = exports.AudioStreamDescriptionCollection 
                 } finally {
                     if (_didIteratorError3) {
                         throw _iteratorError3;
+                    }
+                }
+            }
+
+            return false;
+        }
+    }, {
+        key: "dialog",
+        get: function get() {
+            var _iteratorNormalCompletion4 = true;
+            var _didIteratorError4 = false;
+            var _iteratorError4 = undefined;
+
+            try {
+                for (var _iterator4 = this._streams[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+                    var stream = _step4.value;
+
+                    if (stream.dialog) {
+                        return stream;
+                    }
+                }
+            } catch (err) {
+                _didIteratorError4 = true;
+                _iteratorError4 = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion4 && _iterator4.return) {
+                        _iterator4.return();
+                    }
+                } finally {
+                    if (_didIteratorError4) {
+                        throw _iteratorError4;
                     }
                 }
             }

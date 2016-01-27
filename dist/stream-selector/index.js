@@ -10,10 +10,6 @@ var _index = require('../core/index.js');
 
 var _index2 = _interopRequireDefault(_index);
 
-var _utils = require('../core/utils.js');
-
-var _utils2 = _interopRequireDefault(_utils);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -36,63 +32,38 @@ var StreamSelector = function (_AbstractNode) {
 
         _classCallCheck(this, StreamSelector);
 
-        ///@todo : everything is hard-coded here !
-        /// make it nicer
-
         var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(StreamSelector).call(this, audioContext, audioStreamDescriptionCollection));
 
-        _this._splitterNode = audioContext.createChannelSplitter(10);
+        _this._splitterNode = undefined;
+        _this._mergerNode = undefined;
+        _this._gainNode = [];
 
-        _this._mergerNode = audioContext.createChannelMerger(10);
+        /// the total number of incoming channels, including all the streams
+        /// (mainAudio, extendedAmbience, extendedComments and extendedDialogs)
+        var totalNumberOfChannels_ = _this._audioStreamDescriptionCollection.totalNumberOfChannels;
 
-        _this._gainNode0 = audioContext.createGain();
-        _this._gainNode1 = audioContext.createGain();
-        _this._gainNode2 = audioContext.createGain();
-        _this._gainNode3 = audioContext.createGain();
-        _this._gainNode4 = audioContext.createGain();
-        _this._gainNode5 = audioContext.createGain();
-        _this._gainNode6 = audioContext.createGain();
-        _this._gainNode7 = audioContext.createGain();
-        _this._gainNode8 = audioContext.createGain();
-        _this._gainNode9 = audioContext.createGain();
+        _this._splitterNode = audioContext.createChannelSplitter(totalNumberOfChannels_);
 
+        _this._mergerNode = audioContext.createChannelMerger(totalNumberOfChannels_);
+
+        /// create 10 gainNodes
+        for (var i = 0; i < totalNumberOfChannels_; i++) {
+            var newGainNode = audioContext.createGain();
+            _this._gainNode.push(newGainNode);
+        }
+
+        /// split the input streams into 10 independent channels
         _this.input.connect(_this._splitterNode);
 
-        _this._splitterNode.connect(_this._gainNode0, 0);
-        _this._splitterNode.connect(_this._gainNode1, 1);
-        _this._splitterNode.connect(_this._gainNode2, 2);
-        _this._splitterNode.connect(_this._gainNode3, 3);
-        _this._splitterNode.connect(_this._gainNode4, 4);
-        _this._splitterNode.connect(_this._gainNode5, 5);
-        _this._splitterNode.connect(_this._gainNode6, 6);
-        _this._splitterNode.connect(_this._gainNode7, 7);
-        _this._splitterNode.connect(_this._gainNode8, 8);
-        _this._splitterNode.connect(_this._gainNode9, 9);
+        /// connect a gainNode to each channel
+        for (var i = 0; i < totalNumberOfChannels_; i++) {
+            _this._splitterNode.connect(_this._gainNode[i], i);
+        }
 
-        /*
-        this._gainNode0.connect( this._mergerNode, 0, 0 );
-        this._gainNode1.connect( this._mergerNode, 0, 1 );
-        this._gainNode2.connect( this._mergerNode, 0, 2 );
-        this._gainNode3.connect( this._mergerNode, 0, 3 );
-        this._gainNode4.connect( this._mergerNode, 0, 4 );
-        this._gainNode5.connect( this._mergerNode, 0, 5 );
-        this._gainNode6.connect( this._mergerNode, 0, 6 );
-        this._gainNode7.connect( this._mergerNode, 0, 7 );
-        this._gainNode8.connect( this._mergerNode, 0, 8 );
-        this._gainNode9.connect( this._mergerNode, 0, 9 );
-        */
-
-        // hard downmixing to stereo L/R, for now...
-        _this._gainNode0.connect(_this._mergerNode, 0, 0);
-        _this._gainNode1.connect(_this._mergerNode, 0, 1);
-        _this._gainNode2.connect(_this._mergerNode, 0, 1);
-        _this._gainNode3.connect(_this._mergerNode, 0, 2);
-        _this._gainNode4.connect(_this._mergerNode, 0, 1);
-        _this._gainNode5.connect(_this._mergerNode, 0, 2);
-        _this._gainNode6.connect(_this._mergerNode, 0, 1);
-        _this._gainNode7.connect(_this._mergerNode, 0, 2);
-        _this._gainNode8.connect(_this._mergerNode, 0, 1);
-        _this._gainNode9.connect(_this._mergerNode, 0, 2);
+        /// then merge the output of the 10 gainNodes
+        for (var i = 0; i < totalNumberOfChannels_; i++) {
+            _this._gainNode[i].connect(_this._mergerNode, 0, i);
+        }
 
         _this._mergerNode.connect(_this._output);
         return _this;
@@ -100,6 +71,7 @@ var StreamSelector = function (_AbstractNode) {
 
     /**
      * Notification when the active stream(s) changes
+     * (i.e. whenever a check box is modified)
      */
 
     _createClass(StreamSelector, [{
@@ -107,51 +79,56 @@ var StreamSelector = function (_AbstractNode) {
         value: function activeStreamsChanged() {
             this._update();
         }
+
+        /**
+         * Mute/unmute the streams, depending on the user selection
+         * in the check boxes
+         */
+
     }, {
         key: '_update',
         value: function _update() {
+
             /// retrieves the AudioStreamDescriptionCollection
             var asdc = this._audioStreamDescriptionCollection.streams;
 
-            var mainAudio = asdc[0];
-            var extendedAmbience = asdc[1];
-            var extendedComments = asdc[2];
-            var extendedDialogs = asdc[3];
+            var channelIndex = 0;
 
-            if (mainAudio.active === true) {
-                this._gainNode0.gain.value = 1;
-                this._gainNode1.gain.value = 1;
-            } else {
-                this._gainNode0.gain.value = 0;
-                this._gainNode1.gain.value = 0;
-            }
+            /// go through all the streams and mute/unmute according to their 'active' flag
+            var _iteratorNormalCompletion = true;
+            var _didIteratorError = false;
+            var _iteratorError = undefined;
 
-            if (extendedAmbience.active === true) {
-                this._gainNode2.gain.value = 1;
-                this._gainNode3.gain.value = 1;
-                this._gainNode4.gain.value = 1;
-                this._gainNode5.gain.value = 1;
-                this._gainNode6.gain.value = 1;
-                this._gainNode7.gain.value = 1;
-            } else {
-                this._gainNode2.gain.value = 0;
-                this._gainNode3.gain.value = 0;
-                this._gainNode4.gain.value = 0;
-                this._gainNode5.gain.value = 0;
-                this._gainNode6.gain.value = 0;
-                this._gainNode7.gain.value = 0;
-            }
+            try {
+                for (var _iterator = asdc[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                    var stream = _step.value;
 
-            if (extendedComments.active === true) {
-                this._gainNode8.gain.value = 1;
-            } else {
-                this._gainNode8.gain.value = 0;
-            }
+                    var isActive = stream.active;
 
-            if (extendedDialogs.active === true) {
-                this._gainNode9.gain.value = 1;
-            } else {
-                this._gainNode9.gain.value = 0;
+                    var gainValue = isActive ? 1.0 : 0.0;
+
+                    var numChannelsForThisStream = stream.numChannels;
+
+                    for (var i = 0; i < numChannelsForThisStream; i++) {
+
+                        this._gainNode[channelIndex].gain.value = gainValue;
+
+                        channelIndex++;
+                    }
+                }
+            } catch (err) {
+                _didIteratorError = true;
+                _iteratorError = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion && _iterator.return) {
+                        _iterator.return();
+                    }
+                } finally {
+                    if (_didIteratorError) {
+                        throw _iteratorError;
+                    }
+                }
             }
         }
     }]);
