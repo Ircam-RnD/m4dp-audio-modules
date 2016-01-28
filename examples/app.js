@@ -173,7 +173,7 @@ checkboxEqualization.checked = false;
 function updateActiveStreams(){
 	/// notify the modification of active streams
 	streamSelector.activeStreamsChanged();
-	smartFader.activeStreamsChanged();	
+	smartFader.activeStreamsChanged();
 }
 
 function onCheckVideo() {
@@ -228,7 +228,7 @@ function onCheckEqualization() {
 		headphonesEqualization.bypass = false;
 	} else {
 		headphonesEqualization.bypass = true;
-	}	
+	}
 }
 
 function onCheckLSF() {
@@ -254,32 +254,32 @@ smartFaderDB.addEventListener('input', function(){
 
 	//console.log( "smartFaderDB = " + smartFaderDB.value ); 
 
-	const valueFader = smartFaderDB.value;
+	var valueFader = smartFaderDB.value;
 
-	const minFader = smartFaderDB.min;
-	const maxFader = smartFaderDB.max;
+	var minFader = smartFaderDB.min;
+	var maxFader = smartFaderDB.max;
 
 	//const [minValue, maxValue] = M4DPAudioModules.SmartFader.dBRange();
-	const minValue = -60;
-	const maxValue = 8;
+	var minValue = -60;
+	var maxValue = 8;
 
 	/// scale from GUI to DSP
-	const value = M4DPAudioModules.utilities.scale( valueFader, minFader, maxFader, minValue, maxValue );
+	var value = M4DPAudioModules.utilities.scale( valueFader, minFader, maxFader, minValue, maxValue );
 
 	//console.log( "smartFaderDB (scaled) = " + value ); 
 
 	/// sets the smart fader dB gain
 	smartFader.dB = value;
-})
+});
 
 setInterval(function(){
-   	const isCompressed = smartFader.dynamicCompressionState;
+	var isCompressed = smartFader.dynamicCompressionState;
 
 	if( isCompressed === true){
-		console.log( "compression active" ); 
-	}	
+		console.log( "compression active" );
+	}
 	else{
-		console.log( "compression inactive" ); 
+		console.log( "compression inactive" );
 	}
 }, 500);
 
