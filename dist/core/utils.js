@@ -1,12 +1,13 @@
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+    value: true
 });
 exports.clamp = clamp;
 exports.scale = scale;
 exports.lin2dB = lin2dB;
 exports.dB2lin = dB2lin;
+exports.arrayAlmostEqual = arrayAlmostEqual;
 /**
  * Utilities functions
  */
@@ -20,11 +21,11 @@ exports.dB2lin = dB2lin;
  */
 function clamp(value, min, max) {
 
-  if (max < min) {
-    throw new Error("pas bon");
-  }
+    if (max < min) {
+        throw new Error("pas bon");
+    }
 
-  return Math.max(min, Math.min(value, max));
+    return Math.max(min, Math.min(value, max));
 }
 
 /**
@@ -33,13 +34,13 @@ function clamp(value, min, max) {
  */
 function scale(value, minIn, maxIn, minOut, maxOut) {
 
-  if (maxIn === minIn) {
-    throw new Error("pas bon");
-  }
+    if (maxIn === minIn) {
+        throw new Error("pas bon");
+    }
 
-  var normalized = (value - minIn) / (maxIn - minIn);
+    var normalized = (value - minIn) / (maxIn - minIn);
 
-  return minOut + normalized * (maxOut - minOut);
+    return minOut + normalized * (maxOut - minOut);
 }
 
 /**
@@ -48,11 +49,11 @@ function scale(value, minIn, maxIn, minOut, maxOut) {
  */
 function lin2dB(value) {
 
-  if (value <= 0) {
-    throw new Error("pas bon");
-  }
+    if (value <= 0) {
+        throw new Error("pas bon");
+    }
 
-  return 20 * Math.log10(value);
+    return 20 * Math.log10(value);
 }
 
 /**
@@ -60,15 +61,46 @@ function lin2dB(value) {
  *
  */
 function dB2lin(value) {
-  return Math.pow(10, value / 20);
+    return Math.pow(10, value / 20);
+}
+
+/**
+ * Compares two array. Returns true if they are (almost) equal
+ *
+ */
+function arrayAlmostEqual(array1, array2) {
+    var tolerance = arguments.length <= 2 || arguments[2] === undefined ? 0 : arguments[2];
+
+    if (tolerance < 0.0) {
+        throw new Error("pas bon");
+    }
+
+    if (array1.length != array2.length) {
+        return false;
+    }
+
+    var size = array1.length;
+
+    for (var i = 0; i < size; i++) {
+        var val1 = array1[i];
+        var val2 = array2[i];
+        var diff = Math.abs(val1 - val2);
+
+        if (diff > tolerance) {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 /// @n technique pour avoir un pseudo-namespace
 var utilities = {
-  clamp: clamp,
-  scale: scale,
-  lin2dB: lin2dB,
-  dB2lin: dB2lin
+    clamp: clamp,
+    scale: scale,
+    lin2dB: lin2dB,
+    dB2lin: dB2lin,
+    arrayAlmostEqual: arrayAlmostEqual
 };
 
 exports.default = utilities;

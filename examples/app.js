@@ -1,9 +1,19 @@
 // fonctions de tests "unitaires"
-//M4DPAudioModules.unittests.testBiquadNode();
+
+
+//M4DPAudioModules.unittests.biquadtests.testBiquadNode();
+
+M4DPAudioModules.unittests.binauraltests.testBinauralNode();
+
 //M4DPAudioModules.unittests.testCascadeNode();
 
 //M4DPAudioModules.unittests.testBinaural();
 
+
+console.log("here");
+console.debug("debug");
+
+M4DPAudioModules.unittests.testHrtfFromSofaServer();
 
 var dumpObject = function(obj) {
 	console.debug("Dumping: "+obj);
@@ -11,6 +21,11 @@ var dumpObject = function(obj) {
 		console.debug("    ."+name+"="+obj[name]);
 	}
 };
+
+console.log("here");
+console.debug("debug");
+
+debugger;
 
 videoPlayerMainMediaElement = document.getElementById('videoPlayerMain');
 videoPlayerPipMediaElement = document.getElementById('videoPlayerPip');
@@ -43,7 +58,7 @@ playerAudio.attachView(videoPlayerAudioMediaElement);
 playerAudio.getDebug().setLogToBrowserConsole(false);
 
 
-var controller = new MediaController();
+var controller = new MediaPlayer.dependencies.MediaController();
 
 dumpObject(playerMain);
 
