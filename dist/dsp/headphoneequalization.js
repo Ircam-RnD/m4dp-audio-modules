@@ -24,7 +24,15 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /************************************************************************************/
+/*!
+ *   @file       headphoneequalization.js
+ *   @brief      This class implements the headphone equalization node
+ *   @author     Thibaut Carpentier
+ *   @date       01/2016
+ *
+ */
+/************************************************************************************/
 
 var HeadphonesEqualization = function (_CascadeNode) {
     _inherits(HeadphonesEqualization, _CascadeNode);
@@ -43,16 +51,14 @@ var HeadphonesEqualization = function (_CascadeNode) {
 
         var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(HeadphonesEqualization).call(this, audioContext));
 
-        _this._eqPreset = "none";
+        _this._eqPreset = 'none';
         return _this;
     }
 
     //==============================================================================
     /**
-     * Set eqPreset
-     * @todo: which kind of value, json?
-     * @todo: set it to none to not appy any eq?
-     * @type {EqPreset}
+     * Loads a new headphones equalization preset
+     * @type {string} value : the name of the preset (they are hard-coded) 
      */
 
     _createClass(HeadphonesEqualization, [{
@@ -61,21 +67,21 @@ var HeadphonesEqualization = function (_CascadeNode) {
         //==============================================================================
         value: function _updateCascade() {
 
-            var preset = this.eqPreset;
+            var presetName = this.eqPreset;
 
-            if (preset === "none") {
+            if (presetName === 'none') {
                 _set(Object.getPrototypeOf(HeadphonesEqualization.prototype), 'numCascades', 0, this);
                 _get(Object.getPrototypeOf(HeadphonesEqualization.prototype), 'resetAllBiquads', this).call(this);
-            } else if (preset === "eq1") {
+            } else if (presetName === 'eq1') {
 
                 /// whatever settings... waiting for FTV to communicate their specifications
 
                 _set(Object.getPrototypeOf(HeadphonesEqualization.prototype), 'numCascades', 3, this);
                 _get(Object.getPrototypeOf(HeadphonesEqualization.prototype), 'resetAllBiquads', this).call(this);
 
-                _get(Object.getPrototypeOf(HeadphonesEqualization.prototype), 'setType', this).call(this, 0, "highpass");
-                _get(Object.getPrototypeOf(HeadphonesEqualization.prototype), 'setType', this).call(this, 1, "peaking");
-                _get(Object.getPrototypeOf(HeadphonesEqualization.prototype), 'setType', this).call(this, 2, "lowpass");
+                _get(Object.getPrototypeOf(HeadphonesEqualization.prototype), 'setType', this).call(this, 0, 'highpass');
+                _get(Object.getPrototypeOf(HeadphonesEqualization.prototype), 'setType', this).call(this, 1, 'peaking');
+                _get(Object.getPrototypeOf(HeadphonesEqualization.prototype), 'setType', this).call(this, 2, 'lowpass');
 
                 /// It is expressed in dB, has a default value of 0 and can take a value in a nominal range of -40 to 40
                 _get(Object.getPrototypeOf(HeadphonesEqualization.prototype), 'setGain', this).call(this, 0, -12);
@@ -92,18 +98,19 @@ var HeadphonesEqualization = function (_CascadeNode) {
                 _get(Object.getPrototypeOf(HeadphonesEqualization.prototype), 'setQ', this).call(this, 1, 2);
                 _get(Object.getPrototypeOf(HeadphonesEqualization.prototype), 'setQ', this).call(this, 2, 1);
             } else {
-                throw new Error("Invalid preset name " + preset);
+                throw new Error('Invalid preset name ' + presetName);
             }
         }
     }, {
         key: 'eqPreset',
-        set: function set(value) {
-            this._eqPreset = value;
+        set: function set(presetName) {
+            this._eqPreset = presetName;
             this._updateCascade();
         }
+
         /**
-         * Get eqPreset
-         * @type {EqPreset}
+         * Returns the name of the current headphones equalization preset
+         * @type {string}
          */
         ,
         get: function get() {

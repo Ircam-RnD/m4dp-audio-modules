@@ -18,10 +18,15 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 // IRC_1147, COMPENSATED, 44.1 kHz
 // left ear, navigation = [-30 , 0]
-/**
- * Some test functions for SOFA
- * For debug purposes only
+/************************************************************************************/
+/*!
+ *   @file       testsofa.js
+ *   @brief      Misc test functions for SOFA
+ *   @author     Thibaut Carpentier
+ *   @date       01/2016
+ *
  */
+/************************************************************************************/
 
 function getLeftTestBuffer() {
 
@@ -139,7 +144,7 @@ function testHrtfFromSofaServer() {
 	});
 }
 
-/// @n technique pour avoir un pseudo-namespace
+//==============================================================================
 var sofatests = {
 	getHrir: getHrir,
 	testHrtfFromSofaServer: testHrtfFromSofaServer

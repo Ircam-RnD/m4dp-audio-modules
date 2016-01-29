@@ -17,10 +17,15 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 //==============================================================================
 /// This does not test anything; this just enters in debug mode, to inspect the buffers
-/**
- * Some test functions
- * For debug purposes only
+/************************************************************************************/
+/*!
+ *   @file       testbinaural.js
+ *   @brief      Misc test function for binaural
+ *   @author     Thibaut Carpentier
+ *   @date       01/2016
+ *
  */
+/************************************************************************************/
 
 function testBinauralNode() {
 
@@ -34,15 +39,14 @@ function testBinauralNode() {
 		var numChannels = 2;
 
 		/// create an offline audio context
-		var audioContext1 = new OfflineAudioContext(numChannels, bufferSize, sampleRate);
+		var audioContext1 = new OfflineAudioContext(2, bufferSize, sampleRate);
 
 		/// create a test buffer
-		var buffer = audioContext1.createBuffer(numChannels, bufferSize, sampleRate);
+		var buffer = audioContext1.createBuffer(1, bufferSize, sampleRate);
 
 		/// just a precaution
 		_bufferutils2.default.clearBuffer(buffer);
 		_bufferutils2.default.makeImpulse(buffer, 0, 0);
-		//bufferutilities.makeImpulse( buffer, 1, 10 );
 
 		var convolver = audioContext1.createConvolver();
 
@@ -85,7 +89,7 @@ function testBinauralNode() {
 	});
 }
 
-/// @n technique pour avoir un pseudo-namespace
+//==============================================================================
 var binauraltests = {
 	testBinauralNode: testBinauralNode
 };

@@ -78,11 +78,16 @@ function testBiquadNode() {
     audioContext1.startRendering();
 }
 
-/// @n technique pour avoir un pseudo-namespace
-/**
- * Some test functions
- * For debug purposes only
+//==============================================================================
+/************************************************************************************/
+/*!
+ *   @file       testbiquad.js
+ *   @brief      Misc test functions for BiquadFilterNode
+ *   @author     Thibaut Carpentier
+ *   @date       01/2016
+ *
  */
+/************************************************************************************/
 
 var biquadtests = {
     testBiquadNode: testBiquadNode

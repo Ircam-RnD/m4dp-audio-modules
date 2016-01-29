@@ -8,10 +8,15 @@ exports.scale = scale;
 exports.lin2dB = lin2dB;
 exports.dB2lin = dB2lin;
 exports.arrayAlmostEqual = arrayAlmostEqual;
-/**
- * Utilities functions
+/************************************************************************************/
+/*!
+ *   @file       utils.js
+ *   @brief      Misc utility functions
+ *   @author     Thibaut Carpentier
+ *   @date       01/2016
+ *
  */
-
+/************************************************************************************/
 /**
  * Clips a value within a given range
  * @type {number} value the value to be clipped
@@ -94,7 +99,7 @@ function arrayAlmostEqual(array1, array2) {
     return true;
 }
 
-/// @n technique pour avoir un pseudo-namespace
+//==============================================================================
 var utilities = {
     clamp: clamp,
     scale: scale,

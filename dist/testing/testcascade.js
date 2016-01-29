@@ -16,10 +16,15 @@ var _bufferutils2 = _interopRequireDefault(_bufferutils);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 //==============================================================================
-/**
- * Some test functions
- * For debug purposes only
+/************************************************************************************/
+/*!
+ *   @file       testcascade.js
+ *   @brief      Misc test functions for M4DPAudioModules.CascadeNode
+ *   @author     Thibaut Carpentier
+ *   @date       01/2016
+ *
  */
+/************************************************************************************/
 
 function testCascadeNode() {
 
@@ -94,7 +99,7 @@ function testCascadeNode() {
     audioContext1.startRendering();
 }
 
-/// @n technique pour avoir un pseudo-namespace
+//==============================================================================
 var cascadetests = {
     testCascadeNode: testCascadeNode
 };

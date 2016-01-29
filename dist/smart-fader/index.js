@@ -22,21 +22,29 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /************************************************************************************/
+/*!
+ *   @file       index.js
+ *   @brief      This class implements the so-called SmartFader module of M4DP
+ *   @author     Thibaut Carpentier
+ *   @date       01/2016
+ *
+ */
+/************************************************************************************/
 
 var SmartFader = function (_AbstractNode) {
     _inherits(SmartFader, _AbstractNode);
 
+    //==============================================================================
     /**
      * @param {AudioContext} audioContext - audioContext instance.
      * @param {AudioStreamDescriptionCollection} audioStreamDescriptionCollection - audioStreamDescriptionCollection
      * @param {number} dB - dB value for the SmartFader.
-     * @todo give range of accepted values
      */
 
     function SmartFader(audioContext) {
         var audioStreamDescriptionCollection = arguments.length <= 1 || arguments[1] === undefined ? undefined : arguments[1];
-        var dB = arguments.length <= 2 || arguments[2] === undefined ? undefined : arguments[2];
+        var dB = arguments.length <= 2 || arguments[2] === undefined ? 0.0 : arguments[2];
 
         _classCallCheck(this, SmartFader);
 
@@ -44,21 +52,26 @@ var SmartFader = function (_AbstractNode) {
 
         _this._dB = undefined;
 
-        // AudioGraph connect
-        // @todo: DynamicsCompressorNode accept n channels input
+        ///@n the gain and dynamic compression are applied similarly to all channels
         _this._gainNode = audioContext.createGain();
         _this._dynamicCompressorNode = audioContext.createDynamicsCompressor();
 
-        _this.input.connect(_this._gainNode);
-        _this._gainNode.connect(_this._dynamicCompressorNode);
-        _this._dynamicCompressorNode.connect(_this._output);
+        /// connect the audio nodes
+        {
+            _this.input.connect(_this._gainNode);
+            _this._gainNode.connect(_this._dynamicCompressorNode);
+            _this._dynamicCompressorNode.connect(_this._output);
+        }
 
-        _this.dB = dB;
-
-        _this._updateCompressorSettings();
+        /// initialization
+        {
+            _this.dB = dB;
+            _this._updateCompressorSettings();
+        }
         return _this;
     }
 
+    //==============================================================================
     /**
      * Set the dB value
      * @type {number}
@@ -119,17 +132,31 @@ var SmartFader = function (_AbstractNode) {
 
             var threshold = nominal + Math.abs(maxTruePeak);
 
+            /**
+            Matthieu :
+            Dans mon papier sur le sujet j'avais défini les ordres de grandeur d'une matrice pour expliciter
+            la progression de la compression en fonction du niveau d'entrée. 
+            Ça donne un ratio de 2:1 sur les premiers 6 dB de dépassement puis 3:1 au delà. 
+            Est-ce plus simple pour vous d'user de cette matrice ou d'appeler un compresseur multicanal 
+            et lui passer des paramètres classiques ?
+             On aurait alors :
+            Threshold à -18 dBFS
+            Ratio à 2:1
+            Attack à 20 ms
+            Release à 200 ms
+            */
+
             /// representing the decibel value above which the compression will start taking effect
             this._dynamicCompressorNode.threshold.value = threshold;
 
             /// representing the amount of change, in dB, needed in the input for a 1 dB change in the output
-            this._dynamicCompressorNode.ratio.value = 3;
+            this._dynamicCompressorNode.ratio.value = 2;
 
             /// representing the amount of time, in seconds, required to reduce the gain by 10 dB
-            this._dynamicCompressorNode.attack.value = 0.1;
+            this._dynamicCompressorNode.attack.value = 0.02;
 
             /// representing the amount of time, in seconds, required to increase the gain by 10 dB
-            this._dynamicCompressorNode.release.value = 0.25;
+            this._dynamicCompressorNode.release.value = 0.2;
         }
     }, {
         key: '_update',
@@ -152,28 +179,26 @@ var SmartFader = function (_AbstractNode) {
     }, {
         key: 'dB',
         set: function set(value) {
+
+            /// clamp the incoming value
             this._dB = SmartFader.clampdB(value);
+
+            /// update the DSP processor
             this._update();
         }
-
-        /**
-         * Clips a value within the proper dB range
-         * @type {number} value the value to be clipped
-         */
-        ,
 
         /**
          * Get the dB value
          * @type {number}
          */
+        ,
         get: function get() {
             return this._dB;
         }
 
         /**
-         * Get the dB range
-         * @type {array}
-         * @details +8 dB suffisent, pour passer du -23 au -15 LUFS (iTunes), c'est l'idée.
+         * Clips a value within the proper dB range
+         * @type {number} value the value to be clipped
          */
 
     }, {
@@ -208,6 +233,13 @@ var SmartFader = function (_AbstractNode) {
 
             return _utils2.default.clamp(value, minValue, maxValue);
         }
+
+        /**
+         * Get the dB range
+         * @type {array}
+         * @details +8 dB suffisent, pour passer du -23 au -15 LUFS (iTunes), c'est l'idée.
+         */
+
     }, {
         key: 'dBRange',
         get: function get() {

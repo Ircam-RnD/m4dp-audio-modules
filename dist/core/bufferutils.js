@@ -8,9 +8,15 @@ exports.writeBufferToTextFile = writeBufferToTextFile;
 exports.clearBufferChannel = clearBufferChannel;
 exports.clearBuffer = clearBuffer;
 exports.makeImpulse = makeImpulse;
-/**
- * Utilities functions
+/************************************************************************************/
+/*!
+ *   @file       bufferutils.js
+ *   @brief      Misc utility functions for AudioBuffer manipulation
+ *   @author     Thibaut Carpentier
+ *   @date       01/2016
+ *
  */
+/************************************************************************************/
 
 //==============================================================================
 /**
@@ -185,7 +191,7 @@ function makeImpulse(buffer) {
     channel_[sampleIndex] = 1.0;
 }
 
-/// @n technique pour avoir un pseudo-namespace
+//==============================================================================
 var bufferutilities = {
     writeBufferToTextFileWithMatlabFormat: writeBufferToTextFileWithMatlabFormat,
     writeBufferToTextFile: writeBufferToTextFile,

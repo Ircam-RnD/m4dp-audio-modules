@@ -3,17 +3,13 @@
 
 //M4DPAudioModules.unittests.biquadtests.testBiquadNode();
 
-M4DPAudioModules.unittests.binauraltests.testBinauralNode();
+//M4DPAudioModules.unittests.binauraltests.testBinauralNode();
 
 //M4DPAudioModules.unittests.testCascadeNode();
 
 //M4DPAudioModules.unittests.testBinaural();
 
-
-console.log("here");
-console.debug("debug");
-
-M4DPAudioModules.unittests.testHrtfFromSofaServer();
+//M4DPAudioModules.unittests.testHrtfFromSofaServer();
 
 var dumpObject = function(obj) {
 	console.debug("Dumping: "+obj);
@@ -21,11 +17,6 @@ var dumpObject = function(obj) {
 		console.debug("    ."+name+"="+obj[name]);
 	}
 };
-
-console.log("here");
-console.debug("debug");
-
-debugger;
 
 videoPlayerMainMediaElement = document.getElementById('videoPlayerMain');
 videoPlayerPipMediaElement = document.getElementById('videoPlayerPip');
@@ -147,6 +138,25 @@ var smartFader = new M4DPAudioModules.SmartFader( audioContext, asdc );
 //var dialogEnhancement = new M4DPAudioModules.DialogEnhancement(audioContext);
 var headphonesEqualization = new M4DPAudioModules.HeadphonesEqualization( audioContext );
 
+{
+	///@bug : the mainChannelSplitterNode MUST be connected to the AudioContext,
+	/// otherwise the video wont read.
+	/// so as a workaround, we just add a dummuy node, with 0 gain,
+	/// to connect the mainChannelSplitterNode
+	var uselessGain = audioContext.createGain();
+	mainChannelSplitterNode.connect( uselessGain, 0, 0 );
+	uselessGain.gain.value = 0.;
+	uselessGain.connect( audioContext.destination, 0, 0 );
+}
+
+/*
+/// test pour voir si on a du son dans les canaux extendedChannelSplitterNode
+var oneGain = audioContext.createGain();
+extendedChannelSplitterNode.connect( oneGain, 7, 0 );
+oneGain.connect( audioContext.destination, 0, 0 );
+*/
+
+
 /// receives 4 ADSC with 10 channels in total
 channelMerger.connect( streamSelector.input );
 
@@ -160,6 +170,7 @@ smartFader.connect( headphonesEqualization.input );
 
 /// apply the headphones equalization
 headphonesEqualization.connect( audioContext.destination );
+
 
 
 playerMain.attachSource(urlMain);

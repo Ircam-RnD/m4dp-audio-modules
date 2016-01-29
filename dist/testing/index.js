@@ -1,7 +1,7 @@
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+  value: true
 });
 
 var _testbiquad = require('./testbiquad.js');
@@ -22,17 +22,22 @@ var _testbinaural2 = _interopRequireDefault(_testbinaural);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-/// @n technique pour avoir un pseudo-namespace
-/**
- * Some test functions
- * For debug purposes only
+//==============================================================================
+/************************************************************************************/
+/*!
+ *   @file       index.js
+ *   @brief      Export test modules
+ *   @author     Thibaut Carpentier
+ *   @date       01/2016
+ *
  */
+/************************************************************************************/
 
 var unittests = {
-    biquadtests: _testbiquad2.default,
-    cascadetests: _testcascade2.default,
-    sofatests: _testsofa2.default,
-    binauraltests: _testbinaural2.default
+  biquadtests: _testbiquad2.default,
+  cascadetests: _testcascade2.default,
+  sofatests: _testsofa2.default,
+  binauraltests: _testbinaural2.default
 };
 
 exports.default = unittests;
