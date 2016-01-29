@@ -33,6 +33,8 @@ var AbstractNode = function () {
         this.input = this._audioContext.createGain();
         this._output = this._audioContext.createGain();
     }
+
+    //==============================================================================
     /**
      * Connect the audio node
      * @param {AudioNode} node - an AudioNode to connect to.
@@ -52,6 +54,17 @@ var AbstractNode = function () {
         key: "disconnect",
         value: function disconnect(node) {
             this._output.disconnect(node);
+        }
+
+        //==============================================================================
+        /**
+         * Returns the current sample rate of the audio context
+         */
+
+    }, {
+        key: "getCurrentSampleRate",
+        value: function getCurrentSampleRate() {
+            return this._audioContext.sampleRate;
         }
     }]);
 

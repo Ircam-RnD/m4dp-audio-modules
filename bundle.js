@@ -238,6 +238,8 @@ var AbstractNode = function () {
         this.input = this._audioContext.createGain();
         this._output = this._audioContext.createGain();
     }
+
+    //==============================================================================
     /**
      * Connect the audio node
      * @param {AudioNode} node - an AudioNode to connect to.
@@ -257,6 +259,17 @@ var AbstractNode = function () {
         key: "disconnect",
         value: function disconnect(node) {
             this._output.disconnect(node);
+        }
+
+        //==============================================================================
+        /**
+         * Returns the current sample rate of the audio context
+         */
+
+    }, {
+        key: "getCurrentSampleRate",
+        value: function getCurrentSampleRate() {
+            return this._audioContext.sampleRate;
         }
     }]);
 
@@ -1436,7 +1449,7 @@ var TransauralNode = function (_AbstractNode) {
 
     //==============================================================================
     /**
-     * @brief This class implements a transaural decoder.
+     * @brief This class implements a transaural decoder (abstract)
      *        Restricted to symmetrical speakers setup
      *
      * @param {AudioContext} audioContext - audioContext instance.
@@ -1635,7 +1648,7 @@ var MultichannelSpatialiser = function (_AbstractNode) {
      * @param {AudioContext} audioContext - audioContext instance.
      * @param {AudioStreamDescriptionCollection} audioStreamDescriptionCollection - audioStreamDescriptionCollection.
      * @param {string} outputType - output type 'binaural' or 'transaural' or 'multichannel'
-     * @param {HRTF} hrtf - hrtf @todo to be defined
+     * @param {binaural.HrtfSet} : HRTF set to load
      * @param {string} headphoneEqPresetName - the name of the headphone equalization preset (they are hard-coded) 
      * @param {number} offsetGain - the offset gain (expressed in dB)
      * @param {number} listeningAxis - angle? @todo value to be defined
@@ -1644,10 +1657,10 @@ var MultichannelSpatialiser = function (_AbstractNode) {
     function MultichannelSpatialiser(audioContext) {
         var audioStreamDescriptionCollection = arguments.length <= 1 || arguments[1] === undefined ? undefined : arguments[1];
         var outputType = arguments.length <= 2 || arguments[2] === undefined ? 'binaural' : arguments[2];
-        var hrtf = arguments[3];
+        var hrtf = arguments.length <= 3 || arguments[3] === undefined ? undefined : arguments[3];
         var headphoneEqPresetName = arguments.length <= 4 || arguments[4] === undefined ? 'none' : arguments[4];
         var offsetGain = arguments.length <= 5 || arguments[5] === undefined ? 0.0 : arguments[5];
-        var listeningAxis = arguments[6];
+        var listeningAxis = arguments.length <= 6 || arguments[6] === undefined ? undefined : arguments[6];
 
         _classCallCheck(this, MultichannelSpatialiser);
 
@@ -1791,9 +1804,8 @@ var MultichannelSpatialiser = function (_AbstractNode) {
 
         //==============================================================================
         /**
-         * Set hrtf
-         * @type {HRTF}
-         * @todo: which kind of value, json?
+         * Loads a set of HRTF
+         * @type {binaural.HrtfSet} : cf the binaural module
          */
 
     }, {
@@ -1801,8 +1813,13 @@ var MultichannelSpatialiser = function (_AbstractNode) {
         set: function set(value) {
             this._hrtf = value;
         }
+
+        ///@todo simplified function loadHrtfFrom( subjectNumber )
+        /// using the current sampling rate
+        /// --> creates a new HrtfSet and load it
+
         /**
-         * Get hrtf
+         * Returns the current hrtf
          * @type {HRTF}
          */
         ,

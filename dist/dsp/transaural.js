@@ -32,7 +32,7 @@ var TransauralNode = function (_AbstractNode) {
 
     //==============================================================================
     /**
-     * @brief This class implements a transaural decoder.
+     * @brief This class implements a transaural decoder (abstract)
      *        Restricted to symmetrical speakers setup
      *
      * @param {AudioContext} audioContext - audioContext instance.
