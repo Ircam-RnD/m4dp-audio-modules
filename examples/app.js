@@ -2,6 +2,8 @@
 //M4DPAudioModules.unittests.testBiquadNode();
 //M4DPAudioModules.unittests.testCascadeNode();
 
+//M4DPAudioModules.unittests.testBinaural();
+
 
 var dumpObject = function(obj) {
 	console.debug("Dumping: "+obj);

@@ -5,10 +5,15 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.testBiquadNode = testBiquadNode;
 exports.testCascadeNode = testCascadeNode;
+exports.testBinaural = testBinaural;
 
 var _index = require('../index.js');
 
 var _index2 = _interopRequireDefault(_index);
+
+var _binaural = require('binaural');
+
+var _binaural2 = _interopRequireDefault(_binaural);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -18,6 +23,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * The file can later be downloaded
  * The function returns the download URL
  */
+/**
+ * Some test functions
+ * For debug purposes only
+ */
+
 function writeTextDataToFile(text) {
     var textFile = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
 
@@ -33,12 +43,7 @@ function writeTextDataToFile(text) {
 
     // returns a URL you can use as a href
     return textFile;
-} /**
-   * Some test functions
-   * For debug purposes only
-   */
-
-;
+};
 
 //==============================================================================
 /**
@@ -330,10 +335,117 @@ function testCascadeNode() {
     audioContext1.startRendering();
 }
 
+//==============================================================================
+function testBinaural() {
+
+    var audio = _binaural2.default.audio.utilities;
+    var Source = _binaural2.default.audio.Source;
+    var HrtfSet = _binaural2.default.sofa.HrtfSet;
+    var ServerDataBase = _binaural2.default.sofa.ServerDataBase;
+
+    var audioContext = new window.AudioContext();
+
+    var noiseBuffer = audio.createNoiseBuffer({
+        audioContext: audioContext,
+        channelCount: 1,
+        duration: 5,
+        gain: -20
+    });
+
+    var positionsType = 'sofaSpherical';
+    var testPositions = [[30, 0, 2], // front-left
+    [0, 0, 2], // centre
+    [-30, 0, 2]];
+
+    // front-right
+    var testPositionsName = ['front-left', 'centre', 'front-right'];
+
+    var hrtfSet = new HrtfSet({
+        audioContext: audioContext,
+        filterPositions: testPositions,
+        positionsType: positionsType
+    });
+
+    console.log('accessing server');
+    var serverDataBase = new ServerDataBase();
+
+    serverDataBase.loadCatalogue().then(function () {
+
+        return serverDataBase.getUrls({
+            convention: 'HRIR',
+            dataBase: 'BILI',
+            equalisation: 'COMPENSATED',
+            sampleRate: audioContext.sampleRate,
+            freePattern: '1147'
+        });
+    }).then(function (urls) {
+        console.log('loading HRTF set');
+        return hrtfSet.load(urls[0]);
+    }).then(function () {
+        console.log('activate audio');
+        return new Promise(function (resolve, reject) {
+            var now = audioContext.currentTime;
+            if (now === 0) {
+                console.log('manually start audio context');
+                if (window.confirm('Start Audio?')) {
+                    var gain = audioContext.createGain();
+                    gain.gain.value = 0;
+                    gain.connect(audioContext.destination);
+
+                    var noiseBufferSource = audioContext.createBufferSource();
+                    noiseBufferSource.buffer = noiseBuffer;
+                    noiseBufferSource.loop = true;
+
+                    noiseBufferSource.connect(gain);
+                    noiseBufferSource.start(now);
+                    noiseBufferSource.stop(now + 0.3);
+                    resolve();
+                } else {
+                    reject(new Error('Audio not started'));
+                }
+            } else {
+                resolve();
+            }
+        });
+    }).then(function () {
+        console.log('testing sources');
+        testPositions.forEach(function (position, index) {
+            var positionName = testPositionsName[index];
+            console.log('Test for source on the ' + positionName);
+            return new Promise(function (resolve) {
+                var source = new Source({
+                    audioContext: audioContext,
+                    hrtfSet: hrtfSet,
+                    position: position
+                });
+
+                var noiseBufferSource = audioContext.createBufferSource();
+                noiseBufferSource.buffer = noiseBuffer;
+                noiseBufferSource.loop = true;
+
+                source.inputConnect(noiseBufferSource);
+                noiseBufferSource.start(0);
+
+                source.outputConnect(audioContext.destination);
+
+                if (window.confirm('Is sound on the ' + positionName + '?')) {
+                    resolve(noiseBufferSource);
+                } else {
+                    // resolve any way to stop sound
+                    resolve(noiseBufferSource);
+                }
+            }).then(function (noiseBufferSource) {
+                noiseBufferSource.stop(0);
+            });
+        });
+    }); // for each position
+}
+
 /// @n technique pour avoir un pseudo-namespace
 var unittests = {
     testBiquadNode: testBiquadNode,
-    testCascadeNode: testCascadeNode
+    testCascadeNode: testCascadeNode,
+    testBinaural: testBinaural
 };
 
 exports.default = unittests;
