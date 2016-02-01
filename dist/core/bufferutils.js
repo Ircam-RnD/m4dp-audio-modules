@@ -5,6 +5,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.writeBufferToTextFileWithMatlabFormat = writeBufferToTextFileWithMatlabFormat;
 exports.writeBufferToTextFile = writeBufferToTextFile;
+exports.fillChannel = fillChannel;
 exports.clearBufferChannel = clearBufferChannel;
 exports.clearBuffer = clearBuffer;
 exports.makeImpulse = makeImpulse;
@@ -126,10 +127,14 @@ function writeBufferToTextFile(buffer) {
 
 //==============================================================================
 /**
- * Fills one channel of a buffer with 0
+ * Fills one channel of an AudioBuffer
  * @type {AudioBuffer} buffer
+ * @type {int} channelIndex
+ * @type {number} value
  */
-function clearBufferChannel(buffer, channelIndex) {
+function fillChannel(buffer) {
+    var channelIndex = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
+    var value = arguments.length <= 2 || arguments[2] === undefined ? 0.0 : arguments[2];
 
     var numChannels = buffer.numberOfChannels;
     var numSamples = buffer.length;
@@ -142,12 +147,24 @@ function clearBufferChannel(buffer, channelIndex) {
     var channel_ = buffer.getChannelData(channelIndex);
 
     for (var j = 0; j < numSamples; j++) {
-        channel_[j] = 0.0;
+        channel_[j] = value;
     }
 }
 
+//==============================================================================
 /**
- * Fills all channel of a buffer with 0
+ * Fills one channel of a buffer with 0
+ * @type {AudioBuffer} buffer
+ * @type {int} channelIndex
+ */
+function clearBufferChannel(buffer, channelIndex) {
+
+    fillChannel(buffer, channelIndex, 0.0);
+}
+
+//==============================================================================
+/**
+ * Fills all channels of a buffer with 0
  * @type {AudioBuffer} buffer
  */
 function clearBuffer(buffer) {
@@ -197,7 +214,8 @@ var bufferutilities = {
     writeBufferToTextFile: writeBufferToTextFile,
     clearBufferChannel: clearBufferChannel,
     clearBuffer: clearBuffer,
-    makeImpulse: makeImpulse
+    makeImpulse: makeImpulse,
+    fillChannel: fillChannel
 };
 
 exports.default = bufferutilities;

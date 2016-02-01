@@ -1,6 +1,5 @@
 // fonctions de tests "unitaires"
 
-
 //M4DPAudioModules.unittests.biquadtests.testBiquadNode();
 
 //M4DPAudioModules.unittests.binauraltests.testBinauralNode();
@@ -10,6 +9,12 @@
 //M4DPAudioModules.unittests.testBinaural();
 
 //M4DPAudioModules.unittests.testHrtfFromSofaServer();
+
+//M4DPAudioModules.unittests.sumdifftests.testSumDiffNode();
+
+//M4DPAudioModules.unittests.transauraltests.testTransauralShuffler();
+
+
 
 var dumpObject = function(obj) {
 	console.debug("Dumping: "+obj);

@@ -20,6 +20,14 @@ var _testbinaural = require('./testbinaural.js');
 
 var _testbinaural2 = _interopRequireDefault(_testbinaural);
 
+var _testsumdiff = require('./testsumdiff.js');
+
+var _testsumdiff2 = _interopRequireDefault(_testsumdiff);
+
+var _testtransaural = require('./testtransaural.js');
+
+var _testtransaural2 = _interopRequireDefault(_testtransaural);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 //==============================================================================
@@ -37,7 +45,9 @@ var unittests = {
   biquadtests: _testbiquad2.default,
   cascadetests: _testcascade2.default,
   sofatests: _testsofa2.default,
-  binauraltests: _testbinaural2.default
+  binauraltests: _testbinaural2.default,
+  sumdifftests: _testsumdiff2.default,
+  transauraltests: _testtransaural2.default
 };
 
 exports.default = unittests;

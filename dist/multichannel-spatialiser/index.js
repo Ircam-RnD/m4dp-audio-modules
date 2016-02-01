@@ -18,6 +18,8 @@ var _utils = require('../core/utils.js');
 
 var _utils2 = _interopRequireDefault(_utils);
 
+var _transaural = require('../dsp/transaural.js');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }

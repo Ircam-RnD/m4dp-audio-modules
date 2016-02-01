@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
 		value: true
 });
-exports.unittests = exports.utilities = exports.AudioStreamDescription = exports.AudioStreamDescriptionCollection = exports.SmartFader = exports.ObjectSpatialiserAndMixer = exports.NoiseAdaptation = exports.MultichannelSpatialiser = exports.DialogEnhancement = exports.StreamSelector = exports.HeadphonesEqualization = exports.CascadeNode = undefined;
+exports.unittests = exports.utilities = exports.AudioStreamDescription = exports.AudioStreamDescriptionCollection = exports.SmartFader = exports.ObjectSpatialiserAndMixer = exports.NoiseAdaptation = exports.MultichannelSpatialiser = exports.DialogEnhancement = exports.StreamSelector = exports.HeadphonesEqualization = exports.SumDiffNode = exports.CascadeNode = undefined;
 
 var _index = require('./dialog-enhancement/index.js');
 
@@ -44,6 +44,7 @@ var _index16 = _interopRequireDefault(_index15);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.CascadeNode = _index14.CascadeNode;
+exports.SumDiffNode = _index14.SumDiffNode;
 exports.HeadphonesEqualization = _index14.HeadphonesEqualization;
 exports.StreamSelector = _index13.default;
 exports.DialogEnhancement = _index2.default;
