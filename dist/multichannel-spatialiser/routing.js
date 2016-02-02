@@ -92,7 +92,6 @@ var StreamRouting = function (_AbstractNode) {
 
         /// hard-coded version
         /*
-        /// now do the connections
         {
             //==============================================================================
             /// main video L
@@ -123,7 +122,6 @@ var StreamRouting = function (_AbstractNode) {
 
         /// flexible version
         {
-
             /// retrieves the AudioStreamDescriptionCollection
             /// (mainAudio, extendedAmbience, extendedComments and extendedDialogs)
             var asdc = _this._audioStreamDescriptionCollection.streams;
@@ -163,7 +161,7 @@ var StreamRouting = function (_AbstractNode) {
                             throw new Error("Pas bon...");
                         }
 
-                        _this._splitterNode.connect(_this._mergerNode, k, destinationIndex);
+                        _this._splitterNode.connect(_this._mergerNode, channelIndex, destinationIndex);
 
                         channelIndex++;
                     }

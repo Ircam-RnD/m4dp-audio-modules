@@ -547,6 +547,7 @@ var AudioStreamDescription = exports.AudioStreamDescription = function () {
     _createClass(AudioStreamDescription, [{
         key: "channelIsCenter",
 
+        //==============================================================================
         /**
          * Returns true if the i-th channel corresponds to center
          * @type {int} channelIndex : index of the channel to query
@@ -558,28 +559,9 @@ var AudioStreamDescription = exports.AudioStreamDescription = function () {
             }
 
             if (this._type === "Mono") {
-                switch (channelIndex) {
-                    case 0:
-                        return true;
-                    default:
-                        return false;
-                }
-            } else if (this._type === "Stereo") {
-                return false;
-            } else if (this._type === "MultiWithoutLFE") {
-                switch (channelIndex) {
-                    case 2:
-                        return true;
-                    default:
-                        return false;
-                }
-            } else if (this._type === "MultiWithLFE") {
-                switch (channelIndex) {
-                    case 2:
-                        return true;
-                    default:
-                        return false;
-                }
+                return channelIndex === 0 ? true : false;
+            } else if (this._type === "MultiWithoutLFE" || this._type === "MultiWithLFE") {
+                return channelIndex === 2 ? true : false;
             } else {
                 return false;
             }
@@ -598,19 +580,8 @@ var AudioStreamDescription = exports.AudioStreamDescription = function () {
                 throw new Error("Invalid channel index : " + channelIndex);
             }
 
-            if (this._type === "Mono") {
-                return false;
-            } else if (this._type === "Stereo") {
-                return false;
-            } else if (this._type === "MultiWithoutLFE") {
-                return false;
-            } else if (this._type === "MultiWithLFE") {
-                switch (channelIndex) {
-                    case 6:
-                        return true;
-                    default:
-                        return false;
-                }
+            if (this._type === "MultiWithLFE" && channelIndex === 6) {
+                return true;
             } else {
                 return false;
             }
@@ -669,6 +640,12 @@ var AudioStreamDescription = exports.AudioStreamDescription = function () {
 
             return pos[channelIndex] === -110 ? true : false;
         }
+
+        /**
+         * Returns true if the i-th channel corresponds to RS
+         * @type {int} channelIndex : index of the channel to query
+         */
+
     }, {
         key: "channelIsRightSurround",
         value: function channelIsRightSurround(channelIndex) {
@@ -682,6 +659,7 @@ var AudioStreamDescription = exports.AudioStreamDescription = function () {
             return pos[channelIndex] === +110 ? true : false;
         }
 
+        //==============================================================================
         /**
          * Returns the number of channels of the stream
          * @type {number}
@@ -723,6 +701,7 @@ var AudioStreamDescription = exports.AudioStreamDescription = function () {
             }
         }
 
+        //==============================================================================
         /**
          * Returns the type of the stream
          * @type {string}
@@ -734,6 +713,7 @@ var AudioStreamDescription = exports.AudioStreamDescription = function () {
             return this._type;
         }
 
+        //==============================================================================
         /**
          * Set active, if stream is currently playing or not
          * @type {boolean}
@@ -753,6 +733,7 @@ var AudioStreamDescription = exports.AudioStreamDescription = function () {
             return this._active;
         }
 
+        //==============================================================================
         /**
          * Set the loudness value of audio stream
          * @type {number}
@@ -772,6 +753,7 @@ var AudioStreamDescription = exports.AudioStreamDescription = function () {
             return this._loudness;
         }
 
+        //==============================================================================
         /**
          * Set the maxTruePeak of audio stream
          * @type {number}
@@ -791,6 +773,7 @@ var AudioStreamDescription = exports.AudioStreamDescription = function () {
             return this._maxTruePeak;
         }
 
+        //==============================================================================
         /**
          * Set dialog, if stream is currently a dialog or not
          * @type {boolean}
@@ -810,6 +793,7 @@ var AudioStreamDescription = exports.AudioStreamDescription = function () {
             return this._dialog;
         }
 
+        //==============================================================================
         /**
          * Set ambiance, if stream is currently an ambiance or not
          * @type {boolean}
@@ -829,6 +813,7 @@ var AudioStreamDescription = exports.AudioStreamDescription = function () {
             return this._ambiance;
         }
 
+        //==============================================================================
         /**
          * Set commentary, if stream is currently a commentary (audio description) or not
          * @type {boolean}
@@ -2388,7 +2373,6 @@ var StreamRouting = function (_AbstractNode) {
 
         /// hard-coded version
         /*
-        /// now do the connections
         {
             //==============================================================================
             /// main video L
@@ -2419,7 +2403,6 @@ var StreamRouting = function (_AbstractNode) {
 
         /// flexible version
         {
-
             /// retrieves the AudioStreamDescriptionCollection
             /// (mainAudio, extendedAmbience, extendedComments and extendedDialogs)
             var asdc = _this._audioStreamDescriptionCollection.streams;
@@ -2459,7 +2442,7 @@ var StreamRouting = function (_AbstractNode) {
                             throw new Error("Pas bon...");
                         }
 
-                        _this._splitterNode.connect(_this._mergerNode, k, destinationIndex);
+                        _this._splitterNode.connect(_this._mergerNode, channelIndex, destinationIndex);
 
                         channelIndex++;
                     }
