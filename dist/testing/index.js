@@ -1,7 +1,7 @@
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+    value: true
 });
 
 var _testbiquad = require('./testbiquad.js');
@@ -28,6 +28,14 @@ var _testtransaural = require('./testtransaural.js');
 
 var _testtransaural2 = _interopRequireDefault(_testtransaural);
 
+var _testmultichannel = require('./testmultichannel.js');
+
+var _testmultichannel2 = _interopRequireDefault(_testmultichannel);
+
+var _testrouting = require('./testrouting.js');
+
+var _testrouting2 = _interopRequireDefault(_testrouting);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 //==============================================================================
@@ -42,12 +50,14 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 /************************************************************************************/
 
 var unittests = {
-  biquadtests: _testbiquad2.default,
-  cascadetests: _testcascade2.default,
-  sofatests: _testsofa2.default,
-  binauraltests: _testbinaural2.default,
-  sumdifftests: _testsumdiff2.default,
-  transauraltests: _testtransaural2.default
+    biquadtests: _testbiquad2.default,
+    cascadetests: _testcascade2.default,
+    sofatests: _testsofa2.default,
+    binauraltests: _testbinaural2.default,
+    sumdifftests: _testsumdiff2.default,
+    transauraltests: _testtransaural2.default,
+    multichanneltests: _testmultichannel2.default,
+    routingtests: _testrouting2.default
 };
 
 exports.default = unittests;

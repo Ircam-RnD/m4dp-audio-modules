@@ -545,6 +545,149 @@ var AudioStreamDescription = exports.AudioStreamDescription = function () {
      */
 
     _createClass(AudioStreamDescription, [{
+        key: "channelIsCenter",
+
+        /**
+         * Returns true if the i-th channel corresponds to center
+         * @type {int} channelIndex : index of the channel to query
+         */
+        value: function channelIsCenter(channelIndex) {
+
+            if (channelIndex < 0 || channelIndex >= this.numChannels) {
+                throw new Error("Invalid channel index : " + channelIndex);
+            }
+
+            if (this._type === "Mono") {
+                switch (channelIndex) {
+                    case 0:
+                        return true;
+                    default:
+                        return false;
+                }
+            } else if (this._type === "Stereo") {
+                return false;
+            } else if (this._type === "MultiWithoutLFE") {
+                switch (channelIndex) {
+                    case 2:
+                        return true;
+                    default:
+                        return false;
+                }
+            } else if (this._type === "MultiWithLFE") {
+                switch (channelIndex) {
+                    case 2:
+                        return true;
+                    default:
+                        return false;
+                }
+            } else {
+                return false;
+            }
+        }
+
+        /**
+         * Returns true if the i-th channel corresponds to LFE
+         * @type {int} channelIndex : index of the channel to query
+         */
+
+    }, {
+        key: "channelIsLfe",
+        value: function channelIsLfe(channelIndex) {
+
+            if (channelIndex < 0 || channelIndex >= this.numChannels) {
+                throw new Error("Invalid channel index : " + channelIndex);
+            }
+
+            if (this._type === "Mono") {
+                return false;
+            } else if (this._type === "Stereo") {
+                return false;
+            } else if (this._type === "MultiWithoutLFE") {
+                return false;
+            } else if (this._type === "MultiWithLFE") {
+                switch (channelIndex) {
+                    case 6:
+                        return true;
+                    default:
+                        return false;
+                }
+            } else {
+                return false;
+            }
+        }
+
+        /**
+         * Returns true if the i-th channel corresponds to LEFT
+         * @type {int} channelIndex : index of the channel to query
+         */
+
+    }, {
+        key: "channelIsLeft",
+        value: function channelIsLeft(channelIndex) {
+
+            if (channelIndex < 0 || channelIndex >= this.numChannels) {
+                throw new Error("Invalid channel index : " + channelIndex);
+            }
+
+            var pos = this.channelPositions();
+
+            return pos[channelIndex] === -30 ? true : false;
+        }
+
+        /**
+         * Returns true if the i-th channel corresponds to RIGHT
+         * @type {int} channelIndex : index of the channel to query
+         */
+
+    }, {
+        key: "channelIsRight",
+        value: function channelIsRight(channelIndex) {
+
+            if (channelIndex < 0 || channelIndex >= this.numChannels) {
+                throw new Error("Invalid channel index : " + channelIndex);
+            }
+
+            var pos = this.channelPositions();
+
+            return pos[channelIndex] === +30 ? true : false;
+        }
+
+        /**
+         * Returns true if the i-th channel corresponds to LS
+         * @type {int} channelIndex : index of the channel to query
+         */
+
+    }, {
+        key: "channelIsLeftSurround",
+        value: function channelIsLeftSurround(channelIndex) {
+
+            if (channelIndex < 0 || channelIndex >= this.numChannels) {
+                throw new Error("Invalid channel index : " + channelIndex);
+            }
+
+            var pos = this.channelPositions();
+
+            return pos[channelIndex] === -110 ? true : false;
+        }
+    }, {
+        key: "channelIsRightSurround",
+        value: function channelIsRightSurround(channelIndex) {
+
+            if (channelIndex < 0 || channelIndex >= this.numChannels) {
+                throw new Error("Invalid channel index : " + channelIndex);
+            }
+
+            var pos = this.channelPositions();
+
+            return pos[channelIndex] === +110 ? true : false;
+        }
+
+        /**
+         * Returns the number of channels of the stream
+         * @type {number}
+         */
+
+    }, {
         key: "channelPositions",
         get: function get() {
             switch (this._type) {
@@ -563,12 +706,6 @@ var AudioStreamDescription = exports.AudioStreamDescription = function () {
                     return [1, 2, 3, 4, 5, 6, 7, 8];
             }
         }
-
-        /**
-         * Returns the number of channels of the stream
-         * @type {number}
-         */
-
     }, {
         key: "numChannels",
         get: function get() {
@@ -1854,7 +1991,7 @@ exports.AudioStreamDescriptionCollection = _index11.AudioStreamDescriptionCollec
 exports.AudioStreamDescription = _index11.AudioStreamDescription;
 exports.utilities = _utils2.default;
 exports.unittests = _index16.default;
-},{"./core/index.js":2,"./core/utils.js":3,"./dialog-enhancement/index.js":4,"./dsp/index.js":7,"./multichannel-spatialiser/index.js":12,"./noise-adaptation/index.js":13,"./object-spatialiser-and-mixer/index.js":14,"./smart-fader/index.js":15,"./stream-selector/index.js":16,"./testing/index.js":17}],12:[function(require,module,exports){
+},{"./core/index.js":2,"./core/utils.js":3,"./dialog-enhancement/index.js":4,"./dsp/index.js":7,"./multichannel-spatialiser/index.js":12,"./noise-adaptation/index.js":14,"./object-spatialiser-and-mixer/index.js":15,"./smart-fader/index.js":16,"./stream-selector/index.js":17,"./testing/index.js":18}],12:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -1921,6 +2058,7 @@ var MultichannelSpatialiser = function (_AbstractNode) {
 
         _this._hrtf = hrtf;
         _this._headphonesEqualizationNode = new _headphoneequalization2.default(audioContext);
+        _this._transauralNode = new _transaural.TransauralShufflerNode(audioContext);
 
         _this._listeningAxis = listeningAxis;
 
@@ -2156,6 +2294,202 @@ var MultichannelSpatialiser = function (_AbstractNode) {
 
 exports.default = MultichannelSpatialiser;
 },{"../core/index.js":2,"../core/utils.js":3,"../dsp/headphoneequalization.js":6,"../dsp/transaural.js":10}],13:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _index = require("../core/index.js");
+
+var _index2 = _interopRequireDefault(_index);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /************************************************************************************/
+/*!
+ *   @file       index.js
+ *   @brief      This class takes the 10 audio streams and produces a 5.1 output stream
+ *   @author     Thibaut Carpentier
+ *   @date       01/2016
+ *
+ */
+/************************************************************************************/
+
+var StreamRouting = function (_AbstractNode) {
+    _inherits(StreamRouting, _AbstractNode);
+
+    //==============================================================================
+    /**
+     * @brief This class takes the 10 audio streams and produces a 5.1 output stream
+     * @param {AudioContext} audioContext - audioContext instance.
+     * @param {AudioStreamDescriptionCollection} audioStreamDescriptionCollection - audioStreamDescriptionCollection
+     *
+     * @details With the WebAudioAPI specifications, the 5.1 output stream is arranged as : 
+     *
+     *   0: L: left
+     *   1: R: right
+     *   2: C: center
+     *   3: LFE: subwoofer
+     *   4: SL: surround left
+     *   5: SR: surround right
+     *
+     */
+
+    function StreamRouting(audioContext) {
+        var audioStreamDescriptionCollection = arguments.length <= 1 || arguments[1] === undefined ? undefined : arguments[1];
+
+        _classCallCheck(this, StreamRouting);
+
+        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(StreamRouting).call(this, audioContext, audioStreamDescriptionCollection));
+
+        _this._splitterNode = undefined;
+        _this._mergerNode = undefined;
+
+        if (typeof audioStreamDescriptionCollection === "undefined") {
+            throw new Error("the audioStreamDescriptionCollection must be defined !");
+        }
+
+        /// the total number of incoming channels, including all the streams
+        /// (mainAudio, extendedAmbience, extendedComments and extendedDialogs)
+        var totalNumberOfChannels_ = _this._audioStreamDescriptionCollection.totalNumberOfChannels;
+
+        /// sanity check
+        /// mainAudio (2) + extendedAmbience (6) + extendedComments (1) + extendedDialogs (1) = 10
+        if (totalNumberOfChannels_ != 10) {
+            throw new Error("Ca parait pas bon...");
+        }
+
+        _this._splitterNode = audioContext.createChannelSplitter(totalNumberOfChannels_);
+
+        var numOutputChannels = 6; /// 5.1
+
+        _this._mergerNode = audioContext.createChannelMerger(numOutputChannels);
+
+        /// sanity checks
+        if (_this._splitterNode.numberOfInputs != 1 || _this._splitterNode.numberOfOutputs != totalNumberOfChannels_) {
+            throw new Error("Pas bon");
+        }
+
+        /// split the input streams into 10 independent channels
+        _this.input.connect(_this._splitterNode);
+
+        /// index of the destination channels, according to the WAA specifications
+        var outputIndexL = 0;
+        var outputIndexR = 1;
+        var outputIndexC = 2;
+        var outputIndexLFE = 3;
+        var outputIndexLS = 4;
+        var outputIndexRS = 5;
+
+        /// hard-coded version
+        /*
+        /// now do the connections
+        {
+            //==============================================================================
+            /// main video L
+            this._splitterNode.connect( this._mergerNode, 0, outputIndexL );
+             /// main video R
+            this._splitterNode.connect( this._mergerNode, 1, outputIndexR );
+             //==============================================================================
+            /// extended ambience L
+            this._splitterNode.connect( this._mergerNode, 2, outputIndexL );
+             /// extended ambience R
+            this._splitterNode.connect( this._mergerNode, 3, outputIndexR );
+             /// extended ambience C
+            this._splitterNode.connect( this._mergerNode, 4, outputIndexC );
+             /// extended ambience LS
+            this._splitterNode.connect( this._mergerNode, 5, outputIndexLS );
+             /// extended ambience RS
+            this._splitterNode.connect( this._mergerNode, 6, outputIndexRS );
+             /// extended ambience LFE
+            this._splitterNode.connect( this._mergerNode, 7, outputIndexLFE );
+             //==============================================================================
+            /// extended audio comments (mono)
+            this._splitterNode.connect( this._mergerNode, 8, outputIndexC );
+             //==============================================================================
+            /// extended audio dialogs (mono)
+            this._splitterNode.connect( this._mergerNode, 9, outputIndexC );
+        }
+        */
+
+        /// flexible version
+        {
+
+            /// retrieves the AudioStreamDescriptionCollection
+            /// (mainAudio, extendedAmbience, extendedComments and extendedDialogs)
+            var asdc = _this._audioStreamDescriptionCollection.streams;
+
+            /// input channel index (in the splitter node)
+            var channelIndex = 0;
+
+            /// go through all the streams
+            var _iteratorNormalCompletion = true;
+            var _didIteratorError = false;
+            var _iteratorError = undefined;
+
+            try {
+                for (var _iterator = asdc[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                    var stream = _step.value;
+
+                    var numChannelsForThisStream = stream.numChannels;
+
+                    for (var k = 0; k < numChannelsForThisStream; k++) {
+
+                        /// destination index (in the merger node)
+                        var destinationIndex = undefined;
+
+                        if (stream.channelIsLeft(k) === true) {
+                            destinationIndex = outputIndexL;
+                        } else if (stream.channelIsRight(k) === true) {
+                            destinationIndex = outputIndexR;
+                        } else if (stream.channelIsCenter(k) === true) {
+                            destinationIndex = outputIndexC;
+                        } else if (stream.channelIsLfe(k) === true) {
+                            destinationIndex = outputIndexLFE;
+                        } else if (stream.channelIsLeftSurround(k) === true) {
+                            destinationIndex = outputIndexLS;
+                        } else if (stream.channelIsRightSurround(k) === true) {
+                            destinationIndex = outputIndexRS;
+                        } else {
+                            throw new Error("Pas bon...");
+                        }
+
+                        _this._splitterNode.connect(_this._mergerNode, k, destinationIndex);
+
+                        channelIndex++;
+                    }
+                }
+            } catch (err) {
+                _didIteratorError = true;
+                _iteratorError = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion && _iterator.return) {
+                        _iterator.return();
+                    }
+                } finally {
+                    if (_didIteratorError) {
+                        throw _iteratorError;
+                    }
+                }
+            }
+        }
+
+        /// connect the merger node to the output
+        _this._mergerNode.connect(_this._output);
+        return _this;
+    }
+
+    return StreamRouting;
+}(_index2.default);
+
+exports.default = StreamRouting;
+},{"../core/index.js":2}],14:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -2227,7 +2561,7 @@ var NoiseAdaptation = function (_AbstractNode) {
 }(_index2.default);
 
 exports.default = NoiseAdaptation;
-},{"../core/index.js":2}],14:[function(require,module,exports){
+},{"../core/index.js":2}],15:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -2314,7 +2648,7 @@ var ObjectSpatialiserAndMixer = function (_MultichannelSpatiali) {
 }(_index2.default);
 
 exports.default = ObjectSpatialiserAndMixer;
-},{"../multichannel-spatialiser/index.js":12}],15:[function(require,module,exports){
+},{"../multichannel-spatialiser/index.js":12}],16:[function(require,module,exports){
 'use strict';
 
 var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
@@ -2579,7 +2913,7 @@ var SmartFader = function (_AbstractNode) {
 }(_index2.default);
 
 exports.default = SmartFader;
-},{"../core/index.js":2,"../core/utils.js":3}],16:[function(require,module,exports){
+},{"../core/index.js":2,"../core/utils.js":3}],17:[function(require,module,exports){
 "use strict";
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -2751,11 +3085,11 @@ var StreamSelector = function (_AbstractNode) {
 }(_index2.default);
 
 exports.default = StreamSelector;
-},{"../core/index.js":2}],17:[function(require,module,exports){
+},{"../core/index.js":2}],18:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+    value: true
 });
 
 var _testbiquad = require('./testbiquad.js');
@@ -2782,6 +3116,14 @@ var _testtransaural = require('./testtransaural.js');
 
 var _testtransaural2 = _interopRequireDefault(_testtransaural);
 
+var _testmultichannel = require('./testmultichannel.js');
+
+var _testmultichannel2 = _interopRequireDefault(_testmultichannel);
+
+var _testrouting = require('./testrouting.js');
+
+var _testrouting2 = _interopRequireDefault(_testrouting);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 //==============================================================================
@@ -2796,16 +3138,18 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 /************************************************************************************/
 
 var unittests = {
-  biquadtests: _testbiquad2.default,
-  cascadetests: _testcascade2.default,
-  sofatests: _testsofa2.default,
-  binauraltests: _testbinaural2.default,
-  sumdifftests: _testsumdiff2.default,
-  transauraltests: _testtransaural2.default
+    biquadtests: _testbiquad2.default,
+    cascadetests: _testcascade2.default,
+    sofatests: _testsofa2.default,
+    binauraltests: _testbinaural2.default,
+    sumdifftests: _testsumdiff2.default,
+    transauraltests: _testtransaural2.default,
+    multichanneltests: _testmultichannel2.default,
+    routingtests: _testrouting2.default
 };
 
 exports.default = unittests;
-},{"./testbinaural.js":18,"./testbiquad.js":19,"./testcascade.js":20,"./testsofa.js":21,"./testsumdiff.js":22,"./testtransaural.js":23}],18:[function(require,module,exports){
+},{"./testbinaural.js":19,"./testbiquad.js":20,"./testcascade.js":21,"./testmultichannel.js":22,"./testrouting.js":23,"./testsofa.js":24,"./testsumdiff.js":25,"./testtransaural.js":26}],19:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2903,7 +3247,7 @@ var binauraltests = {
 };
 
 exports.default = binauraltests;
-},{"../core/bufferutils.js":1,"./testsofa.js":21}],19:[function(require,module,exports){
+},{"../core/bufferutils.js":1,"./testsofa.js":24}],20:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -3000,7 +3344,7 @@ var biquadtests = {
 };
 
 exports.default = biquadtests;
-},{"../core/bufferutils.js":1}],20:[function(require,module,exports){
+},{"../core/bufferutils.js":1}],21:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -3108,7 +3452,179 @@ var cascadetests = {
 };
 
 exports.default = cascadetests;
-},{"../core/bufferutils.js":1,"../dsp/cascade.js":5}],21:[function(require,module,exports){
+},{"../core/bufferutils.js":1,"../dsp/cascade.js":5}],22:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.testMultiChannel = testMultiChannel;
+
+var _bufferutils = require("../core/bufferutils.js");
+
+var _bufferutils2 = _interopRequireDefault(_bufferutils);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+//==============================================================================
+function testMultiChannel() {
+
+    var sampleRate = 44100;
+    var bufferSize = 512;
+    var numChannels = 6; /// 5.1
+
+    /// create an offline audio context
+    var audioContext1 = new OfflineAudioContext(numChannels, bufferSize, sampleRate);
+
+    /// create a test buffer
+    var buffer = audioContext1.createBuffer(numChannels, bufferSize, sampleRate);
+
+    /// just a precaution
+    _bufferutils2.default.clearBuffer(buffer);
+    _bufferutils2.default.fillChannel(buffer, 0, 0.1);
+    _bufferutils2.default.fillChannel(buffer, 1, 0.2);
+    _bufferutils2.default.fillChannel(buffer, 2, 0.3);
+    _bufferutils2.default.fillChannel(buffer, 3, 0.4);
+    _bufferutils2.default.fillChannel(buffer, 4, 0.5);
+    _bufferutils2.default.fillChannel(buffer, 5, 0.6);
+
+    /// create a buffer source
+    var bufferSource = audioContext1.createBufferSource();
+
+    /// reference the test buffer with the buffer source
+    bufferSource.buffer = buffer;
+
+    bufferSource.connect(audioContext1.destination);
+
+    /// prepare the rendering
+    var localTime = 0;
+    bufferSource.start(localTime);
+
+    /// receive notification when the rendering is completed
+    audioContext1.oncomplete = function (output) {
+
+        var buf = output.renderedBuffer;
+
+        var bufUrl = _bufferutils2.default.writeBufferToTextFileWithMatlabFormat(buf);
+        console.log("buffer URL :  " + bufUrl);
+
+        ///@n it seems that the audioContext1.destination has only 2 channels
+        /// as long as no multichannel audio device is plugged ?
+
+        debugger;
+    };
+
+    /// start rendering
+    audioContext1.startRendering();
+}
+
+//==============================================================================
+/************************************************************************************/
+/*!
+ *   @file       testmultichannel.js
+ *   @brief      Misc test functions for 5.1
+ *   @author     Thibaut Carpentier
+ *   @date       01/2016
+ *
+ */
+/************************************************************************************/
+
+var multichanneltests = {
+    testMultiChannel: testMultiChannel
+};
+
+exports.default = multichanneltests;
+},{"../core/bufferutils.js":1}],23:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.testRouting = testRouting;
+
+var _bufferutils = require('../core/bufferutils.js');
+
+var _bufferutils2 = _interopRequireDefault(_bufferutils);
+
+var _routing = require('../multichannel-spatialiser/routing.js');
+
+var _routing2 = _interopRequireDefault(_routing);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+//==============================================================================
+/************************************************************************************/
+/*!
+ *   @file       testrouting.js
+ *   @brief      Misc test functions for 5.1
+ *   @author     Thibaut Carpentier
+ *   @date       01/2016
+ *
+ */
+/************************************************************************************/
+
+function testRouting() {
+
+    var sampleRate = 44100;
+    var bufferSize = 512;
+    var numInputs = 10;
+    var numOutputs = 6; /// 5.1
+
+    /// create an offline audio context
+    var audioContext1 = new OfflineAudioContext(numOutputs, bufferSize, sampleRate);
+
+    /// create a test buffer
+    var buffer = audioContext1.createBuffer(numInputs, bufferSize, sampleRate);
+
+    /// just a precaution
+    _bufferutils2.default.clearBuffer(buffer);
+    for (var i = 0; i < numInputs; i++) {
+        _bufferutils2.default.fillChannel(buffer, i, (i + 1) * 0.1);
+    }
+
+    /// create a buffer source
+    var bufferSource = audioContext1.createBufferSource();
+
+    /// reference the test buffer with the buffer source
+    bufferSource.buffer = buffer;
+
+    /// create a node
+    var routingNode = new _routing2.default(audioContext1);
+
+    /// connect the node to the buffer source
+    bufferSource.connect(routingNode.input);
+
+    routingNode.connect(audioContext1.destination);
+
+    /// prepare the rendering
+    var localTime = 0;
+    bufferSource.start(localTime);
+
+    /// receive notification when the rendering is completed
+    audioContext1.oncomplete = function (output) {
+
+        var buf = output.renderedBuffer;
+
+        var bufUrl = _bufferutils2.default.writeBufferToTextFileWithMatlabFormat(buf);
+        console.log("buffer URL :  " + bufUrl);
+
+        ///@n it seems that the audioContext1.destination has only 2 channels
+        /// as long as no multichannel audio device is plugged ?
+
+        debugger;
+    };
+
+    /// start rendering
+    audioContext1.startRendering();
+}
+
+//==============================================================================
+var routingtests = {
+    testRouting: testRouting
+};
+
+exports.default = routingtests;
+},{"../core/bufferutils.js":1,"../multichannel-spatialiser/routing.js":13}],24:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -3262,7 +3778,7 @@ var sofatests = {
 };
 
 exports.default = sofatests;
-},{"../core/utils.js":3,"binaural":34}],22:[function(require,module,exports){
+},{"../core/utils.js":3,"binaural":37}],25:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -3348,7 +3864,7 @@ var sumdifftests = {
 };
 
 exports.default = sumdifftests;
-},{"../core/bufferutils.js":1,"../dsp/sumdiff.js":9}],23:[function(require,module,exports){
+},{"../core/bufferutils.js":1,"../dsp/sumdiff.js":9}],26:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -3431,7 +3947,7 @@ var transauraltests = {
 };
 
 exports.default = transauraltests;
-},{"../core/bufferutils.js":1,"../dsp/transaural.js":10}],24:[function(require,module,exports){
+},{"../core/bufferutils.js":1,"../dsp/transaural.js":10}],27:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
@@ -3483,7 +3999,7 @@ var BinauralPanner = exports.BinauralPanner = function () {
 }();
 
 exports.default = BinauralPanner;
-},{"./Source":25}],25:[function(require,module,exports){
+},{"./Source":28}],28:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -3589,7 +4105,7 @@ var Source = exports.Source = function () {
 }();
 
 exports.default = Source;
-},{}],26:[function(require,module,exports){
+},{}],29:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -3615,7 +4131,7 @@ exports.default = {
   Source: _Source2.default,
   utilities: _utilities2.default
 };
-},{"./BinauralPanner":24,"./Source":25,"./utilities":27}],27:[function(require,module,exports){
+},{"./BinauralPanner":27,"./Source":28,"./utilities":30}],30:[function(require,module,exports){
 'use strict';
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
@@ -3707,7 +4223,7 @@ exports.default = {
   createNoiseBuffer: createNoiseBuffer,
   resampleFloat32Array: resampleFloat32Array
 };
-},{}],28:[function(require,module,exports){
+},{}],31:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -3723,7 +4239,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 exports.default = {
   utilities: _utilities2.default
 };
-},{"./utilities":29}],29:[function(require,module,exports){
+},{"./utilities":32}],32:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -3754,7 +4270,7 @@ exports.default = {
   almostEquals: almostEquals,
   almostEqualsModulo: almostEqualsModulo
 };
-},{}],30:[function(require,module,exports){
+},{}],33:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -3793,7 +4309,7 @@ exports.default = {
   distanceSquared: distanceSquared,
   tree: _kd2.default
 };
-},{"kd.tree":51}],31:[function(require,module,exports){
+},{"kd.tree":54}],34:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -4013,7 +4529,7 @@ exports.default = {
   typedToSofaCartesian: typedToSofaCartesian,
   typedToGl: typedToGl
 };
-},{"./degree":32}],32:[function(require,module,exports){
+},{"./degree":35}],35:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -4063,7 +4579,7 @@ exports.default = {
   toRadian: toRadian,
   toRadianFactor: toRadianFactor
 };
-},{}],33:[function(require,module,exports){
+},{}],36:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -4089,7 +4605,7 @@ exports.default = {
   degree: _degree2.default,
   KdTree: _KdTree2.default
 };
-},{"./KdTree":30,"./coordinates":31,"./degree":32}],34:[function(require,module,exports){
+},{"./KdTree":33,"./coordinates":34,"./degree":35}],37:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -4120,7 +4636,7 @@ exports.default = {
   geometry: _geometry2.default,
   sofa: _sofa2.default
 };
-},{"./audio":26,"./common":28,"./geometry":33,"./sofa":38}],35:[function(require,module,exports){
+},{"./audio":29,"./common":31,"./geometry":36,"./sofa":41}],38:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
@@ -4637,7 +5153,7 @@ var HrtfSet = exports.HrtfSet = function () {
 }();
 
 exports.default = HrtfSet;
-},{"../audio/utilities":27,"../geometry/KdTree":30,"../geometry/coordinates":31,"./dataSetParse":37,"./sofaParse":39,"gl-matrix":41}],36:[function(require,module,exports){
+},{"../audio/utilities":30,"../geometry/KdTree":33,"../geometry/coordinates":34,"./dataSetParse":40,"./sofaParse":42,"gl-matrix":44}],39:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
@@ -4917,7 +5433,7 @@ var ServerDataBase = exports.ServerDataBase = function () {
 }();
 
 exports.default = ServerDataBase;
-},{"./dataSetParse":37,"./xmlParse":40}],37:[function(require,module,exports){
+},{"./dataSetParse":40,"./xmlParse":43}],40:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -5066,7 +5582,7 @@ function dataSetParse(input) {
 }
 
 exports.default = dataSetParse;
-},{}],38:[function(require,module,exports){
+},{}],41:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -5095,7 +5611,7 @@ exports.default = {
   HrtfSet: _HrtfSet2.default,
   ServerDataBase: _ServerDataBase2.default
 };
-},{"./HrtfSet":35,"./ServerDataBase":36}],39:[function(require,module,exports){
+},{"./HrtfSet":38,"./ServerDataBase":39}],42:[function(require,module,exports){
 'use strict';
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
@@ -5177,7 +5693,7 @@ exports.default = {
   sofaParse: sofaParse,
   sofaTypePrefix: sofaTypePrefix
 };
-},{}],40:[function(require,module,exports){
+},{}],43:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -5231,7 +5747,7 @@ if (typeof window.DOMParser !== 'undefined') {
 }
 
 exports.default = xmlParse;
-},{}],41:[function(require,module,exports){
+},{}],44:[function(require,module,exports){
 /**
  * @fileoverview gl-matrix - High performance matrix and vector operations
  * @author Brandon Jones
@@ -5269,7 +5785,7 @@ exports.quat = require("./gl-matrix/quat.js");
 exports.vec2 = require("./gl-matrix/vec2.js");
 exports.vec3 = require("./gl-matrix/vec3.js");
 exports.vec4 = require("./gl-matrix/vec4.js");
-},{"./gl-matrix/common.js":42,"./gl-matrix/mat2.js":43,"./gl-matrix/mat2d.js":44,"./gl-matrix/mat3.js":45,"./gl-matrix/mat4.js":46,"./gl-matrix/quat.js":47,"./gl-matrix/vec2.js":48,"./gl-matrix/vec3.js":49,"./gl-matrix/vec4.js":50}],42:[function(require,module,exports){
+},{"./gl-matrix/common.js":45,"./gl-matrix/mat2.js":46,"./gl-matrix/mat2d.js":47,"./gl-matrix/mat3.js":48,"./gl-matrix/mat4.js":49,"./gl-matrix/quat.js":50,"./gl-matrix/vec2.js":51,"./gl-matrix/vec3.js":52,"./gl-matrix/vec4.js":53}],45:[function(require,module,exports){
 /* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -5323,7 +5839,7 @@ glMatrix.toRadian = function(a){
 
 module.exports = glMatrix;
 
-},{}],43:[function(require,module,exports){
+},{}],46:[function(require,module,exports){
 /* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -5627,7 +6143,7 @@ mat2.LDU = function (L, D, U, a) {
 
 module.exports = mat2;
 
-},{"./common.js":42}],44:[function(require,module,exports){
+},{"./common.js":45}],47:[function(require,module,exports){
 /* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -5946,7 +6462,7 @@ mat2d.frob = function (a) {
 
 module.exports = mat2d;
 
-},{"./common.js":42}],45:[function(require,module,exports){
+},{"./common.js":45}],48:[function(require,module,exports){
 /* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -6513,7 +7029,7 @@ mat3.frob = function (a) {
 
 module.exports = mat3;
 
-},{"./common.js":42}],46:[function(require,module,exports){
+},{"./common.js":45}],49:[function(require,module,exports){
 /* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -7798,7 +8314,7 @@ mat4.frob = function (a) {
 
 module.exports = mat4;
 
-},{"./common.js":42}],47:[function(require,module,exports){
+},{"./common.js":45}],50:[function(require,module,exports){
 /* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -8353,7 +8869,7 @@ quat.str = function (a) {
 
 module.exports = quat;
 
-},{"./common.js":42,"./mat3.js":45,"./vec3.js":49,"./vec4.js":50}],48:[function(require,module,exports){
+},{"./common.js":45,"./mat3.js":48,"./vec3.js":52,"./vec4.js":53}],51:[function(require,module,exports){
 /* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -8878,7 +9394,7 @@ vec2.str = function (a) {
 
 module.exports = vec2;
 
-},{"./common.js":42}],49:[function(require,module,exports){
+},{"./common.js":45}],52:[function(require,module,exports){
 /* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -9589,7 +10105,7 @@ vec3.str = function (a) {
 
 module.exports = vec3;
 
-},{"./common.js":42}],50:[function(require,module,exports){
+},{"./common.js":45}],53:[function(require,module,exports){
 /* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -10128,7 +10644,7 @@ vec4.str = function (a) {
 
 module.exports = vec4;
 
-},{"./common.js":42}],51:[function(require,module,exports){
+},{"./common.js":45}],54:[function(require,module,exports){
 /**
  * AUTHOR OF INITIAL JS LIBRARY
  * k-d Tree JavaScript - V 1.0

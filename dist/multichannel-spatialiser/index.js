@@ -64,6 +64,7 @@ var MultichannelSpatialiser = function (_AbstractNode) {
 
         _this._hrtf = hrtf;
         _this._headphonesEqualizationNode = new _headphoneequalization2.default(audioContext);
+        _this._transauralNode = new _transaural.TransauralShufflerNode(audioContext);
 
         _this._listeningAxis = listeningAxis;
 

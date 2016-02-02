@@ -14,7 +14,9 @@
 
 //M4DPAudioModules.unittests.transauraltests.testTransauralShuffler();
 
+//M4DPAudioModules.unittests.multichanneltests.testMultiChannel();
 
+M4DPAudioModules.unittests.routingtests.testRouting();
 
 var dumpObject = function(obj) {
 	console.debug("Dumping: "+obj);
@@ -157,10 +159,9 @@ var headphonesEqualization = new M4DPAudioModules.HeadphonesEqualization( audioC
 /*
 /// test pour voir si on a du son dans les canaux extendedChannelSplitterNode
 var oneGain = audioContext.createGain();
-extendedChannelSplitterNode.connect( oneGain, 7, 0 );
+extendedChannelSplitterNode.connect( oneGain, 2, 0 );
 oneGain.connect( audioContext.destination, 0, 0 );
 */
-
 
 /// receives 4 ADSC with 10 channels in total
 channelMerger.connect( streamSelector.input );

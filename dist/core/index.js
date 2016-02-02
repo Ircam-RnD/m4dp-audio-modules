@@ -322,6 +322,149 @@ var AudioStreamDescription = exports.AudioStreamDescription = function () {
      */
 
     _createClass(AudioStreamDescription, [{
+        key: "channelIsCenter",
+
+        /**
+         * Returns true if the i-th channel corresponds to center
+         * @type {int} channelIndex : index of the channel to query
+         */
+        value: function channelIsCenter(channelIndex) {
+
+            if (channelIndex < 0 || channelIndex >= this.numChannels) {
+                throw new Error("Invalid channel index : " + channelIndex);
+            }
+
+            if (this._type === "Mono") {
+                switch (channelIndex) {
+                    case 0:
+                        return true;
+                    default:
+                        return false;
+                }
+            } else if (this._type === "Stereo") {
+                return false;
+            } else if (this._type === "MultiWithoutLFE") {
+                switch (channelIndex) {
+                    case 2:
+                        return true;
+                    default:
+                        return false;
+                }
+            } else if (this._type === "MultiWithLFE") {
+                switch (channelIndex) {
+                    case 2:
+                        return true;
+                    default:
+                        return false;
+                }
+            } else {
+                return false;
+            }
+        }
+
+        /**
+         * Returns true if the i-th channel corresponds to LFE
+         * @type {int} channelIndex : index of the channel to query
+         */
+
+    }, {
+        key: "channelIsLfe",
+        value: function channelIsLfe(channelIndex) {
+
+            if (channelIndex < 0 || channelIndex >= this.numChannels) {
+                throw new Error("Invalid channel index : " + channelIndex);
+            }
+
+            if (this._type === "Mono") {
+                return false;
+            } else if (this._type === "Stereo") {
+                return false;
+            } else if (this._type === "MultiWithoutLFE") {
+                return false;
+            } else if (this._type === "MultiWithLFE") {
+                switch (channelIndex) {
+                    case 6:
+                        return true;
+                    default:
+                        return false;
+                }
+            } else {
+                return false;
+            }
+        }
+
+        /**
+         * Returns true if the i-th channel corresponds to LEFT
+         * @type {int} channelIndex : index of the channel to query
+         */
+
+    }, {
+        key: "channelIsLeft",
+        value: function channelIsLeft(channelIndex) {
+
+            if (channelIndex < 0 || channelIndex >= this.numChannels) {
+                throw new Error("Invalid channel index : " + channelIndex);
+            }
+
+            var pos = this.channelPositions();
+
+            return pos[channelIndex] === -30 ? true : false;
+        }
+
+        /**
+         * Returns true if the i-th channel corresponds to RIGHT
+         * @type {int} channelIndex : index of the channel to query
+         */
+
+    }, {
+        key: "channelIsRight",
+        value: function channelIsRight(channelIndex) {
+
+            if (channelIndex < 0 || channelIndex >= this.numChannels) {
+                throw new Error("Invalid channel index : " + channelIndex);
+            }
+
+            var pos = this.channelPositions();
+
+            return pos[channelIndex] === +30 ? true : false;
+        }
+
+        /**
+         * Returns true if the i-th channel corresponds to LS
+         * @type {int} channelIndex : index of the channel to query
+         */
+
+    }, {
+        key: "channelIsLeftSurround",
+        value: function channelIsLeftSurround(channelIndex) {
+
+            if (channelIndex < 0 || channelIndex >= this.numChannels) {
+                throw new Error("Invalid channel index : " + channelIndex);
+            }
+
+            var pos = this.channelPositions();
+
+            return pos[channelIndex] === -110 ? true : false;
+        }
+    }, {
+        key: "channelIsRightSurround",
+        value: function channelIsRightSurround(channelIndex) {
+
+            if (channelIndex < 0 || channelIndex >= this.numChannels) {
+                throw new Error("Invalid channel index : " + channelIndex);
+            }
+
+            var pos = this.channelPositions();
+
+            return pos[channelIndex] === +110 ? true : false;
+        }
+
+        /**
+         * Returns the number of channels of the stream
+         * @type {number}
+         */
+
+    }, {
         key: "channelPositions",
         get: function get() {
             switch (this._type) {
@@ -340,12 +483,6 @@ var AudioStreamDescription = exports.AudioStreamDescription = function () {
                     return [1, 2, 3, 4, 5, 6, 7, 8];
             }
         }
-
-        /**
-         * Returns the number of channels of the stream
-         * @type {number}
-         */
-
     }, {
         key: "numChannels",
         get: function get() {
