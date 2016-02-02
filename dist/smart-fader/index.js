@@ -62,7 +62,7 @@ var SmartFader = function (_AbstractNode) {
 
         ///@n the gain and dynamic compression are applied similarly to all channels
         _this._gainNode = audioContext.createGain();
-        _this._dynamicCompressorNode = new MultichannelCompressorNode(audioContext, totalNumberOfChannels_);
+        _this._dynamicCompressorNode = new _compressor2.default(audioContext, totalNumberOfChannels_);
 
         /// connect the audio nodes
         {

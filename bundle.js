@@ -1437,10 +1437,18 @@ var MultichannelCompressorNode = function (_AbstractNode) {
      * @param {AudioContext} audioContext - audioContext instance.
      * @param {int} numChannels - number of channels to instanciate
      *
-     * @details It turns out the standard CompressorNode from the WAA 
+     * @details It turns out the standard DynamicsCompressorNode from the WAA 
      *          does some weird stuff when the number of channels is 10 ( > 5.1 ?? )
      *
      *  So we created this class which just instanciate 10 mono compressor nodes in parallel
+     *
+     *  NB : the issues with DynamicsCompressorNode might come from the fact that 
+     *  its default Channel count mode is "explicit"
+     *  It could be possible (but not tested), to solve the issue
+     *  by specifying : 
+     *  DynamicsCompressorNode.channelCountMode = "max"
+     *  DynamicsCompressorNode.channelCount = 10;
+     *
      */
 
     function MultichannelCompressorNode(audioContext) {
@@ -2899,7 +2907,7 @@ var SmartFader = function (_AbstractNode) {
 
         ///@n the gain and dynamic compression are applied similarly to all channels
         _this._gainNode = audioContext.createGain();
-        _this._dynamicCompressorNode = new MultichannelCompressorNode(audioContext, totalNumberOfChannels_);
+        _this._dynamicCompressorNode = new _compressor2.default(audioContext, totalNumberOfChannels_);
 
         /// connect the audio nodes
         {
@@ -4158,6 +4166,12 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.BinauralPanner = undefined;
 
+var _glMatrix = require('gl-matrix');
+
+var _glMatrix2 = _interopRequireDefault(_glMatrix);
+
+var _coordinates = require('../geometry/coordinates');
+
 var _Source = require('./Source');
 
 var _Source2 = _interopRequireDefault(_Source);
@@ -4166,27 +4180,221 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+/**
+ * Binaural panner with multiple sources and a listener.
+ */
+
 var BinauralPanner = exports.BinauralPanner = function () {
   function BinauralPanner() {
+    var _this = this;
+
+    var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
     _classCallCheck(this, BinauralPanner);
+
+    this._audioContext = options.audioContext;
+
+    this.positionsType = typeof options.positionsType !== 'undefined' ? options.positionsType : 'gl';
+
+    this._hrtfSet = options.hrtfSet;
+
+    var sourceCount = typeof options.sourceCount !== 'undefined' ? options.sourceCount : 1;
+
+    this._listenerOutdated = true;
+    this._listenerLookAt = [];
+
+    this._listenerPosition = [];
+    this.listenerPosition = typeof options.listenerPosition !== 'undefined' ? options.listenerPosition : (0, _coordinates.glToTyped)([], [0, 0, 0], this.positionsType);
+
+    this._listenerUp = [];
+    this.listenerUp = typeof options.listenerUp !== 'undefined' ? options.listenerUp : (0, _coordinates.glToTyped)([], [0, 1, 0], this.positionsType);
+
+    this._listenerView = [];
+    this.listenerView = typeof options.listenerView !== 'undefined' ? options.listenerView : (0, _coordinates.glToTyped)([], [0, 0, -1], this.positionsType);
+
+    this._sourcesOutdated = new Array(sourceCount).fill(true);
+
+    this._sources = this._sourcesOutdated.map(function () {
+      return new _Source2.default({
+        audioContext: _this._audioContext,
+        crossfadeDuration: options.crossfadeDuration,
+        hrtfSet: _this._hrtfSet
+      });
+    });
+
+    this._sourcePositionsAbsolute = this._sourcesOutdated.map(function () {
+      return [0, 0, 1]; // allocation and default value
+    });
+
+    this._sourcePositionsRelative = this._sourcesOutdated.map(function () {
+      return [0, 0, 1]; // allocation and default value
+    });
+
+    if (typeof options.sourcePositions !== 'undefined') {
+      this.sourcePositions = options.sourcePositions;
+    }
+
+    this.update();
   }
 
+  // ----------- accessors
+
   _createClass(BinauralPanner, [{
-    key: 'contructor',
-    value: function contructor() {
-      var _this = this;
+    key: 'setSourcePositionByIndex',
+    value: function setSourcePositionByIndex(index, positionRequest) {
+      this._sourcesOutdated[index] = true;
+      (0, _coordinates.typedToGl)(this._sourcePositionsAbsolute[index], positionRequest, this.positionsType);
 
-      var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+      return this;
+    }
 
-      this._audioContext = options.audioContext;
-      this._hrtfSet = options.hrtfSet;
+    // ----------- public methods
 
-      this._sources = options.sourcesPosition.map(function (position) {
-        return new _Source2.default({
-          audioContext: _this._audioContext,
-          hrtfSet: _this._hrtfSet,
-          position: position
-        });
+  }, {
+    key: 'connectInputByIndex',
+    value: function connectInputByIndex(index, nodesToConnect, output, input) {
+      this._sources[index].connectInput(nodesToConnect, output, input);
+
+      return this;
+    }
+  }, {
+    key: 'disconnectInputByIndex',
+    value: function disconnectInputByIndex(index, nodesToDisconnect) {
+      this._sources[index].disconnectInput(nodesToDisconnect);
+
+      return this;
+    }
+  }, {
+    key: 'disconnectInputs',
+    value: function disconnectInputs(nodesToDisconnect) {
+      var nodes = Array.isArray(nodesToDisconnect) ? nodesToDisconnect : [nodesToDisconnect]; // make array
+
+      this._sources.forEach(function (source, index) {
+        source.disconnectInput(nodes[index]);
+      });
+
+      return this;
+    }
+  }, {
+    key: 'connectOutputByIndex',
+    value: function connectOutputByIndex(index, nodesToConnect, output, input) {
+      this._sources[index].connectOutput(nodesToConnect, output, input);
+
+      return this;
+    }
+  }, {
+    key: 'disconnectOutputByIndex',
+    value: function disconnectOutputByIndex(index, nodesToDisconnect) {
+      this._sources[index].disconnectOutput(nodesToDisconnect);
+
+      return this;
+    }
+  }, {
+    key: 'connectOutputs',
+    value: function connectOutputs(nodesToConnect, output, input) {
+      this._sources.forEach(function (source) {
+        source.connectOutput(nodesToConnect, output, input);
+      });
+
+      return this;
+    }
+  }, {
+    key: 'disconnectOutputs',
+    value: function disconnectOutputs(nodesToDisconnect) {
+      this._sources.forEach(function (source) {
+        source.disconnectOutput(nodesToDisconnect);
+      });
+
+      return this;
+    }
+  }, {
+    key: 'update',
+    value: function update() {
+      var _this2 = this;
+
+      if (this._listenerOutdated) {
+        _glMatrix2.default.mat4.lookAt(this._listenerLookAt, this._listenerPosition, this._listenerView, this._listenerUp);
+
+        this._sourcesOutdated.fill(true);
+      }
+
+      this._sourcePositionsAbsolute.forEach(function (positionAbsolute, index) {
+        if (_this2._sourcesOutdated[index]) {
+          _glMatrix2.default.vec3.transformMat4(_this2._sourcePositionsRelative[index], positionAbsolute, _this2._listenerLookAt);
+
+          _this2._sources[index].position = _this2._sourcePositionsRelative[index];
+
+          _this2._sourcesOutdated[index] = false;
+        }
+      });
+
+      return this;
+    }
+  }, {
+    key: 'listenerPosition',
+    set: function set(positionRequest) {
+      (0, _coordinates.typedToGl)(this._listenerPosition, positionRequest, this._positionsType);
+      this._listenerOutdated = true;
+    },
+    get: function get() {
+      return (0, _coordinates.glToTyped)([], this._listenerPosition, this._positionsType);
+    }
+  }, {
+    key: 'listenerUp',
+    set: function set(upRequest) {
+      (0, _coordinates.typedToGl)(this._listenerUp, upRequest, this._positionsType);
+      this._listenerOutdated = true;
+    },
+    get: function get() {
+      return (0, _coordinates.glToTyped)([], this._listenerUp, this._positionsType);
+    }
+  }, {
+    key: 'listenerView',
+    set: function set(viewRequest) {
+      (0, _coordinates.typedToGl)(this._listenerView, viewRequest, this._positionsType);
+      this._listenerOutdated = true;
+    },
+    get: function get() {
+      return (0, _coordinates.glToTyped)([], this._listenerView, this._positionsType);
+    }
+
+    /**
+     * Set coordinates type for positions.
+     * @param {coordinatesType} [type='gl']
+     */
+
+  }, {
+    key: 'positionsType',
+    set: function set(type) {
+      this._positionsType = typeof type !== 'undefined' ? type : 'gl';
+    }
+
+    /**
+     * Get coordinates type for positions.
+     * @returns {coordinatesType}
+     */
+    ,
+    get: function get() {
+      return this._positionsType;
+    }
+  }, {
+    key: 'sourcePositions',
+    set: function set(positionsRequest) {
+      var _this3 = this;
+
+      if (positionsRequest.length !== this._sources.length) {
+        throw new Error('Bad number of source positions: ' + (positionsRequest.length + ' ') + ('instead of ' + this._sources.length));
+      }
+
+      positionsRequest.forEach(function (position, index) {
+        _this3.setSourcePositionByIndex(index, position);
+      });
+    },
+    get: function get() {
+      var _this4 = this;
+
+      return this._sourcePositionsAbsolute.map(function (position) {
+        return (0, _coordinates.glToTyped)([], position, _this4.positionsType);
       });
     }
   }]);
@@ -4195,22 +4403,33 @@ var BinauralPanner = exports.BinauralPanner = function () {
 }();
 
 exports.default = BinauralPanner;
-},{"./Source":29}],29:[function(require,module,exports){
+},{"../geometry/coordinates":35,"./Source":29,"gl-matrix":45}],29:[function(require,module,exports){
 'use strict';
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @fileOverview Source for binaural processing.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author Jean-Philippe.Lambert@ircam.fr
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @copyright 2016 IRCAM, Paris, France
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @license CECILL-2.1
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      */
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.Source = undefined;
+
+var _coordinates = require('../geometry/coordinates');
+
+var _coordinates2 = _interopRequireDefault(_coordinates);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 /**
- * @fileOverview Source for binaural processing.
- * @author Jean-Philippe.Lambert@ircam.fr
- * @copyright 2016 IRCAM, Paris, France
- * @license CECILL-2.1
+ * Single source.
+ *
+ * @see BinauralPanner
  */
 
 var Source = exports.Source = function () {
@@ -4222,78 +4441,141 @@ var Source = exports.Source = function () {
     this._audioContext = options.audioContext;
     this._hrtfSet = options.hrtfSet;
 
-    this._convolver = this._audioContext.createConvolver();
-    this._convolver.normalize = false;
+    this._convolverCurrent = this._audioContext.createConvolver();
+    this._convolverCurrent.normalize = false;
 
-    if (typeof options.position !== 'undefined') {
-      this.position = options.position;
-    }
+    this._gainCurrent = this._audioContext.createGain();
+    this._convolverCurrent.connect(this._gainCurrent);
+
+    this._convolverNext = this._audioContext.createConvolver();
+    this._convolverNext.normalize = false;
+
+    this._gainNext = this._audioContext.createGain();
+    this._convolverNext.connect(this._gainNext);
+
+    this.crossfadeDuration = options.crossfadeDuration;
+
+    this._crossfadeAfterTime = this._audioContext.currentTime;
+    this._crossfadeTimeout = undefined;
+
+    // set position when everything is ready
+    this.position = typeof options.position !== 'undefined' ? options.position : _coordinates2.default.glToTyped([], [0, 0, -1], // front
+    this._hrtfSet.positionsType);
   }
 
+  // ----------- accessors
+
   _createClass(Source, [{
-    key: 'inputConnect',
-    value: function inputConnect(nodesToConnect, output, input) {
+    key: 'connectInput',
+
+    // ----------- public methods
+
+    value: function connectInput(nodesToConnect, output, input) {
       var _this = this;
 
-      var nodes = typeof nodesToConnect[0] === 'undefined' ? [nodesToConnect] // single
-      : nodesToConnect; // array
+      var nodes = Array.isArray(nodesToConnect) ? nodesToConnect : [nodesToConnect]; // make array
+
       nodes.forEach(function (node) {
-        node.connect(_this._convolver, output, input);
+        node.connect(_this._convolverCurrent, output, input);
+        node.connect(_this._convolverNext, output, input);
       });
 
       return this;
     }
   }, {
-    key: 'inputDisconnect',
-    value: function inputDisconnect(nodesToDisconnect) {
+    key: 'disconnectInput',
+    value: function disconnectInput(nodesToDisconnect) {
       var _this2 = this;
 
-      var nodes = typeof nodesToDisconnect[0] === 'undefined' ? [nodesToDisconnect] // single
-      : nodesToDisconnect; // array
+      var nodes = Array.isArray(nodesToDisconnect) ? nodesToDisconnect : [nodesToDisconnect]; // make array
 
       nodes.forEach(function (node) {
-        node.disconnect(_this2._convolver);
+        node.disconnect(_this2._convolverCurrent);
+        node.disconnect(_this2._convolverNext);
       });
 
       return this;
     }
   }, {
-    key: 'outputConnect',
-    value: function outputConnect(nodesToConnect, output, input) {
+    key: 'connectOutput',
+    value: function connectOutput(nodesToConnect, output, input) {
       var _this3 = this;
 
-      var nodes = typeof nodesToConnect[0] === 'undefined' ? [nodesToConnect] // single
-      : nodesToConnect; // array
+      var nodes = Array.isArray(nodesToConnect) ? nodesToConnect : [nodesToConnect]; // make array
 
       nodes.forEach(function (node) {
-        _this3._convolver.connect(node, output, input);
+        _this3._gainCurrent.connect(node, output, input);
+        _this3._gainNext.connect(node, output, input);
       });
 
       return this;
     }
   }, {
-    key: 'outputDisconnect',
-    value: function outputDisconnect(nodesToDisconnect) {
+    key: 'disconnectOutput',
+    value: function disconnectOutput(nodesToDisconnect) {
       var _this4 = this;
 
       if (typeof nodesToDisconnect === 'undefined') {
         // disconnect all
-        this._convolver.disconnect();
+        this._gainCurrent.disconnect();
+        this._gainNext.disconnect();
       } else {
-        var nodes = typeof nodesToDisconnect[0] === 'undefined' ? [nodesToDisconnect] // single
-        : nodesToDisconnect; // array
+        var nodes = Array.isArray(nodesToDisconnect) ? nodesToDisconnect : [nodesToDisconnect]; // make array
 
         nodes.forEach(function (node) {
-          _this4._convolver.disconnect(node);
+          _this4._gainCurrent.disconnect(node);
+          _this4._gainNext.disconnect(node);
         });
       }
 
       return this;
     }
   }, {
+    key: 'crossfadeDuration',
+    set: function set() {
+      var duration = arguments.length <= 0 || arguments[0] === undefined ? 0.02 : arguments[0];
+
+      this._crossfadeDuration = duration;
+    },
+    get: function get() {
+      return this._crossfadeDuration;
+    }
+  }, {
     key: 'position',
     set: function set(positionRequest) {
-      this._convolver.buffer = this._hrtfSet.nearestFir(positionRequest);
+      var _this5 = this;
+
+      clearTimeout(this._crossfadeTimeout);
+      var now = this._audioContext.currentTime;
+      if (now >= this._crossfadeAfterTime) {
+        this._crossfadeAfterTime = now + this._crossfadeDuration;
+
+        // swap
+        var tmp = this._convolverCurrent;
+        this._convolverCurrent = this._convolverNext;
+        this._convolverNext = tmp;
+
+        tmp = this._gainCurrent;
+        this._gainCurrent = this._gainNext;
+        this._gainNext = tmp;
+
+        this._convolverNext.buffer = this._hrtfSet.nearestFir(positionRequest);
+
+        // fade in next
+        this._gainNext.gain.cancelScheduledValues(now);
+        this._gainNext.gain.setValueAtTime(0, now);
+        this._gainNext.gain.linearRampToValueAtTime(1, now + this._crossfadeDuration);
+
+        // fade out current
+        this._gainCurrent.gain.cancelScheduledValues(now);
+        this._gainCurrent.gain.setValueAtTime(1, now);
+        this._gainCurrent.gain.linearRampToValueAtTime(0, now + this._crossfadeDuration);
+      } else {
+        // re-schedule later
+        this._crossfadeTimeout = setTimeout(function () {
+          _this5.position = positionRequest;
+        }, 0.02);
+      }
     }
   }]);
 
@@ -4301,7 +4583,7 @@ var Source = exports.Source = function () {
 }();
 
 exports.default = Source;
-},{}],30:[function(require,module,exports){
+},{"../geometry/coordinates":35}],30:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -4336,6 +4618,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.dBToLin = dBToLin;
+exports.createDiracBuffer = createDiracBuffer;
 exports.createNoiseBuffer = createNoiseBuffer;
 exports.resampleFloat32Array = resampleFloat32Array;
 /**
@@ -4345,11 +4628,62 @@ exports.resampleFloat32Array = resampleFloat32Array;
  * @license CECILL-2.1
  */
 
+/**
+ * Convert a dB value to a linear amplitude, i.e. -20dB gives 0.1
+ *
+ * @param {Number} dBValue
+ * @returns {Number}
+ */
 function dBToLin(dBValue) {
   var factor = 1 / 20;
   return Math.pow(10, dBValue * factor);
 }
 
+/**
+ * Create a Dirac buffer, zero-padded.
+ *
+ * Warning: the default length is 2 samples,
+ * to by-pass a bug in Safari ≤ 9.
+ *
+ * @param {Object} options
+ * @param {AudioContext} options.audioContext must be defined
+ * @param {Number} [options.channelCount=1]
+ * @param {Number} [options.gain=0] in dB
+ * @param {Number} [options.length=2] in samples
+ * @returns {AudioBuffer}
+ */
+function createDiracBuffer() {
+  var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
+  var context = options.audioContext;
+
+  var length = typeof options.length !== 'undefined' ? options.length : 2; // Safari ≤9 needs one more
+  var channelCount = typeof options.channelCount !== 'undefined' ? options.channelCount : 1;
+  var gain = typeof options.gain !== 'undefined' ? options.gain : 0; // dB
+
+  var buffer = context.createBuffer(channelCount, length, context.sampleRate);
+  var data = buffer.getChannelData(0);
+
+  var amplitude = dBToLin(gain);
+  data[0] = amplitude;
+  // already padded with zeroes
+
+  return buffer;
+}
+
+/**
+ * Create a noise buffer.
+ *
+ * Warning: the default length is 2 samples,
+ * to by-pass a bug in Safari ≤ 9.
+ *
+ * @param {Object} options
+ * @param {AudioContext} options.audioContext must be defined
+ * @param {Number} [options.channelCount=1]
+ * @param {Number} [options.duration=5] in seconds
+ * @param {Number} [options.gain=-30] in dB
+ * @returns {AudioBuffer}
+ */
 function createNoiseBuffer() {
   var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
@@ -4372,6 +4706,15 @@ function createNoiseBuffer() {
   return buffer;
 }
 
+/**
+ * Convert an array, typed or not, to a Float32Array, with possible re-sampling.
+ *
+ * @param {Object} options
+ * @param {Array} options.inputSamples input array
+ * @param {Number} options.inputSampleRate in Hertz
+ * @param {Number} [options.outputSampleRate=options.inputSampleRate]
+ * @returns {Promise.<Float32Array|Error>}
+ */
 function resampleFloat32Array() {
   var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
@@ -4416,6 +4759,7 @@ function resampleFloat32Array() {
 
 exports.default = {
   dBToLin: dBToLin,
+  createDiracBuffer: createDiracBuffer,
   createNoiseBuffer: createNoiseBuffer,
   resampleFloat32Array: resampleFloat32Array
 };
@@ -4526,6 +4870,21 @@ var _degree = require('./degree');
 var _degree2 = _interopRequireDefault(_degree);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * Coordinates as an array of 3 values:
+ * [x, y, z] or [azimuth, elevation, distance], depending on type
+ *
+ * @typedef coordinates
+ * @type {vec3}
+ */
+
+/**
+ * Coordinates system type: sofaCartesian', 'sofaSpherical', or'gl'.
+ *
+ * @typedef coordinatesType
+ * @type {String}
+ */
 
 function sofaCartesianToGl(out, a) {
   // copy to handle in-place
@@ -4832,7 +5191,7 @@ exports.default = {
   geometry: _geometry2.default,
   sofa: _sofa2.default
 };
-},{"./audio":30,"./common":32,"./geometry":37,"./sofa":42}],39:[function(require,module,exports){
+},{"./audio":30,"./common":32,"./geometry":37,"./sofa":41}],39:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
@@ -4851,9 +5210,9 @@ var _glMatrix = require('gl-matrix');
 
 var _glMatrix2 = _interopRequireDefault(_glMatrix);
 
-var _dataSetParse = require('./dataSetParse');
+var _parseDataSet = require('./parseDataSet');
 
-var _sofaParse = require('./sofaParse');
+var _parseSofa = require('./parseSofa');
 
 var _coordinates = require('../geometry/coordinates');
 
@@ -4876,6 +5235,24 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  */
 
 var HrtfSet = exports.HrtfSet = function () {
+
+  /**
+   * Constructs an HRTF set. Note that the filter positions are applied
+   * during the load of an URL.
+   *
+   * @see load
+   *
+   * @param {Object} options
+   * @param {AudioContext} options.audioContext mandatory for the creation
+   * of FIR audio buffers
+   * @param {coordinatesType} [options.positionsType='gl']
+   * @param {coordinatesType} [options.filterPositionsType=options.positionsType]
+   * @param {Array.<coordinates>} [options.filterPositions=undefined]
+   * array of positions to filter. Use undefined to use all positions.
+   * @param {Boolean} [options.filterAfterLoad = false] true to filter after
+   * full load of SOFA file
+   */
+
   function HrtfSet() {
     var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
@@ -4888,16 +5265,29 @@ var HrtfSet = exports.HrtfSet = function () {
     this.filterPositionsType = options.filterPositionsType;
     this.filterPositions = options.filterPositions;
 
-    this.filterPost = options.filterPost;
+    this.filterAfterLoad = options.filterAfterLoad;
   }
 
   // ------------ accessors
+
+  /**
+   * Set coordinates type for positions.
+   * @param {coordinatesType} [type='gl']
+   */
 
   _createClass(HrtfSet, [{
     key: 'applyFilterPositions',
 
     // ------------- public methods
 
+    /**
+     * Apply filter positions to an existing set of HRTF. (After a successful
+     * load.)
+     *
+     * This is destructive.
+     *
+     * @see HrtfSet#load
+     */
     value: function applyFilterPositions() {
       var _this = this;
 
@@ -4911,6 +5301,15 @@ var HrtfSet = exports.HrtfSet = function () {
 
       this.kdt = _KdTree2.default.tree.createKdTree(filteredPositions, _KdTree2.default.distanceSquared, ['x', 'y', 'z']);
     }
+
+    /**
+     * Load an URL and generate the corresponding set of IR buffers.
+     *
+     * @param {String} sourceUrl
+     * @returns {Promise.<this | Error>} resolve when the URL sucessfully
+     * loaded.
+     */
+
   }, {
     key: 'load',
     value: function load(sourceUrl) {
@@ -4923,15 +5322,17 @@ var HrtfSet = exports.HrtfSet = function () {
       var promise = undefined;
 
       // need a server for partial downloading ("sofa" extension may be naive)
-      var preFilter = typeof this._filterPositions !== 'undefined' && !this.filterPost && extension === 'sofa';
+      var preFilter = typeof this._filterPositions !== 'undefined' && !this.filterAfterLoad && extension === 'sofa';
       if (preFilter) {
         promise = Promise.all([this._loadMetaAndPositions(sourceUrl), this._loadDataSet(sourceUrl)]).then(function (indicesAndDataSet) {
           var indices = indicesAndDataSet[0];
           var dataSet = indicesAndDataSet[1];
           return _this2._loadSofaPartial(sourceUrl, indices, dataSet);
-        }).catch(function (error) {
+        }).catch(function () {
           // when pre-fitering fails, for any reason, try to post-filter
-          console.log('Error while partial loading of ' + sourceUrl + '. ' + (error.message + '. ') + 'Load full and post-filtering, instead.');
+          // console.log(`Error while partial loading of ${sourceUrl}. `
+          //             + `${error.message}. `
+          //             + `Load full and post-filtering, instead.`);
           return _this2._loadSofaFull(url).then(function () {
             _this2.applyFilterPositions();
             return _this2; // final resolve
@@ -4939,7 +5340,7 @@ var HrtfSet = exports.HrtfSet = function () {
         });
       } else {
           promise = this._loadSofaFull(url).then(function () {
-            if (typeof _this2._filterPositions !== 'undefined' && _this2.filterPost) {
+            if (typeof _this2._filterPositions !== 'undefined' && _this2.filterAfterLoad) {
               _this2.applyFilterPositions();
             }
             return _this2; // final resolve
@@ -4948,6 +5349,26 @@ var HrtfSet = exports.HrtfSet = function () {
 
       return promise;
     }
+
+    /**
+     * @typedef HrtfSet.nearestType
+     * @type {Object}
+     * @property {Number} distance from the request
+     * @property {AudioBuffer} fir 2-channels impulse response
+     * @property {Number} index original index in the SOFA set
+     * @property {coordinates} position using positionsType coordinates
+     * system.
+     */
+
+    /**
+     * Get the nearest point in the HRTF set, after a successful load.
+     *
+     * @see HrtfSet#load
+     *
+     * @param {coordinates} positionRequest
+     * @returns {HrtfSet.nearestType}
+     */
+
   }, {
     key: 'nearest',
     value: function nearest(positionRequest) {
@@ -4966,6 +5387,14 @@ var HrtfSet = exports.HrtfSet = function () {
         position: position
       };
     }
+
+    /**
+     * Get the FIR AudioBuffer that corresponds to the closest position in
+     * the set.
+     * @param {coordinates} positionRequest
+     * @returns {AudioBuffer}
+     */
+
   }, {
     key: 'nearestFir',
     value: function nearestFir(positionRequest) {
@@ -4973,6 +5402,16 @@ var HrtfSet = exports.HrtfSet = function () {
     }
 
     // ----------- private methods
+
+    /**
+     * Creates a kd-tree out of the specified indices, positions, and FIR.
+     *
+     * @private
+     *
+     * @param {Array}
+     * indicesPositionsFirs
+     * @returns {this}
+     */
 
   }, {
     key: '_createKdTree',
@@ -4997,10 +5436,20 @@ var HrtfSet = exports.HrtfSet = function () {
       });
 
       this.kdt = _KdTree2.default.tree.createKdTree(positions, _KdTree2.default.distanceSquared, ['x', 'y', 'z']);
-      return;
+      return this;
     }
 
-    // asynchronously create Float32Arrays (may re-sample on the fly)
+    /**
+     * Asynchronously create Float32Arrays, with possible re-sampling.
+     *
+     * @private
+     *
+     * @param {Array.<Number>} indices
+     * @param {Array.<coordinates>} positions
+     * @param {Array.<Float32Array>} firs
+     * @returns {Promise.<Array | Error>}
+     * @throws {Error} assertion that the channel count is 2
+     */
 
   }, {
     key: '_generateIndicesPositionsFirs',
@@ -5029,6 +5478,16 @@ var HrtfSet = exports.HrtfSet = function () {
       });
       return Promise.all(sofaFirsPromises);
     }
+
+    /**
+     * Try to load a data set from a SOFA URL.
+     *
+     * @private
+     *
+     * @param {String} sourceUrl
+     * @returns {Promise.<Object | Error>}
+     */
+
   }, {
     key: '_loadDataSet',
     value: function _loadDataSet(sourceUrl) {
@@ -5047,7 +5506,7 @@ var HrtfSet = exports.HrtfSet = function () {
           }
 
           try {
-            var dds = (0, _dataSetParse.dataSetParse)(request.response);
+            var dds = (0, _parseDataSet.parseDataSet)(request.response);
             resolve(dds);
           } catch (error) {
             // re-throw
@@ -5060,6 +5519,17 @@ var HrtfSet = exports.HrtfSet = function () {
 
       return promise;
     }
+
+    /**
+     * Try to load meta-data and positions from a SOFA URL, to get the
+     * indices closest to the filter positions.
+     *
+     * @private
+     *
+     * @param {String} sourceUrl
+     * @returns {Promise.<Array.<Number> | Error>}
+     */
+
   }, {
     key: '_loadMetaAndPositions',
     value: function _loadMetaAndPositions(sourceUrl) {
@@ -5082,7 +5552,7 @@ var HrtfSet = exports.HrtfSet = function () {
 
           try {
             (function () {
-              var data = (0, _sofaParse.sofaParse)(request.response);
+              var data = (0, _parseSofa.parseSofa)(request.response);
               _this5._setMetaData(data);
 
               var sourcePositions = _this5._sourcePositionsToGl(data);
@@ -5119,6 +5589,16 @@ var HrtfSet = exports.HrtfSet = function () {
 
       return promise;
     }
+
+    /**
+     * Try to load full SOFA URL.
+     *
+     * @private
+     *
+     * @param {String} url
+     * @returns {Promise.<this | Error>}
+     */
+
   }, {
     key: '_loadSofaFull',
     value: function _loadSofaFull(url) {
@@ -5138,7 +5618,7 @@ var HrtfSet = exports.HrtfSet = function () {
           }
 
           try {
-            var data = (0, _sofaParse.sofaParse)(request.response);
+            var data = (0, _parseSofa.parseSofa)(request.response);
             _this6._setMetaData(data);
             var sourcePositions = _this6._sourcePositionsToGl(data);
             _this6._generateIndicesPositionsFirs(sourcePositions.map(function (position, index) {
@@ -5147,7 +5627,7 @@ var HrtfSet = exports.HrtfSet = function () {
             sourcePositions, data['Data.IR'].data).then(function (indicesPositionsFirs) {
               _this6._createKdTree(indicesPositionsFirs);
               _this6.sofaUrl = url;
-              resolve();
+              resolve(_this6);
             });
           } catch (error) {
             // re-throw
@@ -5160,6 +5640,18 @@ var HrtfSet = exports.HrtfSet = function () {
 
       return promise;
     }
+
+    /**
+     * Try to load partial data from a SOFA URL.
+     *
+     * @private
+     *
+     * @param {Array.<String>} sourceUrl
+     * @param {Array.<Number>} indices
+     * @param {Object} dataSet
+     * @returns {Promise.<this | Error>}
+     */
+
   }, {
     key: '_loadSofaPartial',
     value: function _loadSofaPartial(sourceUrl, indices, dataSet) {
@@ -5181,7 +5673,7 @@ var HrtfSet = exports.HrtfSet = function () {
             }
 
             try {
-              var data = (0, _sofaParse.sofaParse)(request.response);
+              var data = (0, _parseSofa.parseSofa)(request.response);
               // (meta-data is already loaded)
 
               var sourcePositions = _this7._sourcePositionsToGl(data);
@@ -5207,6 +5699,16 @@ var HrtfSet = exports.HrtfSet = function () {
         return _this7; // final resolve
       });
     }
+
+    /**
+     * Set meta-data.
+     *
+     * @private
+     *
+     * @param {Object} data
+     * @throws {Error} assertion for FIR data.
+     */
+
   }, {
     key: '_setMetaData',
     value: function _setMetaData(data) {
@@ -5221,16 +5723,24 @@ var HrtfSet = exports.HrtfSet = function () {
       // to generate a SOFA-to-GL look-at mat4.
       // Default SOFA type is 'cartesian' (see table D.4A).
 
-      var listenerPosition = _coordinates2.default.typedToSofaCartesian([], data.ListenerPosition.data[0], (0, _sofaParse.sofaTypePrefix)(data.ListenerPosition.Type || 'cartesian'));
+      var listenerPosition = _coordinates2.default.typedToSofaCartesian([], data.ListenerPosition.data[0], (0, _parseSofa.conformSofaType)(data.ListenerPosition.Type || 'cartesian'));
 
-      var listenerView = _coordinates2.default.typedToSofaCartesian([], data.ListenerView.data[0], (0, _sofaParse.sofaTypePrefix)(data.ListenerView.Type || 'cartesian'));
+      var listenerView = _coordinates2.default.typedToSofaCartesian([], data.ListenerView.data[0], (0, _parseSofa.conformSofaType)(data.ListenerView.Type || 'cartesian'));
 
-      var listenerUp = _coordinates2.default.typedToSofaCartesian([], data.ListenerUp.data[0], (0, _sofaParse.sofaTypePrefix)(data.ListenerUp.Type || 'cartesian'));
+      var listenerUp = _coordinates2.default.typedToSofaCartesian([], data.ListenerUp.data[0], (0, _parseSofa.conformSofaType)(data.ListenerUp.Type || 'cartesian'));
 
       this._sofaToGl = _glMatrix2.default.mat4.lookAt([], listenerPosition, listenerView, listenerUp);
     }
 
-    // convert to cartesian, in-place
+    /**
+     * Convert to GL coordinates, in-place.
+     *
+     * @private
+     *
+     * @param {Object} data
+     * @returns {Array.<coordinates>}
+     * @throws {Error}
+     */
 
   }, {
     key: '_sourcePositionsToGl',
@@ -5238,17 +5748,15 @@ var HrtfSet = exports.HrtfSet = function () {
       var _this8 = this;
 
       var sourcePositions = data.SourcePosition.data; // reference
-      var sourcePositionsType = (0, _sofaParse.sofaTypePrefix)(typeof data.SourcePosition.Type !== 'undefined' ? data.SourcePosition.Type : 'spherical');
-
-      // default (SOFA Table D.4C)
+      var sourcePositionsType = typeof data.SourcePosition.Type !== 'undefined' ? data.SourcePosition.Type : 'spherical'; // default (SOFA Table D.4C)
       switch (sourcePositionsType) {
-        case 'sofaCartesian':
+        case 'cartesian':
           sourcePositions.forEach(function (position) {
             _glMatrix2.default.vec3.transformMat4(position, position, _this8._sofaToGl);
           });
           break;
 
-        case 'sofaSpherical':
+        case 'spherical':
           sourcePositions.forEach(function (position) {
             _coordinates2.default.sofaSphericalToSofaCartesian(position, position); // in-place
             _glMatrix2.default.vec3.transformMat4(position, position, _this8._sofaToGl);
@@ -5265,18 +5773,42 @@ var HrtfSet = exports.HrtfSet = function () {
     key: 'positionsType',
     set: function set(type) {
       this._positionsType = typeof type !== 'undefined' ? type : 'gl';
-    },
+    }
+
+    /**
+     * Get coordinates type for positions.
+     * @returns {coordinatesType}
+     */
+    ,
     get: function get() {
       return this._positionsType;
     }
+
+    /**
+     * Set coordinates type for filter positions.
+     * @param {coordinatesType} [type] undefined to use positionsType
+     */
+
   }, {
     key: 'filterPositionsType',
     set: function set(type) {
       this._filterPositionsType = typeof type !== 'undefined' ? type : this.positionsType;
-    },
+    }
+
+    /**
+     * Get coordinates type for filter positions.
+     * @param {coordinatesType} type
+     */
+    ,
     get: function get() {
       return this._filterPositionsType;
     }
+
+    /**
+     * Set filter positions.
+     * @param {Array.<coordinates>} [positions] undefined for no filtering.
+     */
+
   }, {
     key: 'filterPositions',
     set: function set(positions) {
@@ -5306,7 +5838,13 @@ var HrtfSet = exports.HrtfSet = function () {
             throw new Error('Bad filter type');
         }
       }
-    },
+    }
+
+    /**
+     * Get filter positions.
+     * @param {Array.<coordinates>} positions
+     */
+    ,
     get: function get() {
       var positions = undefined;
       if (typeof this._filterPositions !== 'undefined') {
@@ -5335,13 +5873,25 @@ var HrtfSet = exports.HrtfSet = function () {
       }
       return positions;
     }
+
+    /**
+     * Set post-filtering flag.
+     * @param {Boolean} [post=false]
+     */
+
   }, {
-    key: 'filterPost',
+    key: 'filterAfterLoad',
     set: function set(post) {
-      this._filterPost = typeof post !== 'undefined' ? post : false;
-    },
+      this._filterAfterLoad = typeof post !== 'undefined' ? post : false;
+    }
+
+    /**
+     * Get post-filtering flag.
+     * @returns {Boolean}
+     */
+    ,
     get: function get() {
-      return this._filterPost;
+      return this._filterAfterLoad;
     }
   }]);
 
@@ -5349,7 +5899,7 @@ var HrtfSet = exports.HrtfSet = function () {
 }();
 
 exports.default = HrtfSet;
-},{"../audio/utilities":31,"../geometry/KdTree":34,"../geometry/coordinates":35,"./dataSetParse":41,"./sofaParse":43,"gl-matrix":45}],40:[function(require,module,exports){
+},{"../audio/utilities":31,"../geometry/KdTree":34,"../geometry/coordinates":35,"./parseDataSet":42,"./parseSofa":43,"gl-matrix":45}],40:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
@@ -5364,11 +5914,11 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.ServerDataBase = undefined;
 
-var _xmlParse = require('./xmlParse');
+var _parseXml = require('./parseXml');
 
-var _xmlParse2 = _interopRequireDefault(_xmlParse);
+var _parseXml2 = _interopRequireDefault(_parseXml);
 
-var _dataSetParse = require('./dataSetParse');
+var _parseDataSet = require('./parseDataSet');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -5436,7 +5986,7 @@ var ServerDataBase = exports.ServerDataBase = function () {
             return;
           }
 
-          var xml = (0, _xmlParse2.default)(request.response);
+          var xml = (0, _parseXml2.default)(request.response);
           var dataSet = xml.querySelector('dataset');
 
           // recursive catalogues
@@ -5565,7 +6115,7 @@ var ServerDataBase = exports.ServerDataBase = function () {
             request.onerror();
             return;
           }
-          resolve((0, _dataSetParse.dataSetParse)(request.response));
+          resolve((0, _parseDataSet.parseDataSet)(request.response));
         }; // request.onload
 
         request.send();
@@ -5629,15 +6179,44 @@ var ServerDataBase = exports.ServerDataBase = function () {
 }();
 
 exports.default = ServerDataBase;
-},{"./dataSetParse":41,"./xmlParse":44}],41:[function(require,module,exports){
+},{"./parseDataSet":42,"./parseXml":44}],41:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports._dimensionParse = _dimensionParse;
-exports._definitionParse = _definitionParse;
-exports.dataSetParse = dataSetParse;
+
+var _HrtfSet = require('./HrtfSet');
+
+var _HrtfSet2 = _interopRequireDefault(_HrtfSet);
+
+var _ServerDataBase = require('./ServerDataBase');
+
+var _ServerDataBase2 = _interopRequireDefault(_ServerDataBase);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * @fileOverview Utility classes to handle the loading of HRTF files form a
+ * SOFA server.
+ * @author Jean-Philippe.Lambert@ircam.fr
+ * @copyright 2015-2016 IRCAM, Paris, France
+ * @license CECILL-2.1
+ */
+
+exports.default = {
+  HrtfSet: _HrtfSet2.default,
+  ServerDataBase: _ServerDataBase2.default
+};
+},{"./HrtfSet":39,"./ServerDataBase":40}],42:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports._parseDimension = _parseDimension;
+exports._parseDefinition = _parseDefinition;
+exports.parseDataSet = parseDataSet;
 /**
  * @fileOverview Parser for DDS files
  * @author Jean-Philippe.Lambert@ircam.fr
@@ -5682,13 +6261,13 @@ var _dataSetSplit = new RegExp(_dataSetPattern);
  * @returns {Array.<Array.<String>>} object [key, value] pairs
  *
  * @example
- * dimensionParse('[R = 2]');
+ * _parseDimension('[R = 2]');
  * // [ [ 'R', 2 ] ]
  *
- * dimensionParse('[R = 2][C = 3][I = 1]');
+ * _parseDimension('[R = 2][C = 3][I = 1]');
  * // [ [ 'R', 2 ], [ 'C', 3 ], [ 'I', 1 ] ]
  */
-function _dimensionParse(input) {
+function _parseDimension(input) {
   var parse = [];
   var inputs = input.match(_dimensionMatch);
   if (inputs !== null) {
@@ -5710,11 +6289,11 @@ function _dimensionParse(input) {
  *
  * @private
  * @example
- * definitionParse('Float64 ReceiverPosition[R = 2][C = 3][I = 1];');
+ * _parseDefinition('Float64 ReceiverPosition[R = 2][C = 3][I = 1];');
  * // [ [ 'ReceiverPosition',
  * //     { type: 'Float64', R: 2, C: 3, I: 1 } ] ]
  *
- * definitionParse(
+ * _parseDefinition(
  * `    Float64 ReceiverPosition[R = 2][C = 3][I = 1];
  *      Float64 SourcePosition[M = 1680][C = 3];
  *      Float64 EmitterPosition[E = 1][C = 3][I = 1];`);
@@ -5724,7 +6303,7 @@ function _dimensionParse(input) {
  * //   [ 'EmitterPosition',
  * //     { type: 'Float64', E: 1, C: 3, I: 1 } ] ]
  */
-function _definitionParse(input) {
+function _parseDefinition(input) {
   var parse = [];
   var inputs = input.match(_definitionMatch);
   if (inputs !== null) {
@@ -5736,7 +6315,7 @@ function _definitionParse(input) {
           current[0] = parts[2];
           current[1] = {};
           current[1].type = parts[1];
-          _dimensionParse(parts[3]).forEach(function (dimension) {
+          _parseDimension(parts[3]).forEach(function (dimension) {
             current[1][dimension[0]] = dimension[1];
           });
           parse.push(current);
@@ -5754,7 +6333,7 @@ function _definitionParse(input) {
  * @returns {Object} definitions as `{definition: {key: values}}` objects.
  *
  * @example
- * definitionParse(
+ * _parseDataSet(
  * `Dataset {
  *      Float64 ReceiverPosition[R = 2][C = 3][I = 1];
  *      Float64 SourcePosition[M = 1680][C = 3];
@@ -5766,48 +6345,19 @@ function _definitionParse(input) {
  * //    EmitterPosition: { type: 'Float64', E: 1, C: 3, I: 1 }
  * //    'Data.SamplingRate': { type: 'Float64', I: 1 } }
  */
-function dataSetParse(input) {
+function parseDataSet(input) {
   var parse = {};
   var definitions = _dataSetSplit.exec(input);
   if (definitions !== null && definitions.length > 1) {
-    _definitionParse(definitions[1]).forEach(function (definition) {
+    _parseDefinition(definitions[1]).forEach(function (definition) {
       parse[definition[0]] = definition[1];
     });
   }
   return parse;
 }
 
-exports.default = dataSetParse;
-},{}],42:[function(require,module,exports){
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _HrtfSet = require('./HrtfSet');
-
-var _HrtfSet2 = _interopRequireDefault(_HrtfSet);
-
-var _ServerDataBase = require('./ServerDataBase');
-
-var _ServerDataBase2 = _interopRequireDefault(_ServerDataBase);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/**
- * @fileOverview Utility classes to handle the loading of HRTF files form a
- * SOFA server.
- * @author Jean-Philippe.Lambert@ircam.fr
- * @copyright 2015-2016 IRCAM, Paris, France
- * @license CECILL-2.1
- */
-
-exports.default = {
-  HrtfSet: _HrtfSet2.default,
-  ServerDataBase: _ServerDataBase2.default
-};
-},{"./HrtfSet":39,"./ServerDataBase":40}],43:[function(require,module,exports){
+exports.default = parseDataSet;
+},{}],43:[function(require,module,exports){
 'use strict';
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
@@ -5815,16 +6365,24 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.sofaParse = sofaParse;
-exports.sofaTypePrefix = sofaTypePrefix;
+exports.parseSofa = parseSofa;
+exports.conformSofaType = conformSofaType;
 /**
- * @fileOverview Parser for SOFA files
+ * @fileOverview Parser functions for SOFA files
  * @author Jean-Philippe.Lambert@ircam.fr
  * @copyright 2015 IRCAM, Paris, France
  * @license CECILL-2.1
  */
 
-function sofaParse(sofaString) {
+/**
+ * Parses a SOFA JSON string with into an object with `data` and `metaData`
+ * attributes.
+ *
+ * @param {String} sofaString
+ * @returns {Object} with `data` and `metaData` attributes
+ * @throws {Error} when the parsing fails
+ */
+function parseSofa(sofaString) {
   try {
     var _ret = function () {
       var sofa = JSON.parse(sofaString);
@@ -5867,7 +6425,14 @@ function sofaParse(sofaString) {
   }
 }
 
-function sofaTypePrefix(sofaType) {
+/**
+ * Prefix SOFA coordinates type with `sofa`.
+ *
+ * @param {String} sofaType : either `cartesian` or `spherical`
+ * @returns {String} either `sofaCartesian` or `sofaSpherical`
+ * @throws {Error} if sofaType is unknown
+ */
+function conformSofaType(sofaType) {
   var type = undefined;
 
   switch (sofaType) {
@@ -5886,8 +6451,8 @@ function sofaTypePrefix(sofaType) {
 }
 
 exports.default = {
-  sofaParse: sofaParse,
-  sofaTypePrefix: sofaTypePrefix
+  parseSofa: parseSofa,
+  conformSofaType: conformSofaType
 };
 },{}],44:[function(require,module,exports){
 'use strict';
@@ -5908,7 +6473,7 @@ Object.defineProperty(exports, "__esModule", {
  *
  * It requires a browser environment.
  *
- * @function xmlParse
+ * @function parseXml
  * @param {String} xmlStr full valid XML data.
  * @returns {Object} XMLDocument, DOM-like. (Use any selector.)
  *
@@ -5919,20 +6484,20 @@ Object.defineProperty(exports, "__esModule", {
  *    throw new Error(`Unable to GET: ${request.status}`);
  * };
  * request.onload = () => {
- *   const xml = xmlParse(request.response);
+ *   const xml = parseXml(request.response);
  *   const catalogueReferences = xml.querySelector('dataset > catalogRef');
  *   console.log(catalogueReferences);
  * }
  * request.send();
  */
-var xmlParse = exports.xmlParse = undefined;
+var parseXml = exports.parseXml = undefined;
 
 if (typeof window.DOMParser !== 'undefined') {
-  exports.xmlParse = xmlParse = function xmlParseDOM(xmlStr) {
+  exports.parseXml = parseXml = function parseXmlDOM(xmlStr) {
     return new window.DOMParser().parseFromString(xmlStr, 'text/xml');
   };
 } else if (typeof window.ActiveXObject !== 'undefined' && new window.ActiveXObject('Microsoft.XMLDOM')) {
-  exports.xmlParse = xmlParse = function xmlParseActiveX(xmlStr) {
+  exports.parseXml = parseXml = function parseXmlActiveX(xmlStr) {
     var xmlDoc = new window.ActiveXObject('Microsoft.XMLDOM');
     xmlDoc.async = 'false';
     xmlDoc.loadXML(xmlStr);
@@ -5942,7 +6507,7 @@ if (typeof window.DOMParser !== 'undefined') {
   throw new Error('No XML parser found');
 }
 
-exports.default = xmlParse;
+exports.default = parseXml;
 },{}],45:[function(require,module,exports){
 /**
  * @fileoverview gl-matrix - High performance matrix and vector operations

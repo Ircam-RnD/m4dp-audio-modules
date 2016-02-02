@@ -37,10 +37,18 @@ var MultichannelCompressorNode = function (_AbstractNode) {
      * @param {AudioContext} audioContext - audioContext instance.
      * @param {int} numChannels - number of channels to instanciate
      *
-     * @details It turns out the standard CompressorNode from the WAA 
+     * @details It turns out the standard DynamicsCompressorNode from the WAA 
      *          does some weird stuff when the number of channels is 10 ( > 5.1 ?? )
      *
      *  So we created this class which just instanciate 10 mono compressor nodes in parallel
+     *
+     *  NB : the issues with DynamicsCompressorNode might come from the fact that 
+     *  its default Channel count mode is "explicit"
+     *  It could be possible (but not tested), to solve the issue
+     *  by specifying : 
+     *  DynamicsCompressorNode.channelCountMode = "max"
+     *  DynamicsCompressorNode.channelCount = 10;
+     *
      */
 
     function MultichannelCompressorNode(audioContext) {

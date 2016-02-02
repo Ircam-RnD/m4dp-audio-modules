@@ -31,9 +31,23 @@ videoPlayerAudioMediaElement = document.getElementById('videoPlayerAudio');
 
 var context = new Dash.di.DashContext();
 
+/*
+/// les premières URLs fournies par DotScreen
 var urlMain = "http://medias2.francetv.fr/innovation/media4D/m4dp-set1-LMDJ/manifest.mpd";
 var urlPip = "http://medias2.francetv.fr/innovation/media4D/m4dp-set1-LMDJ/manifest-lsf.mpd";
 var urlAudio = "http://medias2.francetv.fr/innovation/media4D/m4dp-set1-LMDJ/manifest-ad.mpd";
+*/
+
+var urlAudioPrincipale  = 'http://videos-pmd.francetv.fr/innovation/media4D/m4d--LMDJ4-ondemand/manifest.mpd';
+var urlAudioDescription = 'http://videos-pmd.francetv.fr/innovation/media4D/m4d--LMDJ4-ondemand/manifest-ad.mpd';
+var urlFiveDotOne  		= 'http://videos-pmd.francetv.fr/innovation/media4D/m4d--LMDJ4-ondemand/manifest-mc.mpd'; /// L R C LFE Ls Rs ?
+var urlAllTogether 		= 'http://videos-pmd.francetv.fr/innovation/media4D/m4d--LMDJ4-ondemand/manifest-aud.mpd';
+/// for now, there is an issue with urlAllTogether; it actually contains only the 5.1
+
+var urlMain 	= 'http://videos-pmd.francetv.fr/innovation/media4D/m4d--LMDJ4-ondemand/manifest.mpd';
+var urlPip 		= 'http://videos-pmd.francetv.fr/innovation/media4D/m4d--LMDJ4-ondemand/manifest-lsf.mpd';
+var urlAudio 	= urlFiveDotOne;
+
 
 var playerMain = new MediaPlayer(context);
 playerMain.startup();
@@ -84,6 +98,7 @@ var channelMerger = audioContext.createChannelMerger(10);
 // main video (stereo)
 mainChannelSplitterNode.connect(channelMerger, 0, 0);
 mainChannelSplitterNode.connect(channelMerger, 1, 1);
+
 
 // extended audio ambience (5.1)
 extendedChannelSplitterNode.connect(channelMerger, 0, 2);
@@ -152,16 +167,25 @@ var headphonesEqualization = new M4DPAudioModules.HeadphonesEqualization( audioC
 	/// to connect the mainChannelSplitterNode
 	var uselessGain = audioContext.createGain();
 	mainChannelSplitterNode.connect( uselessGain, 0, 0 );
-	uselessGain.gain.value = 0.;
+	uselessGain.gain.value = 0.;	
 	uselessGain.connect( audioContext.destination, 0, 0 );
 }
 
 /*
-/// test pour voir si on a du son dans les canaux extendedChannelSplitterNode
-var oneGain = audioContext.createGain();
-extendedChannelSplitterNode.connect( oneGain, 2, 0 );
-oneGain.connect( audioContext.destination, 0, 0 );
+{
+	/// bout de code pour tester la reception des flux DASH
+
+	var extendedChannelSplitterNode2 = audioContext.createChannelSplitter(10);
+	extendedAudioSource.connect( extendedChannelSplitterNode2 );
+
+	var channelMerger2 = audioContext.createChannelMerger(2);
+
+	extendedChannelSplitterNode2.connect( channelMerger2, 0, 0 );
+
+	channelMerger2.connect( audioContext.destination );
+}
 */
+
 
 /// receives 4 ADSC with 10 channels in total
 channelMerger.connect( streamSelector.input );
@@ -172,18 +196,9 @@ streamSelector.connect( smartFader.input );
 
 smartFader.connect( multichannelSpatialiser.input );
 
-/*
-
-/// apply the smart fader 
-/// (process 10 channels in total)
-smartFader.connect( headphonesEqualization.input );
-
-/// apply the headphones equalization
-headphonesEqualization.connect( audioContext.destination );
-*/
-
 /// apply the multichannel spatialiser
 multichannelSpatialiser.connect( audioContext.destination );
+
 
 
 playerMain.attachSource(urlMain);
