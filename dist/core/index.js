@@ -357,7 +357,7 @@ var AudioStreamDescription = exports.AudioStreamDescription = function () {
                 throw new Error("Invalid channel index : " + channelIndex);
             }
 
-            if (this._type === "MultiWithLFE" && channelIndex === 6) {
+            if (this._type === "MultiWithLFE" && channelIndex === 5) {
                 return true;
             } else {
                 return false;
@@ -377,7 +377,7 @@ var AudioStreamDescription = exports.AudioStreamDescription = function () {
                 throw new Error("Invalid channel index : " + channelIndex);
             }
 
-            var pos = this.channelPositions();
+            var pos = this.channelPositions;
 
             return pos[channelIndex] === -30 ? true : false;
         }
@@ -395,7 +395,7 @@ var AudioStreamDescription = exports.AudioStreamDescription = function () {
                 throw new Error("Invalid channel index : " + channelIndex);
             }
 
-            var pos = this.channelPositions();
+            var pos = this.channelPositions;
 
             return pos[channelIndex] === +30 ? true : false;
         }
@@ -413,7 +413,7 @@ var AudioStreamDescription = exports.AudioStreamDescription = function () {
                 throw new Error("Invalid channel index : " + channelIndex);
             }
 
-            var pos = this.channelPositions();
+            var pos = this.channelPositions;
 
             return pos[channelIndex] === -110 ? true : false;
         }
@@ -431,7 +431,7 @@ var AudioStreamDescription = exports.AudioStreamDescription = function () {
                 throw new Error("Invalid channel index : " + channelIndex);
             }
 
-            var pos = this.channelPositions();
+            var pos = this.channelPositions;
 
             return pos[channelIndex] === +110 ? true : false;
         }

@@ -20,6 +20,10 @@ var _utils2 = _interopRequireDefault(_utils);
 
 var _transaural = require('../dsp/transaural.js');
 
+var _routing = require('../multichannel-spatialiser/routing.js');
+
+var _routing2 = _interopRequireDefault(_routing);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -65,6 +69,7 @@ var MultichannelSpatialiser = function (_AbstractNode) {
         _this._hrtf = hrtf;
         _this._headphonesEqualizationNode = new _headphoneequalization2.default(audioContext);
         _this._transauralNode = new _transaural.TransauralShufflerNode(audioContext);
+        _this._discreteRouting = new _routing2.default(audioContext, audioStreamDescriptionCollection);
 
         _this._listeningAxis = listeningAxis;
 
@@ -91,17 +96,34 @@ var MultichannelSpatialiser = function (_AbstractNode) {
      */
 
     _createClass(MultichannelSpatialiser, [{
-        key: '_updateAudioGraph',
+        key: 'activeStreamsChanged',
+
+        /**
+         * Notification when the active stream(s) changes
+         */
+        value: function activeStreamsChanged() {}
+        /// nothing to do, for the moment
 
         //==============================================================================
         /**
          * Updates the connections of the audio graph
          */
+
+    }, {
+        key: '_updateAudioGraph',
         value: function _updateAudioGraph() {
 
             this._updateGainOffset();
 
-            if (this.isInBinauralMode() === true) {} else if (this.isInTransauralMode() === true) {} else if (this.isInMultichannelMode() === true) {} else {
+            ///@todo : disconnect everything (?)
+
+            if (this.isInBinauralMode() === true) {} else if (this.isInTransauralMode() === true) {} else if (this.isInMultichannelMode() === true) {
+                /// discrete routing in the multichannel mode
+
+                this.input.connect(this._discreteRouting.input);
+                this._discreteRouting.connect(this._gainNode);
+                this._gainNode.connect(this._output);
+            } else {
                 throw new Error("Pas normal!");
             }
 

@@ -16,6 +16,10 @@ var _utils = require('../core/utils.js');
 
 var _utils2 = _interopRequireDefault(_utils);
 
+var _compressor = require('../dsp/compressor.js');
+
+var _compressor2 = _interopRequireDefault(_compressor);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -52,14 +56,18 @@ var SmartFader = function (_AbstractNode) {
 
         _this._dB = undefined;
 
+        /// the total number of incoming channels, including all the streams
+        /// (mainAudio, extendedAmbience, extendedComments and extendedDialogs)
+        var totalNumberOfChannels_ = _this._audioStreamDescriptionCollection.totalNumberOfChannels;
+
         ///@n the gain and dynamic compression are applied similarly to all channels
         _this._gainNode = audioContext.createGain();
-        _this._dynamicCompressorNode = audioContext.createDynamicsCompressor();
+        _this._dynamicCompressorNode = new _compressor2.default(audioContext, totalNumberOfChannels_);
 
         /// connect the audio nodes
         {
             _this.input.connect(_this._gainNode);
-            _this._gainNode.connect(_this._dynamicCompressorNode);
+            _this._gainNode.connect(_this._dynamicCompressorNode.input);
             _this._dynamicCompressorNode.connect(_this._output);
         }
 
@@ -89,6 +97,8 @@ var SmartFader = function (_AbstractNode) {
     }, {
         key: '_updateCompressorSettings',
         value: function _updateCompressorSettings() {
+
+            return;
 
             /// retrieves the AudioStreamDescriptionCollection
             var asdc = this._audioStreamDescriptionCollection;
@@ -147,16 +157,16 @@ var SmartFader = function (_AbstractNode) {
             */
 
             /// representing the decibel value above which the compression will start taking effect
-            this._dynamicCompressorNode.threshold.value = threshold;
+            this._dynamicCompressorNode.setThreshold(threshold);
 
             /// representing the amount of change, in dB, needed in the input for a 1 dB change in the output
-            this._dynamicCompressorNode.ratio.value = 2;
+            this._dynamicCompressorNode.setRatio(2);
 
             /// representing the amount of time, in seconds, required to reduce the gain by 10 dB
-            this._dynamicCompressorNode.attack.value = 0.02;
+            this._dynamicCompressorNode.setAttack(0.02);
 
             /// representing the amount of time, in seconds, required to increase the gain by 10 dB
-            this._dynamicCompressorNode.release.value = 0.2;
+            this._dynamicCompressorNode.setRelease(0.2);
         }
     }, {
         key: '_update',
@@ -217,7 +227,7 @@ var SmartFader = function (_AbstractNode) {
             into the DynamicsCompressorNode. The range of this value is between -20 and 0 (in dB).
             */
 
-            var reduction = this._dynamicCompressorNode.reduction.value;
+            var reduction = this._dynamicCompressorNode.getReduction();
 
             var state = reduction < -0.5 ? true : false;
 

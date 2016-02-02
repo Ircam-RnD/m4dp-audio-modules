@@ -17,7 +17,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /************************************************************************************/
 /*!
  *   @file       index.js
- *   @brief      This class takes the 10 audio streams and produces a 5.1 output stream
+ *   @brief      This class takes the 10 audio streams and produces a 5.1 output stream (discrete routing)
  *   @author     Thibaut Carpentier
  *   @date       01/2016
  *
@@ -29,7 +29,7 @@ var StreamRouting = function (_AbstractNode) {
 
     //==============================================================================
     /**
-     * @brief This class takes the 10 audio streams and produces a 5.1 output stream
+     * @brief This class takes the 10 audio streams and produces a 5.1 output stream (discrete routing)
      * @param {AudioContext} audioContext - audioContext instance.
      * @param {AudioStreamDescriptionCollection} audioStreamDescriptionCollection - audioStreamDescriptionCollection
      *

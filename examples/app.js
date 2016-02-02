@@ -16,7 +16,7 @@
 
 //M4DPAudioModules.unittests.multichanneltests.testMultiChannel();
 
-M4DPAudioModules.unittests.routingtests.testRouting();
+//M4DPAudioModules.unittests.routingtests.testRouting();
 
 var dumpObject = function(obj) {
 	console.debug("Dumping: "+obj);
@@ -141,7 +141,7 @@ var streamSelector = new M4DPAudioModules.StreamSelector( audioContext, asdc );
 var smartFader = new M4DPAudioModules.SmartFader( audioContext, asdc );
 //var objectSpatialiserAndMixer = new M4DPAudioModules.ObjectSpatialiserAndMixer(audioContext);
 //var noiseAdaptation = new M4DPAudioModules.NoiseAdaptation(audioContext);
-//var multichannelSpatialiser = new M4DPAudioModules.MultichannelSpatialiser(audioContext);
+var multichannelSpatialiser = new M4DPAudioModules.MultichannelSpatialiser( audioContext, asdc, 'multichannel' );
 //var dialogEnhancement = new M4DPAudioModules.DialogEnhancement(audioContext);
 var headphonesEqualization = new M4DPAudioModules.HeadphonesEqualization( audioContext );
 
@@ -170,13 +170,22 @@ channelMerger.connect( streamSelector.input );
 /// (process 10 channels in total)
 streamSelector.connect( smartFader.input );
 
+smartFader.connect( multichannelSpatialiser.input );
+
+/*
+
 /// apply the smart fader 
 /// (process 10 channels in total)
 smartFader.connect( headphonesEqualization.input );
 
 /// apply the headphones equalization
 headphonesEqualization.connect( audioContext.destination );
+*/
 
+//streamSelector.connect( multichannelSpatialiser.input );
+
+/// apply the multichannel spatialiser
+multichannelSpatialiser.connect( audioContext.destination );
 
 
 playerMain.attachSource(urlMain);
@@ -208,6 +217,7 @@ function updateActiveStreams(){
 	/// notify the modification of active streams
 	streamSelector.activeStreamsChanged();
 	smartFader.activeStreamsChanged();
+	multichannelSpatialiser.activeStreamsChanged();
 }
 
 function onCheckVideo() {
