@@ -1426,8 +1426,8 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
  */
 /************************************************************************************/
 
-var CompressorNode = function (_AbstractNode) {
-    _inherits(CompressorNode, _AbstractNode);
+var MultichannelCompressorNode = function (_AbstractNode) {
+    _inherits(MultichannelCompressorNode, _AbstractNode);
 
     //==============================================================================
     /**
@@ -1435,19 +1435,20 @@ var CompressorNode = function (_AbstractNode) {
      *        The compressor affects all channel similarly
      *
      * @param {AudioContext} audioContext - audioContext instance.
+     * @param {int} numChannels - number of channels to instanciate
      *
      * @details It turns out the standard CompressorNode from the WAA 
-     *          does some weird stuff when the number of channels is 10
+     *          does some weird stuff when the number of channels is 10 ( > 5.1 ?? )
      *
      *  So we created this class which just instanciate 10 mono compressor nodes in parallel
      */
 
-    function CompressorNode(audioContext) {
+    function MultichannelCompressorNode(audioContext) {
         var numChannels = arguments.length <= 1 || arguments[1] === undefined ? 10 : arguments[1];
 
-        _classCallCheck(this, CompressorNode);
+        _classCallCheck(this, MultichannelCompressorNode);
 
-        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(CompressorNode).call(this, audioContext));
+        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(MultichannelCompressorNode).call(this, audioContext));
 
         _this._compressorNodes = [];
         _this._splitterNode = undefined;
@@ -1490,7 +1491,7 @@ var CompressorNode = function (_AbstractNode) {
         return _this;
     }
 
-    _createClass(CompressorNode, [{
+    _createClass(MultichannelCompressorNode, [{
         key: "getNumChannels",
         value: function getNumChannels() {
             return this._compressorNodes.length;
@@ -1573,10 +1574,10 @@ var CompressorNode = function (_AbstractNode) {
         }
     }]);
 
-    return CompressorNode;
+    return MultichannelCompressorNode;
 }(_index2.default);
 
-exports.default = CompressorNode;
+exports.default = MultichannelCompressorNode;
 },{"../core/index.js":2}],7:[function(require,module,exports){
 'use strict';
 
@@ -2898,7 +2899,7 @@ var SmartFader = function (_AbstractNode) {
 
         ///@n the gain and dynamic compression are applied similarly to all channels
         _this._gainNode = audioContext.createGain();
-        _this._dynamicCompressorNode = new _compressor2.default(audioContext, totalNumberOfChannels_);
+        _this._dynamicCompressorNode = new MultichannelCompressorNode(audioContext, totalNumberOfChannels_);
 
         /// connect the audio nodes
         {

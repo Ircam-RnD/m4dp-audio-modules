@@ -182,8 +182,6 @@ smartFader.connect( headphonesEqualization.input );
 headphonesEqualization.connect( audioContext.destination );
 */
 
-//streamSelector.connect( multichannelSpatialiser.input );
-
 /// apply the multichannel spatialiser
 multichannelSpatialiser.connect( audioContext.destination );
 
