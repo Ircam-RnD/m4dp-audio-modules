@@ -51,8 +51,7 @@ var MultichannelSpatialiser = function (_AbstractNode) {
     /**
      * @param {AudioContext} audioContext - audioContext instance.
      * @param {AudioStreamDescriptionCollection} audioStreamDescriptionCollection - audioStreamDescriptionCollection.
-     * @param {string} outputType - output type 'binaural' or 'transaural' or 'multichannel'
-     * @param {binaural.HrtfSet} : HRTF set to load
+     * @param {string} outputType - output type 'binaural' or 'transaural' or 'multichannel'     
      * @param {string} headphoneEqPresetName - the name of the headphone equalization preset (they are hard-coded) 
      * @param {number} offsetGain - the offset gain (expressed in dB)
      * @param {number} listenerYaw - yaw angle in degrees
@@ -61,16 +60,14 @@ var MultichannelSpatialiser = function (_AbstractNode) {
     function MultichannelSpatialiser(audioContext) {
         var audioStreamDescriptionCollection = arguments.length <= 1 || arguments[1] === undefined ? undefined : arguments[1];
         var outputType = arguments.length <= 2 || arguments[2] === undefined ? 'binaural' : arguments[2];
-        var hrtf = arguments.length <= 3 || arguments[3] === undefined ? undefined : arguments[3];
-        var headphoneEqPresetName = arguments.length <= 4 || arguments[4] === undefined ? 'none' : arguments[4];
-        var offsetGain = arguments.length <= 5 || arguments[5] === undefined ? 0.0 : arguments[5];
-        var listenerYaw = arguments.length <= 6 || arguments[6] === undefined ? 0.0 : arguments[6];
+        var headphoneEqPresetName = arguments.length <= 3 || arguments[3] === undefined ? 'none' : arguments[3];
+        var offsetGain = arguments.length <= 4 || arguments[4] === undefined ? 0.0 : arguments[4];
+        var listenerYaw = arguments.length <= 5 || arguments[5] === undefined ? 0.0 : arguments[5];
 
         _classCallCheck(this, MultichannelSpatialiser);
 
         var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(MultichannelSpatialiser).call(this, audioContext, audioStreamDescriptionCollection));
 
-        _this._hrtf = hrtf;
         _this._headphonesEqualizationNode = new _headphoneequalization2.default(audioContext);
         _this._transauralNode = new _transaural.TransauralShufflerNode(audioContext);
         _this._discreteRouting = new _routing2.default(audioContext, audioStreamDescriptionCollection);
@@ -287,31 +284,6 @@ var MultichannelSpatialiser = function (_AbstractNode) {
         ,
         get: function get() {
             return _audioStreamDescriptionCollection;
-        }
-
-        //==============================================================================
-        /**
-         * Loads a set of HRTF
-         * @type {binaural.HrtfSet} : cf the binaural module
-         */
-
-    }, {
-        key: 'hrtf',
-        set: function set(value) {
-            this._hrtf = value;
-        }
-
-        ///@todo simplified function loadHrtfFrom( subjectNumber )
-        /// using the current sampling rate
-        /// --> creates a new HrtfSet and load it
-
-        /**
-         * Returns the current hrtf
-         * @type {HRTF}
-         */
-        ,
-        get: function get() {
-            return this._hrtf;
         }
 
         //==============================================================================

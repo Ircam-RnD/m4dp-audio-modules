@@ -137,6 +137,10 @@ var VirtualSpeakersNode = function (_AbstractNode) {
                 _this2._binauralPanner.connectOutputs(_this2._output);
             });
         }
+
+        //==============================================================================
+        /// Returns an array of positions in the horizontal plane only.
+
     }, {
         key: '_getHorizontalPlane',
         value: function _getHorizontalPlane() {

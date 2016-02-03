@@ -471,10 +471,10 @@ setInterval(function(){
 	var isCompressed = smartFader.dynamicCompressionState;
 
 	if( isCompressed === true){
-		console.log( "compression active" );
+		document.getElementById('Compression').style.color = "rgba(255, 0, 0, 0.7)";
 	}
 	else{
-		console.log( "compression inactive" );
+		document.getElementById('Compression').style.color = "rgba(255, 255, 255, 0.7)";
 	}
 }, 500);
 
