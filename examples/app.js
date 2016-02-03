@@ -48,6 +48,7 @@ var urlPip 				= dashUrlLsf;
 var urlAudioFiveDotOne 	= dashUrlFiveDotOne;
 var urlAudioDescription	= dashUrlAudioDescription;
 
+//==============================================================================
 var playerMain = new MediaPlayer(context);
 playerMain.startup();
 playerMain.setAutoPlay(false);
@@ -84,7 +85,7 @@ playerAudioDescriptionMediaElement.controller 	= controller;
 var audioContext = new (window.AudioContext || window.webkitAudioContext)();
 console.debug("######### audioContext: " + audioContext);
 
-
+//==============================================================================
 var audioSourceMain 	 	= audioContext.createMediaElementSource( videoPlayerMainMediaElement );
 var audioSourceFiveDotOne  	= audioContext.createMediaElementSource( playerAudioFiveDotOneMediaElement );
 var audioSourceDescription	= audioContext.createMediaElementSource( playerAudioDescriptionMediaElement );
@@ -113,7 +114,7 @@ channelSplitterFiveDotOne.connect( channelMerger, 5, 7 );
 
 channelSplitterDescription.connect( channelMerger, 0, 8 );
 
-
+//==============================================================================
 var mainAudioASD = new M4DPAudioModules.AudioStreamDescription(
 		type = "Stereo",
 		active = true,
@@ -151,6 +152,7 @@ var asdc = new M4DPAudioModules.AudioStreamDescriptionCollection(
 		[mainAudioASD, extendedAmbienceASD, extendedCommentsASD, extendedDialogsASD]
 		);
 
+//==============================================================================
 // M4DPAudioModules
 var streamSelector = new M4DPAudioModules.StreamSelector( audioContext, asdc );
 var smartFader = new M4DPAudioModules.SmartFader( audioContext, asdc );
@@ -243,6 +245,7 @@ checkboxEqualization.checked 	= false;
 
 ///@otodo : need to properly initialize the smartFader (slider) and other checkboxes
 
+//==============================================================================
 function prepareSofaCatalog(){
 	
 	// HRTF set selection menu
@@ -292,6 +295,7 @@ function prepareSofaCatalog(){
          });
 }
 
+//==============================================================================
 function updateActiveStreams(){
 	/// notify the modification of active streams
 	streamSelector.activeStreamsChanged();
@@ -369,7 +373,7 @@ function onCheckLSF() {
 	}
 }
 
-
+//==============================================================================
 /**
  * Callback when the dB slider changes
  */
@@ -395,6 +399,7 @@ smartFaderDB.addEventListener('input', function(){
 	smartFader.dB = value;
 });
 
+//==============================================================================
 setInterval(function(){
 	var isCompressed = smartFader.dynamicCompressionState;
 

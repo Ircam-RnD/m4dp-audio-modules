@@ -38,6 +38,7 @@ var VirtualSpeakersNode = function (_AbstractNode) {
      * @brief This class implements the 5.1 to binaural virtual speakers
      *
      * @param {AudioContext} audioContext - audioContext instance.
+     * @param {AudioStreamDescriptionCollection} audioStreamDescriptionCollection - audioStreamDescriptionCollection.
      */
 
     function VirtualSpeakersNode(audioContext, audioStreamDescriptionCollection) {
@@ -68,6 +69,10 @@ var VirtualSpeakersNode = function (_AbstractNode) {
 
         /// sanity checks
         if (_this._splitterNode.numberOfInputs != 1 || _this._splitterNode.numberOfOutputs != totalNumberOfChannels_) {
+            throw new Error("Pas bon");
+        }
+
+        if (sofaPositions.length != totalNumberOfChannels_) {
             throw new Error("Pas bon");
         }
 
