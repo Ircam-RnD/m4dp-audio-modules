@@ -580,7 +580,7 @@ var AudioStreamDescription = exports.AudioStreamDescription = function () {
                 throw new Error("Invalid channel index : " + channelIndex);
             }
 
-            if (this._type === "MultiWithLFE" && channelIndex === 5) {
+            if (this._type === "MultiWithLFE" && channelIndex === 3) {
                 return true;
             } else {
                 return false;
@@ -674,11 +674,13 @@ var AudioStreamDescription = exports.AudioStreamDescription = function () {
                 case "Stereo":
                     return [-30, +30];
                 case "MultiWithoutLFE":
+                    /// L, R, C, Ls, Rs.
                     return [-30, +30, 0, -110, +110];
                 case "MultiWithLFE":
+                    // L, R, C, Lfe, Ls, Rs.
                     // @n LFE position is irrelevant
                     // but provided so that the array has a length of 6
-                    return [-30, +30, 0, -110, +110, 0];
+                    return [-30, +30, 0, 0, -110, +110];
                 case "EightChannel":
                     // @todo set correct positions
                     return [1, 2, 3, 4, 5, 6, 7, 8];
@@ -1100,6 +1102,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var CascadeNode = function (_AbstractNode) {
     _inherits(CascadeNode, _AbstractNode);
 
+    //==============================================================================
     /**
      * @brief This class implements a cascade of BiquadFilterNodes
      *        The filtering affects all channel similarly
@@ -2109,10 +2112,202 @@ var TransauralFeedforwardNode = exports.TransauralFeedforwardNode = function (_T
 },{"../core/index.js":2,"./kemar.js":9,"./sumdiff.js":10}],12:[function(require,module,exports){
 'use strict';
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _index = require('../core/index.js');
+
+var _index2 = _interopRequireDefault(_index);
+
+var _binaural = require('binaural');
+
+var _binaural2 = _interopRequireDefault(_binaural);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /************************************************************************************/
+/*!
+ *   @file       virtualspeakers.js
+ *   @brief      This class implements the 5.1 to binaural virtual speakers
+ *   @author     Thibaut Carpentier
+ *   @date       01/2016
+ *
+ */
+/************************************************************************************/
+
+var VirtualSpeakersNode = function (_AbstractNode) {
+    _inherits(VirtualSpeakersNode, _AbstractNode);
+
+    //==============================================================================
+    /**
+     * @brief This class implements the 5.1 to binaural virtual speakers
+     *
+     * @param {AudioContext} audioContext - audioContext instance.
+     */
+
+    function VirtualSpeakersNode(audioContext, audioStreamDescriptionCollection) {
+        _classCallCheck(this, VirtualSpeakersNode);
+
+        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(VirtualSpeakersNode).call(this, audioContext, audioStreamDescriptionCollection));
+
+        _this._splitterNode = undefined;
+        _this._binauralPanner = undefined;
+        _this._hrtfSet = undefined;
+
+        /// retrieves the positions of all streams
+        var sofaPositions = _this._getSofaPositions();
+
+        /// instanciate an empty hrtf set
+        _this._hrtfSet = new _binaural2.default.sofa.HrtfSet({
+            audioContext: audioContext,
+            positionsType: 'gl', // mandatory for BinauralPanner
+            filterPositions: sofaPositions,
+            filterPositionsType: 'sofaSpherical'
+        });
+
+        /// the total number of incoming channels, including all the streams
+        /// (mainAudio, extendedAmbience, extendedComments and extendedDialogs)
+        var totalNumberOfChannels_ = _this._audioStreamDescriptionCollection.totalNumberOfChannels;
+
+        _this._splitterNode = audioContext.createChannelSplitter(totalNumberOfChannels_);
+
+        /// sanity checks
+        if (_this._splitterNode.numberOfInputs != 1 || _this._splitterNode.numberOfOutputs != totalNumberOfChannels_) {
+            throw new Error("Pas bon");
+        }
+
+        /// split the input streams into 10 independent channels
+        _this.input.connect(_this._splitterNode);
+
+        /// the binaural panner is not yet created;
+        /// it will be instanciated and connected to the audio graph as soon as an SOFA URL is loaded
+
+        var url = 'http://bili2.ircam.fr/SimpleFreeFieldHRIR/BILI/COMPENSATED/44100/IRC_1100_C_HRIR.sofa';
+        _this.loadHrtfSet(url);
+        return _this;
+    }
+
+    //==============================================================================
+    /**
+     * Load a new HRTF from a given URL
+     * @type {string} url
+     */
+
+    _createClass(VirtualSpeakersNode, [{
+        key: 'loadHrtfSet',
+        value: function loadHrtfSet(url) {
+            var _this2 = this;
+
+            /// the total number of incoming channels, including all the streams
+            /// (mainAudio, extendedAmbience, extendedComments and extendedDialogs)
+            var totalNumberOfChannels_ = this._audioStreamDescriptionCollection.totalNumberOfChannels;
+
+            /// retrieves the positions of all streams
+            var sofaPositions = this._getSofaPositions();
+
+            return this._hrtfSet.load(url).then(function () {
+                console.log("loaded hrtf from " + url);
+
+                _this2._binauralPanner = new _binaural2.default.audio.BinauralPanner({
+                    audioContext: _this2._audioContext,
+                    hrtfSet: _this2._hrtfSet,
+                    crossfadeDuration: 0.01,
+                    positionsType: 'sofaSpherical',
+                    sourceCount: totalNumberOfChannels_,
+                    sourcePositions: sofaPositions
+                });
+
+                /// connect the inputs
+                for (var i = 0; i < totalNumberOfChannels_; i++) {
+                    _this2._binauralPanner.connectInputByIndex(i, _this2._splitterNode, i, 0);
+                }
+
+                /// connect the outputs
+                _this2._binauralPanner.connectOutputs(_this2._output);
+            });
+        }
+
+        //==============================================================================
+        /// returns all the source positions, with the SOFA spherical coordinate
+
+    }, {
+        key: '_getSofaPositions',
+        value: function _getSofaPositions() {
+
+            /// retrieves the AudioStreamDescriptionCollection
+            /// (mainAudio, extendedAmbience, extendedComments and extendedDialogs)
+            var asdc = this._audioStreamDescriptionCollection.streams;
+
+            var channelIndex = 0;
+
+            var sofaPositions = [];
+
+            /// go through all the streams and mute/unmute according to their 'active' flag
+            var _iteratorNormalCompletion = true;
+            var _didIteratorError = false;
+            var _iteratorError = undefined;
+
+            try {
+                for (var _iterator = asdc[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                    var stream = _step.value;
+
+                    /// positions expressed with Spat4 navigation coordinate
+                    var azimuths = stream.channelPositions;
+
+                    var numChannelsForThisStream = stream.numChannels;
+
+                    for (var i = 0; i < numChannelsForThisStream; i++) {
+
+                        /// positions expressed with Spat4 navigation coordinate
+                        var azimuth = azimuths[i];
+
+                        /// convert to SOFA spherical coordinate
+                        var sofaAzim = -1. * azimuth;
+                        var sofaElev = 0.;
+                        var sofaDist = 1.;
+
+                        var sofaPos = [sofaAzim, sofaElev, sofaDist];
+
+                        sofaPositions.push(sofaPos);
+                    }
+                }
+            } catch (err) {
+                _didIteratorError = true;
+                _iteratorError = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion && _iterator.return) {
+                        _iterator.return();
+                    }
+                } finally {
+                    if (_didIteratorError) {
+                        throw _iteratorError;
+                    }
+                }
+            }
+
+            return sofaPositions;
+        }
+    }]);
+
+    return VirtualSpeakersNode;
+}(_index2.default);
+
+exports.default = VirtualSpeakersNode;
+},{"../core/index.js":2,"binaural":39}],13:[function(require,module,exports){
+'use strict';
+
 Object.defineProperty(exports, "__esModule", {
 		value: true
 });
-exports.unittests = exports.utilities = exports.AudioStreamDescription = exports.AudioStreamDescriptionCollection = exports.SmartFader = exports.ObjectSpatialiserAndMixer = exports.NoiseAdaptation = exports.MultichannelSpatialiser = exports.DialogEnhancement = exports.StreamSelector = exports.HeadphonesEqualization = exports.SumDiffNode = exports.CascadeNode = undefined;
+exports.binaural = exports.unittests = exports.utilities = exports.AudioStreamDescription = exports.AudioStreamDescriptionCollection = exports.SmartFader = exports.ObjectSpatialiserAndMixer = exports.NoiseAdaptation = exports.MultichannelSpatialiser = exports.DialogEnhancement = exports.StreamSelector = exports.HeadphonesEqualization = exports.SumDiffNode = exports.CascadeNode = undefined;
 
 var _index = require('./dialog-enhancement/index.js');
 
@@ -2150,6 +2345,10 @@ var _index15 = require('./testing/index.js');
 
 var _index16 = _interopRequireDefault(_index15);
 
+var _binaural = require('binaural');
+
+var _binaural2 = _interopRequireDefault(_binaural);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.CascadeNode = _index14.CascadeNode;
@@ -2165,7 +2364,8 @@ exports.AudioStreamDescriptionCollection = _index11.AudioStreamDescriptionCollec
 exports.AudioStreamDescription = _index11.AudioStreamDescription;
 exports.utilities = _utils2.default;
 exports.unittests = _index16.default;
-},{"./core/index.js":2,"./core/utils.js":3,"./dialog-enhancement/index.js":4,"./dsp/index.js":8,"./multichannel-spatialiser/index.js":13,"./noise-adaptation/index.js":15,"./object-spatialiser-and-mixer/index.js":16,"./smart-fader/index.js":17,"./stream-selector/index.js":18,"./testing/index.js":19}],13:[function(require,module,exports){
+exports.binaural = _binaural2.default;
+},{"./core/index.js":2,"./core/utils.js":3,"./dialog-enhancement/index.js":4,"./dsp/index.js":8,"./multichannel-spatialiser/index.js":14,"./noise-adaptation/index.js":16,"./object-spatialiser-and-mixer/index.js":17,"./smart-fader/index.js":18,"./stream-selector/index.js":19,"./testing/index.js":20,"binaural":39}],14:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -2191,6 +2391,10 @@ var _transaural = require('../dsp/transaural.js');
 var _routing = require('../multichannel-spatialiser/routing.js');
 
 var _routing2 = _interopRequireDefault(_routing);
+
+var _virtualspeakers = require('../dsp/virtualspeakers.js');
+
+var _virtualspeakers2 = _interopRequireDefault(_virtualspeakers);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -2238,6 +2442,7 @@ var MultichannelSpatialiser = function (_AbstractNode) {
         _this._headphonesEqualizationNode = new _headphoneequalization2.default(audioContext);
         _this._transauralNode = new _transaural.TransauralShufflerNode(audioContext);
         _this._discreteRouting = new _routing2.default(audioContext, audioStreamDescriptionCollection);
+        _this._virtualSpeakers = new _virtualspeakers2.default(audioContext, audioStreamDescriptionCollection);
 
         _this._listeningAxis = listeningAxis;
 
@@ -2259,11 +2464,23 @@ var MultichannelSpatialiser = function (_AbstractNode) {
 
     //==============================================================================
     /**
-     * Set outputType: 'binaural' or 'transaural' or 'multichannel'
-     * @type {string}
+     * Load a new HRTF from a given URL
+     * @type {string} url
      */
 
     _createClass(MultichannelSpatialiser, [{
+        key: 'loadHrtfSet',
+        value: function loadHrtfSet(url) {
+            return this._virtualSpeakers.loadHrtfSet(url);
+        }
+
+        //==============================================================================
+        /**
+         * Set outputType: 'binaural' or 'transaural' or 'multichannel'
+         * @type {string}
+         */
+
+    }, {
         key: 'activeStreamsChanged',
 
         /**
@@ -2285,7 +2502,11 @@ var MultichannelSpatialiser = function (_AbstractNode) {
 
             ///@todo : disconnect everything (?)
 
-            if (this.isInBinauralMode() === true) {} else if (this.isInTransauralMode() === true) {} else if (this.isInMultichannelMode() === true) {
+            if (this.isInBinauralMode() === true) {
+
+                this.input.connect(this._virtualSpeakers.input);
+                this._virtualSpeakers.connect(this._output);
+            } else if (this.isInTransauralMode() === true) {} else if (this.isInMultichannelMode() === true) {
                 /// discrete routing in the multichannel mode
 
                 this.input.connect(this._discreteRouting.input);
@@ -2309,7 +2530,7 @@ var MultichannelSpatialiser = function (_AbstractNode) {
 
             /// the so-called 'offset gain' is only applied for transaural or binaural
             if (this.isInBinauralMode() === true || this.isInTransauralMode() === true) {
-                var gainIndB = this.offsetGain();
+                var gainIndB = this.offsetGain;
                 var gainLinear = _utils2.default.dB2lin(gainIndB);
 
                 this._gainNode.gain.value = gainLinear;
@@ -2489,7 +2710,7 @@ var MultichannelSpatialiser = function (_AbstractNode) {
 }(_index2.default);
 
 exports.default = MultichannelSpatialiser;
-},{"../core/index.js":2,"../core/utils.js":3,"../dsp/headphoneequalization.js":7,"../dsp/transaural.js":11,"../multichannel-spatialiser/routing.js":14}],14:[function(require,module,exports){
+},{"../core/index.js":2,"../core/utils.js":3,"../dsp/headphoneequalization.js":7,"../dsp/transaural.js":11,"../dsp/virtualspeakers.js":12,"../multichannel-spatialiser/routing.js":15}],15:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -2683,7 +2904,7 @@ var StreamRouting = function (_AbstractNode) {
 }(_index2.default);
 
 exports.default = StreamRouting;
-},{"../core/index.js":2}],15:[function(require,module,exports){
+},{"../core/index.js":2}],16:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -2755,7 +2976,7 @@ var NoiseAdaptation = function (_AbstractNode) {
 }(_index2.default);
 
 exports.default = NoiseAdaptation;
-},{"../core/index.js":2}],16:[function(require,module,exports){
+},{"../core/index.js":2}],17:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -2842,7 +3063,7 @@ var ObjectSpatialiserAndMixer = function (_MultichannelSpatiali) {
 }(_index2.default);
 
 exports.default = ObjectSpatialiserAndMixer;
-},{"../multichannel-spatialiser/index.js":13}],17:[function(require,module,exports){
+},{"../multichannel-spatialiser/index.js":14}],18:[function(require,module,exports){
 'use strict';
 
 var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
@@ -3117,7 +3338,7 @@ var SmartFader = function (_AbstractNode) {
 }(_index2.default);
 
 exports.default = SmartFader;
-},{"../core/index.js":2,"../core/utils.js":3,"../dsp/compressor.js":6}],18:[function(require,module,exports){
+},{"../core/index.js":2,"../core/utils.js":3,"../dsp/compressor.js":6}],19:[function(require,module,exports){
 "use strict";
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -3289,7 +3510,7 @@ var StreamSelector = function (_AbstractNode) {
 }(_index2.default);
 
 exports.default = StreamSelector;
-},{"../core/index.js":2}],19:[function(require,module,exports){
+},{"../core/index.js":2}],20:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -3353,7 +3574,7 @@ var unittests = {
 };
 
 exports.default = unittests;
-},{"./testbinaural.js":20,"./testbiquad.js":21,"./testcascade.js":22,"./testmultichannel.js":23,"./testrouting.js":24,"./testsofa.js":25,"./testsumdiff.js":26,"./testtransaural.js":27}],20:[function(require,module,exports){
+},{"./testbinaural.js":21,"./testbiquad.js":22,"./testcascade.js":23,"./testmultichannel.js":24,"./testrouting.js":25,"./testsofa.js":26,"./testsumdiff.js":27,"./testtransaural.js":28}],21:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -3451,7 +3672,7 @@ var binauraltests = {
 };
 
 exports.default = binauraltests;
-},{"../core/bufferutils.js":1,"./testsofa.js":25}],21:[function(require,module,exports){
+},{"../core/bufferutils.js":1,"./testsofa.js":26}],22:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -3548,7 +3769,7 @@ var biquadtests = {
 };
 
 exports.default = biquadtests;
-},{"../core/bufferutils.js":1}],22:[function(require,module,exports){
+},{"../core/bufferutils.js":1}],23:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -3656,7 +3877,7 @@ var cascadetests = {
 };
 
 exports.default = cascadetests;
-},{"../core/bufferutils.js":1,"../dsp/cascade.js":5}],23:[function(require,module,exports){
+},{"../core/bufferutils.js":1,"../dsp/cascade.js":5}],24:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -3738,7 +3959,7 @@ var multichanneltests = {
 };
 
 exports.default = multichanneltests;
-},{"../core/bufferutils.js":1}],24:[function(require,module,exports){
+},{"../core/bufferutils.js":1}],25:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -3828,7 +4049,7 @@ var routingtests = {
 };
 
 exports.default = routingtests;
-},{"../core/bufferutils.js":1,"../multichannel-spatialiser/routing.js":14}],25:[function(require,module,exports){
+},{"../core/bufferutils.js":1,"../multichannel-spatialiser/routing.js":15}],26:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -3982,7 +4203,7 @@ var sofatests = {
 };
 
 exports.default = sofatests;
-},{"../core/utils.js":3,"binaural":38}],26:[function(require,module,exports){
+},{"../core/utils.js":3,"binaural":39}],27:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -4068,7 +4289,7 @@ var sumdifftests = {
 };
 
 exports.default = sumdifftests;
-},{"../core/bufferutils.js":1,"../dsp/sumdiff.js":10}],27:[function(require,module,exports){
+},{"../core/bufferutils.js":1,"../dsp/sumdiff.js":10}],28:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -4151,7 +4372,7 @@ var transauraltests = {
 };
 
 exports.default = transauraltests;
-},{"../core/bufferutils.js":1,"../dsp/transaural.js":11}],28:[function(require,module,exports){
+},{"../core/bufferutils.js":1,"../dsp/transaural.js":11}],29:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
@@ -4408,7 +4629,7 @@ var BinauralPanner = exports.BinauralPanner = function () {
 }();
 
 exports.default = BinauralPanner;
-},{"../geometry/coordinates":35,"./Source":29,"gl-matrix":45}],29:[function(require,module,exports){
+},{"../geometry/coordinates":36,"./Source":30,"gl-matrix":46}],30:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -4592,7 +4813,7 @@ var Source = exports.Source = function () {
 }();
 
 exports.default = Source;
-},{}],30:[function(require,module,exports){
+},{}],31:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -4618,7 +4839,7 @@ exports.default = {
   Source: _Source2.default,
   utilities: _utilities2.default
 };
-},{"./BinauralPanner":28,"./Source":29,"./utilities":31}],31:[function(require,module,exports){
+},{"./BinauralPanner":29,"./Source":30,"./utilities":32}],32:[function(require,module,exports){
 'use strict';
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
@@ -4772,7 +4993,7 @@ exports.default = {
   createNoiseBuffer: createNoiseBuffer,
   resampleFloat32Array: resampleFloat32Array
 };
-},{}],32:[function(require,module,exports){
+},{}],33:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -4788,7 +5009,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 exports.default = {
   utilities: _utilities2.default
 };
-},{"./utilities":33}],33:[function(require,module,exports){
+},{"./utilities":34}],34:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -4819,7 +5040,7 @@ exports.default = {
   almostEquals: almostEquals,
   almostEqualsModulo: almostEqualsModulo
 };
-},{}],34:[function(require,module,exports){
+},{}],35:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -4858,7 +5079,7 @@ exports.default = {
   distanceSquared: distanceSquared,
   tree: _kd2.default
 };
-},{"kd.tree":55}],35:[function(require,module,exports){
+},{"kd.tree":56}],36:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -5093,7 +5314,7 @@ exports.default = {
   typedToSofaCartesian: typedToSofaCartesian,
   typedToGl: typedToGl
 };
-},{"./degree":36}],36:[function(require,module,exports){
+},{"./degree":37}],37:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -5143,7 +5364,7 @@ exports.default = {
   toRadian: toRadian,
   toRadianFactor: toRadianFactor
 };
-},{}],37:[function(require,module,exports){
+},{}],38:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -5169,12 +5390,13 @@ exports.default = {
   degree: _degree2.default,
   KdTree: _KdTree2.default
 };
-},{"./KdTree":34,"./coordinates":35,"./degree":36}],38:[function(require,module,exports){
+},{"./KdTree":35,"./coordinates":36,"./degree":37}],39:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.sofa = exports.geometry = exports.common = exports.audio = undefined;
 
 var _audio = require('./audio');
 
@@ -5194,13 +5416,17 @@ var _sofa2 = _interopRequireDefault(_sofa);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+exports.audio = _audio2.default;
+exports.common = _common2.default;
+exports.geometry = _geometry2.default;
+exports.sofa = _sofa2.default;
 exports.default = {
   audio: _audio2.default,
   common: _common2.default,
   geometry: _geometry2.default,
   sofa: _sofa2.default
 };
-},{"./audio":30,"./common":32,"./geometry":37,"./sofa":41}],39:[function(require,module,exports){
+},{"./audio":31,"./common":33,"./geometry":38,"./sofa":42}],40:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
@@ -5908,7 +6134,7 @@ var HrtfSet = exports.HrtfSet = function () {
 }();
 
 exports.default = HrtfSet;
-},{"../audio/utilities":31,"../geometry/KdTree":34,"../geometry/coordinates":35,"./parseDataSet":42,"./parseSofa":43,"gl-matrix":45}],40:[function(require,module,exports){
+},{"../audio/utilities":32,"../geometry/KdTree":35,"../geometry/coordinates":36,"./parseDataSet":43,"./parseSofa":44,"gl-matrix":46}],41:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
@@ -6188,7 +6414,7 @@ var ServerDataBase = exports.ServerDataBase = function () {
 }();
 
 exports.default = ServerDataBase;
-},{"./parseDataSet":42,"./parseXml":44}],41:[function(require,module,exports){
+},{"./parseDataSet":43,"./parseXml":45}],42:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -6217,7 +6443,7 @@ exports.default = {
   HrtfSet: _HrtfSet2.default,
   ServerDataBase: _ServerDataBase2.default
 };
-},{"./HrtfSet":39,"./ServerDataBase":40}],42:[function(require,module,exports){
+},{"./HrtfSet":40,"./ServerDataBase":41}],43:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -6366,7 +6592,7 @@ function parseDataSet(input) {
 }
 
 exports.default = parseDataSet;
-},{}],43:[function(require,module,exports){
+},{}],44:[function(require,module,exports){
 'use strict';
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
@@ -6463,7 +6689,7 @@ exports.default = {
   parseSofa: parseSofa,
   conformSofaType: conformSofaType
 };
-},{}],44:[function(require,module,exports){
+},{}],45:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -6517,7 +6743,7 @@ if (typeof window.DOMParser !== 'undefined') {
 }
 
 exports.default = parseXml;
-},{}],45:[function(require,module,exports){
+},{}],46:[function(require,module,exports){
 /**
  * @fileoverview gl-matrix - High performance matrix and vector operations
  * @author Brandon Jones
@@ -6555,7 +6781,7 @@ exports.quat = require("./gl-matrix/quat.js");
 exports.vec2 = require("./gl-matrix/vec2.js");
 exports.vec3 = require("./gl-matrix/vec3.js");
 exports.vec4 = require("./gl-matrix/vec4.js");
-},{"./gl-matrix/common.js":46,"./gl-matrix/mat2.js":47,"./gl-matrix/mat2d.js":48,"./gl-matrix/mat3.js":49,"./gl-matrix/mat4.js":50,"./gl-matrix/quat.js":51,"./gl-matrix/vec2.js":52,"./gl-matrix/vec3.js":53,"./gl-matrix/vec4.js":54}],46:[function(require,module,exports){
+},{"./gl-matrix/common.js":47,"./gl-matrix/mat2.js":48,"./gl-matrix/mat2d.js":49,"./gl-matrix/mat3.js":50,"./gl-matrix/mat4.js":51,"./gl-matrix/quat.js":52,"./gl-matrix/vec2.js":53,"./gl-matrix/vec3.js":54,"./gl-matrix/vec4.js":55}],47:[function(require,module,exports){
 /* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -6609,7 +6835,7 @@ glMatrix.toRadian = function(a){
 
 module.exports = glMatrix;
 
-},{}],47:[function(require,module,exports){
+},{}],48:[function(require,module,exports){
 /* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -6913,7 +7139,7 @@ mat2.LDU = function (L, D, U, a) {
 
 module.exports = mat2;
 
-},{"./common.js":46}],48:[function(require,module,exports){
+},{"./common.js":47}],49:[function(require,module,exports){
 /* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -7232,7 +7458,7 @@ mat2d.frob = function (a) {
 
 module.exports = mat2d;
 
-},{"./common.js":46}],49:[function(require,module,exports){
+},{"./common.js":47}],50:[function(require,module,exports){
 /* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -7799,7 +8025,7 @@ mat3.frob = function (a) {
 
 module.exports = mat3;
 
-},{"./common.js":46}],50:[function(require,module,exports){
+},{"./common.js":47}],51:[function(require,module,exports){
 /* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -9084,7 +9310,7 @@ mat4.frob = function (a) {
 
 module.exports = mat4;
 
-},{"./common.js":46}],51:[function(require,module,exports){
+},{"./common.js":47}],52:[function(require,module,exports){
 /* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -9639,7 +9865,7 @@ quat.str = function (a) {
 
 module.exports = quat;
 
-},{"./common.js":46,"./mat3.js":49,"./vec3.js":53,"./vec4.js":54}],52:[function(require,module,exports){
+},{"./common.js":47,"./mat3.js":50,"./vec3.js":54,"./vec4.js":55}],53:[function(require,module,exports){
 /* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -10164,7 +10390,7 @@ vec2.str = function (a) {
 
 module.exports = vec2;
 
-},{"./common.js":46}],53:[function(require,module,exports){
+},{"./common.js":47}],54:[function(require,module,exports){
 /* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -10875,7 +11101,7 @@ vec3.str = function (a) {
 
 module.exports = vec3;
 
-},{"./common.js":46}],54:[function(require,module,exports){
+},{"./common.js":47}],55:[function(require,module,exports){
 /* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -11414,7 +11640,7 @@ vec4.str = function (a) {
 
 module.exports = vec4;
 
-},{"./common.js":46}],55:[function(require,module,exports){
+},{"./common.js":47}],56:[function(require,module,exports){
 /**
  * AUTHOR OF INITIAL JS LIBRARY
  * k-d Tree JavaScript - V 1.0
@@ -11873,5 +12099,5 @@ module.exports = {
   }
 }
 
-},{}]},{},[12])(12)
+},{}]},{},[13])(13)
 });

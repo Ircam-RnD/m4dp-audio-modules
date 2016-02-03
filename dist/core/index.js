@@ -357,7 +357,7 @@ var AudioStreamDescription = exports.AudioStreamDescription = function () {
                 throw new Error("Invalid channel index : " + channelIndex);
             }
 
-            if (this._type === "MultiWithLFE" && channelIndex === 5) {
+            if (this._type === "MultiWithLFE" && channelIndex === 3) {
                 return true;
             } else {
                 return false;
@@ -451,11 +451,13 @@ var AudioStreamDescription = exports.AudioStreamDescription = function () {
                 case "Stereo":
                     return [-30, +30];
                 case "MultiWithoutLFE":
+                    /// L, R, C, Ls, Rs.
                     return [-30, +30, 0, -110, +110];
                 case "MultiWithLFE":
+                    // L, R, C, Lfe, Ls, Rs.
                     // @n LFE position is irrelevant
                     // but provided so that the array has a length of 6
-                    return [-30, +30, 0, -110, +110, 0];
+                    return [-30, +30, 0, 0, -110, +110];
                 case "EightChannel":
                     // @todo set correct positions
                     return [1, 2, 3, 4, 5, 6, 7, 8];

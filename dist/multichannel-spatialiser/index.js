@@ -24,6 +24,10 @@ var _routing = require('../multichannel-spatialiser/routing.js');
 
 var _routing2 = _interopRequireDefault(_routing);
 
+var _virtualspeakers = require('../dsp/virtualspeakers.js');
+
+var _virtualspeakers2 = _interopRequireDefault(_virtualspeakers);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -70,6 +74,7 @@ var MultichannelSpatialiser = function (_AbstractNode) {
         _this._headphonesEqualizationNode = new _headphoneequalization2.default(audioContext);
         _this._transauralNode = new _transaural.TransauralShufflerNode(audioContext);
         _this._discreteRouting = new _routing2.default(audioContext, audioStreamDescriptionCollection);
+        _this._virtualSpeakers = new _virtualspeakers2.default(audioContext, audioStreamDescriptionCollection);
 
         _this._listeningAxis = listeningAxis;
 
@@ -91,11 +96,23 @@ var MultichannelSpatialiser = function (_AbstractNode) {
 
     //==============================================================================
     /**
-     * Set outputType: 'binaural' or 'transaural' or 'multichannel'
-     * @type {string}
+     * Load a new HRTF from a given URL
+     * @type {string} url
      */
 
     _createClass(MultichannelSpatialiser, [{
+        key: 'loadHrtfSet',
+        value: function loadHrtfSet(url) {
+            return this._virtualSpeakers.loadHrtfSet(url);
+        }
+
+        //==============================================================================
+        /**
+         * Set outputType: 'binaural' or 'transaural' or 'multichannel'
+         * @type {string}
+         */
+
+    }, {
         key: 'activeStreamsChanged',
 
         /**
@@ -117,7 +134,11 @@ var MultichannelSpatialiser = function (_AbstractNode) {
 
             ///@todo : disconnect everything (?)
 
-            if (this.isInBinauralMode() === true) {} else if (this.isInTransauralMode() === true) {} else if (this.isInMultichannelMode() === true) {
+            if (this.isInBinauralMode() === true) {
+
+                this.input.connect(this._virtualSpeakers.input);
+                this._virtualSpeakers.connect(this._output);
+            } else if (this.isInTransauralMode() === true) {} else if (this.isInMultichannelMode() === true) {
                 /// discrete routing in the multichannel mode
 
                 this.input.connect(this._discreteRouting.input);
@@ -141,7 +162,7 @@ var MultichannelSpatialiser = function (_AbstractNode) {
 
             /// the so-called 'offset gain' is only applied for transaural or binaural
             if (this.isInBinauralMode() === true || this.isInTransauralMode() === true) {
-                var gainIndB = this.offsetGain();
+                var gainIndB = this.offsetGain;
                 var gainLinear = _utils2.default.dB2lin(gainIndB);
 
                 this._gainNode.gain.value = gainLinear;

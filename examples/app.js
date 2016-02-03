@@ -17,6 +17,7 @@ var dumpObject = function(obj) {
 	}
 };
 
+
 /// player pour la video principale
 videoPlayerMainMediaElement			= document.getElementById('videoPlayerMain');
 /// player pour la video LSF (langue des signes)
@@ -82,6 +83,7 @@ playerAudioDescriptionMediaElement.controller 	= controller;
 
 var audioContext = new (window.AudioContext || window.webkitAudioContext)();
 console.debug("######### audioContext: " + audioContext);
+
 
 var audioSourceMain 	 	= audioContext.createMediaElementSource( videoPlayerMainMediaElement );
 var audioSourceFiveDotOne  	= audioContext.createMediaElementSource( playerAudioFiveDotOneMediaElement );
@@ -154,7 +156,7 @@ var streamSelector = new M4DPAudioModules.StreamSelector( audioContext, asdc );
 var smartFader = new M4DPAudioModules.SmartFader( audioContext, asdc );
 //var objectSpatialiserAndMixer = new M4DPAudioModules.ObjectSpatialiserAndMixer(audioContext);
 //var noiseAdaptation = new M4DPAudioModules.NoiseAdaptation(audioContext);
-var multichannelSpatialiser = new M4DPAudioModules.MultichannelSpatialiser( audioContext, asdc, 'multichannel' );
+var multichannelSpatialiser = new M4DPAudioModules.MultichannelSpatialiser( audioContext, asdc, 'binaural' );
 //var dialogEnhancement = new M4DPAudioModules.DialogEnhancement(audioContext);
 var headphonesEqualization = new M4DPAudioModules.HeadphonesEqualization( audioContext );
 
@@ -192,6 +194,7 @@ channelMerger.connect( streamSelector.input );
 /// (process 10 channels in total)
 streamSelector.connect( smartFader.input );
 
+/*
 {
 	var channelSplitter3 = audioContext.createChannelSplitter(10);
 	smartFader.connect( channelSplitter3 );
@@ -201,14 +204,17 @@ streamSelector.connect( smartFader.input );
 
 	channelMerger3.connect( audioContext.destination );
 }
+*/
 
-/*
 smartFader.connect( multichannelSpatialiser.input );
 
 /// apply the multichannel spatialiser
 multichannelSpatialiser.connect( audioContext.destination );
-*/
 
+
+
+/// prepare the sofa catalog of HRTF
+prepareSofaCatalog();
 
 playerMain.attachSource( urlMain );
 playerPip.attachSource( urlPip );
@@ -236,6 +242,55 @@ checkboxLSF.checked 			= true;
 checkboxEqualization.checked 	= false;
 
 ///@otodo : need to properly initialize the smartFader (slider) and other checkboxes
+
+function prepareSofaCatalog(){
+	
+	// HRTF set selection menu
+    var $hrtfSet = document.querySelector('#hrtf-selector');
+    $hrtfSet.onchange = function () 
+    {
+     	/// sets the color to red while loading
+     	$hrtfSet.style.backgroundColor="rgba(255, 0, 0, 0.7)";
+        
+        /// retrieve the URL selected in the menu 
+        var url = $hrtfSet.value;
+
+        /// load the URL in the spatialiser
+        multichannelSpatialiser.loadHrtfSet( url )
+        .then( function() 
+        {
+        	/// reset the color after loading
+        	$hrtfSet.style.backgroundColor="";
+     	});
+    };
+
+    /// retrieves the catalog of URLs from the OpenDAP server
+	var serverDataBase = new M4DPAudioModules.binaural.sofa.ServerDataBase();
+	serverDataBase
+         .loadCatalogue()
+         .then( function () {
+             var urls = serverDataBase.getUrls({
+                 convention: 'HRIR',
+                 equalisation: 'compensated',
+                 sampleRate: audioContext.sampleRate,
+             });
+
+             var $option;
+             urls.forEach( function (url) {
+                 $option = document.createElement('option');
+                 $option.textContent = url;
+                 $hrtfSet.add($option);
+             });
+
+             defaultUrl = urls.findIndex( function (url) {
+                 return url.match('1076');
+             });
+             $hrtfSet.value = urls[defaultUrl];
+             $hrtfSet.onchange();
+
+             return urls;
+         });
+}
 
 function updateActiveStreams(){
 	/// notify the modification of active streams

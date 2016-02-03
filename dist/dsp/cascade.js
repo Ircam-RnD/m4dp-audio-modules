@@ -29,6 +29,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var CascadeNode = function (_AbstractNode) {
     _inherits(CascadeNode, _AbstractNode);
 
+    //==============================================================================
     /**
      * @brief This class implements a cascade of BiquadFilterNodes
      *        The filtering affects all channel similarly
