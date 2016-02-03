@@ -2228,6 +2228,13 @@ var VirtualSpeakersNode = function (_AbstractNode) {
             return this._hrtfSet.load(url).then(function () {
                 console.log("loaded hrtf from " + url);
 
+                /// first of all, disconnect the old panner
+                if (typeof _this2._binauralPanner !== 'undefined') {
+                    _this2._binauralPanner.disconnectOutputs();
+                }
+
+                _this2._binauralPanner = null;
+
                 _this2._binauralPanner = new _binaural2.default.audio.BinauralPanner({
                     audioContext: _this2._audioContext,
                     hrtfSet: _this2._hrtfSet,
@@ -2237,6 +2244,7 @@ var VirtualSpeakersNode = function (_AbstractNode) {
                     sourcePositions: sofaPositions
                 });
 
+                /// first of all, disconnect the old panner
                 _this2._splitterNode.disconnect();
 
                 /// connect the inputs
@@ -2246,6 +2254,9 @@ var VirtualSpeakersNode = function (_AbstractNode) {
 
                 /// connect the outputs
                 _this2._binauralPanner.connectOutputs(_this2._output);
+
+                /// update the listener yaw
+                _this2.listenerYaw = _this2._listenerYaw;
             });
         }
 
