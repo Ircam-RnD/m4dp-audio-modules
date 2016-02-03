@@ -253,7 +253,7 @@ var AbstractNode = function () {
         /**
          * @type {AudioNode}
          */
-        this.input = this._audioContext.createGain();
+        this._input = this._audioContext.createGain();
         this._output = this._audioContext.createGain();
     }
 
@@ -269,14 +269,13 @@ var AbstractNode = function () {
             this._output.connect(node);
         }
         /**
-         * Disconnect the audio node
-         * @param {AudioNode} node - an AudioNode to disconnect to.
+         * Disconnect the audio node     
          */
 
     }, {
         key: "disconnect",
-        value: function disconnect(node) {
-            this._output.disconnect(node);
+        value: function disconnect() {
+            this._output.disconnect();
         }
 
         //==============================================================================
@@ -1327,13 +1326,13 @@ var CascadeNode = function (_AbstractNode) {
             var numCascades_ = this.numCascades;
 
             /// first of all, disconnect everything
-            this.input.disconnect();
+            this._input.disconnect();
             for (var i = 0; i < numCascades_; i++) {
                 this._biquadNodes[i].disconnect();
             }
 
             if (this.bypass === true || numCascades_ === 0) {
-                this.input.connect(this._output);
+                this._input.connect(this._output);
             } else {
                 /// connect the last element to the output
                 this._biquadNodes[numCascades_ - 1].connect(this._output);
@@ -1344,7 +1343,7 @@ var CascadeNode = function (_AbstractNode) {
                 }
 
                 /// connect the 1st biquad to the input
-                this.input.connect(this._biquadNodes[0]);
+                this._input.connect(this._biquadNodes[0]);
             }
         }
     }, {
@@ -1486,7 +1485,7 @@ var MultichannelCompressorNode = function (_AbstractNode) {
         }
 
         /// split the input streams into 10 independent channels
-        _this.input.connect(_this._splitterNode);
+        _this._input.connect(_this._splitterNode);
 
         /// connect a compressorNodes to each channel
         for (var i = 0; i < numChannels; i++) {
@@ -1825,7 +1824,7 @@ var SumDiffNode = function (_AbstractNode) {
         _this._channelSplitterNode = _this._audioContext.createChannelSplitter(2);
         _this._channelMergerNode = _this._audioContext.createChannelMerger(2);
 
-        _this.input.connect(_this._channelSplitterNode);
+        _this._input.connect(_this._channelSplitterNode);
 
         /// a gain node used for -1 multiplication
         _this._gainNode = _this._audioContext.createGain();
@@ -1925,8 +1924,8 @@ var TransauralNode = function (_AbstractNode) {
         value: function _updateAudioGraph() {
 
             if (this.bypass === true) {
-                this.input.disconnect();
-                this.input.connect(this._output);
+                this._input.disconnect();
+                this._input.connect(this._output);
             } else {
                 //this._updateTransauralAudioGraph();
 
@@ -2018,14 +2017,14 @@ var TransauralShufflerNode = exports.TransauralShufflerNode = function (_Transau
         }
 
         /// shuffling input
-        _this2.input.disconnect();
-        _this2.input.connect(_this2._sumDiffNode1.input);
+        _this2._input.disconnect();
+        _this2._input.connect(_this2._sumDiffNode1._input);
 
         /// filtering
         _this2._sumDiffNode1.connect(_this2._convolverNode);
 
         /// shuffling output
-        _this2._convolverNode.connect(_this2._sumDiffNode2.input);
+        _this2._convolverNode.connect(_this2._sumDiffNode2._input);
 
         /// connect to the output
         _this2._sumDiffNode2.connect(_this2._output);
@@ -2044,8 +2043,8 @@ var TransauralShufflerNode = exports.TransauralShufflerNode = function (_Transau
         value: function _updateAudioGraph() {
 
             if (this.bypass === true) {
-                this.input.disconnect();
-                this.input.connect(this._output);
+                this._input.disconnect();
+                this._input.connect(this._output);
             } else {
                 this._updateTransauralAudioGraph();
             }
@@ -2054,9 +2053,9 @@ var TransauralShufflerNode = exports.TransauralShufflerNode = function (_Transau
         key: '_updateTransauralAudioGraph',
         value: function _updateTransauralAudioGraph() {
 
-            this.input.disconnect();
+            this._input.disconnect();
 
-            this.input.connect(this._sumDiffNode1.input);
+            this._input.connect(this._sumDiffNode1._input);
 
             /// (the rest of the graph is already connected in the constructor)
 
@@ -2161,15 +2160,16 @@ var VirtualSpeakersNode = function (_AbstractNode) {
         _this._splitterNode = undefined;
         _this._binauralPanner = undefined;
         _this._hrtfSet = undefined;
+        _this._listenerYaw = 0.0;
 
         /// retrieves the positions of all streams
-        var sofaPositions = _this._getSofaPositions();
+        var horizontalPositions = _this._getHorizontalPlane();
 
         /// instanciate an empty hrtf set
         _this._hrtfSet = new _binaural2.default.sofa.HrtfSet({
             audioContext: audioContext,
             positionsType: 'gl', // mandatory for BinauralPanner
-            filterPositions: sofaPositions,
+            filterPositions: horizontalPositions,
             filterPositionsType: 'sofaSpherical'
         });
 
@@ -2184,12 +2184,14 @@ var VirtualSpeakersNode = function (_AbstractNode) {
             throw new Error("Pas bon");
         }
 
-        if (sofaPositions.length != totalNumberOfChannels_) {
+        /*
+        if( sofaPositions.length != totalNumberOfChannels_ ){
             throw new Error("Pas bon");
         }
+        */
 
         /// split the input streams into 10 independent channels
-        _this.input.connect(_this._splitterNode);
+        _this._input.connect(_this._splitterNode);
 
         /// the binaural panner is not yet created;
         /// it will be instanciated and connected to the audio graph as soon as an SOFA URL is loaded
@@ -2201,12 +2203,18 @@ var VirtualSpeakersNode = function (_AbstractNode) {
 
     //==============================================================================
     /**
-     * Load a new HRTF from a given URL
-     * @type {string} url
+     * Set listenerYaw
+     * @type {number} yaw angle in degrees
      */
 
     _createClass(VirtualSpeakersNode, [{
         key: 'loadHrtfSet',
+
+        //==============================================================================
+        /**
+         * Load a new HRTF from a given URL
+         * @type {string} url
+         */
         value: function loadHrtfSet(url) {
             var _this2 = this;
 
@@ -2229,6 +2237,8 @@ var VirtualSpeakersNode = function (_AbstractNode) {
                     sourcePositions: sofaPositions
                 });
 
+                _this2._splitterNode.disconnect();
+
                 /// connect the inputs
                 for (var i = 0; i < totalNumberOfChannels_; i++) {
                     _this2._binauralPanner.connectInputByIndex(i, _this2._splitterNode, i, 0);
@@ -2237,6 +2247,29 @@ var VirtualSpeakersNode = function (_AbstractNode) {
                 /// connect the outputs
                 _this2._binauralPanner.connectOutputs(_this2._output);
             });
+        }
+    }, {
+        key: '_getHorizontalPlane',
+        value: function _getHorizontalPlane() {
+
+            var sofaPositions = [];
+
+            for (var i = -180; i <= 180; i += 1) {
+
+                /// positions expressed with Spat4 navigation coordinate
+                var azimuth = i;
+
+                /// convert to SOFA spherical coordinate
+                var sofaAzim = -1. * azimuth;
+                var sofaElev = 0.;
+                var sofaDist = 1.;
+
+                var sofaPos = [sofaAzim, sofaElev, sofaDist];
+
+                sofaPositions.push(sofaPos);
+            }
+
+            return sofaPositions;
         }
 
         //==============================================================================
@@ -2299,6 +2332,28 @@ var VirtualSpeakersNode = function (_AbstractNode) {
             }
 
             return sofaPositions;
+        }
+    }, {
+        key: 'listenerYaw',
+        set: function set(value) {
+            this._listenerYaw = value;
+
+            /// the view vector must be expressed in sofaSpherical
+            var viewPos = [-1. * this._listenerYaw, 0., 1.];
+
+            if (typeof this._binauralPanner !== 'undefined') {
+                this._binauralPanner.listenerView = viewPos;
+                this._binauralPanner.update();
+            }
+        }
+
+        /**
+         * Get listenerYaw
+         * @type {number} yaw angle in degrees
+         */
+        ,
+        get: function get() {
+            return this._listenerYaw;
         }
     }]);
 
@@ -2428,7 +2483,7 @@ var MultichannelSpatialiser = function (_AbstractNode) {
      * @param {binaural.HrtfSet} : HRTF set to load
      * @param {string} headphoneEqPresetName - the name of the headphone equalization preset (they are hard-coded) 
      * @param {number} offsetGain - the offset gain (expressed in dB)
-     * @param {number} listeningAxis - angle? @todo value to be defined
+     * @param {number} listenerYaw - yaw angle in degrees
      */
 
     function MultichannelSpatialiser(audioContext) {
@@ -2437,7 +2492,7 @@ var MultichannelSpatialiser = function (_AbstractNode) {
         var hrtf = arguments.length <= 3 || arguments[3] === undefined ? undefined : arguments[3];
         var headphoneEqPresetName = arguments.length <= 4 || arguments[4] === undefined ? 'none' : arguments[4];
         var offsetGain = arguments.length <= 5 || arguments[5] === undefined ? 0.0 : arguments[5];
-        var listeningAxis = arguments.length <= 6 || arguments[6] === undefined ? undefined : arguments[6];
+        var listenerYaw = arguments.length <= 6 || arguments[6] === undefined ? 0.0 : arguments[6];
 
         _classCallCheck(this, MultichannelSpatialiser);
 
@@ -2448,8 +2503,6 @@ var MultichannelSpatialiser = function (_AbstractNode) {
         _this._transauralNode = new _transaural.TransauralShufflerNode(audioContext);
         _this._discreteRouting = new _routing2.default(audioContext, audioStreamDescriptionCollection);
         _this._virtualSpeakers = new _virtualspeakers2.default(audioContext, audioStreamDescriptionCollection);
-
-        _this._listeningAxis = listeningAxis;
 
         /// creates a gain Node. This node is used to process the so-called 'offset gain'
         _this._gainNode = audioContext.createGain();
@@ -2464,6 +2517,9 @@ var MultichannelSpatialiser = function (_AbstractNode) {
 
         /// set the output type
         _this.outputType = outputType;
+
+        /// sets the listener yaw
+        _this.listenerYaw = listenerYaw;
         return _this;
     }
 
@@ -2505,23 +2561,48 @@ var MultichannelSpatialiser = function (_AbstractNode) {
 
             this._updateGainOffset();
 
-            ///@todo : disconnect everything (?)
+            this._disconnectEverything();
 
             if (this.isInBinauralMode() === true) {
 
-                this.input.connect(this._virtualSpeakers.input);
-                this._virtualSpeakers.connect(this._output);
-            } else if (this.isInTransauralMode() === true) {} else if (this.isInMultichannelMode() === true) {
-                /// discrete routing in the multichannel mode
+                /// binaural + headphone EQ + gain offset
+                this._input.connect(this._virtualSpeakers._input);
+                this._virtualSpeakers.connect(this._headphonesEqualizationNode._input);
+                this._headphonesEqualizationNode.connect(this._gainNode);
+                this._gainNode.connect(this._output);
+            } else if (this.isInTransauralMode() === true) {
 
-                this.input.connect(this._discreteRouting.input);
+                /// binaural + transaural + gain offset
+                this._input.connect(this._virtualSpeakers._input);
+                this._virtualSpeakers.connect(this._transauralNode._input);
+                this._transauralNode.connect(this._gainNode);
+                this._gainNode.connect(this._output);
+            } else if (this.isInMultichannelMode() === true) {
+
+                /// discrete routing in the multichannel mode
+                this._input.connect(this._discreteRouting._input);
                 this._discreteRouting.connect(this._gainNode);
                 this._gainNode.connect(this._output);
             } else {
                 throw new Error("Pas normal!");
             }
+        }
 
-            ///@todo a completer
+        //==============================================================================
+        /**
+         * Disconnect the whole audio graph
+         */
+
+    }, {
+        key: '_disconnectEverything',
+        value: function _disconnectEverything() {
+
+            this._input.disconnect();
+            this._virtualSpeakers.disconnect();
+            this._headphonesEqualizationNode.disconnect();
+            this._discreteRouting.disconnect();
+            this._transauralNode.disconnect();
+            this._gainNode.disconnect();
         }
 
         //==============================================================================
@@ -2583,10 +2664,31 @@ var MultichannelSpatialiser = function (_AbstractNode) {
          */
 
     }, {
+        key: 'bypassHeadphoneEqualization',
+
+        /**
+         * Enable or bypass the headphone equalization
+         * @type {boolean}
+         */
+        value: function bypassHeadphoneEqualization(value) {
+            this._headphonesEqualizationNode.bypass = value;
+        }
+
+        //==============================================================================
+        /**
+         * Set the offset gain (expressed in dB)
+         * (un gain d’offset afin de maintenir un niveau subjectif après l’enclenchement du process de spatialisation)
+         * @todo range
+         * @type {number} value
+         */
+
+    }, {
         key: 'outputType',
         set: function set(value) {
 
             if (value === 'binaural' || value === 'transaural' || value === 'multichannel') {
+
+                console.log("MultichannelSpatialiser switching to mode " + value);
 
                 this._outputType = value;
 
@@ -2660,15 +2762,6 @@ var MultichannelSpatialiser = function (_AbstractNode) {
         get: function get() {
             return this._headphonesEqualizationNode.eqPreset;
         }
-
-        //==============================================================================
-        /**
-         * Set the offset gain (expressed in dB)
-         * (un gain d’offset afin de maintenir un niveau subjectif après l’enclenchement du process de spatialisation)
-         * @todo range
-         * @type {number} value
-         */
-
     }, {
         key: 'offsetGain',
         set: function set(value) {
@@ -2691,23 +2784,22 @@ var MultichannelSpatialiser = function (_AbstractNode) {
 
         //==============================================================================
         /**
-         * Set listeningAxis
-         * @todo value type? angle?
-         * @type {number}
+         * Set listenerYaw
+         * @type {number} yaw angle in degrees
          */
 
     }, {
-        key: 'listeningAxis',
+        key: 'listenerYaw',
         set: function set(value) {
-            this._listeningAxis = value;
+            this._virtualSpeakers.listenerYaw = value;
         }
         /**
-         * Get listeningAxis
-         * @type {number}
+         * Get listenerYaw
+         * @type {number} yaw angle in degrees
          */
         ,
         get: function get() {
-            return this._listeningAxis;
+            return this._virtualSpeakers.listenerYaw;
         }
     }]);
 
@@ -2798,7 +2890,7 @@ var StreamRouting = function (_AbstractNode) {
         }
 
         /// split the input streams into 10 independent channels
-        _this.input.connect(_this._splitterNode);
+        _this._input.connect(_this._splitterNode);
 
         /// index of the destination channels, according to the WAA specifications
         var outputIndexL = 0;
@@ -3137,8 +3229,8 @@ var SmartFader = function (_AbstractNode) {
 
         /// connect the audio nodes
         {
-            _this.input.connect(_this._gainNode);
-            _this._gainNode.connect(_this._dynamicCompressorNode.input);
+            _this._input.connect(_this._gainNode);
+            _this._gainNode.connect(_this._dynamicCompressorNode._input);
             _this._dynamicCompressorNode.connect(_this._output);
         }
 
@@ -3424,7 +3516,7 @@ var StreamSelector = function (_AbstractNode) {
         }
 
         /// split the input streams into 10 independent channels
-        _this.input.connect(_this._splitterNode);
+        _this._input.connect(_this._splitterNode);
 
         /// connect a gainNode to each channel
         for (var i = 0; i < totalNumberOfChannels_; i++) {

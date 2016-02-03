@@ -66,8 +66,8 @@ var SmartFader = function (_AbstractNode) {
 
         /// connect the audio nodes
         {
-            _this.input.connect(_this._gainNode);
-            _this._gainNode.connect(_this._dynamicCompressorNode.input);
+            _this._input.connect(_this._gainNode);
+            _this._gainNode.connect(_this._dynamicCompressorNode._input);
             _this._dynamicCompressorNode.connect(_this._output);
         }
 

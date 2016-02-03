@@ -30,7 +30,7 @@ var AbstractNode = function () {
         /**
          * @type {AudioNode}
          */
-        this.input = this._audioContext.createGain();
+        this._input = this._audioContext.createGain();
         this._output = this._audioContext.createGain();
     }
 
@@ -46,14 +46,13 @@ var AbstractNode = function () {
             this._output.connect(node);
         }
         /**
-         * Disconnect the audio node
-         * @param {AudioNode} node - an AudioNode to disconnect to.
+         * Disconnect the audio node     
          */
 
     }, {
         key: "disconnect",
-        value: function disconnect(node) {
-            this._output.disconnect(node);
+        value: function disconnect() {
+            this._output.disconnect();
         }
 
         //==============================================================================

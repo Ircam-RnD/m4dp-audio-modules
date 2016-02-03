@@ -160,7 +160,6 @@ var smartFader = new M4DPAudioModules.SmartFader( audioContext, asdc );
 //var noiseAdaptation = new M4DPAudioModules.NoiseAdaptation(audioContext);
 var multichannelSpatialiser = new M4DPAudioModules.MultichannelSpatialiser( audioContext, asdc, 'binaural' );
 //var dialogEnhancement = new M4DPAudioModules.DialogEnhancement(audioContext);
-var headphonesEqualization = new M4DPAudioModules.HeadphonesEqualization( audioContext );
 
 {
 	///@bug : the channelSplitterMain MUST be connected to the AudioContext,
@@ -190,11 +189,11 @@ var headphonesEqualization = new M4DPAudioModules.HeadphonesEqualization( audioC
 
 
 /// receives 4 ADSC with 10 channels in total
-channelMerger.connect( streamSelector.input );
+channelMerger.connect( streamSelector._input );
 
 /// mute or unmute the inactive streams
 /// (process 10 channels in total)
-streamSelector.connect( smartFader.input );
+streamSelector.connect( smartFader._input );
 
 /*
 {
@@ -208,7 +207,7 @@ streamSelector.connect( smartFader.input );
 }
 */
 
-smartFader.connect( multichannelSpatialiser.input );
+smartFader.connect( multichannelSpatialiser._input );
 
 /// apply the multichannel spatialiser
 multichannelSpatialiser.connect( audioContext.destination );
@@ -235,6 +234,7 @@ var checkboxExDialogs = document.getElementById('checkbox-extended-dialogs');
 var checkboxLSF = document.getElementById('checkbox-lsf');
 var smartFaderDB = document.getElementById('smartFaderDB');
 var checkboxEqualization = document.getElementById('checkbox-equalization');
+var yawFader = document.getElementById('yawFader');
 
 checkboxVideo.checked 			= true;
 checkboxExAmbience.checked 		= false;
@@ -243,7 +243,40 @@ checkboxExDialogs.checked 		= false;
 checkboxLSF.checked 			= true;
 checkboxEqualization.checked 	= false;
 
-///@otodo : need to properly initialize the smartFader (slider) and other checkboxes
+initializeSmartFader();
+onCheckVideo();
+onCheckExAmbience();
+onCheckExComments();
+onCheckEqualization();
+onCheckExDialogs();
+onCheckLSF();
+
+prepareModeSelectionMenu();
+
+//==============================================================================
+function prepareModeSelectionMenu(){
+	var $menu = document.querySelector('#spatialisation-mode-menu');
+
+	$menu.onchange = function () 
+    {
+     	/// retrieve selected mode
+        var selection = $menu.value;
+
+        multichannelSpatialiser.outputType = selection;
+    };
+
+	$option = document.createElement('option');
+	$option.textContent = 'binaural';
+    $menu.add($option);
+
+	$option = document.createElement('option');
+	$option.textContent = 'transaural';
+    $menu.add($option);	
+
+    $option = document.createElement('option');
+	$option.textContent = 'multichannel';
+    $menu.add($option);	
+}
 
 //==============================================================================
 function prepareSofaCatalog(){
@@ -349,12 +382,12 @@ function onCheckExDialogs() {
 function onCheckEqualization() {
 	console.debug("######### onCheckEqualization: "+checkboxEqualization.checked);
 	
-	headphonesEqualization.eqPreset = "eq1";
+	multichannelSpatialiser.eqPreset = "eq1";
 
 	if (checkboxEqualization.checked) {
-		headphonesEqualization.bypass = false;
+		multichannelSpatialiser.bypassHeadphoneEqualization( false );
 	} else {
-		headphonesEqualization.bypass = true;
+		multichannelSpatialiser.bypassHeadphoneEqualization( true );
 	}
 }
 
@@ -374,6 +407,25 @@ function onCheckLSF() {
 }
 
 //==============================================================================
+function initializeSmartFader(){
+
+	var minFader = parseFloat( smartFaderDB.min );
+	var maxFader = parseFloat( smartFaderDB.max );
+
+	/// default value in dB
+	var value = 0.0;
+
+	//const [minValue, maxValue] = M4DPAudioModules.SmartFader.dBRange();
+	var minValue = -60;
+	var maxValue = 8;
+
+	/// scale from dB to GUI
+	var valueFader = M4DPAudioModules.utilities.scale( value, minValue, maxValue, minFader, maxFader );
+
+	smartFaderDB.value = valueFader;
+}
+
+//==============================================================================
 /**
  * Callback when the dB slider changes
  */
@@ -383,8 +435,8 @@ smartFaderDB.addEventListener('input', function(){
 
 	var valueFader = smartFaderDB.value;
 
-	var minFader = smartFaderDB.min;
-	var maxFader = smartFaderDB.max;
+	var minFader = parseFloat( smartFaderDB.min );
+	var maxFader = parseFloat( smartFaderDB.max );
 
 	//const [minValue, maxValue] = M4DPAudioModules.SmartFader.dBRange();
 	var minValue = -60;
@@ -393,10 +445,25 @@ smartFaderDB.addEventListener('input', function(){
 	/// scale from GUI to DSP
 	var value = M4DPAudioModules.utilities.scale( valueFader, minFader, maxFader, minValue, maxValue );
 
+	document.getElementById('Smart').textContent = 'Smart Fader = ' + Math.round(value).toString() + ' dB';
+
 	//console.log( "smartFaderDB (scaled) = " + value ); 
 
 	/// sets the smart fader dB gain
 	smartFader.dB = value;
+});
+
+//==============================================================================
+/**
+ * Callback when the yaw slider changes
+ */
+yawFader.addEventListener('input', function(){
+
+	var valueFader = yawFader.value;
+
+	document.getElementById('Yaw').textContent = 'Yaw = ' + valueFader;
+
+	multichannelSpatialiser.listenerYaw = valueFader;
 });
 
 //==============================================================================

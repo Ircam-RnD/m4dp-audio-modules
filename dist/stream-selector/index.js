@@ -78,7 +78,7 @@ var StreamSelector = function (_AbstractNode) {
         }
 
         /// split the input streams into 10 independent channels
-        _this.input.connect(_this._splitterNode);
+        _this._input.connect(_this._splitterNode);
 
         /// connect a gainNode to each channel
         for (var i = 0; i < totalNumberOfChannels_; i++) {

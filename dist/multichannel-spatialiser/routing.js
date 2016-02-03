@@ -80,7 +80,7 @@ var StreamRouting = function (_AbstractNode) {
         }
 
         /// split the input streams into 10 independent channels
-        _this.input.connect(_this._splitterNode);
+        _this._input.connect(_this._splitterNode);
 
         /// index of the destination channels, according to the WAA specifications
         var outputIndexL = 0;

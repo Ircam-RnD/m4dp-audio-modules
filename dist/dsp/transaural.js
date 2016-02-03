@@ -73,8 +73,8 @@ var TransauralNode = function (_AbstractNode) {
         value: function _updateAudioGraph() {
 
             if (this.bypass === true) {
-                this.input.disconnect();
-                this.input.connect(this._output);
+                this._input.disconnect();
+                this._input.connect(this._output);
             } else {
                 //this._updateTransauralAudioGraph();
 
@@ -166,14 +166,14 @@ var TransauralShufflerNode = exports.TransauralShufflerNode = function (_Transau
         }
 
         /// shuffling input
-        _this2.input.disconnect();
-        _this2.input.connect(_this2._sumDiffNode1.input);
+        _this2._input.disconnect();
+        _this2._input.connect(_this2._sumDiffNode1._input);
 
         /// filtering
         _this2._sumDiffNode1.connect(_this2._convolverNode);
 
         /// shuffling output
-        _this2._convolverNode.connect(_this2._sumDiffNode2.input);
+        _this2._convolverNode.connect(_this2._sumDiffNode2._input);
 
         /// connect to the output
         _this2._sumDiffNode2.connect(_this2._output);
@@ -192,8 +192,8 @@ var TransauralShufflerNode = exports.TransauralShufflerNode = function (_Transau
         value: function _updateAudioGraph() {
 
             if (this.bypass === true) {
-                this.input.disconnect();
-                this.input.connect(this._output);
+                this._input.disconnect();
+                this._input.connect(this._output);
             } else {
                 this._updateTransauralAudioGraph();
             }
@@ -202,9 +202,9 @@ var TransauralShufflerNode = exports.TransauralShufflerNode = function (_Transau
         key: '_updateTransauralAudioGraph',
         value: function _updateTransauralAudioGraph() {
 
-            this.input.disconnect();
+            this._input.disconnect();
 
-            this.input.connect(this._sumDiffNode1.input);
+            this._input.connect(this._sumDiffNode1._input);
 
             /// (the rest of the graph is already connected in the constructor)
 

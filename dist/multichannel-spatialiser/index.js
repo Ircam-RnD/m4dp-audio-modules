@@ -55,7 +55,7 @@ var MultichannelSpatialiser = function (_AbstractNode) {
      * @param {binaural.HrtfSet} : HRTF set to load
      * @param {string} headphoneEqPresetName - the name of the headphone equalization preset (they are hard-coded) 
      * @param {number} offsetGain - the offset gain (expressed in dB)
-     * @param {number} listeningAxis - angle? @todo value to be defined
+     * @param {number} listenerYaw - yaw angle in degrees
      */
 
     function MultichannelSpatialiser(audioContext) {
@@ -64,7 +64,7 @@ var MultichannelSpatialiser = function (_AbstractNode) {
         var hrtf = arguments.length <= 3 || arguments[3] === undefined ? undefined : arguments[3];
         var headphoneEqPresetName = arguments.length <= 4 || arguments[4] === undefined ? 'none' : arguments[4];
         var offsetGain = arguments.length <= 5 || arguments[5] === undefined ? 0.0 : arguments[5];
-        var listeningAxis = arguments.length <= 6 || arguments[6] === undefined ? undefined : arguments[6];
+        var listenerYaw = arguments.length <= 6 || arguments[6] === undefined ? 0.0 : arguments[6];
 
         _classCallCheck(this, MultichannelSpatialiser);
 
@@ -75,8 +75,6 @@ var MultichannelSpatialiser = function (_AbstractNode) {
         _this._transauralNode = new _transaural.TransauralShufflerNode(audioContext);
         _this._discreteRouting = new _routing2.default(audioContext, audioStreamDescriptionCollection);
         _this._virtualSpeakers = new _virtualspeakers2.default(audioContext, audioStreamDescriptionCollection);
-
-        _this._listeningAxis = listeningAxis;
 
         /// creates a gain Node. This node is used to process the so-called 'offset gain'
         _this._gainNode = audioContext.createGain();
@@ -91,6 +89,9 @@ var MultichannelSpatialiser = function (_AbstractNode) {
 
         /// set the output type
         _this.outputType = outputType;
+
+        /// sets the listener yaw
+        _this.listenerYaw = listenerYaw;
         return _this;
     }
 
@@ -132,23 +133,48 @@ var MultichannelSpatialiser = function (_AbstractNode) {
 
             this._updateGainOffset();
 
-            ///@todo : disconnect everything (?)
+            this._disconnectEverything();
 
             if (this.isInBinauralMode() === true) {
 
-                this.input.connect(this._virtualSpeakers.input);
-                this._virtualSpeakers.connect(this._output);
-            } else if (this.isInTransauralMode() === true) {} else if (this.isInMultichannelMode() === true) {
-                /// discrete routing in the multichannel mode
+                /// binaural + headphone EQ + gain offset
+                this._input.connect(this._virtualSpeakers._input);
+                this._virtualSpeakers.connect(this._headphonesEqualizationNode._input);
+                this._headphonesEqualizationNode.connect(this._gainNode);
+                this._gainNode.connect(this._output);
+            } else if (this.isInTransauralMode() === true) {
 
-                this.input.connect(this._discreteRouting.input);
+                /// binaural + transaural + gain offset
+                this._input.connect(this._virtualSpeakers._input);
+                this._virtualSpeakers.connect(this._transauralNode._input);
+                this._transauralNode.connect(this._gainNode);
+                this._gainNode.connect(this._output);
+            } else if (this.isInMultichannelMode() === true) {
+
+                /// discrete routing in the multichannel mode
+                this._input.connect(this._discreteRouting._input);
                 this._discreteRouting.connect(this._gainNode);
                 this._gainNode.connect(this._output);
             } else {
                 throw new Error("Pas normal!");
             }
+        }
 
-            ///@todo a completer
+        //==============================================================================
+        /**
+         * Disconnect the whole audio graph
+         */
+
+    }, {
+        key: '_disconnectEverything',
+        value: function _disconnectEverything() {
+
+            this._input.disconnect();
+            this._virtualSpeakers.disconnect();
+            this._headphonesEqualizationNode.disconnect();
+            this._discreteRouting.disconnect();
+            this._transauralNode.disconnect();
+            this._gainNode.disconnect();
         }
 
         //==============================================================================
@@ -210,10 +236,31 @@ var MultichannelSpatialiser = function (_AbstractNode) {
          */
 
     }, {
+        key: 'bypassHeadphoneEqualization',
+
+        /**
+         * Enable or bypass the headphone equalization
+         * @type {boolean}
+         */
+        value: function bypassHeadphoneEqualization(value) {
+            this._headphonesEqualizationNode.bypass = value;
+        }
+
+        //==============================================================================
+        /**
+         * Set the offset gain (expressed in dB)
+         * (un gain d’offset afin de maintenir un niveau subjectif après l’enclenchement du process de spatialisation)
+         * @todo range
+         * @type {number} value
+         */
+
+    }, {
         key: 'outputType',
         set: function set(value) {
 
             if (value === 'binaural' || value === 'transaural' || value === 'multichannel') {
+
+                console.log("MultichannelSpatialiser switching to mode " + value);
 
                 this._outputType = value;
 
@@ -287,15 +334,6 @@ var MultichannelSpatialiser = function (_AbstractNode) {
         get: function get() {
             return this._headphonesEqualizationNode.eqPreset;
         }
-
-        //==============================================================================
-        /**
-         * Set the offset gain (expressed in dB)
-         * (un gain d’offset afin de maintenir un niveau subjectif après l’enclenchement du process de spatialisation)
-         * @todo range
-         * @type {number} value
-         */
-
     }, {
         key: 'offsetGain',
         set: function set(value) {
@@ -318,23 +356,22 @@ var MultichannelSpatialiser = function (_AbstractNode) {
 
         //==============================================================================
         /**
-         * Set listeningAxis
-         * @todo value type? angle?
-         * @type {number}
+         * Set listenerYaw
+         * @type {number} yaw angle in degrees
          */
 
     }, {
-        key: 'listeningAxis',
+        key: 'listenerYaw',
         set: function set(value) {
-            this._listeningAxis = value;
+            this._virtualSpeakers.listenerYaw = value;
         }
         /**
-         * Get listeningAxis
-         * @type {number}
+         * Get listenerYaw
+         * @type {number} yaw angle in degrees
          */
         ,
         get: function get() {
-            return this._listeningAxis;
+            return this._virtualSpeakers.listenerYaw;
         }
     }]);
 

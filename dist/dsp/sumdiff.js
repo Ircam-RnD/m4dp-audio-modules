@@ -49,7 +49,7 @@ var SumDiffNode = function (_AbstractNode) {
         _this._channelSplitterNode = _this._audioContext.createChannelSplitter(2);
         _this._channelMergerNode = _this._audioContext.createChannelMerger(2);
 
-        _this.input.connect(_this._channelSplitterNode);
+        _this._input.connect(_this._channelSplitterNode);
 
         /// a gain node used for -1 multiplication
         _this._gainNode = _this._audioContext.createGain();

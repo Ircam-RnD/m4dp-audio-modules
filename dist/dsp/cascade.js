@@ -254,13 +254,13 @@ var CascadeNode = function (_AbstractNode) {
             var numCascades_ = this.numCascades;
 
             /// first of all, disconnect everything
-            this.input.disconnect();
+            this._input.disconnect();
             for (var i = 0; i < numCascades_; i++) {
                 this._biquadNodes[i].disconnect();
             }
 
             if (this.bypass === true || numCascades_ === 0) {
-                this.input.connect(this._output);
+                this._input.connect(this._output);
             } else {
                 /// connect the last element to the output
                 this._biquadNodes[numCascades_ - 1].connect(this._output);
@@ -271,7 +271,7 @@ var CascadeNode = function (_AbstractNode) {
                 }
 
                 /// connect the 1st biquad to the input
-                this.input.connect(this._biquadNodes[0]);
+                this._input.connect(this._biquadNodes[0]);
             }
         }
     }, {

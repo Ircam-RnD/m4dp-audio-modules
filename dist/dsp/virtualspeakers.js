@@ -49,15 +49,16 @@ var VirtualSpeakersNode = function (_AbstractNode) {
         _this._splitterNode = undefined;
         _this._binauralPanner = undefined;
         _this._hrtfSet = undefined;
+        _this._listenerYaw = 0.0;
 
         /// retrieves the positions of all streams
-        var sofaPositions = _this._getSofaPositions();
+        var horizontalPositions = _this._getHorizontalPlane();
 
         /// instanciate an empty hrtf set
         _this._hrtfSet = new _binaural2.default.sofa.HrtfSet({
             audioContext: audioContext,
             positionsType: 'gl', // mandatory for BinauralPanner
-            filterPositions: sofaPositions,
+            filterPositions: horizontalPositions,
             filterPositionsType: 'sofaSpherical'
         });
 
@@ -72,12 +73,14 @@ var VirtualSpeakersNode = function (_AbstractNode) {
             throw new Error("Pas bon");
         }
 
-        if (sofaPositions.length != totalNumberOfChannels_) {
+        /*
+        if( sofaPositions.length != totalNumberOfChannels_ ){
             throw new Error("Pas bon");
         }
+        */
 
         /// split the input streams into 10 independent channels
-        _this.input.connect(_this._splitterNode);
+        _this._input.connect(_this._splitterNode);
 
         /// the binaural panner is not yet created;
         /// it will be instanciated and connected to the audio graph as soon as an SOFA URL is loaded
@@ -89,12 +92,18 @@ var VirtualSpeakersNode = function (_AbstractNode) {
 
     //==============================================================================
     /**
-     * Load a new HRTF from a given URL
-     * @type {string} url
+     * Set listenerYaw
+     * @type {number} yaw angle in degrees
      */
 
     _createClass(VirtualSpeakersNode, [{
         key: 'loadHrtfSet',
+
+        //==============================================================================
+        /**
+         * Load a new HRTF from a given URL
+         * @type {string} url
+         */
         value: function loadHrtfSet(url) {
             var _this2 = this;
 
@@ -117,6 +126,8 @@ var VirtualSpeakersNode = function (_AbstractNode) {
                     sourcePositions: sofaPositions
                 });
 
+                _this2._splitterNode.disconnect();
+
                 /// connect the inputs
                 for (var i = 0; i < totalNumberOfChannels_; i++) {
                     _this2._binauralPanner.connectInputByIndex(i, _this2._splitterNode, i, 0);
@@ -125,6 +136,29 @@ var VirtualSpeakersNode = function (_AbstractNode) {
                 /// connect the outputs
                 _this2._binauralPanner.connectOutputs(_this2._output);
             });
+        }
+    }, {
+        key: '_getHorizontalPlane',
+        value: function _getHorizontalPlane() {
+
+            var sofaPositions = [];
+
+            for (var i = -180; i <= 180; i += 1) {
+
+                /// positions expressed with Spat4 navigation coordinate
+                var azimuth = i;
+
+                /// convert to SOFA spherical coordinate
+                var sofaAzim = -1. * azimuth;
+                var sofaElev = 0.;
+                var sofaDist = 1.;
+
+                var sofaPos = [sofaAzim, sofaElev, sofaDist];
+
+                sofaPositions.push(sofaPos);
+            }
+
+            return sofaPositions;
         }
 
         //==============================================================================
@@ -187,6 +221,28 @@ var VirtualSpeakersNode = function (_AbstractNode) {
             }
 
             return sofaPositions;
+        }
+    }, {
+        key: 'listenerYaw',
+        set: function set(value) {
+            this._listenerYaw = value;
+
+            /// the view vector must be expressed in sofaSpherical
+            var viewPos = [-1. * this._listenerYaw, 0., 1.];
+
+            if (typeof this._binauralPanner !== 'undefined') {
+                this._binauralPanner.listenerView = viewPos;
+                this._binauralPanner.update();
+            }
+        }
+
+        /**
+         * Get listenerYaw
+         * @type {number} yaw angle in degrees
+         */
+        ,
+        get: function get() {
+            return this._listenerYaw;
         }
     }]);
 
