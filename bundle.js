@@ -4158,7 +4158,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @fileOverview Multi-source binaural panner.
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @author Jean-Philippe.Lambert@ircam.fr
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @copyright 2016 IRCAM, Paris, France
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @license CECILL-2.1
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @license BSD-3-Clause
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       */
 
 Object.defineProperty(exports, "__esModule", {
@@ -4246,6 +4246,11 @@ var BinauralPanner = exports.BinauralPanner = function () {
       (0, _coordinates.typedToGl)(this._sourcePositionsAbsolute[index], positionRequest, this.positionsType);
 
       return this;
+    }
+  }, {
+    key: 'getSourcePositionByIndex',
+    value: function getSourcePositionByIndex(index) {
+      return (0, _coordinates.glToTyped)([], this._sourcePositionsAbsolute[index], this.positionsType);
     }
 
     // ----------- public methods
@@ -4406,25 +4411,20 @@ exports.default = BinauralPanner;
 },{"../geometry/coordinates":35,"./Source":29,"gl-matrix":45}],29:[function(require,module,exports){
 'use strict';
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @fileOverview Source for binaural processing.
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @author Jean-Philippe.Lambert@ircam.fr
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @copyright 2016 IRCAM, Paris, France
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @license CECILL-2.1
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      */
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.Source = undefined;
-
-var _coordinates = require('../geometry/coordinates');
-
-var _coordinates2 = _interopRequireDefault(_coordinates);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * @fileOverview Source for binaural processing.
+ * @author Jean-Philippe.Lambert@ircam.fr
+ * @copyright 2016 IRCAM, Paris, France
+ * @license BSD-3-Clause
+ */
 
 /**
  * Single source.
@@ -4459,8 +4459,9 @@ var Source = exports.Source = function () {
     this._crossfadeTimeout = undefined;
 
     // set position when everything is ready
-    this.position = typeof options.position !== 'undefined' ? options.position : _coordinates2.default.glToTyped([], [0, 0, -1], // front
-    this._hrtfSet.positionsType);
+    if (typeof options.position !== 'undefined') {
+      this.position = options.position;
+    }
   }
 
   // ----------- accessors
@@ -4541,6 +4542,14 @@ var Source = exports.Source = function () {
       return this._crossfadeDuration;
     }
   }, {
+    key: 'hrtfSet',
+    set: function set(hrtfSet) {
+      this._hrtfSet = hrtfSet;
+    },
+    get: function get() {
+      return this._hrtfSet;
+    }
+  }, {
     key: 'position',
     set: function set(positionRequest) {
       var _this5 = this;
@@ -4583,7 +4592,7 @@ var Source = exports.Source = function () {
 }();
 
 exports.default = Source;
-},{"../geometry/coordinates":35}],30:[function(require,module,exports){
+},{}],30:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -4625,7 +4634,7 @@ exports.resampleFloat32Array = resampleFloat32Array;
  * @fileOverview Audio utilities
  * @author Jean-Philippe.Lambert@ircam.fr
  * @copyright 2016 IRCAM, Paris, France
- * @license CECILL-2.1
+ * @license BSD-3-Clause
  */
 
 /**
@@ -4791,7 +4800,7 @@ exports.almostEqualsModulo = almostEqualsModulo;
  * @fileOverview Common utilities
  * @author Jean-Philippe.Lambert@ircam.fr
  * @copyright 2015-2016 IRCAM, Paris, France
- * @license CECILL-2.1
+ * @license BSD-3-Clause
  */
 
 function almostEquals(value, reference) {
@@ -4830,7 +4839,7 @@ exports.tree = _kd2.default; /**
                               * @fileOverview Helpers for k-d tree.
                               * @author Jean-Philippe.Lambert@ircam.fr
                               * @copyright 2015-2016 IRCAM, Paris, France
-                              * @license CECILL-2.1
+                              * @license BSD-3-Clause
                               */
 
 function distanceSquared(a, b) {
@@ -4924,7 +4933,7 @@ function sofaCartesianToGl(out, a) {
    *
    * @author Jean-Philippe.Lambert@ircam.fr
    * @copyright 2015-2016 IRCAM, Paris, France
-   * @license CECILL-2.1
+   * @license BSD-3-Clause
    */
 
 function glToSofaCartesian(out, a) {
@@ -5099,7 +5108,7 @@ exports.atan2 = atan2;
  * @fileOverview Convert to and from degree
  * @author Jean-Philippe.Lambert@ircam.fr
  * @copyright 2015-2016 IRCAM, Paris, France
- * @license CECILL-2.1
+ * @license BSD-3-Clause
  */
 
 var toRadianFactor = exports.toRadianFactor = Math.PI / 180;
@@ -5198,7 +5207,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @fileOverview Container for HRTF set.
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @author Jean-Philippe.Lambert@ircam.fr
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @copyright 2015-2016 IRCAM, Paris, France
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @license CECILL-2.1
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @license BSD-3-Clause
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       */
 
 Object.defineProperty(exports, "__esModule", {
@@ -5906,7 +5915,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @fileOverview Access a remote data-base from a SOFA server.
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @author Jean-Philippe.Lambert@ircam.fr
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @copyright 2015-2016 IRCAM, Paris, France
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @license CECILL-2.1
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @license BSD-3-Clause
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       */
 
 Object.defineProperty(exports, "__esModule", {
@@ -6201,7 +6210,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * SOFA server.
  * @author Jean-Philippe.Lambert@ircam.fr
  * @copyright 2015-2016 IRCAM, Paris, France
- * @license CECILL-2.1
+ * @license BSD-3-Clause
  */
 
 exports.default = {
@@ -6221,7 +6230,7 @@ exports.parseDataSet = parseDataSet;
  * @fileOverview Parser for DDS files
  * @author Jean-Philippe.Lambert@ircam.fr
  * @copyright 2015-2016 IRCAM, Paris, France
- * @license CECILL-2.1
+ * @license BSD-3-Clause
  */
 
 // '[R = 2]'
@@ -6371,7 +6380,7 @@ exports.conformSofaType = conformSofaType;
  * @fileOverview Parser functions for SOFA files
  * @author Jean-Philippe.Lambert@ircam.fr
  * @copyright 2015 IRCAM, Paris, France
- * @license CECILL-2.1
+ * @license BSD-3-Clause
  */
 
 /**
@@ -6464,7 +6473,7 @@ Object.defineProperty(exports, "__esModule", {
  * @fileOverview Simple XML parser, as a DOM parser.
  * @author Jean-Philippe.Lambert@ircam.fr
  * @copyright 2015-2016 IRCAM, Paris, France
- * @license CECILL-2.1
+ * @license BSD-3-Clause
  */
 
 /**
