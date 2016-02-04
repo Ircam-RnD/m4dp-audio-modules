@@ -83,7 +83,7 @@ playerAudioFiveDotOneMediaElement.controller 	= controller;
 playerAudioDescriptionMediaElement.controller 	= controller;
 
 var audioContext = new (window.AudioContext || window.webkitAudioContext)();
-console.debug("######### audioContext: " + audioContext);
+//console.debug("######### audioContext: " + audioContext);
 
 //==============================================================================
 var audioSourceMain 	 	= audioContext.createMediaElementSource( videoPlayerMainMediaElement );
