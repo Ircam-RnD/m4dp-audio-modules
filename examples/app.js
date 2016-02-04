@@ -351,7 +351,7 @@ function prepareSofaCatalog(){
              });
 
              defaultUrl = urls.findIndex( function (url) {
-                 return url.match('1076');
+                 return url.match('1018');
              });
              $hrtfSet.value = urls[defaultUrl];
              $hrtfSet.onchange();
@@ -482,7 +482,7 @@ function initializeSmartFader(){
  */
 smartFaderDB.addEventListener('input', function(){
 
-	var valueFader = smartFaderDB.value;
+	var valueFader = parseFloat( smartFaderDB.value );
 
 	var minFader = parseFloat( smartFaderDB.min );
 	var maxFader = parseFloat( smartFaderDB.max );
@@ -503,7 +503,7 @@ smartFaderDB.addEventListener('input', function(){
 //==============================================================================
 gainOffsetFader.addEventListener('input', function(){
 
-	var value = gainOffsetFader.value;
+	var value = parseFloat( gainOffsetFader.value );
 	/// this is in [-12 12] range
 
 	document.getElementById('label-gain-offset').textContent = 'Gain Offset = ' + Math.round(value).toString() + ' dB';
@@ -520,7 +520,7 @@ gainOffsetFader.addEventListener('input', function(){
  */
 yawFader.addEventListener('input', function(){
 
-	var valueFader = yawFader.value;
+	var valueFader = parseFloat( yawFader.value );
 
 	document.getElementById('label-yaw').textContent = 'Listener yaw = ' + valueFader;
 
@@ -534,7 +534,7 @@ yawFader.addEventListener('input', function(){
  */
 azimFader.addEventListener('input', function(){
 
-	var valueFader = azimFader.value;
+	var valueFader = parseFloat( azimFader.value );
 
 	document.getElementById('label-azim').textContent = 'azim = ' + valueFader;
 
@@ -547,7 +547,7 @@ azimFader.addEventListener('input', function(){
  */
 elevFader.addEventListener('input', function(){
 
-	var valueFader = elevFader.value;
+	var valueFader = parseFloat( elevFader.value );
 
 	document.getElementById('label-elev').textContent = 'elev = ' + valueFader;
 
@@ -556,7 +556,7 @@ elevFader.addEventListener('input', function(){
 
 compressionRatio.addEventListener('input', function(){
 
-	var valueFader = compressionRatio.value;
+	var valueFader = parseFloat( compressionRatio.value );
 
 	document.getElementById('label-compression-ratio').textContent = 'Compression ratio = ' + valueFader + ':1';
 

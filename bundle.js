@@ -2306,10 +2306,11 @@ var VirtualSpeakersNode = function (_AbstractNode) {
         /// retrieves the positions of all streams
         var sofaPositions = _this._getSofaPositions();
 
+        /// at the moment, we load the whole HRTF file
         _this._binauralPanner = new _binaural2.default.audio.BinauralPanner({
             audioContext: audioContext,
             positionsType: 'sofaSpherical',
-            filterPositions: horizontalPositions,
+            //filterPositions: horizontalPositions,
             crossfadeDuration: 0.05,
             sourceCount: totalNumberOfChannels_,
             sourcePositions: sofaPositions
@@ -2372,7 +2373,11 @@ var VirtualSpeakersNode = function (_AbstractNode) {
             var _this2 = this;
 
             return this._binauralPanner.loadHrtfSet(url).then(function () {
-                console.log('loaded hrtf from ' + url + ' with ' + _this2._binauralPanner.filterPositions.length + ' positions');
+                if (typeof _this2._binauralPanner.filterPositions !== 'undefined') {
+                    console.log('loaded hrtf from ' + url + ' with ' + _this2._binauralPanner.filterPositions.length + ' positions');
+                } else {
+                    console.log('loaded hrtf from ' + url);
+                }
 
                 /// update the listener yaw
                 _this2.listenerYaw = _this2._listenerYaw;
@@ -2386,7 +2391,11 @@ var VirtualSpeakersNode = function (_AbstractNode) {
                 console.log('using ' + sofaUrl + ' instead');
 
                 return _this2._binauralPanner.loadHrtfSet(sofaUrl).then(function () {
-                    console.log('loaded hrtf from ' + sofaUrl + ' with ' + _this2._binauralPanner.filterPositions.length + ' positions');
+                    if (typeof _this2._binauralPanner.filterPositions !== 'undefined') {
+                        console.log('loaded hrtf from ' + sofaUrl + ' with ' + _this2._binauralPanner.filterPositions.length + ' positions');
+                    } else {
+                        console.log('loaded hrtf from ' + sofaUrl);
+                    }
 
                     _this2.listenerYaw = _this2._listenerYaw;
                 });
@@ -2487,12 +2496,33 @@ var VirtualSpeakersNode = function (_AbstractNode) {
             this._listenerYaw = value;
 
             /// the view vector must be expressed in sofaSpherical
-            var viewPos = [-1. * this._listenerYaw, 0., 1.];
+            //const viewPos = [ -1. * this._listenerYaw, 0., 1. ];
 
-            if (typeof this._binauralPanner !== 'undefined') {
+            /// making the listener yaw rotation 'a la mano'
+            {
+                var sofaPositions = this._getSofaPositions();
+                var relativePositions = [];
+
+                for (var i = 0; i < sofaPositions.length; i++) {
+                    /// relative position in sofa spherical coordinates
+                    var az = sofaPositions[i][0] + this._listenerYaw;
+                    var el = sofaPositions[i][1];
+                    var di = sofaPositions[i][2];
+
+                    var pos = [az, el, di];
+
+                    relativePositions.push(pos);
+                }
+
+                this._binauralPanner.sourcePositions = relativePositions;
+                this._binauralPanner.update();
+            }
+            /*
+            if( typeof this._binauralPanner !== 'undefined' ){
                 this._binauralPanner.listenerView = viewPos;
                 this._binauralPanner.update();
             }
+            */
         }
 
         /**
