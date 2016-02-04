@@ -245,6 +245,17 @@ onCheckLSF();
 prepareModeSelectionMenu();
 
 //==============================================================================
+function setElementVisibility( elementId, visibility ){
+
+	if( visibility === true ){
+		document.getElementById(elementId).style.visibility = "";
+	}
+	else{
+		document.getElementById(elementId).style.visibility = "hidden";
+	}
+}
+
+//==============================================================================
 function prepareModeSelectionMenu(){
 	var $menu = document.querySelector('#spatialisation-mode-menu');
 
@@ -254,27 +265,27 @@ function prepareModeSelectionMenu(){
         var selection = $menu.value;
 
         if( selection === 'binaural' ){
-			document.getElementById('checkbox-equalization').style.visibility = "";
-			document.getElementById('label-equalization').style.visibility = "";
+			setElementVisibility('checkbox-equalization', true);
+			setElementVisibility('label-equalization', true);
         }
         else{
-			document.getElementById('checkbox-equalization').style.visibility = "hidden";
-			document.getElementById('label-equalization').style.visibility = "hidden";
+			setElementVisibility('checkbox-equalization', false);
+			setElementVisibility('label-equalization', false);
         }
 
         if( selection === 'multichannel' ){
-        	document.getElementById('yawFader').style.visibility = "hidden";        	
-        	document.getElementById('label-yaw').style.visibility = "hidden";
-        	document.getElementById('gainOffset').style.visibility = "hidden";
-        	document.getElementById('label-gain-offset').style.visibility = "hidden";
-        	document.getElementById('hrtf-selector').style.visibility = "hidden";
+        	setElementVisibility('yawFader', false);
+        	setElementVisibility('label-yaw', false);
+        	setElementVisibility('gainOffset', false);
+        	setElementVisibility('label-gain-offset', false);
+        	setElementVisibility('hrtf-selector', false);
         }
         else{
-        	document.getElementById('yawFader').style.visibility = "";        		
-        	document.getElementById('label-yaw').style.visibility = "";
-        	document.getElementById('gainOffset').style.visibility = "";
-        	document.getElementById('label-gain-offset').style.visibility = "";
-        	document.getElementById('hrtf-selector').style.visibility = "";
+        	setElementVisibility('yawFader', true);
+        	setElementVisibility('label-yaw', true);
+        	setElementVisibility('gainOffset', true);
+        	setElementVisibility('label-gain-offset', true);
+        	setElementVisibility('hrtf-selector', true);
         }
 
         multichannelSpatialiser.outputType = selection;
