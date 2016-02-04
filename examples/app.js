@@ -225,6 +225,7 @@ var checkboxEqualization = document.getElementById('checkbox-equalization');
 var yawFader = document.getElementById('yawFader');
 var azimFader = document.getElementById('azimFader');
 var elevFader = document.getElementById('elevFader');
+var gainOffsetFader = document.getElementById('gainOffset');
 
 checkboxVideo.checked 			= true;
 checkboxExAmbience.checked 		= false;
@@ -264,10 +265,16 @@ function prepareModeSelectionMenu(){
         if( selection === 'multichannel' ){
         	document.getElementById('yawFader').style.visibility = "hidden";        	
         	document.getElementById('label-yaw').style.visibility = "hidden";
+        	document.getElementById('gainOffset').style.visibility = "hidden";
+        	document.getElementById('label-gain-offset').style.visibility = "hidden";
+        	document.getElementById('hrtf-selector').style.visibility = "hidden";
         }
         else{
         	document.getElementById('yawFader').style.visibility = "";        		
         	document.getElementById('label-yaw').style.visibility = "";
+        	document.getElementById('gainOffset').style.visibility = "";
+        	document.getElementById('label-gain-offset').style.visibility = "";
+        	document.getElementById('hrtf-selector').style.visibility = "";
         }
 
         multichannelSpatialiser.outputType = selection;
@@ -459,6 +466,20 @@ smartFaderDB.addEventListener('input', function(){
 
 	/// sets the smart fader dB gain
 	smartFader.dB = value;
+});
+
+//==============================================================================
+gainOffsetFader.addEventListener('input', function(){
+
+	var value = gainOffsetFader.value;
+	/// this is in [-12 12] range
+
+	document.getElementById('label-gain-offset').textContent = 'Gain Offset = ' + Math.round(value).toString() + ' dB';
+
+	/// un gain d’offset afin de maintenir un niveau subjectif apres l’enclenchement du process de spatialisation
+
+	multichannelSpatialiser.offsetGain = value;
+	objectSpatialiserAndMixer.offsetGain = value;
 });
 
 //==============================================================================
