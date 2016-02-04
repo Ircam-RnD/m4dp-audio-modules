@@ -3296,7 +3296,7 @@ var SmartFader = function (_AbstractNode) {
         var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(SmartFader).call(this, audioContext, audioStreamDescriptionCollection));
 
         _this._dB = undefined;
-        _this._compressionRatio = 2;
+        _this._compressionRatio = SmartFader.defaultCompressionRatio;
 
         /// the total number of incoming channels, including all the streams
         /// (mainAudio, extendedAmbience, extendedComments and extendedDialogs)
@@ -3337,6 +3337,7 @@ var SmartFader = function (_AbstractNode) {
             this._updateCompressorSettings();
         }
 
+        //==============================================================================
         /**
          * Sets the compression ratio
          * representing the amount of change, in dB, needed in the input for a 1 dB change in the output
@@ -3460,6 +3461,7 @@ var SmartFader = function (_AbstractNode) {
     }, {
         key: 'dynamicCompressionState',
 
+        //==============================================================================
         /**
          * Returns the dynamic compression state
          * @type {boolean}
@@ -3482,7 +3484,12 @@ var SmartFader = function (_AbstractNode) {
     }, {
         key: 'compressionRatio',
         set: function set(value) {
-            this._compressionRatio = _utils2.default.clamp(value, 1, 10);
+            var _SmartFader$compressi = _slicedToArray(SmartFader.compressionRatioRange, 2);
+
+            var minValue = _SmartFader$compressi[0];
+            var maxValue = _SmartFader$compressi[1];
+
+            this._compressionRatio = _utils2.default.clamp(value, minValue, maxValue);
 
             this._updateCompressorSettings();
         }
@@ -3494,6 +3501,12 @@ var SmartFader = function (_AbstractNode) {
         get: function get() {
             return this._compressionRatio;
         }
+
+        /**
+         * Get the compression ratio range
+         * @type {array}     
+         */
+
     }], [{
         key: 'clampdB',
         value: function clampdB(value) {
@@ -3505,6 +3518,7 @@ var SmartFader = function (_AbstractNode) {
             return _utils2.default.clamp(value, minValue, maxValue);
         }
 
+        //==============================================================================
         /**
          * Get the dB range
          * @type {array}
@@ -3526,6 +3540,22 @@ var SmartFader = function (_AbstractNode) {
         key: 'dBDefault',
         get: function get() {
             return 0;
+        }
+    }, {
+        key: 'compressionRatioRange',
+        get: function get() {
+            return [1, 10];
+        }
+
+        /**
+         * Returns the default compression ratio
+         * @type {number}
+         */
+
+    }, {
+        key: 'defaultCompressionRatio',
+        get: function get() {
+            return 2;
         }
     }]);
 
