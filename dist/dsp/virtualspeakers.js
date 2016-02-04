@@ -73,12 +73,6 @@ var VirtualSpeakersNode = function (_AbstractNode) {
             throw new Error("Pas bon");
         }
 
-        /*
-        if( sofaPositions.length != totalNumberOfChannels_ ){
-            throw new Error("Pas bon");
-        }
-        */
-
         /// split the input streams into 10 independent channels
         _this._input.connect(_this._splitterNode);
 

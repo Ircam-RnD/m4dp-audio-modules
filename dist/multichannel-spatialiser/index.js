@@ -76,15 +76,13 @@ var MultichannelSpatialiser = function (_AbstractNode) {
         /// creates a gain Node. This node is used to process the so-called 'offset gain'
         _this._gainNode = audioContext.createGain();
 
-        ///@todo : connect the gainNode where it should be
-
         /// set the offset gain
         _this.offsetGain = offsetGain;
 
         /// loads the proper headphone equalization preset
         _this.eqPreset = headphoneEqPresetName;
 
-        /// set the output type
+        /// set the output type (this will create the audio graph)
         _this.outputType = outputType;
 
         /// sets the listener yaw
@@ -228,8 +226,8 @@ var MultichannelSpatialiser = function (_AbstractNode) {
 
         //==============================================================================
         /**
-         * Set audio streams description (json)
-         * @type {AudioStreamDescriptionCollection}
+         * Loads a new headphones equalization preset
+         * @type {string} presetName : the name of the preset (they are hard-coded) 
          */
 
     }, {
@@ -246,8 +244,7 @@ var MultichannelSpatialiser = function (_AbstractNode) {
         //==============================================================================
         /**
          * Set the offset gain (expressed in dB)
-         * (un gain d’offset afin de maintenir un niveau subjectif après l’enclenchement du process de spatialisation)
-         * @todo range
+         * (un gain d’offset afin de maintenir un niveau subjectif apres l’enclenchement du process de spatialisation)
          * @type {number} value
          */
 
@@ -274,24 +271,6 @@ var MultichannelSpatialiser = function (_AbstractNode) {
         get: function get() {
             return this._outputType;
         }
-    }, {
-        key: 'audioStreamDescriptionCollection',
-        set: function set(value) {}
-        /**
-         * Get audio streams description
-         * @type {AudioStreamDescriptionCollection}
-         */
-        ,
-        get: function get() {
-            return _audioStreamDescriptionCollection;
-        }
-
-        //==============================================================================
-        /**
-         * Loads a new headphones equalization preset
-         * @type {string} presetName : the name of the preset (they are hard-coded) 
-         */
-
     }, {
         key: 'eqPreset',
         set: function set(presetName) {

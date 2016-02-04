@@ -156,7 +156,7 @@ var asdc = new M4DPAudioModules.AudioStreamDescriptionCollection(
 // M4DPAudioModules
 var streamSelector = new M4DPAudioModules.StreamSelector( audioContext, asdc );
 var smartFader = new M4DPAudioModules.SmartFader( audioContext, asdc );
-//var objectSpatialiserAndMixer = new M4DPAudioModules.ObjectSpatialiserAndMixer(audioContext);
+var objectSpatialiserAndMixer = new M4DPAudioModules.ObjectSpatialiserAndMixer( audioContext, asdc, 'binaural' );
 //var noiseAdaptation = new M4DPAudioModules.NoiseAdaptation(audioContext);
 var multichannelSpatialiser = new M4DPAudioModules.MultichannelSpatialiser( audioContext, asdc, 'binaural' );
 //var dialogEnhancement = new M4DPAudioModules.DialogEnhancement(audioContext);
@@ -168,7 +168,7 @@ var multichannelSpatialiser = new M4DPAudioModules.MultichannelSpatialiser( audi
 	/// to connect the channelSplitterMain
 	var uselessGain = audioContext.createGain();
 	channelSplitterMain.connect( uselessGain, 0, 0 );
-	uselessGain.gain.value = 0.;	
+	uselessGain.gain.value = 0.;
 	uselessGain.connect( audioContext.destination, 0, 0 );
 }
 
@@ -194,18 +194,6 @@ channelMerger.connect( streamSelector._input );
 /// mute or unmute the inactive streams
 /// (process 10 channels in total)
 streamSelector.connect( smartFader._input );
-
-/*
-{
-	var channelSplitter3 = audioContext.createChannelSplitter(10);
-	smartFader.connect( channelSplitter3 );
-
-	var channelMerger3 = audioContext.createChannelMerger(2);
-	channelSplitter3.connect( channelMerger3, 3, 0 );
-
-	channelMerger3.connect( audioContext.destination );
-}
-*/
 
 smartFader.connect( multichannelSpatialiser._input );
 
@@ -235,6 +223,8 @@ var checkboxLSF = document.getElementById('checkbox-lsf');
 var smartFaderDB = document.getElementById('smartFaderDB');
 var checkboxEqualization = document.getElementById('checkbox-equalization');
 var yawFader = document.getElementById('yawFader');
+var azimFader = document.getElementById('azimFader');
+var elevFader = document.getElementById('elevFader');
 
 checkboxVideo.checked 			= true;
 checkboxExAmbience.checked 		= false;
@@ -258,11 +248,30 @@ function prepareModeSelectionMenu(){
 	var $menu = document.querySelector('#spatialisation-mode-menu');
 
 	$menu.onchange = function () 
-    {
-     	/// retrieve selected mode
+	{
+		/// retrieve selected mode
         var selection = $menu.value;
 
+        if( selection === 'binaural' ){
+			document.getElementById('checkbox-equalization').style.visibility = "";
+			document.getElementById('label-equalization').style.visibility = "";
+        }
+        else{
+			document.getElementById('checkbox-equalization').style.visibility = "hidden";
+			document.getElementById('label-equalization').style.visibility = "hidden";
+        }
+
+        if( selection === 'multichannel' ){
+        	document.getElementById('yawFader').style.visibility = "hidden";        	
+        	document.getElementById('label-yaw').style.visibility = "hidden";
+        }
+        else{
+        	document.getElementById('yawFader').style.visibility = "";        		
+        	document.getElementById('label-yaw').style.visibility = "";
+        }
+
         multichannelSpatialiser.outputType = selection;
+        objectSpatialiserAndMixer.outputType = selection;
     };
 
 	$option = document.createElement('option');
@@ -271,11 +280,11 @@ function prepareModeSelectionMenu(){
 
 	$option = document.createElement('option');
 	$option.textContent = 'transaural';
-    $menu.add($option);	
+    $menu.add($option);
 
     $option = document.createElement('option');
 	$option.textContent = 'multichannel';
-    $menu.add($option);	
+    $menu.add($option);
 }
 
 //==============================================================================
@@ -283,21 +292,23 @@ function prepareSofaCatalog(){
 	
 	// HRTF set selection menu
     var $hrtfSet = document.querySelector('#hrtf-selector');
-    $hrtfSet.onchange = function () 
+    $hrtfSet.onchange = function ()
     {
-     	/// sets the color to red while loading
-     	$hrtfSet.style.backgroundColor="rgba(255, 0, 0, 0.7)";
+		/// sets the color to red while loading
+		$hrtfSet.style.backgroundColor="rgba(255, 0, 0, 0.7)";
         
         /// retrieve the URL selected in the menu 
         var url = $hrtfSet.value;
 
         /// load the URL in the spatialiser
         multichannelSpatialiser.loadHrtfSet( url )
-        .then( function() 
+        .then( function()
         {
-        	/// reset the color after loading
-        	$hrtfSet.style.backgroundColor="";
-     	});
+			/// reset the color after loading
+			$hrtfSet.style.backgroundColor="";
+		});
+
+		objectSpatialiserAndMixer.loadHrtfSet( url );        
     };
 
     /// retrieves the catalog of URLs from the OpenDAP server
@@ -334,10 +345,11 @@ function updateActiveStreams(){
 	streamSelector.activeStreamsChanged();
 	smartFader.activeStreamsChanged();
 	multichannelSpatialiser.activeStreamsChanged();
+	objectSpatialiserAndMixer.activeStreamsChanged();
 }
 
 function onCheckVideo() {
-	console.debug("######### onCheckVideo: "+checkboxVideo.checked);
+	//console.debug("######### onCheckVideo: "+checkboxVideo.checked);
 	if (checkboxVideo.checked) {
 		mainAudioASD.active = true;
 	} else {
@@ -347,7 +359,7 @@ function onCheckVideo() {
 }
 
 function onCheckExAmbience() {
-	console.debug("######### onCheckExAmbience: "+checkboxExAmbience.checked);
+	//console.debug("######### onCheckExAmbience: "+checkboxExAmbience.checked);
 	//onCheckEx();
 	if (checkboxExAmbience.checked) {
 		extendedAmbienceASD.active = true;
@@ -358,7 +370,7 @@ function onCheckExAmbience() {
 }
 
 function onCheckExComments() {
-	console.debug("######### onCheckExComments: "+checkboxExComments.checked);
+	//console.debug("######### onCheckExComments: "+checkboxExComments.checked);
 	//onCheckEx();
 	if (checkboxExComments.checked) {
 		extendedCommentsASD.active = true;
@@ -369,7 +381,7 @@ function onCheckExComments() {
 }
 
 function onCheckExDialogs() {
-	console.debug("######### onCheckExDialogs: "+checkboxExDialogs.checked);
+	//console.debug("######### onCheckExDialogs: "+checkboxExDialogs.checked);
 	//onCheckEx();
 	if (checkboxExDialogs.checked) {
 		extendedDialogsASD.active = true;
@@ -380,7 +392,7 @@ function onCheckExDialogs() {
 }
 
 function onCheckEqualization() {
-	console.debug("######### onCheckEqualization: "+checkboxEqualization.checked);
+	//console.debug("######### onCheckEqualization: "+checkboxEqualization.checked);
 	
 	multichannelSpatialiser.eqPreset = "eq1";
 
@@ -392,7 +404,7 @@ function onCheckEqualization() {
 }
 
 function onCheckLSF() {
-	console.debug("######### onCheckLSF: "+checkboxLSF.checked);
+	//console.debug("######### onCheckLSF: "+checkboxLSF.checked);
 	if (checkboxLSF.checked) {
 		controller.currentTime = videoPlayerMainMediaElement.currentTime;
 		videoPlayerPipMediaElement.controller = controller;
@@ -431,8 +443,6 @@ function initializeSmartFader(){
  */
 smartFaderDB.addEventListener('input', function(){
 
-	//console.log( "smartFaderDB = " + smartFaderDB.value ); 
-
 	var valueFader = smartFaderDB.value;
 
 	var minFader = parseFloat( smartFaderDB.min );
@@ -445,9 +455,7 @@ smartFaderDB.addEventListener('input', function(){
 	/// scale from GUI to DSP
 	var value = M4DPAudioModules.utilities.scale( valueFader, minFader, maxFader, minValue, maxValue );
 
-	document.getElementById('Smart').textContent = 'Smart Fader = ' + Math.round(value).toString() + ' dB';
-
-	//console.log( "smartFaderDB (scaled) = " + value ); 
+	document.getElementById('label-smart-fader').textContent = 'Smart Fader = ' + Math.round(value).toString() + ' dB';
 
 	/// sets the smart fader dB gain
 	smartFader.dB = value;
@@ -461,9 +469,36 @@ yawFader.addEventListener('input', function(){
 
 	var valueFader = yawFader.value;
 
-	document.getElementById('Yaw').textContent = 'Yaw = ' + valueFader;
+	document.getElementById('label-yaw').textContent = 'Listener yaw = ' + valueFader;
 
 	multichannelSpatialiser.listenerYaw = valueFader;
+	objectSpatialiserAndMixer.listenerYaw = valueFader;
+});
+
+//==============================================================================
+/**
+ * Callback when the azim slider changes
+ */
+azimFader.addEventListener('input', function(){
+
+	var valueFader = azimFader.value;
+
+	document.getElementById('label-azim').textContent = 'azim = ' + valueFader;
+
+	objectSpatialiserAndMixer.setCommentaryAzimuth( valueFader );
+});
+
+//==============================================================================
+/**
+ * Callback when the azim slider changes
+ */
+elevFader.addEventListener('input', function(){
+
+	var valueFader = elevFader.value;
+
+	document.getElementById('label-elev').textContent = 'elev = ' + valueFader;
+
+	objectSpatialiserAndMixer.setCommentaryElevation( valueFader );
 });
 
 //==============================================================================
@@ -471,10 +506,10 @@ setInterval(function(){
 	var isCompressed = smartFader.dynamicCompressionState;
 
 	if( isCompressed === true){
-		document.getElementById('Compression').style.color = "rgba(255, 0, 0, 0.7)";
+		document.getElementById('label-compression').style.color = "rgba(255, 0, 0, 0.7)";
 	}
 	else{
-		document.getElementById('Compression').style.color = "rgba(255, 255, 255, 0.7)";
+		document.getElementById('label-compression').style.color = "rgba(255, 255, 255, 0.7)";
 	}
 }, 500);
 
