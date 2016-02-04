@@ -55,6 +55,7 @@ var SmartFader = function (_AbstractNode) {
         var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(SmartFader).call(this, audioContext, audioStreamDescriptionCollection));
 
         _this._dB = undefined;
+        _this._compressionRatio = 2;
 
         /// the total number of incoming channels, including all the streams
         /// (mainAudio, extendedAmbience, extendedComments and extendedDialogs)
@@ -94,11 +95,15 @@ var SmartFader = function (_AbstractNode) {
         value: function activeStreamsChanged() {
             this._updateCompressorSettings();
         }
+
+        /**
+         * Sets the compression ratio
+         * representing the amount of change, in dB, needed in the input for a 1 dB change in the output
+         */
+
     }, {
         key: '_updateCompressorSettings',
         value: function _updateCompressorSettings() {
-
-            return;
 
             /// retrieves the AudioStreamDescriptionCollection
             var asdc = this._audioStreamDescriptionCollection;
@@ -160,7 +165,7 @@ var SmartFader = function (_AbstractNode) {
             this._dynamicCompressorNode.setThreshold(threshold);
 
             /// representing the amount of change, in dB, needed in the input for a 1 dB change in the output
-            this._dynamicCompressorNode.setRatio(2);
+            this._dynamicCompressorNode.setRatio(this._compressionRatio);
 
             /// representing the amount of time, in seconds, required to reduce the gain by 10 dB
             this._dynamicCompressorNode.setAttack(0.02);
@@ -232,6 +237,21 @@ var SmartFader = function (_AbstractNode) {
             var state = reduction < -0.5 ? true : false;
 
             return state;
+        }
+    }, {
+        key: 'compressionRatio',
+        set: function set(value) {
+            this._compressionRatio = _utils2.default.clamp(value, 1, 10);
+
+            this._updateCompressorSettings();
+        }
+
+        /**
+         * Returns the compression ratio     
+         */
+        ,
+        get: function get() {
+            return this._compressionRatio;
         }
     }], [{
         key: 'clampdB',

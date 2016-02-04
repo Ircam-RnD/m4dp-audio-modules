@@ -226,6 +226,8 @@ var yawFader = document.getElementById('yawFader');
 var azimFader = document.getElementById('azimFader');
 var elevFader = document.getElementById('elevFader');
 var gainOffsetFader = document.getElementById('gainOffset');
+var compressionRatio = document.getElementById('compressionRatio');
+compressionRatio.value = 2;
 
 checkboxVideo.checked 			= true;
 checkboxExAmbience.checked 		= false;
@@ -531,6 +533,15 @@ elevFader.addEventListener('input', function(){
 	document.getElementById('label-elev').textContent = 'elev = ' + valueFader;
 
 	objectSpatialiserAndMixer.setCommentaryElevation( valueFader );
+});
+
+compressionRatio.addEventListener('input', function(){
+
+	var valueFader = compressionRatio.value;
+
+	document.getElementById('label-compression-ratio').textContent = 'Compression ratio = ' + valueFader + ':1';
+
+	smartFader.compressionRatio = valueFader;
 });
 
 //==============================================================================
