@@ -229,6 +229,7 @@ var gainOffsetFader = document.getElementById('gainOffset');
 var compressionRatio = document.getElementById('compressionRatio');
 compressionRatio.value = 2;
 
+
 checkboxVideo.checked 			= true;
 checkboxExAmbience.checked 		= false;
 checkboxExComments.checked 		= false;
@@ -573,4 +574,12 @@ setInterval(function(){
 		document.getElementById('label-compression').style.color = "rgba(255, 255, 255, 0.7)";
 	}
 }, 500);
+
+//==============================================================================
+var event = new Event('input');
+yawFader.dispatchEvent(event);
+compressionRatio.dispatchEvent(event);
+azimFader.dispatchEvent(event);
+elevFader.dispatchEvent(event);
+gainOffsetFader.dispatchEvent(event);
 

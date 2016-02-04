@@ -84,9 +84,6 @@ var VirtualSpeakersNode = function (_AbstractNode) {
         /// split the input streams into 10 independent channels
         _this._input.connect(_this._splitterNode);
 
-        /// the binaural panner is not yet created;
-        /// it will be instanciated and connected to the audio graph as soon as an SOFA URL is loaded
-
         /// an HRTF set is loaded upon initialization of the application...
 
         _this._listenerYaw = 0.0;
@@ -104,7 +101,7 @@ var VirtualSpeakersNode = function (_AbstractNode) {
 
         //==============================================================================
         /**
-         * Returns a fllabck url in case bili2 is not accessible
+         * Returns a fallabck url in case bili2 is not accessible
          * @type {string} url
          */
         value: function getFallbackUrl() {
@@ -126,15 +123,11 @@ var VirtualSpeakersNode = function (_AbstractNode) {
         value: function loadHrtfSet(url) {
             var _this2 = this;
 
-            /// the total number of incoming channels, including all the streams
-            /// (mainAudio, extendedAmbience, extendedComments and extendedDialogs)
-            var totalNumberOfChannels_ = this._audioStreamDescriptionCollection.totalNumberOfChannels;
-
-            /// retrieves the positions of all streams
-            var sofaPositions = this._getSofaPositions();
-
             return this._binauralPanner.loadHrtfSet(url).then(function () {
                 console.log('loaded hrtf from ' + url + ' with ' + _this2._binauralPanner.filterPositions.length + ' positions');
+
+                /// update the listener yaw
+                _this2.listenerYaw = _this2._listenerYaw;
             }).catch(function () {
                 console.log('could not access bili2.ircam.fr...');
                 /// using default data instead                   
@@ -146,6 +139,8 @@ var VirtualSpeakersNode = function (_AbstractNode) {
 
                 return _this2._binauralPanner.loadHrtfSet(sofaUrl).then(function () {
                     console.log('loaded hrtf from ' + sofaUrl + ' with ' + _this2._binauralPanner.filterPositions.length + ' positions');
+
+                    _this2.listenerYaw = _this2._listenerYaw;
                 });
             });
         }
