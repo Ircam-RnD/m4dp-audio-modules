@@ -120,15 +120,20 @@ var ObjectSpatialiserAndMixer = function (_MultichannelSpatiali) {
 
             var sourceIndex = this._getSourceIndexForCommentary();
 
-            /// convert to SOFA spherical coordinate
-            var sofaAzim = -1. * this._azimuth;
-            var sofaElev = this._elevation;
-            var sofaDist = 1.; /// fow now, the distance is not take into account
+            if (sourceIndex >= 0) {
 
-            var sofaPos = [sofaAzim, sofaElev, sofaDist];
+                /// convert to SOFA spherical coordinate
+                var sofaAzim = -1. * this._azimuth;
+                var sofaElev = this._elevation;
+                var sofaDist = 1.; /// fow now, the distance is not take into account
 
-            if (typeof this._virtualSpeakers._binauralPanner !== 'undefined') {
-                this._virtualSpeakers._binauralPanner.setSourcePositionByIndex(sourceIndex, sofaPos);
+                var sofaPos = [sofaAzim, sofaElev, sofaDist];
+
+                if (typeof this._virtualSpeakers._binauralPanner !== 'undefined') {
+                    this._virtualSpeakers._binauralPanner.setSourcePositionByIndex(sourceIndex, sofaPos);
+                }
+            } else {
+                /// there is no commentary stream
             }
         }
 
@@ -137,6 +142,7 @@ var ObjectSpatialiserAndMixer = function (_MultichannelSpatiali) {
          * The binaural processor handles up to 10 sources, considering all the streams.
          * This function returns the index of the source which corresponds to the commentary
          * (that needs to be spatialized)
+         * Returns -1 if there is no commentary
          */
 
     }, {
@@ -185,6 +191,8 @@ var ObjectSpatialiserAndMixer = function (_MultichannelSpatiali) {
                     }
                 }
             }
+
+            return -1;
         }
 
         //==============================================================================

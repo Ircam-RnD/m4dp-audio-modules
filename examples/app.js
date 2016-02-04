@@ -356,6 +356,24 @@ function prepareSofaCatalog(){
              $hrtfSet.onchange();
 
              return urls;
+         })
+         .catch( () => {
+         	/// failed to access the catalog (maybe unauthorized IP)
+         	/// just use the hard-coded sofa data
+
+         	console.log('could not access bili2.ircam.fr...');
+
+         	const sofaUrl = multichannelSpatialiser._virtualSpeakers.getFallbackUrl();
+
+         	var $option;
+            $option = document.createElement('option');
+			$option.textContent = sofaUrl;
+			$hrtfSet.add($option);
+             
+         	$hrtfSet.value = sofaUrl;
+            $hrtfSet.onchange();
+
+         	return sofaUrl;
          });
 }
 

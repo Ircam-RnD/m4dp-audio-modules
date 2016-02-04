@@ -8,6 +8,11 @@ exports.scale = scale;
 exports.lin2dB = lin2dB;
 exports.dB2lin = dB2lin;
 exports.arrayAlmostEqual = arrayAlmostEqual;
+exports.deg2rad = deg2rad;
+exports.rad2deg = rad2deg;
+exports.modulo = modulo;
+exports.nav2trig = nav2trig;
+exports.trig2nav = trig2nav;
 /************************************************************************************/
 /*!
  *   @file       utils.js
@@ -71,7 +76,6 @@ function dB2lin(value) {
 
 /**
  * Compares two array. Returns true if they are (almost) equal
- *
  */
 function arrayAlmostEqual(array1, array2) {
     var tolerance = arguments.length <= 2 || arguments[2] === undefined ? 0 : arguments[2];
@@ -100,11 +104,70 @@ function arrayAlmostEqual(array1, array2) {
 }
 
 //==============================================================================
+/**
+ * degrees to radians conversion
+ */
+function deg2rad(value) {
+    return value * 0.017453292520;
+}
+
+/**
+ * radians to degrees conversion
+ */
+function rad2deg(value) {
+    return value * 57.295779513082;
+}
+
+//==============================================================================
+/**
+ * modulo (%) binary operator returning positive results
+ */
+function modulo(x, modu) {
+
+    var y = x;
+    while (y < 0.0) {
+        y += modu;
+    }
+
+    while (y >= modu) {
+        y -= modu;
+    }
+
+    return y;
+}
+
+//==============================================================================
+/**
+ *  @brief          navigationnal to trigonometric conversion
+ *
+ *  @details        navigationnal is expressed in degrees, clock-wise with 0 deg at (x,y)=(0,1)
+ *                  trigonometric is expressed in radians, anticlock-wise with 0 deg at (x,y)=(1,0)
+ */
+function nav2trig(x) {
+    return deg2rad(modulo(270.0 - x, 360.0) - 180.0);
+}
+
+/**
+ *  @brief          trigonometric to navigationnal conversion
+ *
+ *  @details        navigationnal is expressed in degrees, clock-wise with 0 deg at (x,y)=(0,1)
+ *                  trigonometric is expressed in radians, anticlock-wise with 0 deg at (x,y)=(1,0)
+ */
+function trig2nav(x) {
+    return modulo(270.0 - rad2deg(x), 360.0) - 180.0;
+}
+
+//==============================================================================
 var utilities = {
     clamp: clamp,
     scale: scale,
     lin2dB: lin2dB,
     dB2lin: dB2lin,
+    deg2rad: deg2rad,
+    rad2deg: rad2deg,
+    modulo: modulo,
+    nav2trig: nav2trig,
+    trig2nav: trig2nav,
     arrayAlmostEqual: arrayAlmostEqual
 };
 

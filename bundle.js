@@ -446,7 +446,7 @@ var AudioStreamDescriptionCollection = exports.AudioStreamDescriptionCollection 
                 for (var _iterator3 = this._streams[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
                     var stream = _step3.value;
 
-                    if (stream.active) {
+                    if (stream.active === true) {
                         return true;
                     }
                 }
@@ -478,7 +478,7 @@ var AudioStreamDescriptionCollection = exports.AudioStreamDescriptionCollection 
                 for (var _iterator4 = this._streams[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
                     var stream = _step4.value;
 
-                    if (stream.dialog) {
+                    if (stream.dialog === true) {
                         return stream;
                     }
                 }
@@ -498,6 +498,80 @@ var AudioStreamDescriptionCollection = exports.AudioStreamDescriptionCollection 
             }
 
             return undefined;
+        }
+
+        /**
+         * Returns true if there is at least one dialog among all the streams     
+         */
+
+    }, {
+        key: "hasDialog",
+        get: function get() {
+            var _iteratorNormalCompletion5 = true;
+            var _didIteratorError5 = false;
+            var _iteratorError5 = undefined;
+
+            try {
+                for (var _iterator5 = this._streams[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
+                    var stream = _step5.value;
+
+                    if (stream.dialog === true) {
+                        return true;
+                    }
+                }
+            } catch (err) {
+                _didIteratorError5 = true;
+                _iteratorError5 = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion5 && _iterator5.return) {
+                        _iterator5.return();
+                    }
+                } finally {
+                    if (_didIteratorError5) {
+                        throw _iteratorError5;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        /**
+         * Returns true if there is at least one commentary among all the streams     
+         */
+
+    }, {
+        key: "hasCommentary",
+        get: function get() {
+            var _iteratorNormalCompletion6 = true;
+            var _didIteratorError6 = false;
+            var _iteratorError6 = undefined;
+
+            try {
+                for (var _iterator6 = this._streams[Symbol.iterator](), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
+                    var stream = _step6.value;
+
+                    if (stream.commentary === true) {
+                        return true;
+                    }
+                }
+            } catch (err) {
+                _didIteratorError6 = true;
+                _iteratorError6 = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion6 && _iterator6.return) {
+                        _iterator6.return();
+                    }
+                } finally {
+                    if (_didIteratorError6) {
+                        throw _iteratorError6;
+                    }
+                }
+            }
+
+            return false;
         }
     }]);
 
@@ -786,7 +860,7 @@ var AudioStreamDescription = exports.AudioStreamDescription = function () {
             this._dialog = value;
         }
         /**
-         * Get dialog, if stream is currently a dialog or not
+         * Returns true if the stream is a dialog
          * @type {boolean}
          */
         ,
@@ -806,7 +880,7 @@ var AudioStreamDescription = exports.AudioStreamDescription = function () {
             this._ambiance = value;
         }
         /**
-         * Get ambiance, if stream is currently an ambiance or not
+         * Returns if the stream is an ambiance
          * @type {boolean}
          */
         ,
@@ -826,7 +900,7 @@ var AudioStreamDescription = exports.AudioStreamDescription = function () {
             this._commentary = value;
         }
         /**
-         * Get commentary, if stream is currently a commentary (audio description) or not
+         * Returns true if the stream is a commentary (audio description)
          * @type {boolean}
          */
         ,
@@ -864,6 +938,11 @@ exports.scale = scale;
 exports.lin2dB = lin2dB;
 exports.dB2lin = dB2lin;
 exports.arrayAlmostEqual = arrayAlmostEqual;
+exports.deg2rad = deg2rad;
+exports.rad2deg = rad2deg;
+exports.modulo = modulo;
+exports.nav2trig = nav2trig;
+exports.trig2nav = trig2nav;
 /************************************************************************************/
 /*!
  *   @file       utils.js
@@ -927,7 +1006,6 @@ function dB2lin(value) {
 
 /**
  * Compares two array. Returns true if they are (almost) equal
- *
  */
 function arrayAlmostEqual(array1, array2) {
     var tolerance = arguments.length <= 2 || arguments[2] === undefined ? 0 : arguments[2];
@@ -956,11 +1034,70 @@ function arrayAlmostEqual(array1, array2) {
 }
 
 //==============================================================================
+/**
+ * degrees to radians conversion
+ */
+function deg2rad(value) {
+    return value * 0.017453292520;
+}
+
+/**
+ * radians to degrees conversion
+ */
+function rad2deg(value) {
+    return value * 57.295779513082;
+}
+
+//==============================================================================
+/**
+ * modulo (%) binary operator returning positive results
+ */
+function modulo(x, modu) {
+
+    var y = x;
+    while (y < 0.0) {
+        y += modu;
+    }
+
+    while (y >= modu) {
+        y -= modu;
+    }
+
+    return y;
+}
+
+//==============================================================================
+/**
+ *  @brief          navigationnal to trigonometric conversion
+ *
+ *  @details        navigationnal is expressed in degrees, clock-wise with 0 deg at (x,y)=(0,1)
+ *                  trigonometric is expressed in radians, anticlock-wise with 0 deg at (x,y)=(1,0)
+ */
+function nav2trig(x) {
+    return deg2rad(modulo(270.0 - x, 360.0) - 180.0);
+}
+
+/**
+ *  @brief          trigonometric to navigationnal conversion
+ *
+ *  @details        navigationnal is expressed in degrees, clock-wise with 0 deg at (x,y)=(0,1)
+ *                  trigonometric is expressed in radians, anticlock-wise with 0 deg at (x,y)=(1,0)
+ */
+function trig2nav(x) {
+    return modulo(270.0 - rad2deg(x), 360.0) - 180.0;
+}
+
+//==============================================================================
 var utilities = {
     clamp: clamp,
     scale: scale,
     lin2dB: lin2dB,
     dB2lin: dB2lin,
+    deg2rad: deg2rad,
+    rad2deg: rad2deg,
+    modulo: modulo,
+    nav2trig: nav2trig,
+    trig2nav: trig2nav,
     arrayAlmostEqual: arrayAlmostEqual
 };
 
@@ -2158,26 +2295,34 @@ var VirtualSpeakersNode = function (_AbstractNode) {
         var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(VirtualSpeakersNode).call(this, audioContext, audioStreamDescriptionCollection));
 
         _this._splitterNode = undefined;
-        _this._binauralPanner = undefined;
-        _this._hrtfSet = undefined;
-        _this._listenerYaw = 0.0;
 
         /// retrieves the positions of all streams
         var horizontalPositions = _this._getHorizontalPlane();
-
-        /// instanciate an empty hrtf set
-        _this._hrtfSet = new _binaural2.default.sofa.HrtfSet({
-            audioContext: audioContext,
-            positionsType: 'gl', // mandatory for BinauralPanner
-            filterPositions: horizontalPositions,
-            filterPositionsType: 'sofaSpherical'
-        });
 
         /// the total number of incoming channels, including all the streams
         /// (mainAudio, extendedAmbience, extendedComments and extendedDialogs)
         var totalNumberOfChannels_ = _this._audioStreamDescriptionCollection.totalNumberOfChannels;
 
+        /// retrieves the positions of all streams
+        var sofaPositions = _this._getSofaPositions();
+
+        _this._binauralPanner = new _binaural2.default.audio.BinauralPanner({
+            audioContext: audioContext,
+            positionsType: 'sofaSpherical',
+            filterPositions: horizontalPositions,
+            crossfadeDuration: 0.05,
+            sourceCount: totalNumberOfChannels_,
+            sourcePositions: sofaPositions
+        });
+
+        /// connect the outputs
+        _this._binauralPanner.connectOutputs(_this._output);
+
         _this._splitterNode = audioContext.createChannelSplitter(totalNumberOfChannels_);
+        /// connect the inputs
+        for (var i = 0; i < totalNumberOfChannels_; i++) {
+            _this._binauralPanner.connectInputByIndex(i, _this._splitterNode, i, 0);
+        }
 
         /// sanity checks
         if (_this._splitterNode.numberOfInputs != 1 || _this._splitterNode.numberOfOutputs != totalNumberOfChannels_) {
@@ -2190,8 +2335,9 @@ var VirtualSpeakersNode = function (_AbstractNode) {
         /// the binaural panner is not yet created;
         /// it will be instanciated and connected to the audio graph as soon as an SOFA URL is loaded
 
-        var url = 'http://bili2.ircam.fr/SimpleFreeFieldHRIR/BILI/COMPENSATED/44100/IRC_1100_C_HRIR.sofa';
-        _this.loadHrtfSet(url);
+        /// an HRTF set is loaded upon initialization of the application...
+
+        _this._listenerYaw = 0.0;
         return _this;
     }
 
@@ -2202,13 +2348,29 @@ var VirtualSpeakersNode = function (_AbstractNode) {
      */
 
     _createClass(VirtualSpeakersNode, [{
-        key: 'loadHrtfSet',
+        key: 'getFallbackUrl',
+
+        //==============================================================================
+        /**
+         * Returns a fllabck url in case bili2 is not accessible
+         * @type {string} url
+         */
+        value: function getFallbackUrl() {
+            var sampleRate = this._audioContext.sampleRate;
+
+            var sofaUrl = './hrtf/IRC_1147_C_HRIR_' + sampleRate + '.sofa.json';
+
+            return sofaUrl;
+        }
 
         //==============================================================================
         /**
          * Load a new HRTF from a given URL
          * @type {string} url
          */
+
+    }, {
+        key: 'loadHrtfSet',
         value: function loadHrtfSet(url) {
             var _this2 = this;
 
@@ -2219,38 +2381,20 @@ var VirtualSpeakersNode = function (_AbstractNode) {
             /// retrieves the positions of all streams
             var sofaPositions = this._getSofaPositions();
 
-            return this._hrtfSet.load(url).then(function () {
-                console.log("loaded hrtf from " + url);
+            return this._binauralPanner.loadHrtfSet(url).then(function () {
+                console.log('loaded hrtf from ' + url + ' with ' + _this2._binauralPanner.filterPositions.length + ' positions');
+            }).catch(function () {
+                console.log('could not access bili2.ircam.fr...');
+                /// using default data instead                   
 
-                /// first of all, disconnect the old panner
-                if (typeof _this2._binauralPanner !== 'undefined') {
-                    _this2._binauralPanner.disconnectOutputs();
-                }
+                var sampleRate = _this2._audioContext.sampleRate;
 
-                _this2._binauralPanner = null;
+                var sofaUrl = _this2.getFallbackUrl();
+                console.log('using ' + sofaUrl + ' instead');
 
-                _this2._binauralPanner = new _binaural2.default.audio.BinauralPanner({
-                    audioContext: _this2._audioContext,
-                    hrtfSet: _this2._hrtfSet,
-                    crossfadeDuration: 0.01,
-                    positionsType: 'sofaSpherical',
-                    sourceCount: totalNumberOfChannels_,
-                    sourcePositions: sofaPositions
+                return _this2._binauralPanner.loadHrtfSet(sofaUrl).then(function () {
+                    console.log('loaded hrtf from ' + sofaUrl + ' with ' + _this2._binauralPanner.filterPositions.length + ' positions');
                 });
-
-                /// first of all, disconnect the old panner
-                _this2._splitterNode.disconnect();
-
-                /// connect the inputs
-                for (var i = 0; i < totalNumberOfChannels_; i++) {
-                    _this2._binauralPanner.connectInputByIndex(i, _this2._splitterNode, i, 0);
-                }
-
-                /// connect the outputs
-                _this2._binauralPanner.connectOutputs(_this2._output);
-
-                /// update the listener yaw
-                _this2.listenerYaw = _this2._listenerYaw;
             });
         }
 
@@ -3156,15 +3300,20 @@ var ObjectSpatialiserAndMixer = function (_MultichannelSpatiali) {
 
             var sourceIndex = this._getSourceIndexForCommentary();
 
-            /// convert to SOFA spherical coordinate
-            var sofaAzim = -1. * this._azimuth;
-            var sofaElev = this._elevation;
-            var sofaDist = 1.; /// fow now, the distance is not take into account
+            if (sourceIndex >= 0) {
 
-            var sofaPos = [sofaAzim, sofaElev, sofaDist];
+                /// convert to SOFA spherical coordinate
+                var sofaAzim = -1. * this._azimuth;
+                var sofaElev = this._elevation;
+                var sofaDist = 1.; /// fow now, the distance is not take into account
 
-            if (typeof this._virtualSpeakers._binauralPanner !== 'undefined') {
-                this._virtualSpeakers._binauralPanner.setSourcePositionByIndex(sourceIndex, sofaPos);
+                var sofaPos = [sofaAzim, sofaElev, sofaDist];
+
+                if (typeof this._virtualSpeakers._binauralPanner !== 'undefined') {
+                    this._virtualSpeakers._binauralPanner.setSourcePositionByIndex(sourceIndex, sofaPos);
+                }
+            } else {
+                /// there is no commentary stream
             }
         }
 
@@ -3173,6 +3322,7 @@ var ObjectSpatialiserAndMixer = function (_MultichannelSpatiali) {
          * The binaural processor handles up to 10 sources, considering all the streams.
          * This function returns the index of the source which corresponds to the commentary
          * (that needs to be spatialized)
+         * Returns -1 if there is no commentary
          */
 
     }, {
@@ -3221,6 +3371,8 @@ var ObjectSpatialiserAndMixer = function (_MultichannelSpatiali) {
                     }
                 }
             }
+
+            return -1;
         }
 
         //==============================================================================
@@ -4604,8 +4756,10 @@ var _createClass = function () { function defineProperties(target, props) { for 
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @fileOverview Multi-source binaural panner.
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @author Jean-Philippe.Lambert@ircam.fr
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       * @copyright 2016 IRCAM, Paris, France
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @license BSD-3-Clause
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * @license CECILL-2.1
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       */
+
+var _templateObject = _taggedTemplateLiteral(['for use with BinauralPannerNode'], ['for use with BinauralPannerNode']);
 
 Object.defineProperty(exports, "__esModule", {
   value: true
@@ -4618,11 +4772,17 @@ var _glMatrix2 = _interopRequireDefault(_glMatrix);
 
 var _coordinates = require('../geometry/coordinates');
 
+var _HrtfSet = require('../sofa/HrtfSet');
+
+var _HrtfSet2 = _interopRequireDefault(_HrtfSet);
+
 var _Source = require('./Source');
 
 var _Source2 = _interopRequireDefault(_Source);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _taggedTemplateLiteral(strings, raw) { return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -4631,6 +4791,32 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  */
 
 var BinauralPanner = exports.BinauralPanner = function () {
+
+  /**
+   /**
+   * Constructs an HRTF set. Note that the filter positions are applied
+   * during the load of an HRTF URL.
+   *
+   * @see HrtfSet
+   * @see loadHrtfSet
+   *
+   * @param {Object} options
+   * @param {AudioContext} options.audioContext mandatory for the creation
+   * of FIR audio buffers
+   * @param {coordinatesType} [options.positionsType='gl']
+   * @param {coordinatesType} [options.filterPositionsType=options.positionsType]
+   * @param {Array.<coordinates>} [options.filterPositions=undefined]
+   * array of positions to filter. Use undefined to use all positions.
+   * @param {Boolean} [options.filterAfterLoad = false] true to filter after
+   * full load of SOFA file
+   * @param {coordinates} [options.listenerPosition=[0, 0, 0]]
+   * @param {coordinates} [options.listenerUp=[0, 1, 0]]
+   * @param {coordinates} [options.listenerView=[0, 0, -1]]
+   * @param {Number} [options.sourceCount=1]
+   * @param {Array.<coordinates>} [options.sourcePositions=undefined] must
+   * be of length options.sourceCount
+   */
+
   function BinauralPanner() {
     var _this = this;
 
@@ -4640,9 +4826,7 @@ var BinauralPanner = exports.BinauralPanner = function () {
 
     this._audioContext = options.audioContext;
 
-    this.positionsType = typeof options.positionsType !== 'undefined' ? options.positionsType : 'gl';
-
-    this._hrtfSet = options.hrtfSet;
+    this.positionsType = options.positionsType;
 
     var sourceCount = typeof options.sourceCount !== 'undefined' ? options.sourceCount : 1;
 
@@ -4663,8 +4847,7 @@ var BinauralPanner = exports.BinauralPanner = function () {
     this._sources = this._sourcesOutdated.map(function () {
       return new _Source2.default({
         audioContext: _this._audioContext,
-        crossfadeDuration: options.crossfadeDuration,
-        hrtfSet: _this._hrtfSet
+        crossfadeDuration: options.crossfadeDuration
       });
     });
 
@@ -4676,6 +4859,15 @@ var BinauralPanner = exports.BinauralPanner = function () {
       return [0, 0, 1]; // allocation and default value
     });
 
+    this.hrtfSet = typeof options.hrtfSet !== 'undefined' ? options.hrtfSet : new _HrtfSet2.default({
+      audioContext: this._audioContext,
+      positionsType: 'gl'
+    });
+
+    this.filterPositionsType = options.filterPositionsType;
+    this.filterPositions = options.filterPositions;
+    this.filterAfterLoad = options.filterAfterLoad;
+
     if (typeof options.sourcePositions !== 'undefined') {
       this.sourcePositions = options.sourcePositions;
     }
@@ -4685,14 +4877,35 @@ var BinauralPanner = exports.BinauralPanner = function () {
 
   // ----------- accessors
 
+  /**
+   * Set coordinates type for positions.
+   * @param {coordinatesType} [type='gl']
+   */
+
   _createClass(BinauralPanner, [{
     key: 'setSourcePositionByIndex',
+
+    /**
+     * Set the position of one source.
+     *
+     * @param {Number} index
+     * @param {coordinates} positionRequest
+     * @returns {this}
+     */
     value: function setSourcePositionByIndex(index, positionRequest) {
       this._sourcesOutdated[index] = true;
       (0, _coordinates.typedToGl)(this._sourcePositionsAbsolute[index], positionRequest, this.positionsType);
 
       return this;
     }
+
+    /**
+     * Get the position of one source
+     *
+     * @param {Number} index
+     * @returns {coordinates}
+     */
+
   }, {
     key: 'getSourcePositionByIndex',
     value: function getSourcePositionByIndex(index) {
@@ -4701,6 +4914,38 @@ var BinauralPanner = exports.BinauralPanner = function () {
 
     // ----------- public methods
 
+    /**
+     * Load an HRTF set form an URL, and update sources.
+     *
+     * @see HrtfSet#load
+     *
+     * @param {String} sourceUrl
+     * @returns {Promise.<(this|Error)>} resolve when URL successfully
+     * loaded.
+     */
+
+  }, {
+    key: 'loadHrtfSet',
+    value: function loadHrtfSet(sourceUrl) {
+      var _this2 = this;
+
+      return this._hrtfSet.load(sourceUrl).then(function () {
+        _this2._sourcesOutdated.fill(true);
+        _this2.update();
+        return _this2;
+      });
+    }
+
+    /**
+     * Connect the input of a source.
+     *
+     * @param {Number} index
+     * @param {(AudioNode|Array.<AudioNode>)} nodesToConnect
+     * @param {Number} [output=0] output to connect from
+     * @param {Number} [input=0] input to connect to
+     * @returns {this}
+     */
+
   }, {
     key: 'connectInputByIndex',
     value: function connectInputByIndex(index, nodesToConnect, output, input) {
@@ -4708,6 +4953,15 @@ var BinauralPanner = exports.BinauralPanner = function () {
 
       return this;
     }
+
+    /**
+     * Disconnect the input of one source.
+     *
+     * @param {Number} index
+     * @param {(AudioNode|Array.<AudioNode>)} nodesToDisconnect
+     * @returns {this}
+     */
+
   }, {
     key: 'disconnectInputByIndex',
     value: function disconnectInputByIndex(index, nodesToDisconnect) {
@@ -4715,6 +4969,14 @@ var BinauralPanner = exports.BinauralPanner = function () {
 
       return this;
     }
+
+    /**
+     * Disconnect the input of each source.
+     *
+     * @param {(AudioNode|Array.<AudioNode>)} nodesToDisconnect
+     * @returns {this}
+     */
+
   }, {
     key: 'disconnectInputs',
     value: function disconnectInputs(nodesToDisconnect) {
@@ -4726,6 +4988,17 @@ var BinauralPanner = exports.BinauralPanner = function () {
 
       return this;
     }
+
+    /**
+     * Connect the output of a source.
+     *
+     * @param {Number} index
+     * @param {(AudioNode|Array.<AudioNode>)} nodesToConnect
+     * @param {Number} [output=0] output to connect from
+     * @param {Number} [input=0] input to connect to
+     * @returns {this}
+     */
+
   }, {
     key: 'connectOutputByIndex',
     value: function connectOutputByIndex(index, nodesToConnect, output, input) {
@@ -4733,6 +5006,15 @@ var BinauralPanner = exports.BinauralPanner = function () {
 
       return this;
     }
+
+    /**
+     * Disconnect the output of a source.
+     *
+     * @param {Number} index
+     * @param {(AudioNode|Array.<AudioNode>)} nodesToDisconnect
+     * @returns {this}
+     */
+
   }, {
     key: 'disconnectOutputByIndex',
     value: function disconnectOutputByIndex(index, nodesToDisconnect) {
@@ -4740,6 +5022,20 @@ var BinauralPanner = exports.BinauralPanner = function () {
 
       return this;
     }
+
+    /**
+     * Connect each output of each source. Note that the number of nodes to
+     * connect must match the number of sources.
+     *
+     * @see BinauralPanner#connectOutputByIndex
+     *
+     * @param {Number} index
+     * @param {(AudioNode|Array.<AudioNode>)} nodesToConnect
+     * @param {Number} [output=0] output to connect from
+     * @param {Number} [input=0] input to connect to
+     * @returns {this}
+     */
+
   }, {
     key: 'connectOutputs',
     value: function connectOutputs(nodesToConnect, output, input) {
@@ -4749,6 +5045,14 @@ var BinauralPanner = exports.BinauralPanner = function () {
 
       return this;
     }
+
+    /**
+     * Disconnect the output of each source.
+     *
+     * @param {(AudioNode|Array.<AudioNode>)} nodesToDisconnect
+     * @returns {this}
+     */
+
   }, {
     key: 'disconnectOutputs',
     value: function disconnectOutputs(nodesToDisconnect) {
@@ -4758,10 +5062,18 @@ var BinauralPanner = exports.BinauralPanner = function () {
 
       return this;
     }
+
+    /**
+     * Update the sources filters, according to possible changes in listener,
+     * and source positions.
+     *
+     * @returns {this}
+     */
+
   }, {
     key: 'update',
     value: function update() {
-      var _this2 = this;
+      var _this3 = this;
 
       if (this._listenerOutdated) {
         _glMatrix2.default.mat4.lookAt(this._listenerLookAt, this._listenerPosition, this._listenerView, this._listenerUp);
@@ -4769,17 +5081,122 @@ var BinauralPanner = exports.BinauralPanner = function () {
         this._sourcesOutdated.fill(true);
       }
 
-      this._sourcePositionsAbsolute.forEach(function (positionAbsolute, index) {
-        if (_this2._sourcesOutdated[index]) {
-          _glMatrix2.default.vec3.transformMat4(_this2._sourcePositionsRelative[index], positionAbsolute, _this2._listenerLookAt);
+      if (this._hrtfSet.isReady) {
+        this._sourcePositionsAbsolute.forEach(function (positionAbsolute, index) {
+          if (_this3._sourcesOutdated[index]) {
+            _glMatrix2.default.vec3.transformMat4(_this3._sourcePositionsRelative[index], positionAbsolute, _this3._listenerLookAt);
 
-          _this2._sources[index].position = _this2._sourcePositionsRelative[index];
+            _this3._sources[index].position = _this3._sourcePositionsRelative[index];
 
-          _this2._sourcesOutdated[index] = false;
-        }
-      });
+            _this3._sourcesOutdated[index] = false;
+          }
+        });
+      }
 
       return this;
+    }
+  }, {
+    key: 'positionsType',
+    set: function set(type) {
+      this._positionsType = typeof type !== 'undefined' ? type : 'gl';
+    }
+
+    /**
+     * Get coordinates type for positions.
+     * @returns {coordinatesType}
+     */
+    ,
+    get: function get() {
+      return this._positionsType;
+    }
+
+    /**
+     * Refer an external HRTF set, and update sources. Its positions
+     * coordinate type must be 'gl'.
+     *
+     * @see HrtfSet
+     * @see BinauralPanner#update
+     *
+     * @param {HrtfSet} hrtfSet
+     * @throws {Error} when hrtfSet in undefined or hrtfSet.positionsType is
+     * not 'gl'.
+     */
+
+  }, {
+    key: 'hrtfSet',
+    set: function set(hrtfSet) {
+      var _this4 = this;
+
+      if (typeof hrtfSet !== 'undefined') {
+        if (hrtfSet.positionsType !== 'gl') {
+          throw new Error('positions type of HRTF set must be \'gl\' ' + ('(and not \'' + hrtfSet.positionsType + '\') ')(_templateObject));
+        }
+        this._hrtfSet = hrtfSet;
+      } else {
+        throw new Error('Undefined HRTF set for BinauralPanner');
+      }
+
+      // update HRTF set references
+      this._sourcesOutdated.fill(true);
+      this._sources.forEach(function (source) {
+        source.hrtfSet = _this4._hrtfSet;
+      });
+
+      this.update();
+    }
+
+    /**
+     * Get the HrtfSet.
+     *
+     * @returns {HrtfSet}
+     */
+    ,
+    get: function get() {
+      return this._hrtfSet;
+    }
+
+    // ------------- HRTF set proxies
+
+    /**
+     * Set the filter positions of the HRTF set
+     *
+     * @see HrtfSet#filterPositions
+     *
+     * @param {Array.<coordinates>} positions
+     */
+
+  }, {
+    key: 'filterPositions',
+    set: function set(positions) {
+      this._hrtfSet.filterPositions = positions;
+    }
+
+    /**
+     * Get the filter positions of the HRTF set
+     *
+     * @see HrtfSet#filterPositions
+     *
+     * @return {Array.<coordinates>} positions
+     */
+    ,
+    get: function get() {
+      return this._hrtfSet.filterPositions;
+    }
+  }, {
+    key: 'filterPositionsType',
+    set: function set(type) {
+      this._hrtfSet.filterPositionsType = type;
+    },
+    get: function get() {
+      return this._hrtfSet.filterPositionsType;
+    }
+  }, {
+    key: 'filterAfterLoad',
+    set: function set(post) {
+      this._hrtfSet.filterAfterLoad = post;
+    },
+    get: function get() {
+      return this._hrtfSet.filterAfterLoad;
     }
   }, {
     key: 'listenerPosition',
@@ -4810,42 +5227,41 @@ var BinauralPanner = exports.BinauralPanner = function () {
     }
 
     /**
-     * Set coordinates type for positions.
-     * @param {coordinatesType} [type='gl']
+     * Set the sources positions.
+     *
+     * @see BinauralPanner#setSourcePositionByIndex
+     *
+     * @param {Array.<coordinates>} positionsRequest
+     * @throws {Error} if the length of positionsRequest is not the same as
+     * the number of sources
      */
 
-  }, {
-    key: 'positionsType',
-    set: function set(type) {
-      this._positionsType = typeof type !== 'undefined' ? type : 'gl';
-    }
-
-    /**
-     * Get coordinates type for positions.
-     * @returns {coordinatesType}
-     */
-    ,
-    get: function get() {
-      return this._positionsType;
-    }
   }, {
     key: 'sourcePositions',
     set: function set(positionsRequest) {
-      var _this3 = this;
+      var _this5 = this;
 
       if (positionsRequest.length !== this._sources.length) {
         throw new Error('Bad number of source positions: ' + (positionsRequest.length + ' ') + ('instead of ' + this._sources.length));
       }
 
       positionsRequest.forEach(function (position, index) {
-        _this3.setSourcePositionByIndex(index, position);
+        _this5._sourcesOutdated[index] = true;
+        _this5.setSourcePositionByIndex(index, position);
       });
-    },
+    }
+
+    /**
+     * Get the source positions.
+     *
+     * @returns {Array.<coordinates>}
+     */
+    ,
     get: function get() {
-      var _this4 = this;
+      var _this6 = this;
 
       return this._sourcePositionsAbsolute.map(function (position) {
-        return (0, _coordinates.glToTyped)([], position, _this4.positionsType);
+        return (0, _coordinates.glToTyped)([], position, _this6.positionsType);
       });
     }
   }]);
@@ -4854,7 +5270,7 @@ var BinauralPanner = exports.BinauralPanner = function () {
 }();
 
 exports.default = BinauralPanner;
-},{"../geometry/coordinates":36,"./Source":30,"gl-matrix":46}],30:[function(require,module,exports){
+},{"../geometry/coordinates":36,"../sofa/HrtfSet":40,"./Source":30,"gl-matrix":46}],30:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -5168,7 +5584,7 @@ function createNoiseBuffer() {
  * @param {Array} options.inputSamples input array
  * @param {Number} options.inputSampleRate in Hertz
  * @param {Number} [options.outputSampleRate=options.inputSampleRate]
- * @returns {Promise.<Float32Array|Error>}
+ * @returns {Promise.<(Float32Array|Error)>}
  */
 function resampleFloat32Array() {
   var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
@@ -5621,6 +6037,7 @@ exports.default = {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.sofa = exports.geometry = exports.common = exports.audio = undefined;
 
 var _audio = require('./audio');
 
@@ -5640,6 +6057,10 @@ var _sofa2 = _interopRequireDefault(_sofa);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+exports.audio = _audio2.default;
+exports.common = _common2.default;
+exports.geometry = _geometry2.default;
+exports.sofa = _sofa2.default;
 exports.default = {
   audio: _audio2.default,
   common: _common2.default,
@@ -5695,7 +6116,7 @@ var HrtfSet = exports.HrtfSet = function () {
    * Constructs an HRTF set. Note that the filter positions are applied
    * during the load of an URL.
    *
-   * @see load
+   * @see Hrtfset#load
    *
    * @param {Object} options
    * @param {AudioContext} options.audioContext mandatory for the creation
@@ -5714,6 +6135,8 @@ var HrtfSet = exports.HrtfSet = function () {
     _classCallCheck(this, HrtfSet);
 
     this.audioContext = options.audioContext;
+
+    this._ready = false;
 
     this.positionsType = options.positionsType;
 
@@ -5761,7 +6184,7 @@ var HrtfSet = exports.HrtfSet = function () {
      * Load an URL and generate the corresponding set of IR buffers.
      *
      * @param {String} sourceUrl
-     * @returns {Promise.<this | Error>} resolve when the URL sucessfully
+     * @returns {Promise.<(this|Error)>} resolve when the URL sucessfully
      * loaded.
      */
 
@@ -5782,7 +6205,10 @@ var HrtfSet = exports.HrtfSet = function () {
         promise = Promise.all([this._loadMetaAndPositions(sourceUrl), this._loadDataSet(sourceUrl)]).then(function (indicesAndDataSet) {
           var indices = indicesAndDataSet[0];
           var dataSet = indicesAndDataSet[1];
-          return _this2._loadSofaPartial(sourceUrl, indices, dataSet);
+          return _this2._loadSofaPartial(sourceUrl, indices, dataSet).then(function () {
+            _this2._ready = true;
+            return _this2; // final resolve
+          });
         }).catch(function () {
           // when pre-fitering fails, for any reason, try to post-filter
           // console.log(`Error while partial loading of ${sourceUrl}. `
@@ -5790,6 +6216,7 @@ var HrtfSet = exports.HrtfSet = function () {
           //             + `Load full and post-filtering, instead.`);
           return _this2._loadSofaFull(url).then(function () {
             _this2.applyFilterPositions();
+            _this2._ready = true;
             return _this2; // final resolve
           });
         });
@@ -5798,6 +6225,7 @@ var HrtfSet = exports.HrtfSet = function () {
             if (typeof _this2._filterPositions !== 'undefined' && _this2.filterAfterLoad) {
               _this2.applyFilterPositions();
             }
+            _this2._ready = true;
             return _this2; // final resolve
           });
         }
@@ -5902,7 +6330,7 @@ var HrtfSet = exports.HrtfSet = function () {
      * @param {Array.<Number>} indices
      * @param {Array.<coordinates>} positions
      * @param {Array.<Float32Array>} firs
-     * @returns {Promise.<Array | Error>}
+     * @returns {Promise.<(Array|Error)>}
      * @throws {Error} assertion that the channel count is 2
      */
 
@@ -5940,7 +6368,7 @@ var HrtfSet = exports.HrtfSet = function () {
      * @private
      *
      * @param {String} sourceUrl
-     * @returns {Promise.<Object | Error>}
+     * @returns {Promise.<(Object|Error)>}
      */
 
   }, {
@@ -5982,7 +6410,7 @@ var HrtfSet = exports.HrtfSet = function () {
      * @private
      *
      * @param {String} sourceUrl
-     * @returns {Promise.<Array.<Number> | Error>}
+     * @returns {(Promise.<Array.<Number>>|Error)}
      */
 
   }, {
@@ -6051,7 +6479,7 @@ var HrtfSet = exports.HrtfSet = function () {
      * @private
      *
      * @param {String} url
-     * @returns {Promise.<this | Error>}
+     * @returns {Promise.<(this|Error)>}
      */
 
   }, {
@@ -6104,7 +6532,7 @@ var HrtfSet = exports.HrtfSet = function () {
      * @param {Array.<String>} sourceUrl
      * @param {Array.<Number>} indices
      * @param {Object} dataSet
-     * @returns {Promise.<this | Error>}
+     * @returns {Promise.<(this|Error)>}
      */
 
   }, {
@@ -6311,13 +6739,13 @@ var HrtfSet = exports.HrtfSet = function () {
             break;
 
           case 'sofaCartesian':
-            positions = this._filterPositions.forEach(function (current) {
+            positions = this._filterPositions.map(function (current) {
               return _coordinates2.default.glToSofaCartesian([], current);
             });
             break;
 
           case 'sofaSpherical':
-            positions = this._filterPositions.forEach(function (current) {
+            positions = this._filterPositions.map(function (current) {
               return _coordinates2.default.glToSofaSpherical([], current);
             });
             break;
@@ -6347,6 +6775,21 @@ var HrtfSet = exports.HrtfSet = function () {
     ,
     get: function get() {
       return this._filterAfterLoad;
+    }
+
+    /**
+     * Test whether an HRTF set is actually loaded.
+     *
+     * @see HrtfSet#load
+     *
+     * @returns {Boolean} false before any successful load, true after.
+     *
+     */
+
+  }, {
+    key: 'isReady',
+    get: function get() {
+      return this._ready;
     }
   }]);
 
@@ -6415,7 +6858,7 @@ var ServerDataBase = exports.ServerDataBase = function () {
    * {@link constructor}.
    * @param {Object} [destination] Catalogue to update. Default is
    * internal.
-   * @returns {Promise.<(String | Error)>} The promise will resolve (with
+   * @returns {Promise.<(String|Error)>} The promise will resolve (with
    * sourceUrl) when every sub-catalogue will successfully load, or will
    * reject (with an error) as soon as one transfer fails.
    */
@@ -6549,7 +6992,7 @@ var ServerDataBase = exports.ServerDataBase = function () {
      * server, like
      * 'http://bili2.ircam.fr/SimpleFreeFieldHRIR/BILI/COMPENSATED/44100/IRC_1100_C_HRIR.sofa'
      *
-     * @returns {Promise.<(Object | String)>} The promise will resolve after
+     * @returns {Promise.<(Object|String)>} The promise will resolve after
      * successfully loading, with definitions as * `{definition: {key: values}}`
      * objects; the promise will reject is the transfer fails, with an error.
      */

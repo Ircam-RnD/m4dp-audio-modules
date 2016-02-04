@@ -47,26 +47,34 @@ var VirtualSpeakersNode = function (_AbstractNode) {
         var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(VirtualSpeakersNode).call(this, audioContext, audioStreamDescriptionCollection));
 
         _this._splitterNode = undefined;
-        _this._binauralPanner = undefined;
-        _this._hrtfSet = undefined;
-        _this._listenerYaw = 0.0;
 
         /// retrieves the positions of all streams
         var horizontalPositions = _this._getHorizontalPlane();
-
-        /// instanciate an empty hrtf set
-        _this._hrtfSet = new _binaural2.default.sofa.HrtfSet({
-            audioContext: audioContext,
-            positionsType: 'gl', // mandatory for BinauralPanner
-            filterPositions: horizontalPositions,
-            filterPositionsType: 'sofaSpherical'
-        });
 
         /// the total number of incoming channels, including all the streams
         /// (mainAudio, extendedAmbience, extendedComments and extendedDialogs)
         var totalNumberOfChannels_ = _this._audioStreamDescriptionCollection.totalNumberOfChannels;
 
+        /// retrieves the positions of all streams
+        var sofaPositions = _this._getSofaPositions();
+
+        _this._binauralPanner = new _binaural2.default.audio.BinauralPanner({
+            audioContext: audioContext,
+            positionsType: 'sofaSpherical',
+            filterPositions: horizontalPositions,
+            crossfadeDuration: 0.05,
+            sourceCount: totalNumberOfChannels_,
+            sourcePositions: sofaPositions
+        });
+
+        /// connect the outputs
+        _this._binauralPanner.connectOutputs(_this._output);
+
         _this._splitterNode = audioContext.createChannelSplitter(totalNumberOfChannels_);
+        /// connect the inputs
+        for (var i = 0; i < totalNumberOfChannels_; i++) {
+            _this._binauralPanner.connectInputByIndex(i, _this._splitterNode, i, 0);
+        }
 
         /// sanity checks
         if (_this._splitterNode.numberOfInputs != 1 || _this._splitterNode.numberOfOutputs != totalNumberOfChannels_) {
@@ -79,8 +87,9 @@ var VirtualSpeakersNode = function (_AbstractNode) {
         /// the binaural panner is not yet created;
         /// it will be instanciated and connected to the audio graph as soon as an SOFA URL is loaded
 
-        var url = 'http://bili2.ircam.fr/SimpleFreeFieldHRIR/BILI/COMPENSATED/44100/IRC_1100_C_HRIR.sofa';
-        _this.loadHrtfSet(url);
+        /// an HRTF set is loaded upon initialization of the application...
+
+        _this._listenerYaw = 0.0;
         return _this;
     }
 
@@ -91,13 +100,29 @@ var VirtualSpeakersNode = function (_AbstractNode) {
      */
 
     _createClass(VirtualSpeakersNode, [{
-        key: 'loadHrtfSet',
+        key: 'getFallbackUrl',
+
+        //==============================================================================
+        /**
+         * Returns a fllabck url in case bili2 is not accessible
+         * @type {string} url
+         */
+        value: function getFallbackUrl() {
+            var sampleRate = this._audioContext.sampleRate;
+
+            var sofaUrl = './hrtf/IRC_1147_C_HRIR_' + sampleRate + '.sofa.json';
+
+            return sofaUrl;
+        }
 
         //==============================================================================
         /**
          * Load a new HRTF from a given URL
          * @type {string} url
          */
+
+    }, {
+        key: 'loadHrtfSet',
         value: function loadHrtfSet(url) {
             var _this2 = this;
 
@@ -108,38 +133,20 @@ var VirtualSpeakersNode = function (_AbstractNode) {
             /// retrieves the positions of all streams
             var sofaPositions = this._getSofaPositions();
 
-            return this._hrtfSet.load(url).then(function () {
-                console.log("loaded hrtf from " + url);
+            return this._binauralPanner.loadHrtfSet(url).then(function () {
+                console.log('loaded hrtf from ' + url + ' with ' + _this2._binauralPanner.filterPositions.length + ' positions');
+            }).catch(function () {
+                console.log('could not access bili2.ircam.fr...');
+                /// using default data instead                   
 
-                /// first of all, disconnect the old panner
-                if (typeof _this2._binauralPanner !== 'undefined') {
-                    _this2._binauralPanner.disconnectOutputs();
-                }
+                var sampleRate = _this2._audioContext.sampleRate;
 
-                _this2._binauralPanner = null;
+                var sofaUrl = _this2.getFallbackUrl();
+                console.log('using ' + sofaUrl + ' instead');
 
-                _this2._binauralPanner = new _binaural2.default.audio.BinauralPanner({
-                    audioContext: _this2._audioContext,
-                    hrtfSet: _this2._hrtfSet,
-                    crossfadeDuration: 0.01,
-                    positionsType: 'sofaSpherical',
-                    sourceCount: totalNumberOfChannels_,
-                    sourcePositions: sofaPositions
+                return _this2._binauralPanner.loadHrtfSet(sofaUrl).then(function () {
+                    console.log('loaded hrtf from ' + sofaUrl + ' with ' + _this2._binauralPanner.filterPositions.length + ' positions');
                 });
-
-                /// first of all, disconnect the old panner
-                _this2._splitterNode.disconnect();
-
-                /// connect the inputs
-                for (var i = 0; i < totalNumberOfChannels_; i++) {
-                    _this2._binauralPanner.connectInputByIndex(i, _this2._splitterNode, i, 0);
-                }
-
-                /// connect the outputs
-                _this2._binauralPanner.connectOutputs(_this2._output);
-
-                /// update the listener yaw
-                _this2.listenerYaw = _this2._listenerYaw;
             });
         }
 

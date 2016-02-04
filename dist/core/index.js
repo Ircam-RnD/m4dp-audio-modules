@@ -223,7 +223,7 @@ var AudioStreamDescriptionCollection = exports.AudioStreamDescriptionCollection 
                 for (var _iterator3 = this._streams[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
                     var stream = _step3.value;
 
-                    if (stream.active) {
+                    if (stream.active === true) {
                         return true;
                     }
                 }
@@ -255,7 +255,7 @@ var AudioStreamDescriptionCollection = exports.AudioStreamDescriptionCollection 
                 for (var _iterator4 = this._streams[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
                     var stream = _step4.value;
 
-                    if (stream.dialog) {
+                    if (stream.dialog === true) {
                         return stream;
                     }
                 }
@@ -275,6 +275,80 @@ var AudioStreamDescriptionCollection = exports.AudioStreamDescriptionCollection 
             }
 
             return undefined;
+        }
+
+        /**
+         * Returns true if there is at least one dialog among all the streams     
+         */
+
+    }, {
+        key: "hasDialog",
+        get: function get() {
+            var _iteratorNormalCompletion5 = true;
+            var _didIteratorError5 = false;
+            var _iteratorError5 = undefined;
+
+            try {
+                for (var _iterator5 = this._streams[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
+                    var stream = _step5.value;
+
+                    if (stream.dialog === true) {
+                        return true;
+                    }
+                }
+            } catch (err) {
+                _didIteratorError5 = true;
+                _iteratorError5 = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion5 && _iterator5.return) {
+                        _iterator5.return();
+                    }
+                } finally {
+                    if (_didIteratorError5) {
+                        throw _iteratorError5;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        /**
+         * Returns true if there is at least one commentary among all the streams     
+         */
+
+    }, {
+        key: "hasCommentary",
+        get: function get() {
+            var _iteratorNormalCompletion6 = true;
+            var _didIteratorError6 = false;
+            var _iteratorError6 = undefined;
+
+            try {
+                for (var _iterator6 = this._streams[Symbol.iterator](), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
+                    var stream = _step6.value;
+
+                    if (stream.commentary === true) {
+                        return true;
+                    }
+                }
+            } catch (err) {
+                _didIteratorError6 = true;
+                _iteratorError6 = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion6 && _iterator6.return) {
+                        _iterator6.return();
+                    }
+                } finally {
+                    if (_didIteratorError6) {
+                        throw _iteratorError6;
+                    }
+                }
+            }
+
+            return false;
         }
     }]);
 
@@ -563,7 +637,7 @@ var AudioStreamDescription = exports.AudioStreamDescription = function () {
             this._dialog = value;
         }
         /**
-         * Get dialog, if stream is currently a dialog or not
+         * Returns true if the stream is a dialog
          * @type {boolean}
          */
         ,
@@ -583,7 +657,7 @@ var AudioStreamDescription = exports.AudioStreamDescription = function () {
             this._ambiance = value;
         }
         /**
-         * Get ambiance, if stream is currently an ambiance or not
+         * Returns if the stream is an ambiance
          * @type {boolean}
          */
         ,
@@ -603,7 +677,7 @@ var AudioStreamDescription = exports.AudioStreamDescription = function () {
             this._commentary = value;
         }
         /**
-         * Get commentary, if stream is currently a commentary (audio description) or not
+         * Returns true if the stream is a commentary (audio description)
          * @type {boolean}
          */
         ,
