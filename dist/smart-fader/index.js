@@ -56,6 +56,8 @@ var SmartFader = function (_AbstractNode) {
 
         _this._dB = undefined;
         _this._compressionRatio = SmartFader.defaultCompressionRatio;
+        _this._attackTime = SmartFader.defaultAttackTime;
+        _this._releaseTime = SmartFader.defaultReleaseTime;
 
         /// the total number of incoming channels, including all the streams
         /// (mainAudio, extendedAmbience, extendedComments and extendedDialogs)
@@ -87,6 +89,74 @@ var SmartFader = function (_AbstractNode) {
      */
 
     _createClass(SmartFader, [{
+        key: 'setdBFromGui',
+
+        //==============================================================================
+        /**
+         * Sets the compression ratio, according to a slider in the GUI
+         * theSlider : the slider
+         * return the actual value of the compression ratio
+         */
+        value: function setdBFromGui(theSlider) {
+
+            /// the value of the fader
+            var valueFader = parseFloat(theSlider.value);
+
+            // get the bounds of the fader (GUI)
+            var minFader = parseFloat(theSlider.min);
+            var maxFader = parseFloat(theSlider.max);
+
+            // get the actual bounds for this parameter
+
+            var _SmartFader$dBRange = _slicedToArray(SmartFader.dBRange, 2);
+
+            var minValue = _SmartFader$dBRange[0];
+            var maxValue = _SmartFader$dBRange[1];
+
+            /// scale from GUI to DSP
+
+            var value = M4DPAudioModules.utilities.scale(valueFader, minFader, maxFader, minValue, maxValue);
+
+            this.dB = value;
+
+            return value;
+        }
+
+        /**
+         * Returns the current value of compression ratio, already scaled for the GUI
+         * theSlider : the slider
+         */
+
+    }, {
+        key: 'getdBForGui',
+        value: function getdBForGui(theSlider) {
+
+            // get the bounds of the fader (GUI)
+            var minFader = parseFloat(theSlider.min);
+            var maxFader = parseFloat(theSlider.max);
+
+            // get the actual bounds for this parameter
+
+            var _SmartFader$dBRange2 = _slicedToArray(SmartFader.dBRange, 2);
+
+            var minValue = _SmartFader$dBRange2[0];
+            var maxValue = _SmartFader$dBRange2[1];
+
+            var actualValue = this.dB;
+
+            /// scale from DSP to GUI
+            var value = M4DPAudioModules.utilities.scale(actualValue, minValue, maxValue, minFader, maxFader);
+
+            return value;
+        }
+
+        //==============================================================================
+        /**
+         * Returns the dynamic compression state
+         * @type {boolean}
+         */
+
+    }, {
         key: 'activeStreamsChanged',
 
         /**
@@ -102,6 +172,203 @@ var SmartFader = function (_AbstractNode) {
          * representing the amount of change, in dB, needed in the input for a 1 dB change in the output
          */
 
+    }, {
+        key: 'setCompressionRatioFromGui',
+
+        //==============================================================================
+        /**
+         * Sets the compression ratio, according to a slider in the GUI
+         * theSlider : the slider
+         * return the actual value of the compression ratio
+         */
+        value: function setCompressionRatioFromGui(theSlider) {
+
+            /// the value of the fader
+            var valueFader = parseFloat(theSlider.value);
+
+            // get the bounds of the fader (GUI)
+            var minFader = parseFloat(theSlider.min);
+            var maxFader = parseFloat(theSlider.max);
+
+            // get the actual bounds for this parameter
+
+            var _SmartFader$compressi = _slicedToArray(SmartFader.compressionRatioRange, 2);
+
+            var minValue = _SmartFader$compressi[0];
+            var maxValue = _SmartFader$compressi[1];
+
+            /// scale from GUI to DSP
+
+            var value = M4DPAudioModules.utilities.scale(valueFader, minFader, maxFader, minValue, maxValue);
+
+            this.compressionRatio = value;
+
+            return value;
+        }
+
+        /**
+         * Returns the current value of compression ratio, already scaled for the GUI
+         * theSlider : the slider
+         */
+
+    }, {
+        key: 'getCompressionRatioForGui',
+        value: function getCompressionRatioForGui(theSlider) {
+
+            // get the bounds of the fader (GUI)
+            var minFader = parseFloat(theSlider.min);
+            var maxFader = parseFloat(theSlider.max);
+
+            // get the actual bounds for this parameter
+
+            var _SmartFader$compressi2 = _slicedToArray(SmartFader.compressionRatioRange, 2);
+
+            var minValue = _SmartFader$compressi2[0];
+            var maxValue = _SmartFader$compressi2[1];
+
+            var actualValue = this.compressionRatio;
+
+            /// scale from DSP to GUI
+            var value = M4DPAudioModules.utilities.scale(actualValue, minValue, maxValue, minFader, maxFader);
+
+            return value;
+        }
+
+        //==============================================================================
+        /**
+         * Sets the attack time (in msec)
+         * representing the amount of time, in seconds, required to reduce the gain by 10 dB
+         */
+
+    }, {
+        key: 'setAttackTimeFromGui',
+
+        //==============================================================================
+        /**
+         * Sets the attack time, according to a slider in the GUI
+         * theSlider : the slider
+         * return the actual value of the attack time (in msec)
+         */
+        value: function setAttackTimeFromGui(theSlider) {
+
+            /// the value of the fader
+            var valueFader = parseFloat(theSlider.value);
+
+            // get the bounds of the fader (GUI)
+            var minFader = parseFloat(theSlider.min);
+            var maxFader = parseFloat(theSlider.max);
+
+            // get the actual bounds for this parameter
+
+            var _SmartFader$attackTim = _slicedToArray(SmartFader.attackTimeRange, 2);
+
+            var minValue = _SmartFader$attackTim[0];
+            var maxValue = _SmartFader$attackTim[1];
+
+            /// scale from GUI to DSP
+
+            var value = M4DPAudioModules.utilities.scale(valueFader, minFader, maxFader, minValue, maxValue);
+
+            this.attackTime = value;
+
+            return value;
+        }
+
+        /**
+         * Returns the current value of attack time, already scaled for the GUI
+         * theSlider : the slider
+         */
+
+    }, {
+        key: 'getAttackTimeForGui',
+        value: function getAttackTimeForGui(theSlider) {
+
+            // get the bounds of the fader (GUI)
+            var minFader = parseFloat(theSlider.min);
+            var maxFader = parseFloat(theSlider.max);
+
+            // get the actual bounds for this parameter
+
+            var _SmartFader$attackTim2 = _slicedToArray(SmartFader.attackTimeRange, 2);
+
+            var minValue = _SmartFader$attackTim2[0];
+            var maxValue = _SmartFader$attackTim2[1];
+
+            var actualValue = this.attackTime;
+
+            /// scale from DSP to GUI
+            var value = M4DPAudioModules.utilities.scale(actualValue, minValue, maxValue, minFader, maxFader);
+
+            return value;
+        }
+
+        //==============================================================================
+        /**
+         * Sets the release time (in msec)
+         * representing the amount of time, in seconds, required to increase the gain by 10 dB
+         */
+
+    }, {
+        key: 'setReleaseTimeFromGui',
+
+        //==============================================================================
+        /**
+         * Sets the release time, according to a slider in the GUI
+         * theSlider : the slider
+         * return the actual value of the release time (in msec)
+         */
+        value: function setReleaseTimeFromGui(theSlider) {
+
+            /// the value of the fader
+            var valueFader = parseFloat(theSlider.value);
+
+            // get the bounds of the fader (GUI)
+            var minFader = parseFloat(theSlider.min);
+            var maxFader = parseFloat(theSlider.max);
+
+            // get the actual bounds for this parameter
+
+            var _SmartFader$releaseTi = _slicedToArray(SmartFader.releaseTimeRange, 2);
+
+            var minValue = _SmartFader$releaseTi[0];
+            var maxValue = _SmartFader$releaseTi[1];
+
+            /// scale from GUI to DSP
+
+            var value = M4DPAudioModules.utilities.scale(valueFader, minFader, maxFader, minValue, maxValue);
+
+            this.releaseTime = value;
+
+            return value;
+        }
+
+        /**
+         * Returns the current value of release time, already scaled for the GUI
+         * theSlider : the slider
+         */
+
+    }, {
+        key: 'getReleaseTimeForGui',
+        value: function getReleaseTimeForGui(theSlider) {
+
+            // get the bounds of the fader (GUI)
+            var minFader = parseFloat(theSlider.min);
+            var maxFader = parseFloat(theSlider.max);
+
+            // get the actual bounds for this parameter
+
+            var _SmartFader$releaseTi2 = _slicedToArray(SmartFader.releaseTimeRange, 2);
+
+            var minValue = _SmartFader$releaseTi2[0];
+            var maxValue = _SmartFader$releaseTi2[1];
+
+            var actualValue = this.releaseTime;
+
+            /// scale from DSP to GUI
+            var value = M4DPAudioModules.utilities.scale(actualValue, minValue, maxValue, minFader, maxFader);
+
+            return value;
+        }
     }, {
         key: '_updateCompressorSettings',
         value: function _updateCompressorSettings() {
@@ -169,10 +436,12 @@ var SmartFader = function (_AbstractNode) {
             this._dynamicCompressorNode.setRatio(this._compressionRatio);
 
             /// representing the amount of time, in seconds, required to reduce the gain by 10 dB
-            this._dynamicCompressorNode.setAttack(0.02);
+            var attackInSeconds = _utils2.default.ms2sec(this._attackTime);
+            this._dynamicCompressorNode.setAttack(attackInSeconds);
 
             /// representing the amount of time, in seconds, required to increase the gain by 10 dB
-            this._dynamicCompressorNode.setRelease(0.2);
+            var releaseInSeconds = _utils2.default.ms2sec(this._releaseTime);
+            this._dynamicCompressorNode.setRelease(releaseInSeconds);
         }
     }, {
         key: '_update',
@@ -219,12 +488,6 @@ var SmartFader = function (_AbstractNode) {
 
     }, {
         key: 'dynamicCompressionState',
-
-        //==============================================================================
-        /**
-         * Returns the dynamic compression state
-         * @type {boolean}
-         */
         get: function get() {
 
             /// representing the amount of gain reduction currently applied by the compressor to the signal.
@@ -243,10 +506,10 @@ var SmartFader = function (_AbstractNode) {
     }, {
         key: 'compressionRatio',
         set: function set(value) {
-            var _SmartFader$compressi = _slicedToArray(SmartFader.compressionRatioRange, 2);
+            var _SmartFader$compressi3 = _slicedToArray(SmartFader.compressionRatioRange, 2);
 
-            var minValue = _SmartFader$compressi[0];
-            var maxValue = _SmartFader$compressi[1];
+            var minValue = _SmartFader$compressi3[0];
+            var maxValue = _SmartFader$compressi3[1];
 
             this._compressionRatio = _utils2.default.clamp(value, minValue, maxValue);
 
@@ -266,13 +529,65 @@ var SmartFader = function (_AbstractNode) {
          * @type {array}     
          */
 
+    }, {
+        key: 'attackTime',
+        set: function set(value) {
+            var _SmartFader$attackTim3 = _slicedToArray(SmartFader.attackTimeRange, 2);
+
+            var minValue = _SmartFader$attackTim3[0];
+            var maxValue = _SmartFader$attackTim3[1];
+
+            this._attackTime = _utils2.default.clamp(value, minValue, maxValue);
+
+            this._updateCompressorSettings();
+        }
+
+        /**
+         * Returns the attack time (in msec)  
+         */
+        ,
+        get: function get() {
+            return this._attackTime;
+        }
+
+        /**
+         * Get the attack time range (in msec)
+         * @type {array}     
+         */
+
+    }, {
+        key: 'releaseTime',
+        set: function set(value) {
+            var _SmartFader$releaseTi3 = _slicedToArray(SmartFader.releaseTimeRange, 2);
+
+            var minValue = _SmartFader$releaseTi3[0];
+            var maxValue = _SmartFader$releaseTi3[1];
+
+            this._releaseTime = _utils2.default.clamp(value, minValue, maxValue);
+
+            this._updateCompressorSettings();
+        }
+
+        /**
+         * Returns the release time (in msec)  
+         */
+        ,
+        get: function get() {
+            return this._releaseTime;
+        }
+
+        /**
+         * Get the release time range (in msec)
+         * @type {array}     
+         */
+
     }], [{
         key: 'clampdB',
         value: function clampdB(value) {
-            var _SmartFader$dBRange = _slicedToArray(SmartFader.dBRange, 2);
+            var _SmartFader$dBRange3 = _slicedToArray(SmartFader.dBRange, 2);
 
-            var minValue = _SmartFader$dBRange[0];
-            var maxValue = _SmartFader$dBRange[1];
+            var minValue = _SmartFader$dBRange3[0];
+            var maxValue = _SmartFader$dBRange3[1];
 
             return _utils2.default.clamp(value, minValue, maxValue);
         }
@@ -288,6 +603,26 @@ var SmartFader = function (_AbstractNode) {
         key: 'dBRange',
         get: function get() {
             return [-60, 8];
+        }
+    }, {
+        key: 'mindBRange',
+        get: function get() {
+            var _SmartFader$dBRange4 = _slicedToArray(SmartFader.dBRange, 2);
+
+            var minValue = _SmartFader$dBRange4[0];
+            var maxValue = _SmartFader$dBRange4[1];
+
+            return minValue;
+        }
+    }, {
+        key: 'maxdBRange',
+        get: function get() {
+            var _SmartFader$dBRange5 = _slicedToArray(SmartFader.dBRange, 2);
+
+            var minValue = _SmartFader$dBRange5[0];
+            var maxValue = _SmartFader$dBRange5[1];
+
+            return maxValue;
         }
 
         /**
@@ -305,6 +640,26 @@ var SmartFader = function (_AbstractNode) {
         get: function get() {
             return [1, 10];
         }
+    }, {
+        key: 'minCompressionRatioRange',
+        get: function get() {
+            var _SmartFader$compressi4 = _slicedToArray(SmartFader.compressionRatioRange, 2);
+
+            var minValue = _SmartFader$compressi4[0];
+            var maxValue = _SmartFader$compressi4[1];
+
+            return minValue;
+        }
+    }, {
+        key: 'maxCompressionRatioRange',
+        get: function get() {
+            var _SmartFader$compressi5 = _slicedToArray(SmartFader.compressionRatioRange, 2);
+
+            var minValue = _SmartFader$compressi5[0];
+            var maxValue = _SmartFader$compressi5[1];
+
+            return maxValue;
+        }
 
         /**
          * Returns the default compression ratio
@@ -315,6 +670,98 @@ var SmartFader = function (_AbstractNode) {
         key: 'defaultCompressionRatio',
         get: function get() {
             return 2;
+        }
+    }, {
+        key: 'attackTimeRange',
+        get: function get() {
+            return [5, 500];
+        }
+
+        /**
+         * Returns the minimum attack time (in msec)  
+         */
+
+    }, {
+        key: 'minAttackTimeRange',
+        get: function get() {
+            var _SmartFader$attackTim4 = _slicedToArray(SmartFader.attackTimeRange, 2);
+
+            var minValue = _SmartFader$attackTim4[0];
+            var maxValue = _SmartFader$attackTim4[1];
+
+            return minValue;
+        }
+
+        /**
+         * Returns the maximum attack time (in msec)  
+         */
+
+    }, {
+        key: 'maxAttackTimeRange',
+        get: function get() {
+            var _SmartFader$attackTim5 = _slicedToArray(SmartFader.attackTimeRange, 2);
+
+            var minValue = _SmartFader$attackTim5[0];
+            var maxValue = _SmartFader$attackTim5[1];
+
+            return maxValue;
+        }
+
+        /**
+         * Returns the default attack time (in msec)
+         * @type {number}
+         */
+
+    }, {
+        key: 'defaultAttackTime',
+        get: function get() {
+            return 20;
+        }
+    }, {
+        key: 'releaseTimeRange',
+        get: function get() {
+            return [5, 1000];
+        }
+
+        /**
+         * Returns the minimum release time (in msec)  
+         */
+
+    }, {
+        key: 'minReleaseTimeRange',
+        get: function get() {
+            var _SmartFader$releaseTi4 = _slicedToArray(SmartFader.releaseTimeRange, 2);
+
+            var minValue = _SmartFader$releaseTi4[0];
+            var maxValue = _SmartFader$releaseTi4[1];
+
+            return minValue;
+        }
+
+        /**
+         * Returns the maximum release time (in msec)  
+         */
+
+    }, {
+        key: 'maxReleaseTimeRange',
+        get: function get() {
+            var _SmartFader$releaseTi5 = _slicedToArray(SmartFader.releaseTimeRange, 2);
+
+            var minValue = _SmartFader$releaseTi5[0];
+            var maxValue = _SmartFader$releaseTi5[1];
+
+            return maxValue;
+        }
+
+        /**
+         * Returns the default release time (in msec)
+         * @type {number}
+         */
+
+    }, {
+        key: 'defaultReleaseTime',
+        get: function get() {
+            return 200;
         }
     }]);
 

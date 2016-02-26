@@ -62,7 +62,8 @@ var VirtualSpeakersNode = function (_AbstractNode) {
         _this._binauralPanner = new _binaural2.default.audio.BinauralPanner({
             audioContext: audioContext,
             positionsType: 'sofaSpherical',
-            //filterPositions: horizontalPositions,
+            filterPositions: horizontalPositions,
+            filterPositionsType: 'sofaSpherical',
             crossfadeDuration: 0.05,
             sourceCount: totalNumberOfChannels_,
             sourcePositions: sofaPositions
@@ -72,6 +73,7 @@ var VirtualSpeakersNode = function (_AbstractNode) {
         _this._binauralPanner.connectOutputs(_this._output);
 
         _this._splitterNode = audioContext.createChannelSplitter(totalNumberOfChannels_);
+
         /// connect the inputs
         for (var i = 0; i < totalNumberOfChannels_; i++) {
             _this._binauralPanner.connectInputByIndex(i, _this._splitterNode, i, 0);
@@ -248,33 +250,31 @@ var VirtualSpeakersNode = function (_AbstractNode) {
             this._listenerYaw = value;
 
             /// the view vector must be expressed in sofaSpherical
-            //const viewPos = [ -1. * this._listenerYaw, 0., 1. ];
+            var viewPos = [-1. * this._listenerYaw, 0., 1.];
 
+            /*
             /// making the listener yaw rotation 'a la mano'
             {
-                var sofaPositions = this._getSofaPositions();
+                const sofaPositions = this._getSofaPositions();
                 var relativePositions = [];
-
-                for (var i = 0; i < sofaPositions.length; i++) {
+                 for( let i = 0; i < sofaPositions.length; i++ )
+                {
                     /// relative position in sofa spherical coordinates
-                    var az = sofaPositions[i][0] + this._listenerYaw;
-                    var el = sofaPositions[i][1];
-                    var di = sofaPositions[i][2];
-
-                    var pos = [az, el, di];
-
-                    relativePositions.push(pos);
+                    const az = sofaPositions[i][0] + this._listenerYaw;
+                    const el = sofaPositions[i][1];
+                    const di = sofaPositions[i][2];
+                     const pos = [az, el, di];
+                     relativePositions.push( pos );
                 }
-
-                this._binauralPanner.sourcePositions = relativePositions;
-                this._binauralPanner.update();
-            }
-            /*
-            if( typeof this._binauralPanner !== 'undefined' ){
-                this._binauralPanner.listenerView = viewPos;
+                 this._binauralPanner.sourcePositions = relativePositions;
                 this._binauralPanner.update();
             }
             */
+
+            {
+                this._binauralPanner.listenerView = viewPos;
+                this._binauralPanner.update();
+            }
         }
 
         /**

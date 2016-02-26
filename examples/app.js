@@ -115,6 +115,7 @@ channelSplitterFiveDotOne.connect( channelMerger, 5, 7 );
 channelSplitterDescription.connect( channelMerger, 0, 8 );
 
 //==============================================================================
+// Configure the AudioStreamDescription according to the EBU Core file(s)
 var mainAudioASD = new M4DPAudioModules.AudioStreamDescription(
 		type = "Stereo",
 		active = true,
@@ -201,10 +202,7 @@ smartFader.connect( multichannelSpatialiser._input );
 multichannelSpatialiser.connect( audioContext.destination );
 
 
-
-/// prepare the sofa catalog of HRTF
-prepareSofaCatalog();
-
+//==============================================================================
 playerMain.attachSource( urlMain );
 playerPip.attachSource( urlPip );
 playerAudioFiveDotOne.attachSource( urlAudioFiveDotOne );
@@ -215,37 +213,28 @@ playerPip.play();
 playerAudioFiveDotOne.play();
 playerAudioDescription.play();
 
+//==============================================================================
+// Retrieves the controllers from the GUI
 var checkboxVideo = document.getElementById('checkbox-video');
 var checkboxExAmbience = document.getElementById('checkbox-extended-ambience');
 var checkboxExComments = document.getElementById('checkbox-extended-comments');
 var checkboxExDialogs = document.getElementById('checkbox-extended-dialogs');
 var checkboxLSF = document.getElementById('checkbox-lsf');
 var smartFaderDB = document.getElementById('smartFaderDB');
+var compressionRatio = document.getElementById('compressionRatio');
+var attackTime = document.getElementById('attackTime');
+var releaseTime = document.getElementById('releaseTime');
 var checkboxEqualization = document.getElementById('checkbox-equalization');
+var gainOffsetFader = document.getElementById('gainOffset');
 var yawFader = document.getElementById('yawFader');
 var azimFader = document.getElementById('azimFader');
 var elevFader = document.getElementById('elevFader');
-var gainOffsetFader = document.getElementById('gainOffset');
-var compressionRatio = document.getElementById('compressionRatio');
-compressionRatio.value = 2;
 
-
-checkboxVideo.checked 			= true;
-checkboxExAmbience.checked 		= false;
-checkboxExComments.checked 		= false;
-checkboxExDialogs.checked 		= false;
-checkboxLSF.checked 			= true;
-checkboxEqualization.checked 	= false;
-
-initializeSmartFader();
-onCheckVideo();
-onCheckExAmbience();
-onCheckExComments();
-onCheckEqualization();
-onCheckExDialogs();
-onCheckLSF();
-
-prepareModeSelectionMenu();
+//==============================================================================
+// initialize the GUI stuffs
+initializeSliders();
+initializeCheckBoxes();
+initializeDropDownMenus();
 
 //==============================================================================
 function setElementVisibility( elementId, visibility ){
@@ -458,22 +447,40 @@ function onCheckLSF() {
 }
 
 //==============================================================================
-function initializeSmartFader(){
+function initializeDropDownMenus(){
 
-	var minFader = parseFloat( smartFaderDB.min );
-	var maxFader = parseFloat( smartFaderDB.max );
+	/// prepare the sofa catalog of HRTF
+	prepareSofaCatalog();
 
-	/// default value in dB
-	var value = 0.0;
+	prepareModeSelectionMenu();
+}
 
-	//const [minValue, maxValue] = M4DPAudioModules.SmartFader.dBRange();
-	var minValue = -60;
-	var maxValue = 8;
+//==============================================================================
+function initializeCheckBoxes(){
 
-	/// scale from dB to GUI
-	var valueFader = M4DPAudioModules.utilities.scale( value, minValue, maxValue, minFader, maxFader );
+	checkboxVideo.checked 			= true;
+	checkboxExAmbience.checked 		= false;
+	checkboxExComments.checked 		= false;
+	checkboxExDialogs.checked 		= false;
+	checkboxLSF.checked 			= true;
+	checkboxEqualization.checked 	= false;
 
-	smartFaderDB.value = valueFader;
+	onCheckVideo();
+	onCheckExAmbience();
+	onCheckExComments();
+	onCheckEqualization();
+	onCheckExDialogs();
+	onCheckLSF();
+}
+
+//==============================================================================
+function initializeSliders(){
+
+	/// make sure the sliders are properly initialized, with scaled values
+	smartFaderDB.value = smartFader.getdBForGui( smartFaderDB );
+	compressionRatio.value = smartFader.getCompressionRatioForGui( compressionRatio );
+	attackTime.value = smartFader.getAttackTimeForGui( attackTime );
+	releaseTime.value = smartFader.getReleaseTimeForGui( releaseTime );
 }
 
 //==============================================================================
@@ -482,22 +489,9 @@ function initializeSmartFader(){
  */
 smartFaderDB.addEventListener('input', function(){
 
-	var valueFader = parseFloat( smartFaderDB.value );
+	var value = smartFader.setdBFromGui( smartFaderDB );
 
-	var minFader = parseFloat( smartFaderDB.min );
-	var maxFader = parseFloat( smartFaderDB.max );
-
-	//const [minValue, maxValue] = M4DPAudioModules.SmartFader.dBRange();
-	var minValue = -60;
-	var maxValue = 8;
-
-	/// scale from GUI to DSP
-	var value = M4DPAudioModules.utilities.scale( valueFader, minFader, maxFader, minValue, maxValue );
-
-	document.getElementById('label-smart-fader').textContent = 'Smart Fader = ' + Math.round(value).toString() + ' dB';
-
-	/// sets the smart fader dB gain
-	smartFader.dB = value;
+	document.getElementById('label-smart-fader').textContent = 'Smart Fader = ' + Math.round(value).toString() + ' dB';	
 });
 
 //==============================================================================
@@ -554,16 +548,41 @@ elevFader.addEventListener('input', function(){
 	objectSpatialiserAndMixer.setCommentaryElevation( valueFader );
 });
 
+//==============================================================================
+/**
+ * Callback when the compressionRatio slider changes
+ */
 compressionRatio.addEventListener('input', function(){
 
-	var valueFader = parseFloat( compressionRatio.value );
+	var value = smartFader.setCompressionRatioFromGui( compressionRatio );
 
-	document.getElementById('label-compression-ratio').textContent = 'Compression ratio = ' + valueFader + ':1';
-
-	smartFader.compressionRatio = valueFader;
+	document.getElementById('label-compression-ratio').textContent = 'Compression ratio = ' + value + ':1';
 });
 
 //==============================================================================
+/**
+ * Callback when the compressionRatio slider changes
+ */
+attackTime.addEventListener('input', function(){
+
+	var value = smartFader.setAttackTimeFromGui( attackTime );
+
+	document.getElementById('label-attack-time').textContent = 'Attack time = ' + Math.round(value).toString()  + ' ms';
+});
+
+//==============================================================================
+/**
+ * Callback when the compressionRatio slider changes
+ */
+releaseTime.addEventListener('input', function(){
+
+	var value = smartFader.setReleaseTimeFromGui( releaseTime );
+
+	document.getElementById('label-release-time').textContent = 'Release time = ' + Math.round(value).toString()  + ' ms';
+});
+
+//==============================================================================
+/// Refresh the dynamic compression state every 500 msec
 setInterval(function(){
 	var isCompressed = smartFader.dynamicCompressionState;
 
@@ -577,9 +596,13 @@ setInterval(function(){
 
 //==============================================================================
 var event = new Event('input');
-yawFader.dispatchEvent(event);
+smartFaderDB.dispatchEvent(event);
 compressionRatio.dispatchEvent(event);
+attackTime.dispatchEvent(event);
+releaseTime.dispatchEvent(event);
+yawFader.dispatchEvent(event);
 azimFader.dispatchEvent(event);
 elevFader.dispatchEvent(event);
 gainOffsetFader.dispatchEvent(event);
+
 

@@ -13,6 +13,7 @@ exports.rad2deg = rad2deg;
 exports.modulo = modulo;
 exports.nav2trig = nav2trig;
 exports.trig2nav = trig2nav;
+exports.ms2sec = ms2sec;
 /************************************************************************************/
 /*!
  *   @file       utils.js
@@ -158,6 +159,14 @@ function trig2nav(x) {
 }
 
 //==============================================================================
+/**
+ * msec -> seconds
+ */
+function ms2sec(ms) {
+    return ms / 1000.;
+}
+
+//==============================================================================
 var utilities = {
     clamp: clamp,
     scale: scale,
@@ -168,6 +177,7 @@ var utilities = {
     modulo: modulo,
     nav2trig: nav2trig,
     trig2nav: trig2nav,
+    ms2sec: ms2sec,
     arrayAlmostEqual: arrayAlmostEqual
 };
 
