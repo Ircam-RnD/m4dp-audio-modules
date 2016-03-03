@@ -11,21 +11,23 @@
 //M4DPAudioModules.unittests.routingtests.testRouting();
 
 var dumpObject = function(obj) {
-	console.debug("Dumping: "+obj);
-	for (var name in obj) {
-		console.debug("    ."+name+"="+obj[name]);
-	}
+    console.debug("Dumping: "+obj);
+    for (var name in obj) {
+        console.debug("    ."+name+"="+obj[name]);
+    }
 };
 
 
 /// player pour la video principale
-videoPlayerMainMediaElement			= document.getElementById('videoPlayerMain');
+videoPlayerMainMediaElement           = document.getElementById('videoPlayerMain');
 /// player pour la video LSF (langue des signes)
-videoPlayerPipMediaElement 			= document.getElementById('videoPlayerPip');
+videoPlayerPipMediaElement            = document.getElementById('videoPlayerPip');
 /// player pour l'audio 5.1
-playerAudioFiveDotOneMediaElement 	= document.getElementById('playerAudioFiveDotOne');
+playerAudioFiveDotOneMediaElement     = document.getElementById('playerAudioFiveDotOne');
 /// player pour l'audio description
-playerAudioDescriptionMediaElement 	= document.getElementById('playerAudioDescription');
+playerAudioDescriptionMediaElement    = document.getElementById('playerAudioDescription');
+/// player pour les dialgoues
+playerDialogueMediaElement            = document.getElementById('playerDialogue');
 
 
 var context = new Dash.di.DashContext();
@@ -37,16 +39,17 @@ var urlPip = "http://medias2.francetv.fr/innovation/media4D/m4dp-set1-LMDJ/manif
 var urlAudio = "http://medias2.francetv.fr/innovation/media4D/m4dp-set1-LMDJ/manifest-ad.mpd";
 */
 
-var dashUrlAudioPrincipale  = 'http://videos-pmd.francetv.fr/innovation/media4D/m4d--LMDJ4-ondemand/manifest.mpd';
-var dashUrlAudioDescription = 'http://videos-pmd.francetv.fr/innovation/media4D/m4d--LMDJ4-ondemand/manifest-ad.mpd';
-var dashUrlFiveDotOne  		= 'http://videos-pmd.francetv.fr/innovation/media4D/m4d--LMDJ4-ondemand/manifest-mc.mpd'; /// L R C LFE Ls Rs ?
-var dashUrlAllTogether 		= 'http://videos-pmd.francetv.fr/innovation/media4D/m4d--LMDJ4-ondemand/manifest-aud.mpd';
-var dashUrlLsf 				= 'http://videos-pmd.francetv.fr/innovation/media4D/m4d--LMDJ4-ondemand/manifest-lsf.mpd';
+var dashUrlAudioPrincipale     = 'http://videos-pmd.francetv.fr/innovation/media4D/m4d-LMDJ-ondemand-3lsf/manifest.mpd';
+var dashUrlAudioDescription    = 'http://videos-pmd.francetv.fr/innovation/media4D/m4d-LMDJ-ondemand-3lsf/manifest-ad.mpd';
+var dashUrlFiveDotOne          = 'http://videos-pmd.francetv.fr/innovation/media4D/m4d-LMDJ-ondemand-3lsf/manifest-ea3.mpd'; /// L R C LFE Ls Rs ?
+var dashUrlDial                = 'http://videos-pmd.francetv.fr/innovation/media4D/m4d-LMDJ-ondemand-3lsf/manifest-di.mpd';
+var dashUrlLsf                 = 'http://videos-pmd.francetv.fr/innovation/media4D/m4d-LMDJ-ondemand-3lsf/manifest-lsf.mpd';
 
-var urlMain 			= dashUrlAudioPrincipale;
-var urlPip 				= dashUrlLsf;
-var urlAudioFiveDotOne 	= dashUrlFiveDotOne;
-var urlAudioDescription	= dashUrlAudioDescription;
+var urlMain                = dashUrlAudioPrincipale;
+var urlPip                 = dashUrlLsf;
+var urlAudioFiveDotOne     = dashUrlFiveDotOne;
+var urlAudioDescription    = dashUrlAudioDescription;
+var urlDialogue            = dashUrlDial;
 
 //==============================================================================
 var playerMain = new MediaPlayer(context);
@@ -73,34 +76,43 @@ playerAudioDescription.setAutoPlay(false);
 playerAudioDescription.attachView(playerAudioDescriptionMediaElement);
 playerAudioDescription.getDebug().setLogToBrowserConsole(false);
 
-var controller = new MediaPlayer.dependencies.MediaController();
+var playerDialogue = new MediaPlayer(context);
+playerDialogue.startup();
+playerDialogue.setAutoPlay(false);
+playerDialogue.attachView(playerDialogueMediaElement);
+playerDialogue.getDebug().setLogToBrowserConsole(false);
+
+var controller = new MediaController();
 
 //dumpObject( playerMain );
 
-videoPlayerMainMediaElement.controller 			= controller;
-videoPlayerPipMediaElement.controller 			= controller;
-playerAudioFiveDotOneMediaElement.controller 	= controller;
-playerAudioDescriptionMediaElement.controller 	= controller;
+videoPlayerMainMediaElement.controller             = controller;
+videoPlayerPipMediaElement.controller             = controller;
+playerAudioFiveDotOneMediaElement.controller     = controller;
+playerAudioDescriptionMediaElement.controller     = controller;
+playerDialogueMediaElement.controller             = controller;
 
 var audioContext = new (window.AudioContext || window.webkitAudioContext)();
 //console.debug("######### audioContext: " + audioContext);
 
 //==============================================================================
-var audioSourceMain 	 	= audioContext.createMediaElementSource( videoPlayerMainMediaElement );
-var audioSourceFiveDotOne  	= audioContext.createMediaElementSource( playerAudioFiveDotOneMediaElement );
-var audioSourceDescription	= audioContext.createMediaElementSource( playerAudioDescriptionMediaElement );
-///@todo : audioSource pour les dialogues ?
+var audioSourceMain          = audioContext.createMediaElementSource( videoPlayerMainMediaElement );
+var audioSourceFiveDotOne    = audioContext.createMediaElementSource( playerAudioFiveDotOneMediaElement );
+var audioSourceDescription   = audioContext.createMediaElementSource( playerAudioDescriptionMediaElement );
+var audioSourceDialogue      = audioContext.createMediaElementSource( playerDialogueMediaElement );
 
 /// create a 10-channel stream containing all audio materials
 var channelMerger = audioContext.createChannelMerger(10);
 
-var channelSplitterMain 		= audioContext.createChannelSplitter( 2 );
-var channelSplitterFiveDotOne	= audioContext.createChannelSplitter( 6 );
-var channelSplitterDescription 	= audioContext.createChannelSplitter( 1 );
+var channelSplitterMain         = audioContext.createChannelSplitter( 2 );
+var channelSplitterFiveDotOne   = audioContext.createChannelSplitter( 6 );
+var channelSplitterDescription  = audioContext.createChannelSplitter( 1 );
+var channelSplitterDialogue     = audioContext.createChannelSplitter( 1 );
 
 audioSourceMain.connect( channelSplitterMain );
 audioSourceFiveDotOne.connect( channelSplitterFiveDotOne );
 audioSourceDescription.connect( channelSplitterDescription );
+audioSourceDialogue.connect( channelSplitterDialogue );
 
 channelSplitterMain.connect( channelMerger, 0, 0 );
 channelSplitterMain.connect( channelMerger, 1, 1 );
@@ -114,44 +126,46 @@ channelSplitterFiveDotOne.connect( channelMerger, 5, 7 );
 
 channelSplitterDescription.connect( channelMerger, 0, 8 );
 
+channelSplitterDialogue.connect( channelMerger, 0, 9 );
+
 //==============================================================================
 // Configure the AudioStreamDescription according to the EBU Core file(s)
 var mainAudioASD = new M4DPAudioModules.AudioStreamDescription(
-		type = "Stereo",
-		active = true,
-		loudness = -23,
-		maxTruePeak = -1,
-		dialog = true,
-		ambiance = true,
-		commentary = false);
+        type = "Stereo",
+        active = true,
+        loudness = -22.1,
+        maxTruePeak = -5.1,
+        dialog = true,
+        ambiance = true,
+        commentary = false);
 var extendedAmbienceASD = new M4DPAudioModules.AudioStreamDescription(
-		type = "MultiWithLFE",
-		active = false,
-		loudness = -23,
-		maxTruePeak = -1,
-		dialog = false,
-		ambiance = true,
-		commentary = false);
+        type = "MultiWithLFE",
+        active = false,
+        loudness = -19.6,
+        maxTruePeak = -5.9,
+        dialog = false,
+        ambiance = true,
+        commentary = false);
 var extendedCommentsASD = new M4DPAudioModules.AudioStreamDescription(
-		type = "Mono",
-		active = false,
-		loudness = -23,
-		maxTruePeak = -1,
-		dialog = false,
-		ambiance = false,
-		commentary = true);
+        type = "Mono",
+        active = false,
+        loudness = -23,
+        maxTruePeak = -1,
+        dialog = false,
+        ambiance = false,
+        commentary = true);
 var extendedDialogsASD = new M4DPAudioModules.AudioStreamDescription(
-		type = "Mono",
-		active = false,
-		loudness = -23,
-		maxTruePeak = -1,
-		dialog = true,
-		ambiance = false,
-		commentary = false);
+        type = "Mono",
+        active = false,
+        loudness = -22.7,
+        maxTruePeak = -6.1,
+        dialog = true,
+        ambiance = false,
+        commentary = false);
 
 var asdc = new M4DPAudioModules.AudioStreamDescriptionCollection(
-		[mainAudioASD, extendedAmbienceASD, extendedCommentsASD, extendedDialogsASD]
-		);
+        [mainAudioASD, extendedAmbienceASD, extendedCommentsASD, extendedDialogsASD]
+        );
 
 //==============================================================================
 // M4DPAudioModules
@@ -163,28 +177,28 @@ var multichannelSpatialiser = new M4DPAudioModules.MultichannelSpatialiser( audi
 //var dialogEnhancement = new M4DPAudioModules.DialogEnhancement(audioContext);
 
 {
-	///@bug : the channelSplitterMain MUST be connected to the AudioContext,
-	/// otherwise the video wont read.
-	/// so as a workaround, we just add a dummuy node, with 0 gain,
-	/// to connect the channelSplitterMain
-	var uselessGain = audioContext.createGain();
-	channelSplitterMain.connect( uselessGain, 0, 0 );
-	uselessGain.gain.value = 0.;
-	uselessGain.connect( audioContext.destination, 0, 0 );
+    ///@bug : the channelSplitterMain MUST be connected to the AudioContext,
+    /// otherwise the video wont read.
+    /// so as a workaround, we just add a dummuy node, with 0 gain,
+    /// to connect the channelSplitterMain
+    var uselessGain = audioContext.createGain();
+    channelSplitterMain.connect( uselessGain, 0, 0 );
+    uselessGain.gain.value = 0.;
+    uselessGain.connect( audioContext.destination, 0, 0 );
 }
 
 /*
 {
-	/// bout de code pour tester la reception des flux DASH
+    /// bout de code pour tester la reception des flux DASH
 
-	var extendedChannelSplitterNode2 = audioContext.createChannelSplitter(10);
-	channelMerger.connect( extendedChannelSplitterNode2 );
+    var extendedChannelSplitterNode2 = audioContext.createChannelSplitter(10);
+    channelMerger.connect( extendedChannelSplitterNode2 );
 
-	var channelMerger2 = audioContext.createChannelMerger(2);
+    var channelMerger2 = audioContext.createChannelMerger(2);
 
-	extendedChannelSplitterNode2.connect( channelMerger2, 8, 0 );
+    extendedChannelSplitterNode2.connect( channelMerger2, 8, 0 );
 
-	channelMerger2.connect( audioContext.destination );
+    channelMerger2.connect( audioContext.destination );
 }
 */
 
@@ -207,11 +221,13 @@ playerMain.attachSource( urlMain );
 playerPip.attachSource( urlPip );
 playerAudioFiveDotOne.attachSource( urlAudioFiveDotOne );
 playerAudioDescription.attachSource( urlAudioDescription );
+playerDialogue.attachSource( urlDialogue );
 
 playerMain.play();
 playerPip.play();
 playerAudioFiveDotOne.play();
 playerAudioDescription.play();
+playerDialogue.play();
 
 //==============================================================================
 // Retrieves the controllers from the GUI
@@ -239,73 +255,73 @@ initializeDropDownMenus();
 //==============================================================================
 function setElementVisibility( elementId, visibility ){
 
-	if( visibility === true ){
-		document.getElementById(elementId).style.visibility = "";
-	}
-	else{
-		document.getElementById(elementId).style.visibility = "hidden";
-	}
+    if( visibility === true ){
+        document.getElementById(elementId).style.visibility = "";
+    }
+    else{
+        document.getElementById(elementId).style.visibility = "hidden";
+    }
 }
 
 //==============================================================================
 function prepareModeSelectionMenu(){
-	var $menu = document.querySelector('#spatialisation-mode-menu');
+    var $menu = document.querySelector('#spatialisation-mode-menu');
 
-	$menu.onchange = function () 
-	{
-		/// retrieve selected mode
+    $menu.onchange = function () 
+    {
+        /// retrieve selected mode
         var selection = $menu.value;
 
         if( selection === 'binaural' ){
-			setElementVisibility('checkbox-equalization', true);
-			setElementVisibility('label-equalization', true);
+            setElementVisibility('checkbox-equalization', true);
+            setElementVisibility('label-equalization', true);
         }
         else{
-			setElementVisibility('checkbox-equalization', false);
-			setElementVisibility('label-equalization', false);
+            setElementVisibility('checkbox-equalization', false);
+            setElementVisibility('label-equalization', false);
         }
 
         if( selection === 'multichannel' ){
-        	setElementVisibility('yawFader', false);
-        	setElementVisibility('label-yaw', false);
-        	setElementVisibility('gainOffset', false);
-        	setElementVisibility('label-gain-offset', false);
-        	setElementVisibility('hrtf-selector', false);
+            setElementVisibility('yawFader', false);
+            setElementVisibility('label-yaw', false);
+            setElementVisibility('gainOffset', false);
+            setElementVisibility('label-gain-offset', false);
+            setElementVisibility('hrtf-selector', false);
         }
         else{
-        	setElementVisibility('yawFader', true);
-        	setElementVisibility('label-yaw', true);
-        	setElementVisibility('gainOffset', true);
-        	setElementVisibility('label-gain-offset', true);
-        	setElementVisibility('hrtf-selector', true);
+            setElementVisibility('yawFader', true);
+            setElementVisibility('label-yaw', true);
+            setElementVisibility('gainOffset', true);
+            setElementVisibility('label-gain-offset', true);
+            setElementVisibility('hrtf-selector', true);
         }
 
         multichannelSpatialiser.outputType = selection;
         objectSpatialiserAndMixer.outputType = selection;
     };
 
-	$option = document.createElement('option');
-	$option.textContent = 'binaural';
-    $menu.add($option);
-
-	$option = document.createElement('option');
-	$option.textContent = 'transaural';
+    $option = document.createElement('option');
+    $option.textContent = 'binaural';
     $menu.add($option);
 
     $option = document.createElement('option');
-	$option.textContent = 'multichannel';
+    $option.textContent = 'transaural';
+    $menu.add($option);
+
+    $option = document.createElement('option');
+    $option.textContent = 'multichannel';
     $menu.add($option);
 }
 
 //==============================================================================
 function prepareSofaCatalog(){
-	
-	// HRTF set selection menu
+    
+    // HRTF set selection menu
     var $hrtfSet = document.querySelector('#hrtf-selector');
     $hrtfSet.onchange = function ()
     {
-		/// sets the color to red while loading
-		$hrtfSet.style.backgroundColor="rgba(255, 0, 0, 0.7)";
+        /// sets the color to red while loading
+        $hrtfSet.style.backgroundColor="rgba(255, 0, 0, 0.7)";
         
         /// retrieve the URL selected in the menu 
         var url = $hrtfSet.value;
@@ -314,16 +330,16 @@ function prepareSofaCatalog(){
         multichannelSpatialiser.loadHrtfSet( url )
         .then( function()
         {
-			/// reset the color after loading
-			$hrtfSet.style.backgroundColor="";
-		});
+            /// reset the color after loading
+            $hrtfSet.style.backgroundColor="";
+        });
 
-		objectSpatialiserAndMixer.loadHrtfSet( url );        
+        objectSpatialiserAndMixer.loadHrtfSet( url );        
     };
 
     /// retrieves the catalog of URLs from the OpenDAP server
-	var serverDataBase = new M4DPAudioModules.binaural.sofa.ServerDataBase();
-	serverDataBase
+    var serverDataBase = new M4DPAudioModules.binaural.sofa.ServerDataBase();
+    serverDataBase
          .loadCatalogue()
          .then( function () {
              var urls = serverDataBase.getUrls({
@@ -347,140 +363,140 @@ function prepareSofaCatalog(){
 
              return urls;
          })
-         .catch( () => {
-         	/// failed to access the catalog (maybe unauthorized IP)
-         	/// just use the hard-coded sofa data
+         .catch( function (){
+             /// failed to access the catalog (maybe unauthorized IP)
+             /// just use the hard-coded sofa data
 
-         	console.log('could not access bili2.ircam.fr...');
+             console.log('could not access bili2.ircam.fr...');
 
-         	const sofaUrl = multichannelSpatialiser._virtualSpeakers.getFallbackUrl();
+             sofaUrl = multichannelSpatialiser._virtualSpeakers.getFallbackUrl();
 
-         	var $option;
+             var $option;
             $option = document.createElement('option');
-			$option.textContent = sofaUrl;
-			$hrtfSet.add($option);
+            $option.textContent = sofaUrl;
+            $hrtfSet.add($option);
              
-         	$hrtfSet.value = sofaUrl;
+             $hrtfSet.value = sofaUrl;
             $hrtfSet.onchange();
 
-         	return sofaUrl;
+             return sofaUrl;
          });
 }
 
 //==============================================================================
 function updateActiveStreams(){
-	/// notify the modification of active streams
-	streamSelector.activeStreamsChanged();
-	smartFader.activeStreamsChanged();
-	multichannelSpatialiser.activeStreamsChanged();
-	objectSpatialiserAndMixer.activeStreamsChanged();
+    /// notify the modification of active streams
+    streamSelector.activeStreamsChanged();
+    smartFader.activeStreamsChanged();
+    multichannelSpatialiser.activeStreamsChanged();
+    objectSpatialiserAndMixer.activeStreamsChanged();
 }
 
 function onCheckVideo() {
-	//console.debug("######### onCheckVideo: "+checkboxVideo.checked);
-	if (checkboxVideo.checked) {
-		mainAudioASD.active = true;
-	} else {
-		mainAudioASD.active = false;
-	}
-	updateActiveStreams();
+    //console.debug("######### onCheckVideo: "+checkboxVideo.checked);
+    if (checkboxVideo.checked) {
+        mainAudioASD.active = true;
+    } else {
+        mainAudioASD.active = false;
+    }
+    updateActiveStreams();
 }
 
 function onCheckExAmbience() {
-	//console.debug("######### onCheckExAmbience: "+checkboxExAmbience.checked);
-	//onCheckEx();
-	if (checkboxExAmbience.checked) {
-		extendedAmbienceASD.active = true;
-	} else {
-		extendedAmbienceASD.active = false;
-	}
-	updateActiveStreams();
+    //console.debug("######### onCheckExAmbience: "+checkboxExAmbience.checked);
+    //onCheckEx();
+    if (checkboxExAmbience.checked) {
+        extendedAmbienceASD.active = true;
+    } else {
+        extendedAmbienceASD.active = false;
+    }
+    updateActiveStreams();
 }
 
 function onCheckExComments() {
-	//console.debug("######### onCheckExComments: "+checkboxExComments.checked);
-	//onCheckEx();
-	if (checkboxExComments.checked) {
-		extendedCommentsASD.active = true;
-	} else {
-		extendedCommentsASD.active = false;
-	}
-	updateActiveStreams();
+    //console.debug("######### onCheckExComments: "+checkboxExComments.checked);
+    //onCheckEx();
+    if (checkboxExComments.checked) {
+        extendedCommentsASD.active = true;
+    } else {
+        extendedCommentsASD.active = false;
+    }
+    updateActiveStreams();
 }
 
 function onCheckExDialogs() {
-	//console.debug("######### onCheckExDialogs: "+checkboxExDialogs.checked);
-	//onCheckEx();
-	if (checkboxExDialogs.checked) {
-		extendedDialogsASD.active = true;
-	} else {
-		extendedDialogsASD.active = false;
-	}
-	updateActiveStreams();
+    //console.debug("######### onCheckExDialogs: "+checkboxExDialogs.checked);
+    //onCheckEx();
+    if (checkboxExDialogs.checked) {
+        extendedDialogsASD.active = true;
+    } else {
+        extendedDialogsASD.active = false;
+    }
+    updateActiveStreams();
 }
 
 function onCheckEqualization() {
-	//console.debug("######### onCheckEqualization: "+checkboxEqualization.checked);
-	
-	multichannelSpatialiser.eqPreset = "eq1";
+    //console.debug("######### onCheckEqualization: "+checkboxEqualization.checked);
+    
+    multichannelSpatialiser.eqPreset = "eq1";
 
-	if (checkboxEqualization.checked) {
-		multichannelSpatialiser.bypassHeadphoneEqualization( false );
-	} else {
-		multichannelSpatialiser.bypassHeadphoneEqualization( true );
-	}
+    if (checkboxEqualization.checked) {
+        multichannelSpatialiser.bypassHeadphoneEqualization( false );
+    } else {
+        multichannelSpatialiser.bypassHeadphoneEqualization( true );
+    }
 }
 
 function onCheckLSF() {
-	//console.debug("######### onCheckLSF: "+checkboxLSF.checked);
-	if (checkboxLSF.checked) {
-		controller.currentTime = videoPlayerMainMediaElement.currentTime;
-		videoPlayerPipMediaElement.controller = controller;
-		playerPip.startup();
-		playerPip.setAutoPlay(false);
-		playerPip.attachView(videoPlayerPipMediaElement);
-		playerPip.attachSource(urlPip);
-	} else {
-		videoPlayerPipMediaElement.controller = null;
-		playerPip.reset();
-	}
+    //console.debug("######### onCheckLSF: "+checkboxLSF.checked);
+    if (checkboxLSF.checked) {
+        controller.currentTime = videoPlayerMainMediaElement.currentTime;
+        videoPlayerPipMediaElement.controller = controller;
+        playerPip.startup();
+        playerPip.setAutoPlay(false);
+        playerPip.attachView(videoPlayerPipMediaElement);
+        playerPip.attachSource(urlPip);
+    } else {
+        videoPlayerPipMediaElement.controller = null;
+        playerPip.reset();
+    }
 }
 
 //==============================================================================
 function initializeDropDownMenus(){
 
-	/// prepare the sofa catalog of HRTF
-	prepareSofaCatalog();
+    /// prepare the sofa catalog of HRTF
+    prepareSofaCatalog();
 
-	prepareModeSelectionMenu();
+    prepareModeSelectionMenu();
 }
 
 //==============================================================================
 function initializeCheckBoxes(){
 
-	checkboxVideo.checked 			= true;
-	checkboxExAmbience.checked 		= false;
-	checkboxExComments.checked 		= false;
-	checkboxExDialogs.checked 		= false;
-	checkboxLSF.checked 			= true;
-	checkboxEqualization.checked 	= false;
+    checkboxVideo.checked             = true;
+    checkboxExAmbience.checked         = false;
+    checkboxExComments.checked         = false;
+    checkboxExDialogs.checked         = false;
+    checkboxLSF.checked             = true;
+    checkboxEqualization.checked     = false;
 
-	onCheckVideo();
-	onCheckExAmbience();
-	onCheckExComments();
-	onCheckEqualization();
-	onCheckExDialogs();
-	onCheckLSF();
+    onCheckVideo();
+    onCheckExAmbience();
+    onCheckExComments();
+    onCheckEqualization();
+    onCheckExDialogs();
+    onCheckLSF();
 }
 
 //==============================================================================
 function initializeSliders(){
 
-	/// make sure the sliders are properly initialized, with scaled values
-	smartFaderDB.value = smartFader.getdBForGui( smartFaderDB );
-	compressionRatio.value = smartFader.getCompressionRatioForGui( compressionRatio );
-	attackTime.value = smartFader.getAttackTimeForGui( attackTime );
-	releaseTime.value = smartFader.getReleaseTimeForGui( releaseTime );
+    /// make sure the sliders are properly initialized, with scaled values
+    smartFaderDB.value = smartFader.getdBForGui( smartFaderDB );
+    compressionRatio.value = smartFader.getCompressionRatioForGui( compressionRatio );
+    attackTime.value = smartFader.getAttackTimeForGui( attackTime );
+    releaseTime.value = smartFader.getReleaseTimeForGui( releaseTime );
 }
 
 //==============================================================================
@@ -489,23 +505,23 @@ function initializeSliders(){
  */
 smartFaderDB.addEventListener('input', function(){
 
-	var value = smartFader.setdBFromGui( smartFaderDB );
+    var value = smartFader.setdBFromGui( smartFaderDB );
 
-	document.getElementById('label-smart-fader').textContent = 'Smart Fader = ' + Math.round(value).toString() + ' dB';	
+    document.getElementById('label-smart-fader').textContent = 'Smart Fader = ' + Math.round(value).toString() + ' dB';    
 });
 
 //==============================================================================
 gainOffsetFader.addEventListener('input', function(){
 
-	var value = parseFloat( gainOffsetFader.value );
-	/// this is in [-12 12] range
+    var value = parseFloat( gainOffsetFader.value );
+    /// this is in [-12 12] range
 
-	document.getElementById('label-gain-offset').textContent = 'Gain Offset = ' + Math.round(value).toString() + ' dB';
+    document.getElementById('label-gain-offset').textContent = 'Gain Offset = ' + Math.round(value).toString() + ' dB';
 
-	/// un gain d’offset afin de maintenir un niveau subjectif apres l’enclenchement du process de spatialisation
+    /// un gain d’offset afin de maintenir un niveau subjectif apres l’enclenchement du process de spatialisation
 
-	multichannelSpatialiser.offsetGain = value;
-	objectSpatialiserAndMixer.offsetGain = value;
+    multichannelSpatialiser.offsetGain = value;
+    objectSpatialiserAndMixer.offsetGain = value;
 });
 
 //==============================================================================
@@ -514,12 +530,12 @@ gainOffsetFader.addEventListener('input', function(){
  */
 yawFader.addEventListener('input', function(){
 
-	var valueFader = parseFloat( yawFader.value );
+    var valueFader = parseFloat( yawFader.value );
 
-	document.getElementById('label-yaw').textContent = 'Listener yaw = ' + valueFader;
+    document.getElementById('label-yaw').textContent = 'Listener yaw = ' + valueFader;
 
-	multichannelSpatialiser.listenerYaw = valueFader;
-	objectSpatialiserAndMixer.listenerYaw = valueFader;
+    multichannelSpatialiser.listenerYaw = valueFader;
+    objectSpatialiserAndMixer.listenerYaw = valueFader;
 });
 
 //==============================================================================
@@ -528,11 +544,11 @@ yawFader.addEventListener('input', function(){
  */
 azimFader.addEventListener('input', function(){
 
-	var valueFader = parseFloat( azimFader.value );
+    var valueFader = parseFloat( azimFader.value );
 
-	document.getElementById('label-azim').textContent = 'azim = ' + valueFader;
+    document.getElementById('label-azim').textContent = 'azim = ' + valueFader;
 
-	objectSpatialiserAndMixer.setCommentaryAzimuth( valueFader );
+    objectSpatialiserAndMixer.setCommentaryAzimuth( valueFader );
 });
 
 //==============================================================================
@@ -541,11 +557,11 @@ azimFader.addEventListener('input', function(){
  */
 elevFader.addEventListener('input', function(){
 
-	var valueFader = parseFloat( elevFader.value );
+    var valueFader = parseFloat( elevFader.value );
 
-	document.getElementById('label-elev').textContent = 'elev = ' + valueFader;
+    document.getElementById('label-elev').textContent = 'elev = ' + valueFader;
 
-	objectSpatialiserAndMixer.setCommentaryElevation( valueFader );
+    objectSpatialiserAndMixer.setCommentaryElevation( valueFader );
 });
 
 //==============================================================================
@@ -554,9 +570,9 @@ elevFader.addEventListener('input', function(){
  */
 compressionRatio.addEventListener('input', function(){
 
-	var value = smartFader.setCompressionRatioFromGui( compressionRatio );
+    var value = smartFader.setCompressionRatioFromGui( compressionRatio );
 
-	document.getElementById('label-compression-ratio').textContent = 'Compression ratio = ' + value + ':1';
+    document.getElementById('label-compression-ratio').textContent = 'Compression ratio = ' + value + ':1';
 });
 
 //==============================================================================
@@ -565,9 +581,9 @@ compressionRatio.addEventListener('input', function(){
  */
 attackTime.addEventListener('input', function(){
 
-	var value = smartFader.setAttackTimeFromGui( attackTime );
+    var value = smartFader.setAttackTimeFromGui( attackTime );
 
-	document.getElementById('label-attack-time').textContent = 'Attack time = ' + Math.round(value).toString()  + ' ms';
+    document.getElementById('label-attack-time').textContent = 'Attack time = ' + Math.round(value).toString()  + ' ms';
 });
 
 //==============================================================================
@@ -576,22 +592,22 @@ attackTime.addEventListener('input', function(){
  */
 releaseTime.addEventListener('input', function(){
 
-	var value = smartFader.setReleaseTimeFromGui( releaseTime );
+    var value = smartFader.setReleaseTimeFromGui( releaseTime );
 
-	document.getElementById('label-release-time').textContent = 'Release time = ' + Math.round(value).toString()  + ' ms';
+    document.getElementById('label-release-time').textContent = 'Release time = ' + Math.round(value).toString()  + ' ms';
 });
 
 //==============================================================================
 /// Refresh the dynamic compression state every 500 msec
 setInterval(function(){
-	var isCompressed = smartFader.dynamicCompressionState;
+    var isCompressed = smartFader.dynamicCompressionState;
 
-	if( isCompressed === true){
-		document.getElementById('label-compression').style.color = "rgba(255, 0, 0, 0.7)";
-	}
-	else{
-		document.getElementById('label-compression').style.color = "rgba(255, 255, 255, 0.7)";
-	}
+    if( isCompressed === true){
+        document.getElementById('label-compression').style.color = "rgba(255, 0, 0, 0.7)";
+    }
+    else{
+        document.getElementById('label-compression').style.color = "rgba(255, 255, 255, 0.7)";
+    }
 }, 500);
 
 //==============================================================================

@@ -61,7 +61,7 @@ var VirtualSpeakersNode = function (_AbstractNode) {
         /// at the moment, we load the whole HRTF file
         _this._binauralPanner = new _binaural2.default.audio.BinauralPanner({
             audioContext: audioContext,
-            positionsType: 'sofaSpherical',
+            coordinateSystem: 'sofaSpherical',
             filterPositions: horizontalPositions,
             filterPositionsType: 'sofaSpherical',
             crossfadeDuration: 0.05,
@@ -110,7 +110,7 @@ var VirtualSpeakersNode = function (_AbstractNode) {
         value: function getFallbackUrl() {
             var sampleRate = this._audioContext.sampleRate;
 
-            var sofaUrl = './hrtf/IRC_1147_C_HRIR_' + sampleRate + '.sofa.json';
+            var sofaUrl = './hrtf/IRC_1147_C_HRIR_M_' + sampleRate + '.sofa.json';
 
             return sofaUrl;
         }
