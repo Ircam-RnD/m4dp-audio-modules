@@ -2322,7 +2322,7 @@ var VirtualSpeakersNode = function (_AbstractNode) {
             coordinateSystem: 'sofaSpherical',
             filterPositions: horizontalPositions,
             filterPositionsType: 'sofaSpherical',
-            crossfadeDuration: 0.05,
+            crossfadeDuration: 0.01,
             sourceCount: totalNumberOfChannels_,
             sourcePositions: sofaPositions
         });
@@ -3263,38 +3263,23 @@ var ObjectSpatialiserAndMixer = function (_MultichannelSpatiali) {
 
         _classCallCheck(this, ObjectSpatialiserAndMixer);
 
-        return _possibleConstructorReturn(this, Object.getPrototypeOf(ObjectSpatialiserAndMixer).call(this, audioContext, audioStreamDescriptionCollection, outputType, headphoneEqPresetName, offsetGain, listenerYaw));
+        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(ObjectSpatialiserAndMixer).call(this, audioContext, audioStreamDescriptionCollection, outputType, headphoneEqPresetName, offsetGain, listenerYaw));
+
+        _this._distance = 1;
+        return _this;
     }
 
     //==============================================================================
     /**
-     * Load a new HRTF from a given URL
-     * @type {string} url
+     * Set the position of the additionnal mono commentary     
+     * @param {number} azimuth - azimuth @todo values to be defined
+     * @param {number} elevation - elevation @todo values to be defined
+     * @param {number} distance - distance @todo values to be defined
+     *
+     * @details The values are expressed with Spat4 navigational coordinates
      */
 
     _createClass(ObjectSpatialiserAndMixer, [{
-        key: 'loadHrtfSet',
-        value: function loadHrtfSet(url) {
-            var _this2 = this;
-
-            return;
-            this._virtualSpeakers.loadHrtfSet(url).then(function () {
-                /// we need to update the position of the commentary after loading a new hrtf set
-                _this2._updateCommentaryPosition();
-            });
-        }
-
-        //==============================================================================
-        /**
-         * Set the position of the additionnal mono commentary     
-         * @param {number} azimuth - azimuth @todo values to be defined
-         * @param {number} elevation - elevation @todo values to be defined
-         * @param {number} distance - distance @todo values to be defined
-         *
-         * @details The values are expressed with Spat4 navigational coordinates
-         */
-
-    }, {
         key: 'setCommentaryPosition',
         value: function setCommentaryPosition(azimuth, elevation, distance) {
             this._azimuth = azimuth;
@@ -3312,6 +3297,51 @@ var ObjectSpatialiserAndMixer = function (_MultichannelSpatiali) {
         key: 'setCommentaryElevation',
         value: function setCommentaryElevation(elev) {
             this.setCommentaryPosition(this._azimuth, elev, this._distance);
+        }
+    }, {
+        key: 'setCommentaryAzimuthFromGui',
+        value: function setCommentaryAzimuthFromGui(theSlider) {
+
+            /// the value of the fader
+            var valueFader = parseFloat(theSlider.value);
+
+            // get the bounds of the fader (GUI)
+            var minFader = parseFloat(theSlider.min);
+            var maxFader = parseFloat(theSlider.max);
+
+            // get the actual bounds for this parameter
+            var minValue = -180;
+            var maxValue = 180;
+
+            /// scale from GUI to DSP
+
+            var value = M4DPAudioModules.utilities.scale(valueFader, minFader, maxFader, minValue, maxValue);
+
+            this.setCommentaryAzimuth(value);
+
+            return Math.round(value);
+        }
+    }, {
+        key: 'setCommentaryElevationFromGui',
+        value: function setCommentaryElevationFromGui(theSlider) {
+            /// the value of the fader
+            var valueFader = parseFloat(theSlider.value);
+
+            // get the bounds of the fader (GUI)
+            var minFader = parseFloat(theSlider.min);
+            var maxFader = parseFloat(theSlider.max);
+
+            // get the actual bounds for this parameter
+            var minValue = -40;
+            var maxValue = 90;
+
+            /// scale from GUI to DSP
+
+            var value = M4DPAudioModules.utilities.scale(valueFader, minFader, maxFader, minValue, maxValue);
+
+            this.setCommentaryElevation(value);
+
+            return Math.round(value);
         }
 
         /**
@@ -3346,6 +3376,7 @@ var ObjectSpatialiserAndMixer = function (_MultichannelSpatiali) {
 
                 if (typeof this._virtualSpeakers._binauralPanner !== 'undefined') {
                     this._virtualSpeakers._binauralPanner.setSourcePositionByIndex(sourceIndex, sofaPos);
+                    this._virtualSpeakers._binauralPanner.update();
                 }
             } else {
                 /// there is no commentary stream

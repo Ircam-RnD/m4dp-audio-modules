@@ -64,7 +64,7 @@ var VirtualSpeakersNode = function (_AbstractNode) {
             coordinateSystem: 'sofaSpherical',
             filterPositions: horizontalPositions,
             filterPositionsType: 'sofaSpherical',
-            crossfadeDuration: 0.05,
+            crossfadeDuration: 0.01,
             sourceCount: totalNumberOfChannels_,
             sourcePositions: sofaPositions
         });

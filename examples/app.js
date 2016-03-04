@@ -86,11 +86,11 @@ var controller = new MediaController();
 
 //dumpObject( playerMain );
 
-videoPlayerMainMediaElement.controller             = controller;
-videoPlayerPipMediaElement.controller             = controller;
+videoPlayerMainMediaElement.controller           = controller;
+videoPlayerPipMediaElement.controller            = controller;
 playerAudioFiveDotOneMediaElement.controller     = controller;
-playerAudioDescriptionMediaElement.controller     = controller;
-playerDialogueMediaElement.controller             = controller;
+playerAudioDescriptionMediaElement.controller    = controller;
+playerDialogueMediaElement.controller            = controller;
 
 var audioContext = new (window.AudioContext || window.webkitAudioContext)();
 //console.debug("######### audioContext: " + audioContext);
@@ -169,13 +169,24 @@ var asdc = new M4DPAudioModules.AudioStreamDescriptionCollection(
 
 //==============================================================================
 // M4DPAudioModules
-var streamSelector = new M4DPAudioModules.StreamSelector( audioContext, asdc );
-var smartFader = new M4DPAudioModules.SmartFader( audioContext, asdc );
-var objectSpatialiserAndMixer = new M4DPAudioModules.ObjectSpatialiserAndMixer( audioContext, asdc, 'binaural' );
-//var noiseAdaptation = new M4DPAudioModules.NoiseAdaptation(audioContext);
-var multichannelSpatialiser = new M4DPAudioModules.MultichannelSpatialiser( audioContext, asdc, 'binaural' );
-//var dialogEnhancement = new M4DPAudioModules.DialogEnhancement(audioContext);
 
+/// connect either the multichannel spatializer or the object spatializer
+var ModulesConfiguration = 
+{
+    kMultichannelSpatialiser : 0,
+    kObjectSpatialiserAndMixer : 1
+};
+
+var config = ModulesConfiguration.kMultichannelSpatialiser;
+
+var streamSelector  = new M4DPAudioModules.StreamSelector( audioContext, asdc );
+var smartFader      = new M4DPAudioModules.SmartFader( audioContext, asdc );
+//var noiseAdaptation = new M4DPAudioModules.NoiseAdaptation(audioContext);
+//var dialogEnhancement = new M4DPAudioModules.DialogEnhancement(audioContext);    
+var multichannelSpatialiser = new M4DPAudioModules.MultichannelSpatialiser( audioContext, asdc, 'binaural' );
+var objectSpatialiserAndMixer = new M4DPAudioModules.ObjectSpatialiserAndMixer( audioContext, asdc, 'binaural' );
+
+//==============================================================================    
 {
     ///@bug : the channelSplitterMain MUST be connected to the AudioContext,
     /// otherwise the video wont read.
@@ -185,6 +196,16 @@ var multichannelSpatialiser = new M4DPAudioModules.MultichannelSpatialiser( audi
     channelSplitterMain.connect( uselessGain, 0, 0 );
     uselessGain.gain.value = 0.;
     uselessGain.connect( audioContext.destination, 0, 0 );
+}    
+
+/// WAA connections
+{
+    /// receives 4 ADSC with 10 channels in total
+    channelMerger.connect( streamSelector._input );
+
+    /// mute or unmute the inactive streams
+    /// (process 10 channels in total)
+    streamSelector.connect( smartFader._input );
 }
 
 /*
@@ -202,19 +223,8 @@ var multichannelSpatialiser = new M4DPAudioModules.MultichannelSpatialiser( audi
 }
 */
 
-
-/// receives 4 ADSC with 10 channels in total
-channelMerger.connect( streamSelector._input );
-
-/// mute or unmute the inactive streams
-/// (process 10 channels in total)
-streamSelector.connect( smartFader._input );
-
-smartFader.connect( multichannelSpatialiser._input );
-
-/// apply the multichannel spatialiser
-multichannelSpatialiser.connect( audioContext.destination );
-
+//==============================================================================
+//updateWAAConnections();
 
 //==============================================================================
 playerMain.attachSource( urlMain );
@@ -253,6 +263,36 @@ initializeCheckBoxes();
 initializeDropDownMenus();
 
 //==============================================================================
+function updateWAAConnections(){
+    
+    smartFader.disconnect();
+    multichannelSpatialiser.disconnect();
+    objectSpatialiserAndMixer.disconnect();
+
+    var processor = undefined;
+
+    if( config == ModulesConfiguration.kMultichannelSpatialiser ){
+        processor = multichannelSpatialiser;       
+    }
+    else if( config == ModulesConfiguration.kObjectSpatialiserAndMixer ){
+        processor = objectSpatialiserAndMixer;
+    }
+    else{
+        throw new Error( "Invalid configuration" );
+    }
+    
+    smartFader.connect( processor._input );
+
+    /// apply the multichannel spatialiser
+    processor.connect( audioContext.destination );
+
+    var $hrtfSet = document.querySelector('#hrtf-selector');
+    if( $hrtfSet.onchange != null ){    
+        $hrtfSet.onchange();
+    }
+}
+
+//==============================================================================
 function setElementVisibility( elementId, visibility ){
 
     if( visibility === true ){
@@ -267,7 +307,7 @@ function setElementVisibility( elementId, visibility ){
 function prepareModeSelectionMenu(){
     var $menu = document.querySelector('#spatialisation-mode-menu');
 
-    $menu.onchange = function () 
+    $menu.onchange = function ()
     {
         /// retrieve selected mode
         var selection = $menu.value;
@@ -311,6 +351,51 @@ function prepareModeSelectionMenu(){
     $option = document.createElement('option');
     $option.textContent = 'multichannel';
     $menu.add($option);
+
+    $menu.value = 'binaural';
+    $menu.onchange();
+}
+
+//==============================================================================
+function prepareConfiguration(){
+    // configuration set selection menu
+    var $menu = document.querySelector('#configuration-selector');
+
+    $menu.onchange = function ()
+    {
+        /// retrieve selected mode
+        var selection = $menu.value;
+
+        var displayDialogPosition = false;
+
+        if( selection === 'Multichannel Spatialiser' ){
+            displayDialogPosition = false;
+            config = ModulesConfiguration.kMultichannelSpatialiser;
+        }
+        else if( selection === 'Object Spatialiser and Mixer' ){
+            displayDialogPosition = true;
+            config = ModulesConfiguration.kObjectSpatialiserAndMixer;
+        }
+
+        setElementVisibility('azimFader', displayDialogPosition);
+        setElementVisibility('label-azim', displayDialogPosition);
+        setElementVisibility('elevFader', displayDialogPosition);
+        setElementVisibility('label-elev', displayDialogPosition);
+
+        /// and update the WAA connections
+        updateWAAConnections();
+    };
+
+    $option = document.createElement('option');
+    $option.textContent = 'Multichannel Spatialiser';
+    $menu.add($option);
+
+    $option = document.createElement('option');
+    $option.textContent = 'Object Spatialiser and Mixer';
+    $menu.add($option);
+    
+    $menu.value = 'Multichannel Spatialiser';
+    $menu.onchange();
 }
 
 //==============================================================================
@@ -326,61 +411,82 @@ function prepareSofaCatalog(){
         /// retrieve the URL selected in the menu 
         var url = $hrtfSet.value;
 
+        var currentProcessor = undefined;
+        if( config == ModulesConfiguration.kMultichannelSpatialiser ){
+            currentProcessor = multichannelSpatialiser;
+        }
+        else{
+            currentProcessor = objectSpatialiserAndMixer;
+        }
+
         /// load the URL in the spatialiser
-        multichannelSpatialiser.loadHrtfSet( url )
+        currentProcessor.loadHrtfSet( url )
         .then( function()
         {
             /// reset the color after loading
             $hrtfSet.style.backgroundColor="";
-        });
 
-        objectSpatialiserAndMixer.loadHrtfSet( url );        
+            objectSpatialiserAndMixer._updateCommentaryPosition();
+        });
     };
 
-    /// retrieves the catalog of URLs from the OpenDAP server
-    var serverDataBase = new M4DPAudioModules.binaural.sofa.ServerDataBase();
-    serverDataBase
-         .loadCatalogue()
-         .then( function () {
-             var urls = serverDataBase.getUrls({
-                 convention: 'HRIR',
-                 equalisation: 'compensated',
-                 sampleRate: audioContext.sampleRate,
-             });
+    if( $hrtfSet.options.length === 0 ){
 
-             var $option;
-             urls.forEach( function (url) {
+        /// populate the menu
+
+        /// retrieves the catalog of URLs from the OpenDAP server
+        var serverDataBase = new M4DPAudioModules.binaural.sofa.ServerDataBase();
+        serverDataBase
+             .loadCatalogue()
+             .then( function () {
+                 var urls = serverDataBase.getUrls({
+                     convention: 'HRIR',
+                     equalisation: 'compensated',
+                     sampleRate: audioContext.sampleRate,
+                 });
+
+                 var $option;
+                 urls.forEach( function (url) {
+                     $option = document.createElement('option');
+                     $option.textContent = url;
+                     $hrtfSet.add($option);
+                 });
+
+                 defaultUrl = urls.findIndex( function (url) {
+                     return url.match('1018');
+                 });
+                 $hrtfSet.value = urls[defaultUrl];
+                 $hrtfSet.onchange();
+
+                 return urls;
+             })
+             .catch( function (){
+                 /// failed to access the catalog (maybe unauthorized IP)
+                 /// just use the hard-coded sofa data
+
+                 console.log('could not access bili2.ircam.fr...');
+
+                var currentProcessor = undefined;
+                if( config == ModulesConfiguration.kMultichannelSpatialiser ){
+                    currentProcessor = multichannelSpatialiser;
+                }
+                else{
+                    currentProcessor = objectSpatialiserAndMixer;
+                }
+
+                 sofaUrl = currentProcessor._virtualSpeakers.getFallbackUrl();
+
+                 var $option;
                  $option = document.createElement('option');
-                 $option.textContent = url;
+                 $option.textContent = sofaUrl;
                  $hrtfSet.add($option);
+                 
+                 $hrtfSet.value = sofaUrl;
+                 $hrtfSet.onchange();
+
+                 return sofaUrl;
              });
-
-             defaultUrl = urls.findIndex( function (url) {
-                 return url.match('1018');
-             });
-             $hrtfSet.value = urls[defaultUrl];
-             $hrtfSet.onchange();
-
-             return urls;
-         })
-         .catch( function (){
-             /// failed to access the catalog (maybe unauthorized IP)
-             /// just use the hard-coded sofa data
-
-             console.log('could not access bili2.ircam.fr...');
-
-             sofaUrl = multichannelSpatialiser._virtualSpeakers.getFallbackUrl();
-
-             var $option;
-            $option = document.createElement('option');
-            $option.textContent = sofaUrl;
-            $hrtfSet.add($option);
-             
-             $hrtfSet.value = sofaUrl;
-            $hrtfSet.onchange();
-
-             return sofaUrl;
-         });
+     }
 }
 
 //==============================================================================
@@ -465,6 +571,8 @@ function onCheckLSF() {
 //==============================================================================
 function initializeDropDownMenus(){
 
+    prepareConfiguration();
+
     /// prepare the sofa catalog of HRTF
     prepareSofaCatalog();
 
@@ -497,6 +605,9 @@ function initializeSliders(){
     compressionRatio.value = smartFader.getCompressionRatioForGui( compressionRatio );
     attackTime.value = smartFader.getAttackTimeForGui( attackTime );
     releaseTime.value = smartFader.getReleaseTimeForGui( releaseTime );
+
+    azimFader.value = 0;
+    elevFader.value = 0;
 }
 
 //==============================================================================
@@ -507,7 +618,7 @@ smartFaderDB.addEventListener('input', function(){
 
     var value = smartFader.setdBFromGui( smartFaderDB );
 
-    document.getElementById('label-smart-fader').textContent = 'Smart Fader = ' + Math.round(value).toString() + ' dB';    
+    document.getElementById('label-smart-fader').textContent = 'Smart Fader = ' + Math.round(value).toString() + ' dB';
 });
 
 //==============================================================================
@@ -544,11 +655,9 @@ yawFader.addEventListener('input', function(){
  */
 azimFader.addEventListener('input', function(){
 
-    var valueFader = parseFloat( azimFader.value );
-
-    document.getElementById('label-azim').textContent = 'azim = ' + valueFader;
-
-    objectSpatialiserAndMixer.setCommentaryAzimuth( valueFader );
+    var value = objectSpatialiserAndMixer.setCommentaryAzimuthFromGui( azimFader );
+    
+    document.getElementById('label-azim').textContent = 'azim = ' + value;    
 });
 
 //==============================================================================
@@ -557,11 +666,9 @@ azimFader.addEventListener('input', function(){
  */
 elevFader.addEventListener('input', function(){
 
-    var valueFader = parseFloat( elevFader.value );
+    var value = objectSpatialiserAndMixer.setCommentaryElevationFromGui( elevFader );
 
-    document.getElementById('label-elev').textContent = 'elev = ' + valueFader;
-
-    objectSpatialiserAndMixer.setCommentaryElevation( valueFader );
+    document.getElementById('label-elev').textContent = 'elev = ' + value;    
 });
 
 //==============================================================================
@@ -611,14 +718,14 @@ setInterval(function(){
 }, 500);
 
 //==============================================================================
-var event = new Event('input');
-smartFaderDB.dispatchEvent(event);
-compressionRatio.dispatchEvent(event);
-attackTime.dispatchEvent(event);
-releaseTime.dispatchEvent(event);
-yawFader.dispatchEvent(event);
-azimFader.dispatchEvent(event);
-elevFader.dispatchEvent(event);
-gainOffsetFader.dispatchEvent(event);
+var inputEvent = new Event('input');
+smartFaderDB.dispatchEvent(inputEvent);
+compressionRatio.dispatchEvent(inputEvent);
+attackTime.dispatchEvent(inputEvent);
+releaseTime.dispatchEvent(inputEvent);
+yawFader.dispatchEvent(inputEvent);
+azimFader.dispatchEvent(inputEvent);
+elevFader.dispatchEvent(inputEvent);
+gainOffsetFader.dispatchEvent(inputEvent);
 
 
