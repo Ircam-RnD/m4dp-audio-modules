@@ -253,8 +253,13 @@ var releaseTime = document.getElementById('releaseTime');
 var checkboxEqualization = document.getElementById('checkbox-equalization');
 var gainOffsetFader = document.getElementById('gainOffset');
 var yawFader = document.getElementById('yawFader');
-var azimFader = document.getElementById('azimFader');
-var elevFader = document.getElementById('elevFader');
+var azimCommentsFader = document.getElementById('azimCommentsFader');
+var elevCommentsFader = document.getElementById('elevCommentsFader');
+var distCommentsFader = document.getElementById('distCommentsFader');
+var azimDialogFader = document.getElementById('azimDialogFader');
+var elevDialogFader = document.getElementById('elevDialogFader');
+var distDialogFader = document.getElementById('distDialogFader');
+
 
 //==============================================================================
 // initialize the GUI stuffs
@@ -377,10 +382,19 @@ function prepareConfiguration(){
             config = ModulesConfiguration.kObjectSpatialiserAndMixer;
         }
 
-        setElementVisibility('azimFader', displayDialogPosition);
-        setElementVisibility('label-azim', displayDialogPosition);
-        setElementVisibility('elevFader', displayDialogPosition);
-        setElementVisibility('label-elev', displayDialogPosition);
+        setElementVisibility('azimCommentsFader', displayDialogPosition);
+        setElementVisibility('label-azim-comments', displayDialogPosition);
+        setElementVisibility('elevCommentsFader', displayDialogPosition);
+        setElementVisibility('label-elev-comments', displayDialogPosition);
+        setElementVisibility('distCommentsFader', displayDialogPosition);
+        setElementVisibility('label-dist-comments', displayDialogPosition);
+
+        setElementVisibility('azimDialogFader', displayDialogPosition);
+        setElementVisibility('label-azim-dialog', displayDialogPosition);
+        setElementVisibility('elevDialogFader', displayDialogPosition);
+        setElementVisibility('label-elev-dialog', displayDialogPosition);
+        setElementVisibility('distDialogFader', displayDialogPosition);
+        setElementVisibility('label-dist-dialog', displayDialogPosition);
 
         /// and update the WAA connections
         updateWAAConnections();
@@ -606,8 +620,12 @@ function initializeSliders(){
     attackTime.value = smartFader.getAttackTimeForGui( attackTime );
     releaseTime.value = smartFader.getReleaseTimeForGui( releaseTime );
 
-    azimFader.value = 0;
-    elevFader.value = 0;
+    azimCommentsFader.value = 0;
+    elevCommentsFader.value = 0;
+    distCommentsFader.value = 1;
+    azimDialogFader.value = 0;
+    elevDialogFader.value = 0;
+    distDialogFader.value = 1;
 }
 
 //==============================================================================
@@ -653,22 +671,66 @@ yawFader.addEventListener('input', function(){
 /**
  * Callback when the azim slider changes
  */
-azimFader.addEventListener('input', function(){
+azimCommentsFader.addEventListener('input', function(){
 
-    var value = objectSpatialiserAndMixer.setCommentaryAzimuthFromGui( azimFader );
+    var value = objectSpatialiserAndMixer.setCommentaryAzimuthFromGui( azimCommentsFader );
     
-    document.getElementById('label-azim').textContent = 'azim = ' + value;    
+    document.getElementById('label-azim-comments').textContent = 'azim = ' + value;    
+});
+
+//==============================================================================
+/**
+ * Callback when the elev slider changes
+ */
+elevCommentsFader.addEventListener('input', function(){
+
+    var value = objectSpatialiserAndMixer.setCommentaryElevationFromGui( elevCommentsFader );
+
+    document.getElementById('label-elev-comments').textContent = 'elev = ' + value;    
 });
 
 //==============================================================================
 /**
  * Callback when the azim slider changes
  */
-elevFader.addEventListener('input', function(){
+distCommentsFader.addEventListener('input', function(){
 
-    var value = objectSpatialiserAndMixer.setCommentaryElevationFromGui( elevFader );
+    var value = objectSpatialiserAndMixer.setCommentaryDistanceFromGui( distCommentsFader );
+    
+    document.getElementById('label-dist-comments').textContent = 'dist = ' + value + ' m';    
+});
 
-    document.getElementById('label-elev').textContent = 'elev = ' + value;    
+//==============================================================================
+/**
+ * Callback when the azim slider changes
+ */
+azimDialogFader.addEventListener('input', function(){
+
+    var value = objectSpatialiserAndMixer.setDialogAzimuthFromGui( azimDialogFader );
+    
+    document.getElementById('label-azim-dialog').textContent = 'azim = ' + value;    
+});
+
+//==============================================================================
+/**
+ * Callback when the elev slider changes
+ */
+elevDialogFader.addEventListener('input', function(){
+
+    var value = objectSpatialiserAndMixer.setDialogElevationFromGui( elevDialogFader );
+
+    document.getElementById('label-elev-dialog').textContent = 'elev = ' + value;    
+});
+
+//==============================================================================
+/**
+ * Callback when the elev slider changes
+ */
+distDialogFader.addEventListener('input', function(){
+
+    var value = objectSpatialiserAndMixer.setDialogDistanceFromGui( distDialogFader );
+
+    document.getElementById('label-dist-dialog').textContent = 'dist = ' + value + ' m';    
 });
 
 //==============================================================================
@@ -724,8 +786,12 @@ compressionRatio.dispatchEvent(inputEvent);
 attackTime.dispatchEvent(inputEvent);
 releaseTime.dispatchEvent(inputEvent);
 yawFader.dispatchEvent(inputEvent);
-azimFader.dispatchEvent(inputEvent);
-elevFader.dispatchEvent(inputEvent);
+azimCommentsFader.dispatchEvent(inputEvent);
+elevCommentsFader.dispatchEvent(inputEvent);
+distCommentsFader.dispatchEvent(inputEvent);
+azimDialogFader.dispatchEvent(inputEvent);
+elevDialogFader.dispatchEvent(inputEvent);
+distDialogFader.dispatchEvent(inputEvent);
 gainOffsetFader.dispatchEvent(inputEvent);
 
 

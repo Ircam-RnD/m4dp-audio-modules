@@ -47,6 +47,7 @@ var VirtualSpeakersNode = function (_AbstractNode) {
         var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(VirtualSpeakersNode).call(this, audioContext, audioStreamDescriptionCollection));
 
         _this._splitterNode = undefined;
+        _this._gainNodes = [];
 
         /// retrieves the positions of all streams
         var horizontalPositions = _this._getHorizontalPlane();
@@ -74,9 +75,24 @@ var VirtualSpeakersNode = function (_AbstractNode) {
 
         _this._splitterNode = audioContext.createChannelSplitter(totalNumberOfChannels_);
 
-        /// connect the inputs
+        /// create one gain Node for each virtual speaker
+        /// i.e. each virtual speaker has an independent gain setting
         for (var i = 0; i < totalNumberOfChannels_; i++) {
-            _this._binauralPanner.connectInputByIndex(i, _this._splitterNode, i, 0);
+            var newGainNode = audioContext.createGain();
+            _this._gainNodes.push(newGainNode);
+
+            /// also initialize the gain to 1.0
+            _this._gainNodes[i].gain.value = 1.0;
+        }
+
+        /// connect the output of the splitter to the respective gain nodes
+        for (var i = 0; i < totalNumberOfChannels_; i++) {
+            _this._splitterNode.connect(_this._gainNodes[i], i);
+        }
+
+        /// connect the output of the gain nodes to the respective binaural source
+        for (var i = 0; i < totalNumberOfChannels_; i++) {
+            _this._binauralPanner.connectInputByIndex(i, _this._gainNodes[i], 0, 0);
         }
 
         /// sanity checks
@@ -94,12 +110,35 @@ var VirtualSpeakersNode = function (_AbstractNode) {
     }
 
     //==============================================================================
-    /**
-     * Set listenerYaw
-     * @type {number} yaw angle in degrees
-     */
 
     _createClass(VirtualSpeakersNode, [{
+        key: 'getNumChannels',
+        value: function getNumChannels() {
+            return this._gainNodes.length;
+        }
+
+        //==============================================================================
+
+    }, {
+        key: 'setGainForVirtualSource',
+        value: function setGainForVirtualSource(sourceIndex, linearGain) {
+
+            var numChannels = this.getNumChannels();
+
+            if (sourceIndex < 0 || sourceIndex >= numChannels) {
+                throw new Error("Invalid source index : " + sourceIndex);
+            }
+
+            this._gainNodes[sourceIndex].gain.value = linearGain;
+        }
+
+        //==============================================================================
+        /**
+         * Set listenerYaw
+         * @type {number} yaw angle in degrees
+         */
+
+    }, {
         key: 'getFallbackUrl',
 
         //==============================================================================
