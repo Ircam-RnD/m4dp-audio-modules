@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -6,9 +6,13 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _index = require("../core/index.js");
+var _index = require('../core/index.js');
 
 var _index2 = _interopRequireDefault(_index);
+
+var _utils = require('../core/utils.js');
+
+var _utils2 = _interopRequireDefault(_utils);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -100,8 +104,13 @@ var StreamSelector = function (_AbstractNode) {
      */
 
     _createClass(StreamSelector, [{
-        key: "activeStreamsChanged",
+        key: 'activeStreamsChanged',
         value: function activeStreamsChanged() {
+            this._update();
+        }
+    }, {
+        key: 'streamsTrimChanged',
+        value: function streamsTrimChanged() {
             this._update();
         }
 
@@ -112,7 +121,7 @@ var StreamSelector = function (_AbstractNode) {
          */
 
     }, {
-        key: "_update",
+        key: '_update',
         value: function _update() {
 
             /// retrieves the AudioStreamDescriptionCollection
@@ -135,6 +144,11 @@ var StreamSelector = function (_AbstractNode) {
                     /// linear gain value
                     var gainValue = isActive ? 1.0 : 0.0;
 
+                    var trimIndB = stream.trim;
+                    var trimLevel = _utils2.default.dB2lin(trimIndB);
+
+                    var overallGain = gainValue * trimLevel;
+
                     var numChannelsForThisStream = stream.numChannels;
 
                     for (var i = 0; i < numChannelsForThisStream; i++) {
@@ -143,7 +157,7 @@ var StreamSelector = function (_AbstractNode) {
                             throw new Error("Y'a un bug qq part...");
                         }
 
-                        this._gainNode[channelIndex].gain.value = gainValue;
+                        this._gainNode[channelIndex].gain.value = overallGain;
 
                         channelIndex++;
                     }

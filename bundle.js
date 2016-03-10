@@ -327,6 +327,15 @@ var AudioStreamDescriptionCollection = exports.AudioStreamDescriptionCollection 
         /// nothing to do in the base class
 
         /**
+         * Notification when the trim of stream(s) changes
+         */
+
+    }, {
+        key: "streamsTrimChanged",
+        value: function streamsTrimChanged() {}
+        /// nothing to do in the base class  
+
+        /**
          * Get the current dialog audio stream description of the collection
          * @type {AudioStreamDescription}
          */
@@ -592,6 +601,7 @@ var AudioStreamDescription = exports.AudioStreamDescription = function () {
      * @param {number} maxTruePeak - maxTruePeak.
      * @param {boolean} dialog - dialog.
      * @param {boolean} ambiance - ambiance.
+     * @param {number} trim - input trim level (in dB)
      */
 
     function AudioStreamDescription(type) {
@@ -611,6 +621,7 @@ var AudioStreamDescription = exports.AudioStreamDescription = function () {
         this._dialog = dialog;
         this._ambiance = ambiance;
         this._commentary = commentary;
+        this._trim = 0;
     }
     /**
      * Get channel position based on audio stream type
@@ -739,6 +750,43 @@ var AudioStreamDescription = exports.AudioStreamDescription = function () {
          */
 
     }, {
+        key: "setTrimFromGui",
+
+        //==============================================================================
+        /**
+         * Sets the trim level, according to a slider in the GUI
+         * theSlider : the slider
+         * return the actual value of the trim
+         */
+        value: function setTrimFromGui(theSlider) {
+
+            /// the value of the fader
+            var valueFader = parseFloat(theSlider.value);
+
+            // get the bounds of the fader (GUI)
+            var minFader = parseFloat(theSlider.min);
+            var maxFader = parseFloat(theSlider.max);
+
+            // get the actual bounds for this parameter
+            var minValue = -60;
+            var maxValue = 30;
+
+            /// scale from GUI to DSP
+
+            var value = M4DPAudioModules.utilities.scale(valueFader, minFader, maxFader, minValue, maxValue);
+
+            this._trim = value;
+
+            return value;
+        }
+
+        //==============================================================================
+        /**
+         * Set the loudness value of audio stream
+         * @type {number}
+         */
+
+    }, {
         key: "channelPositions",
         get: function get() {
             switch (this._type) {
@@ -810,10 +858,23 @@ var AudioStreamDescription = exports.AudioStreamDescription = function () {
 
         //==============================================================================
         /**
-         * Set the loudness value of audio stream
+         * Set the trim level (in dB)
          * @type {number}
          */
 
+    }, {
+        key: "trim",
+        set: function set(value) {
+            this._trim = value;
+        }
+        /**
+         * Get the trim level (in dB)
+         * @type {number}
+         */
+        ,
+        get: function get() {
+            return this._trim;
+        }
     }, {
         key: "loudness",
         set: function set(value) {
@@ -4524,7 +4585,7 @@ var SmartFader = function (_AbstractNode) {
 
 exports.default = SmartFader;
 },{"../core/index.js":2,"../core/utils.js":3,"../dsp/compressor.js":6}],19:[function(require,module,exports){
-"use strict";
+'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -4532,9 +4593,13 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _index = require("../core/index.js");
+var _index = require('../core/index.js');
 
 var _index2 = _interopRequireDefault(_index);
+
+var _utils = require('../core/utils.js');
+
+var _utils2 = _interopRequireDefault(_utils);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -4626,8 +4691,13 @@ var StreamSelector = function (_AbstractNode) {
      */
 
     _createClass(StreamSelector, [{
-        key: "activeStreamsChanged",
+        key: 'activeStreamsChanged',
         value: function activeStreamsChanged() {
+            this._update();
+        }
+    }, {
+        key: 'streamsTrimChanged',
+        value: function streamsTrimChanged() {
             this._update();
         }
 
@@ -4638,7 +4708,7 @@ var StreamSelector = function (_AbstractNode) {
          */
 
     }, {
-        key: "_update",
+        key: '_update',
         value: function _update() {
 
             /// retrieves the AudioStreamDescriptionCollection
@@ -4661,6 +4731,11 @@ var StreamSelector = function (_AbstractNode) {
                     /// linear gain value
                     var gainValue = isActive ? 1.0 : 0.0;
 
+                    var trimIndB = stream.trim;
+                    var trimLevel = _utils2.default.dB2lin(trimIndB);
+
+                    var overallGain = gainValue * trimLevel;
+
                     var numChannelsForThisStream = stream.numChannels;
 
                     for (var i = 0; i < numChannelsForThisStream; i++) {
@@ -4669,7 +4744,7 @@ var StreamSelector = function (_AbstractNode) {
                             throw new Error("Y'a un bug qq part...");
                         }
 
-                        this._gainNode[channelIndex].gain.value = gainValue;
+                        this._gainNode[channelIndex].gain.value = overallGain;
 
                         channelIndex++;
                     }
@@ -4695,7 +4770,7 @@ var StreamSelector = function (_AbstractNode) {
 }(_index2.default);
 
 exports.default = StreamSelector;
-},{"../core/index.js":2}],20:[function(require,module,exports){
+},{"../core/index.js":2,"../core/utils.js":3}],20:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {

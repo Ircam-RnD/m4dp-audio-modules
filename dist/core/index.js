@@ -104,6 +104,15 @@ var AudioStreamDescriptionCollection = exports.AudioStreamDescriptionCollection 
         /// nothing to do in the base class
 
         /**
+         * Notification when the trim of stream(s) changes
+         */
+
+    }, {
+        key: "streamsTrimChanged",
+        value: function streamsTrimChanged() {}
+        /// nothing to do in the base class  
+
+        /**
          * Get the current dialog audio stream description of the collection
          * @type {AudioStreamDescription}
          */
@@ -369,6 +378,7 @@ var AudioStreamDescription = exports.AudioStreamDescription = function () {
      * @param {number} maxTruePeak - maxTruePeak.
      * @param {boolean} dialog - dialog.
      * @param {boolean} ambiance - ambiance.
+     * @param {number} trim - input trim level (in dB)
      */
 
     function AudioStreamDescription(type) {
@@ -388,6 +398,7 @@ var AudioStreamDescription = exports.AudioStreamDescription = function () {
         this._dialog = dialog;
         this._ambiance = ambiance;
         this._commentary = commentary;
+        this._trim = 0;
     }
     /**
      * Get channel position based on audio stream type
@@ -516,6 +527,43 @@ var AudioStreamDescription = exports.AudioStreamDescription = function () {
          */
 
     }, {
+        key: "setTrimFromGui",
+
+        //==============================================================================
+        /**
+         * Sets the trim level, according to a slider in the GUI
+         * theSlider : the slider
+         * return the actual value of the trim
+         */
+        value: function setTrimFromGui(theSlider) {
+
+            /// the value of the fader
+            var valueFader = parseFloat(theSlider.value);
+
+            // get the bounds of the fader (GUI)
+            var minFader = parseFloat(theSlider.min);
+            var maxFader = parseFloat(theSlider.max);
+
+            // get the actual bounds for this parameter
+            var minValue = -60;
+            var maxValue = 30;
+
+            /// scale from GUI to DSP
+
+            var value = M4DPAudioModules.utilities.scale(valueFader, minFader, maxFader, minValue, maxValue);
+
+            this._trim = value;
+
+            return value;
+        }
+
+        //==============================================================================
+        /**
+         * Set the loudness value of audio stream
+         * @type {number}
+         */
+
+    }, {
         key: "channelPositions",
         get: function get() {
             switch (this._type) {
@@ -587,10 +635,23 @@ var AudioStreamDescription = exports.AudioStreamDescription = function () {
 
         //==============================================================================
         /**
-         * Set the loudness value of audio stream
+         * Set the trim level (in dB)
          * @type {number}
          */
 
+    }, {
+        key: "trim",
+        set: function set(value) {
+            this._trim = value;
+        }
+        /**
+         * Get the trim level (in dB)
+         * @type {number}
+         */
+        ,
+        get: function get() {
+            return this._trim;
+        }
     }, {
         key: "loudness",
         set: function set(value) {

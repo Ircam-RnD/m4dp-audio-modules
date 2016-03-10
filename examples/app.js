@@ -259,7 +259,10 @@ var distCommentsFader = document.getElementById('distCommentsFader');
 var azimDialogFader = document.getElementById('azimDialogFader');
 var elevDialogFader = document.getElementById('elevDialogFader');
 var distDialogFader = document.getElementById('distDialogFader');
-
+var trimMain = document.getElementById('trimMain');
+var trimAmbiance = document.getElementById('trimAmbiance');
+var trimComments = document.getElementById('trimComments');
+var trimDialog = document.getElementById('trimDialog');
 
 //==============================================================================
 // initialize the GUI stuffs
@@ -512,6 +515,11 @@ function updateActiveStreams(){
     objectSpatialiserAndMixer.activeStreamsChanged();
 }
 
+function updateStreamsTrim(){
+    /// notify the modification of trim of streams
+    streamSelector.streamsTrimChanged();    
+}
+
 function onCheckVideo() {
     //console.debug("######### onCheckVideo: "+checkboxVideo.checked);
     if (checkboxVideo.checked) {
@@ -620,6 +628,11 @@ function initializeSliders(){
     attackTime.value = smartFader.getAttackTimeForGui( attackTime );
     releaseTime.value = smartFader.getReleaseTimeForGui( releaseTime );
 
+    trimMain.value = 0;
+    trimAmbiance.value = 0;
+    trimComments.value = 0;
+    trimDialog.value = 0;
+
     azimCommentsFader.value = 0;
     elevCommentsFader.value = 0;
     distCommentsFader.value = 1;
@@ -627,6 +640,46 @@ function initializeSliders(){
     elevDialogFader.value = 0;
     distDialogFader.value = 1;
 }
+
+//==============================================================================
+/**
+ * Callback when the trim slider changes
+ */
+trimMain.addEventListener('input', function(){
+
+    var value = mainAudioASD.setTrimFromGui( trimMain );
+
+    updateStreamsTrim();
+
+    document.getElementById('label-trim-main').textContent = 'Main Audio = ' + Math.round(value).toString() + ' dB';
+});
+
+trimAmbiance.addEventListener('input', function(){
+
+    var value = extendedAmbienceASD.setTrimFromGui( trimAmbiance );
+
+    updateStreamsTrim();
+
+    document.getElementById('label-trim-ambiance').textContent = 'Extended ambiance = ' + Math.round(value).toString() + ' dB';
+});
+
+trimComments.addEventListener('input', function(){
+
+    var value = extendedCommentsASD.setTrimFromGui( trimComments );
+
+    updateStreamsTrim();
+
+    document.getElementById('label-trim-comments').textContent = 'Extended comments = ' + Math.round(value).toString() + ' dB';
+});
+
+trimDialog.addEventListener('input', function(){
+
+    var value = extendedDialogsASD.setTrimFromGui( trimDialog );
+
+    updateStreamsTrim();
+
+    document.getElementById('label-trim-dialog').textContent = 'Extended dialog = ' + Math.round(value).toString() + ' dB';
+});
 
 //==============================================================================
 /**
@@ -781,6 +834,10 @@ setInterval(function(){
 
 //==============================================================================
 var inputEvent = new Event('input');
+trimMain.dispatchEvent(inputEvent);
+trimAmbiance.dispatchEvent(inputEvent);
+trimComments.dispatchEvent(inputEvent);
+trimDialog.dispatchEvent(inputEvent);
 smartFaderDB.dispatchEvent(inputEvent);
 compressionRatio.dispatchEvent(inputEvent);
 attackTime.dispatchEvent(inputEvent);
