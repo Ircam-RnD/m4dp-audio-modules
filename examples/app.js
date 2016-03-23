@@ -3,6 +3,7 @@
 //M4DPAudioModules.unittests.biquadtests.testBiquadNode();
 //M4DPAudioModules.unittests.binauraltests.testBinauralNode();
 //M4DPAudioModules.unittests.testCascadeNode();
+//M4DPAudioModules.unittests.phonetests.testPhoneNode();
 //M4DPAudioModules.unittests.testBinaural();
 //M4DPAudioModules.unittests.testHrtfFromSofaServer();
 //M4DPAudioModules.unittests.sumdifftests.testSumDiffNode();
