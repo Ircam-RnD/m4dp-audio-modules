@@ -12,6 +12,14 @@ var _testcascade = require('./testcascade.js');
 
 var _testcascade2 = _interopRequireDefault(_testcascade);
 
+var _testanalysis = require('./testanalysis.js');
+
+var _testanalysis2 = _interopRequireDefault(_testanalysis);
+
+var _testphone = require('./testphone.js');
+
+var _testphone2 = _interopRequireDefault(_testphone);
+
 var _testsofa = require('./testsofa.js');
 
 var _testsofa2 = _interopRequireDefault(_testsofa);
@@ -52,6 +60,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var unittests = {
     biquadtests: _testbiquad2.default,
     cascadetests: _testcascade2.default,
+    analysistests: _testanalysis2.default,
+    phonetests: _testphone2.default,
     sofatests: _testsofa2.default,
     binauraltests: _testbinaural2.default,
     sumdifftests: _testsumdiff2.default,

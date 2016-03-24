@@ -1,10 +1,10 @@
 "use strict";
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _index = require("../core/index.js");
 
@@ -86,13 +86,13 @@ var MultichannelCompressorNode = function (_AbstractNode) {
         _this._input.connect(_this._splitterNode);
 
         /// connect a compressorNodes to each channel
-        for (var i = 0; i < numChannels; i++) {
-            _this._splitterNode.connect(_this._compressorNodes[i], i);
+        for (var _i = 0; _i < numChannels; _i++) {
+            _this._splitterNode.connect(_this._compressorNodes[_i], _i);
         }
 
         /// then merge the output of the 10 compressorNodes
-        for (var i = 0; i < numChannels; i++) {
-            _this._compressorNodes[i].connect(_this._mergerNode, 0, i);
+        for (var _i2 = 0; _i2 < numChannels; _i2++) {
+            _this._compressorNodes[_i2].connect(_this._mergerNode, 0, _i2);
         }
 
         _this._mergerNode.connect(_this._output);

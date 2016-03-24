@@ -9,15 +9,13 @@ exports.fillChannel = fillChannel;
 exports.clearBufferChannel = clearBufferChannel;
 exports.clearBuffer = clearBuffer;
 exports.makeImpulse = makeImpulse;
-/************************************************************************************/
-/*!
- *   @file       bufferutils.js
- *   @brief      Misc utility functions for AudioBuffer manipulation
- *   @author     Thibaut Carpentier
- *   @date       01/2016
- *
- */
-/************************************************************************************/
+exports.makeNoise = makeNoise;
+
+var _utils = require("./utils.js");
+
+var _utils2 = _interopRequireDefault(_utils);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 //==============================================================================
 /**
@@ -27,6 +25,7 @@ exports.makeImpulse = makeImpulse;
  */
 function writeTextDataToFile(text) {
     var textFile = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
+
 
     var data = new Blob([text], { type: 'text/plain' });
 
@@ -40,7 +39,17 @@ function writeTextDataToFile(text) {
 
     // returns a URL you can use as a href
     return textFile;
-};
+} /************************************************************************************/
+/*!
+ *   @file       bufferutils.js
+ *   @brief      Misc utility functions for AudioBuffer manipulation
+ *   @author     Thibaut Carpentier
+ *   @date       01/2016
+ *
+ */
+/************************************************************************************/
+
+;
 
 //==============================================================================
 /**
@@ -136,6 +145,7 @@ function fillChannel(buffer) {
     var channelIndex = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
     var value = arguments.length <= 2 || arguments[2] === undefined ? 0.0 : arguments[2];
 
+
     var numChannels = buffer.numberOfChannels;
     var numSamples = buffer.length;
 
@@ -187,6 +197,7 @@ function makeImpulse(buffer) {
     var channelIndex = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
     var sampleIndex = arguments.length <= 2 || arguments[2] === undefined ? 0 : arguments[2];
 
+
     var numChannels = buffer.numberOfChannels;
     var numSamples = buffer.length;
 
@@ -208,6 +219,25 @@ function makeImpulse(buffer) {
     channel_[sampleIndex] = 1.0;
 }
 
+function makeNoise(buffer) {
+    var channelIndex = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
+    var gain = arguments.length <= 2 || arguments[2] === undefined ? 0 : arguments[2];
+
+    var numChannels = buffer.numberOfChannels;
+
+    /// boundary check
+    if (channelIndex < 0 || channelIndex >= numChannels) {
+        throw new Error("Invalid channelIndex");
+    }
+
+    var amplitude = _utils2.default.dB2lin(gain);
+
+    var data = buffer.getChannelData(channelIndex);
+    data.forEach(function (sample, index) {
+        data[index] = amplitude * Math.random() * 2 - 1;
+    });
+}
+
 //==============================================================================
 var bufferutilities = {
     writeBufferToTextFileWithMatlabFormat: writeBufferToTextFileWithMatlabFormat,
@@ -215,6 +245,7 @@ var bufferutilities = {
     clearBufferChannel: clearBufferChannel,
     clearBuffer: clearBuffer,
     makeImpulse: makeImpulse,
+    makeNoise: makeNoise,
     fillChannel: fillChannel
 };
 

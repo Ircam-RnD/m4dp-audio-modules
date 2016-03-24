@@ -1,12 +1,12 @@
 'use strict';
 
-var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _index = require('../core/index.js');
 
@@ -35,6 +35,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
  *
  */
 /************************************************************************************/
+
 
 var SmartFader = function (_AbstractNode) {
     _inherits(SmartFader, _AbstractNode);
@@ -88,8 +89,10 @@ var SmartFader = function (_AbstractNode) {
      * @type {number}
      */
 
+
     _createClass(SmartFader, [{
         key: 'setdBFromGui',
+
 
         //==============================================================================
         /**
@@ -142,6 +145,7 @@ var SmartFader = function (_AbstractNode) {
             var minValue = _SmartFader$dBRange2[0];
             var maxValue = _SmartFader$dBRange2[1];
 
+
             var actualValue = this.dB;
 
             /// scale from DSP to GUI
@@ -159,6 +163,7 @@ var SmartFader = function (_AbstractNode) {
     }, {
         key: 'activeStreamsChanged',
 
+
         /**
          * Notification when the active stream(s) changes
          */
@@ -174,6 +179,7 @@ var SmartFader = function (_AbstractNode) {
 
     }, {
         key: 'setCompressionRatioFromGui',
+
 
         //==============================================================================
         /**
@@ -226,6 +232,7 @@ var SmartFader = function (_AbstractNode) {
             var minValue = _SmartFader$compressi2[0];
             var maxValue = _SmartFader$compressi2[1];
 
+
             var actualValue = this.compressionRatio;
 
             /// scale from DSP to GUI
@@ -242,6 +249,7 @@ var SmartFader = function (_AbstractNode) {
 
     }, {
         key: 'setAttackTimeFromGui',
+
 
         //==============================================================================
         /**
@@ -294,6 +302,7 @@ var SmartFader = function (_AbstractNode) {
             var minValue = _SmartFader$attackTim2[0];
             var maxValue = _SmartFader$attackTim2[1];
 
+
             var actualValue = this.attackTime;
 
             /// scale from DSP to GUI
@@ -310,6 +319,7 @@ var SmartFader = function (_AbstractNode) {
 
     }, {
         key: 'setReleaseTimeFromGui',
+
 
         //==============================================================================
         /**
@@ -361,6 +371,7 @@ var SmartFader = function (_AbstractNode) {
 
             var minValue = _SmartFader$releaseTi2[0];
             var maxValue = _SmartFader$releaseTi2[1];
+
 
             var actualValue = this.releaseTime;
 
@@ -511,6 +522,7 @@ var SmartFader = function (_AbstractNode) {
             var minValue = _SmartFader$compressi3[0];
             var maxValue = _SmartFader$compressi3[1];
 
+
             this._compressionRatio = _utils2.default.clamp(value, minValue, maxValue);
 
             this._updateCompressorSettings();
@@ -536,6 +548,7 @@ var SmartFader = function (_AbstractNode) {
 
             var minValue = _SmartFader$attackTim3[0];
             var maxValue = _SmartFader$attackTim3[1];
+
 
             this._attackTime = _utils2.default.clamp(value, minValue, maxValue);
 
@@ -563,6 +576,7 @@ var SmartFader = function (_AbstractNode) {
             var minValue = _SmartFader$releaseTi3[0];
             var maxValue = _SmartFader$releaseTi3[1];
 
+
             this._releaseTime = _utils2.default.clamp(value, minValue, maxValue);
 
             this._updateCompressorSettings();
@@ -588,6 +602,7 @@ var SmartFader = function (_AbstractNode) {
 
             var minValue = _SmartFader$dBRange3[0];
             var maxValue = _SmartFader$dBRange3[1];
+
 
             return _utils2.default.clamp(value, minValue, maxValue);
         }

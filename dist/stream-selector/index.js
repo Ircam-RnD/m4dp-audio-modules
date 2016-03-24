@@ -1,10 +1,10 @@
 'use strict';
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _index = require('../core/index.js');
 
@@ -85,13 +85,13 @@ var StreamSelector = function (_AbstractNode) {
         _this._input.connect(_this._splitterNode);
 
         /// connect a gainNode to each channel
-        for (var i = 0; i < totalNumberOfChannels_; i++) {
-            _this._splitterNode.connect(_this._gainNode[i], i);
+        for (var _i = 0; _i < totalNumberOfChannels_; _i++) {
+            _this._splitterNode.connect(_this._gainNode[_i], _i);
         }
 
         /// then merge the output of the 10 gainNodes
-        for (var i = 0; i < totalNumberOfChannels_; i++) {
-            _this._gainNode[i].connect(_this._mergerNode, 0, i);
+        for (var _i2 = 0; _i2 < totalNumberOfChannels_; _i2++) {
+            _this._gainNode[_i2].connect(_this._mergerNode, 0, _i2);
         }
 
         _this._mergerNode.connect(_this._output);
@@ -102,6 +102,7 @@ var StreamSelector = function (_AbstractNode) {
      * Notification when the active stream(s) changes
      * (i.e. whenever a check box is modified)
      */
+
 
     _createClass(StreamSelector, [{
         key: 'activeStreamsChanged',
@@ -138,6 +139,7 @@ var StreamSelector = function (_AbstractNode) {
             try {
                 for (var _iterator = asdc[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
                     var stream = _step.value;
+
 
                     var isActive = stream.active;
 

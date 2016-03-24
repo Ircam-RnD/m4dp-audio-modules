@@ -138,6 +138,7 @@ var StreamRouting = function (_AbstractNode) {
                 for (var _iterator = asdc[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
                     var stream = _step.value;
 
+
                     var numChannelsForThisStream = stream.numChannels;
 
                     for (var k = 0; k < numChannelsForThisStream; k++) {

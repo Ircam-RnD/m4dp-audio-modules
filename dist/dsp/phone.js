@@ -58,9 +58,8 @@ var PhoneNode = function (_CascadeNode) {
         _this._q = 1;
 
         _set(Object.getPrototypeOf(PhoneNode.prototype), 'numCascades', 1, _this); // add more for steeper boost
-        _get(Object.getPrototypeOf(PhoneNode.prototype), 'resetAllBiquads', _this).call(_this);
         _get(Object.getPrototypeOf(PhoneNode.prototype), 'setType', _this).call(_this, 0, 'peaking');
-        _this._updateCascade();
+        _this._updateCascades();
         return _this;
     }
 
@@ -72,13 +71,14 @@ var PhoneNode = function (_CascadeNode) {
 
 
     _createClass(PhoneNode, [{
-        key: '_updateCascade',
+        key: '_updateCascades',
 
 
         //==============================================================================
-        value: function _updateCascade() {
+        value: function _updateCascades() {
+            var gain = this._gain / _get(Object.getPrototypeOf(PhoneNode.prototype), 'numCascades', this);
             for (var c = 0; c < _get(Object.getPrototypeOf(PhoneNode.prototype), 'numCascades', this); ++c) {
-                _get(Object.getPrototypeOf(PhoneNode.prototype), 'setGain', this).call(this, c, this._gain);
+                _get(Object.getPrototypeOf(PhoneNode.prototype), 'setGain', this).call(this, c, gain);
                 _get(Object.getPrototypeOf(PhoneNode.prototype), 'setFrequency', this).call(this, c, this._frequency);
                 _get(Object.getPrototypeOf(PhoneNode.prototype), 'setQ', this).call(this, c, this._q);
             }
@@ -87,7 +87,7 @@ var PhoneNode = function (_CascadeNode) {
         key: 'gain',
         set: function set(gainRequest) {
             this._gain = gainRequest;
-            this._updateCascade();
+            this._updateCascades();
         }
 
         /**
@@ -109,7 +109,7 @@ var PhoneNode = function (_CascadeNode) {
         key: 'frequency',
         set: function set(frequencyRequest) {
             this._frequency = frequencyRequest;
-            this._updateCascade();
+            this._updateCascades();
         }
 
         /**
@@ -131,7 +131,7 @@ var PhoneNode = function (_CascadeNode) {
         key: 'q',
         set: function set(qRequest) {
             this._q = qRequest;
-            this._updateCascade();
+            this._updateCascades();
         }
 
         /**
@@ -150,11 +150,13 @@ var PhoneNode = function (_CascadeNode) {
          */
 
     }, {
-        key: 'numCascade',
+        key: 'numCascades',
         set: function set(numCascadesRequest) {
             _set(Object.getPrototypeOf(PhoneNode.prototype), 'numCascades', numCascadesRequest, this);
-            _get(Object.getPrototypeOf(PhoneNode.prototype), 'resetAllBiquads', this).call(this);
-            this._updateCascade();
+            for (var c = 0; c < _get(Object.getPrototypeOf(PhoneNode.prototype), 'numCascades', this); ++c) {
+                _get(Object.getPrototypeOf(PhoneNode.prototype), 'setType', this).call(this, c, 'peaking');
+            }
+            this._updateCascades();
         }
 
         /**

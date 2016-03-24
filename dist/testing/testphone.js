@@ -42,6 +42,8 @@ function testPhoneNode() {
     _bufferutils2.default.clearBuffer(buffer);
     _bufferutils2.default.makeImpulse(buffer, 0, 0);
     _bufferutils2.default.makeImpulse(buffer, 1, 10);
+    _bufferutils2.default.makeNoise(buffer, 2, 0);
+    _bufferutils2.default.makeNoise(buffer, 3, -6);
 
     /// create a buffer source
     var bufferSource = audioContext1.createBufferSource();
@@ -54,7 +56,7 @@ function testPhoneNode() {
 
     /// configure the phone filter
     {
-        phoneNode.gain = 6;
+        phoneNode.gain = 6; // NOT default, default is 0
 
         phoneNode.frequency = 1200; // default
         phoneNode.q = 1; // default
