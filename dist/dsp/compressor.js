@@ -1,10 +1,10 @@
 "use strict";
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _index = require("../core/index.js");
 
@@ -61,6 +61,12 @@ var MultichannelCompressorNode = function (_AbstractNode) {
         _this._compressorNodes = [];
         _this._splitterNode = undefined;
         _this._mergerNode = undefined;
+        _this._isBypass = false;
+
+        /// sanity checks
+        if (numChannels <= 0) {
+            throw new Error("Pas bon");
+        }
 
         _this._splitterNode = audioContext.createChannelSplitter(numChannels);
 
@@ -76,34 +82,45 @@ var MultichannelCompressorNode = function (_AbstractNode) {
             throw new Error("Pas bon");
         }
 
-        /// create 10 compressorNodes
+        /// create N compressorNodes
         for (var i = 0; i < numChannels; i++) {
             var newCompressorNode = audioContext.createDynamicsCompressor();
             _this._compressorNodes.push(newCompressorNode);
         }
 
-        /// split the input streams into 10 independent channels
-        _this._input.connect(_this._splitterNode);
-
-        /// connect a compressorNodes to each channel
-        for (var _i = 0; _i < numChannels; _i++) {
-            _this._splitterNode.connect(_this._compressorNodes[_i], _i);
-        }
-
-        /// then merge the output of the 10 compressorNodes
-        for (var _i2 = 0; _i2 < numChannels; _i2++) {
-            _this._compressorNodes[_i2].connect(_this._mergerNode, 0, _i2);
-        }
-
-        _this._mergerNode.connect(_this._output);
+        _this._updateAudioGraph();
         return _this;
     }
 
+    //==============================================================================
+    /**
+     * Enable or bypass the processor
+     * @type {boolean}
+     */
+
     _createClass(MultichannelCompressorNode, [{
         key: "getNumChannels",
+
+        //==============================================================================
         value: function getNumChannels() {
             return this._compressorNodes.length;
         }
+
+        //==============================================================================
+
+    }, {
+        key: "getCompressorOfFirstChannel",
+        value: function getCompressorOfFirstChannel() {
+
+            if (this.getNumChannels() <= 0) {
+                throw new Error("smothing is wrong");
+            }
+
+            return this._compressorNodes[0];
+        }
+
+        //==============================================================================
+
     }, {
         key: "getReductionForChannel",
         value: function getReductionForChannel(channelIndex) {
@@ -118,6 +135,9 @@ var MultichannelCompressorNode = function (_AbstractNode) {
 
             return this._compressorNodes[channelIndex].reduction.value;
         }
+
+        //==============================================================================
+
     }, {
         key: "getReduction",
         value: function getReduction() {
@@ -136,6 +156,9 @@ var MultichannelCompressorNode = function (_AbstractNode) {
 
             return reduction;
         }
+
+        //==============================================================================
+
     }, {
         key: "setThreshold",
         value: function setThreshold(value) {
@@ -148,6 +171,16 @@ var MultichannelCompressorNode = function (_AbstractNode) {
             }
         }
     }, {
+        key: "getThreshold",
+        value: function getThreshold() {
+            /// the parameter is the same for all channels
+
+            return this.getCompressorOfFirstChannel().threshold.value;
+        }
+
+        //==============================================================================
+
+    }, {
         key: "setRatio",
         value: function setRatio(value) {
             /// the parameter is applied similarly to all channels
@@ -158,6 +191,16 @@ var MultichannelCompressorNode = function (_AbstractNode) {
                 this._compressorNodes[i].ratio.value = value;
             }
         }
+    }, {
+        key: "getRatio",
+        value: function getRatio() {
+            /// the parameter is the same for all channels
+
+            return this.getCompressorOfFirstChannel().ratio.value;
+        }
+
+        //==============================================================================
+
     }, {
         key: "setAttack",
         value: function setAttack(value) {
@@ -170,6 +213,16 @@ var MultichannelCompressorNode = function (_AbstractNode) {
             }
         }
     }, {
+        key: "getAttack",
+        value: function getAttack() {
+            /// the parameter is the same for all channels
+
+            return this.getCompressorOfFirstChannel().attack.value;
+        }
+
+        //==============================================================================
+
+    }, {
         key: "setRelease",
         value: function setRelease(value) {
             /// the parameter is applied similarly to all channels
@@ -179,6 +232,71 @@ var MultichannelCompressorNode = function (_AbstractNode) {
             for (var i = 0; i < numChannels; i++) {
                 this._compressorNodes[i].release.value = value;
             }
+        }
+    }, {
+        key: "getRelease",
+        value: function getRelease() {
+            /// the parameter is the same for all channels
+
+            return this.getCompressorOfFirstChannel().release.value;
+        }
+
+        //==============================================================================
+        /**
+         * Updates the connections of the audio graph
+         */
+
+    }, {
+        key: "_updateAudioGraph",
+        value: function _updateAudioGraph() {
+
+            var numChannels = this.getNumChannels();
+
+            /// first of all, disconnect everything
+            this._input.disconnect();
+            this._splitterNode.disconnect();
+            this._mergerNode.disconnect();
+            for (var i = 0; i < numChannels; i++) {
+                this._compressorNodes[i].disconnect();
+            }
+
+            if (this.bypass === true || numChannels === 0) {
+
+                this._input.connect(this._output);
+            } else {
+
+                /// split the input streams into N independent channels
+                this._input.connect(this._splitterNode);
+
+                /// connect a compressorNodes to each channel
+                for (var i = 0; i < numChannels; i++) {
+                    this._splitterNode.connect(this._compressorNodes[i], i);
+                }
+
+                /// then merge the output of the N compressorNodes
+                for (var i = 0; i < numChannels; i++) {
+                    this._compressorNodes[i].connect(this._mergerNode, 0, i);
+                }
+
+                this._mergerNode.connect(this._output);
+            }
+        }
+    }, {
+        key: "bypass",
+        set: function set(value) {
+
+            if (value !== this._isBypass) {
+                this._isBypass = value;
+                this._updateAudioGraph();
+            }
+        }
+
+        /**
+         * Returns true if the processor is bypassed
+         */
+        ,
+        get: function get() {
+            return this._isBypass;
         }
     }]);
 

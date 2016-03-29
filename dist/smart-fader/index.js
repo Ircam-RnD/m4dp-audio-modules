@@ -1,12 +1,12 @@
 'use strict';
 
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
 var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 
 var _index = require('../core/index.js');
 
@@ -36,7 +36,6 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
  */
 /************************************************************************************/
 
-
 var SmartFader = function (_AbstractNode) {
     _inherits(SmartFader, _AbstractNode);
 
@@ -59,6 +58,7 @@ var SmartFader = function (_AbstractNode) {
         _this._compressionRatio = SmartFader.defaultCompressionRatio;
         _this._attackTime = SmartFader.defaultAttackTime;
         _this._releaseTime = SmartFader.defaultReleaseTime;
+        _this._isBypass = false;
 
         /// the total number of incoming channels, including all the streams
         /// (mainAudio, extendedAmbience, extendedComments and extendedDialogs)
@@ -69,11 +69,7 @@ var SmartFader = function (_AbstractNode) {
         _this._dynamicCompressorNode = new _compressor2.default(audioContext, totalNumberOfChannels_);
 
         /// connect the audio nodes
-        {
-            _this._input.connect(_this._gainNode);
-            _this._gainNode.connect(_this._dynamicCompressorNode._input);
-            _this._dynamicCompressorNode.connect(_this._output);
-        }
+        _this._updateAudioGraph();
 
         /// initialization
         {
@@ -85,14 +81,12 @@ var SmartFader = function (_AbstractNode) {
 
     //==============================================================================
     /**
-     * Set the dB value
-     * @type {number}
+     * Enable or bypass the processor
+     * @type {boolean}
      */
-
 
     _createClass(SmartFader, [{
         key: 'setdBFromGui',
-
 
         //==============================================================================
         /**
@@ -145,7 +139,6 @@ var SmartFader = function (_AbstractNode) {
             var minValue = _SmartFader$dBRange2[0];
             var maxValue = _SmartFader$dBRange2[1];
 
-
             var actualValue = this.dB;
 
             /// scale from DSP to GUI
@@ -163,7 +156,6 @@ var SmartFader = function (_AbstractNode) {
     }, {
         key: 'activeStreamsChanged',
 
-
         /**
          * Notification when the active stream(s) changes
          */
@@ -179,7 +171,6 @@ var SmartFader = function (_AbstractNode) {
 
     }, {
         key: 'setCompressionRatioFromGui',
-
 
         //==============================================================================
         /**
@@ -232,7 +223,6 @@ var SmartFader = function (_AbstractNode) {
             var minValue = _SmartFader$compressi2[0];
             var maxValue = _SmartFader$compressi2[1];
 
-
             var actualValue = this.compressionRatio;
 
             /// scale from DSP to GUI
@@ -249,7 +239,6 @@ var SmartFader = function (_AbstractNode) {
 
     }, {
         key: 'setAttackTimeFromGui',
-
 
         //==============================================================================
         /**
@@ -302,7 +291,6 @@ var SmartFader = function (_AbstractNode) {
             var minValue = _SmartFader$attackTim2[0];
             var maxValue = _SmartFader$attackTim2[1];
 
-
             var actualValue = this.attackTime;
 
             /// scale from DSP to GUI
@@ -319,7 +307,6 @@ var SmartFader = function (_AbstractNode) {
 
     }, {
         key: 'setReleaseTimeFromGui',
-
 
         //==============================================================================
         /**
@@ -371,7 +358,6 @@ var SmartFader = function (_AbstractNode) {
 
             var minValue = _SmartFader$releaseTi2[0];
             var maxValue = _SmartFader$releaseTi2[1];
-
 
             var actualValue = this.releaseTime;
 
@@ -472,6 +458,54 @@ var SmartFader = function (_AbstractNode) {
 
             this._gainNode.gain.value = lin;
         }
+
+        //==============================================================================
+        /**
+         * Updates the connections of the audio graph
+         */
+
+    }, {
+        key: '_updateAudioGraph',
+        value: function _updateAudioGraph() {
+
+            /// first of all, disconnect everything
+            this._input.disconnect();
+            this._gainNode.disconnect();
+            this._dynamicCompressorNode.disconnect();
+
+            if (this.bypass === true) {
+                this._input.connect(this._output);
+            } else {
+
+                this._input.connect(this._gainNode);
+                this._gainNode.connect(this._dynamicCompressorNode._input);
+                this._dynamicCompressorNode.connect(this._output);
+            }
+        }
+    }, {
+        key: 'bypass',
+        set: function set(value) {
+
+            if (value !== this._isBypass) {
+                this._isBypass = value;
+                this._updateAudioGraph();
+            }
+        }
+
+        /**
+         * Returns true if the processor is bypassed
+         */
+        ,
+        get: function get() {
+            return this._isBypass;
+        }
+
+        //==============================================================================
+        /**
+         * Set the dB value
+         * @type {number}
+         */
+
     }, {
         key: 'dB',
         set: function set(value) {
@@ -522,7 +556,6 @@ var SmartFader = function (_AbstractNode) {
             var minValue = _SmartFader$compressi3[0];
             var maxValue = _SmartFader$compressi3[1];
 
-
             this._compressionRatio = _utils2.default.clamp(value, minValue, maxValue);
 
             this._updateCompressorSettings();
@@ -548,7 +581,6 @@ var SmartFader = function (_AbstractNode) {
 
             var minValue = _SmartFader$attackTim3[0];
             var maxValue = _SmartFader$attackTim3[1];
-
 
             this._attackTime = _utils2.default.clamp(value, minValue, maxValue);
 
@@ -576,7 +608,6 @@ var SmartFader = function (_AbstractNode) {
             var minValue = _SmartFader$releaseTi3[0];
             var maxValue = _SmartFader$releaseTi3[1];
 
-
             this._releaseTime = _utils2.default.clamp(value, minValue, maxValue);
 
             this._updateCompressorSettings();
@@ -602,7 +633,6 @@ var SmartFader = function (_AbstractNode) {
 
             var minValue = _SmartFader$dBRange3[0];
             var maxValue = _SmartFader$dBRange3[1];
-
 
             return _utils2.default.clamp(value, minValue, maxValue);
         }

@@ -1,10 +1,10 @@
 'use strict';
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _index = require('../multichannel-spatialiser/index.js');
 
@@ -29,7 +29,6 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
  *
  */
 /************************************************************************************/
-
 
 var ObjectSpatialiserAndMixer = function (_MultichannelSpatiali) {
     _inherits(ObjectSpatialiserAndMixer, _MultichannelSpatiali);
@@ -69,7 +68,6 @@ var ObjectSpatialiserAndMixer = function (_MultichannelSpatiali) {
      *
      * @details The values are expressed with Spat4 navigational coordinates
      */
-
 
     _createClass(ObjectSpatialiserAndMixer, [{
         key: 'setCommentaryPosition',
@@ -234,7 +232,6 @@ var ObjectSpatialiserAndMixer = function (_MultichannelSpatiali) {
             try {
                 for (var _iterator = asdc[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
                     var stream = _step.value;
-
 
                     if (stream.commentary === true) {
 
@@ -441,7 +438,6 @@ var ObjectSpatialiserAndMixer = function (_MultichannelSpatiali) {
                 for (var _iterator2 = asdc[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
                     var stream = _step2.value;
 
-
                     if (stream.dialog === true && stream.type === "Mono") {
                         return sourceIndex;
                     } else {
@@ -475,7 +471,6 @@ var ObjectSpatialiserAndMixer = function (_MultichannelSpatiali) {
 
     }, {
         key: '_process',
-
 
         //==============================================================================
         /**

@@ -27,7 +27,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function writeTextDataToFile(text) {
     var textFile = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
 
-
     var data = new Blob([text], { type: 'text/plain' });
 
     // If we are replacing a previously generated file we need to
@@ -146,7 +145,6 @@ function fillChannel(buffer) {
     var channelIndex = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
     var value = arguments.length <= 2 || arguments[2] === undefined ? 0.0 : arguments[2];
 
-
     var numChannels = buffer.numberOfChannels;
     var numSamples = buffer.length;
 
@@ -197,7 +195,6 @@ function clearBuffer(buffer) {
 function makeImpulse(buffer) {
     var channelIndex = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
     var sampleIndex = arguments.length <= 2 || arguments[2] === undefined ? 0 : arguments[2];
-
 
     var numChannels = buffer.numberOfChannels;
     var numSamples = buffer.length;
@@ -254,11 +251,11 @@ exports.default = bufferutilities;
 },{"./utils.js":3}],2:[function(require,module,exports){
 "use strict";
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -293,7 +290,6 @@ var AbstractNode = function () {
      * Connect the audio node
      * @param {AudioNode} node - an AudioNode to connect to.
      */
-
 
     _createClass(AbstractNode, [{
         key: "connect",
@@ -330,7 +326,6 @@ var AbstractNode = function () {
  * Container for AudioStreamDescription
  */
 
-
 exports.default = AbstractNode;
 
 var AudioStreamDescriptionCollection = exports.AudioStreamDescriptionCollection = function () {
@@ -350,17 +345,14 @@ var AudioStreamDescriptionCollection = exports.AudioStreamDescriptionCollection 
      * @type {AudioStreamDescription[]}
      */
 
-
     _createClass(AudioStreamDescriptionCollection, [{
         key: "activeStreamsChanged",
-
 
         /**
          * Notification when the active stream(s) changes
          */
         value: function activeStreamsChanged() {}
         /// nothing to do in the base class
-
 
         /**
          * Notification when the trim of stream(s) changes
@@ -370,7 +362,6 @@ var AudioStreamDescriptionCollection = exports.AudioStreamDescriptionCollection 
         key: "streamsTrimChanged",
         value: function streamsTrimChanged() {}
         /// nothing to do in the base class  
-
 
         /**
          * Get the current dialog audio stream description of the collection
@@ -629,7 +620,6 @@ var AudioStreamDescriptionCollection = exports.AudioStreamDescriptionCollection 
  * AudioStreamDescription describes a stream.
  */
 
-
 var AudioStreamDescription = exports.AudioStreamDescription = function () {
     /**
      * AudioStreamDescription constructor
@@ -666,10 +656,8 @@ var AudioStreamDescription = exports.AudioStreamDescription = function () {
      * @type {number[]}
      */
 
-
     _createClass(AudioStreamDescription, [{
         key: "channelIsCenter",
-
 
         //==============================================================================
         /**
@@ -791,7 +779,6 @@ var AudioStreamDescription = exports.AudioStreamDescription = function () {
 
     }, {
         key: "setTrimFromGui",
-
 
         //==============================================================================
         /**
@@ -1015,18 +1002,6 @@ var AudioStreamDescription = exports.AudioStreamDescription = function () {
 }();
 
 /**
- * HRTF
- * @todo: to be defined
- * @typedef {Object} HRTF
- */
-
-/**
- * EqPreset
- * @todo: to be defined
- * @typedef {Object} EqPreset
- */
-
-/**
 * @external {AudioContext} https://developer.mozilla.org/fr/docs/Web/API/AudioContext
 */
 },{}],3:[function(require,module,exports){
@@ -1112,7 +1087,6 @@ function dB2lin(value) {
  */
 function arrayAlmostEqual(array1, array2) {
     var tolerance = arguments.length <= 2 || arguments[2] === undefined ? 0 : arguments[2];
-
 
     if (tolerance < 0.0) {
         throw new Error("pas bon");
@@ -1218,11 +1192,11 @@ exports.default = utilities;
 },{}],4:[function(require,module,exports){
 'use strict';
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _index = require('../core/index.js');
 
@@ -1258,7 +1232,6 @@ var DialogEnhancement = function (_AbstractNode) {
      * Set Mode - value is 1, 2 or 3
      * @type {number}
      */
-
 
     _createClass(DialogEnhancement, [{
         key: 'mode',
@@ -1323,11 +1296,11 @@ exports.default = DialogEnhancement;
 },{"../core/index.js":2}],5:[function(require,module,exports){
 'use strict';
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _index = require('../core/index.js');
 
@@ -1386,10 +1359,8 @@ var AnalysisNode = function (_AbstractNode) {
    * @type {number} fftSize : a non-zero power of 2 in a range from 32 to 2048
    */
 
-
   _createClass(AnalysisNode, [{
     key: 'getRMS',
-
 
     //==============================================================================
     /**
@@ -1597,11 +1568,11 @@ exports.default = AnalysisNode;
 },{"../core/index.js":2}],6:[function(require,module,exports){
 "use strict";
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _index = require("../core/index.js");
 
@@ -1654,10 +1625,8 @@ var CascadeNode = function (_AbstractNode) {
      * @type {boolean}
      */
 
-
     _createClass(CascadeNode, [{
         key: "setFrequency",
-
 
         //==============================================================================
         /**
@@ -1844,7 +1813,6 @@ var CascadeNode = function (_AbstractNode) {
     }, {
         key: "_updateAudioGraph",
 
-
         //==============================================================================
         /**
          * Updates the connections of the audio graph
@@ -1866,8 +1834,8 @@ var CascadeNode = function (_AbstractNode) {
                 this._biquadNodes[numCascades_ - 1].connect(this._output);
 
                 /// connect the cascades
-                for (var _i = numCascades_ - 1; _i > 0; _i--) {
-                    this._biquadNodes[_i - 1].connect(this._biquadNodes[_i]);
+                for (var i = numCascades_ - 1; i > 0; i--) {
+                    this._biquadNodes[i - 1].connect(this._biquadNodes[i]);
                 }
 
                 /// connect the 1st biquad to the input
@@ -1930,11 +1898,11 @@ exports.default = CascadeNode;
 },{"../core/index.js":2}],7:[function(require,module,exports){
 "use strict";
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _index = require("../core/index.js");
 
@@ -1991,6 +1959,12 @@ var MultichannelCompressorNode = function (_AbstractNode) {
         _this._compressorNodes = [];
         _this._splitterNode = undefined;
         _this._mergerNode = undefined;
+        _this._isBypass = false;
+
+        /// sanity checks
+        if (numChannels <= 0) {
+            throw new Error("Pas bon");
+        }
 
         _this._splitterNode = audioContext.createChannelSplitter(numChannels);
 
@@ -2006,34 +1980,45 @@ var MultichannelCompressorNode = function (_AbstractNode) {
             throw new Error("Pas bon");
         }
 
-        /// create 10 compressorNodes
+        /// create N compressorNodes
         for (var i = 0; i < numChannels; i++) {
             var newCompressorNode = audioContext.createDynamicsCompressor();
             _this._compressorNodes.push(newCompressorNode);
         }
 
-        /// split the input streams into 10 independent channels
-        _this._input.connect(_this._splitterNode);
-
-        /// connect a compressorNodes to each channel
-        for (var _i = 0; _i < numChannels; _i++) {
-            _this._splitterNode.connect(_this._compressorNodes[_i], _i);
-        }
-
-        /// then merge the output of the 10 compressorNodes
-        for (var _i2 = 0; _i2 < numChannels; _i2++) {
-            _this._compressorNodes[_i2].connect(_this._mergerNode, 0, _i2);
-        }
-
-        _this._mergerNode.connect(_this._output);
+        _this._updateAudioGraph();
         return _this;
     }
 
+    //==============================================================================
+    /**
+     * Enable or bypass the processor
+     * @type {boolean}
+     */
+
     _createClass(MultichannelCompressorNode, [{
         key: "getNumChannels",
+
+        //==============================================================================
         value: function getNumChannels() {
             return this._compressorNodes.length;
         }
+
+        //==============================================================================
+
+    }, {
+        key: "getCompressorOfFirstChannel",
+        value: function getCompressorOfFirstChannel() {
+
+            if (this.getNumChannels() <= 0) {
+                throw new Error("smothing is wrong");
+            }
+
+            return this._compressorNodes[0];
+        }
+
+        //==============================================================================
+
     }, {
         key: "getReductionForChannel",
         value: function getReductionForChannel(channelIndex) {
@@ -2048,6 +2033,9 @@ var MultichannelCompressorNode = function (_AbstractNode) {
 
             return this._compressorNodes[channelIndex].reduction.value;
         }
+
+        //==============================================================================
+
     }, {
         key: "getReduction",
         value: function getReduction() {
@@ -2066,6 +2054,9 @@ var MultichannelCompressorNode = function (_AbstractNode) {
 
             return reduction;
         }
+
+        //==============================================================================
+
     }, {
         key: "setThreshold",
         value: function setThreshold(value) {
@@ -2078,6 +2069,16 @@ var MultichannelCompressorNode = function (_AbstractNode) {
             }
         }
     }, {
+        key: "getThreshold",
+        value: function getThreshold() {
+            /// the parameter is the same for all channels
+
+            return this.getCompressorOfFirstChannel().threshold.value;
+        }
+
+        //==============================================================================
+
+    }, {
         key: "setRatio",
         value: function setRatio(value) {
             /// the parameter is applied similarly to all channels
@@ -2088,6 +2089,16 @@ var MultichannelCompressorNode = function (_AbstractNode) {
                 this._compressorNodes[i].ratio.value = value;
             }
         }
+    }, {
+        key: "getRatio",
+        value: function getRatio() {
+            /// the parameter is the same for all channels
+
+            return this.getCompressorOfFirstChannel().ratio.value;
+        }
+
+        //==============================================================================
+
     }, {
         key: "setAttack",
         value: function setAttack(value) {
@@ -2100,6 +2111,16 @@ var MultichannelCompressorNode = function (_AbstractNode) {
             }
         }
     }, {
+        key: "getAttack",
+        value: function getAttack() {
+            /// the parameter is the same for all channels
+
+            return this.getCompressorOfFirstChannel().attack.value;
+        }
+
+        //==============================================================================
+
+    }, {
         key: "setRelease",
         value: function setRelease(value) {
             /// the parameter is applied similarly to all channels
@@ -2110,6 +2131,71 @@ var MultichannelCompressorNode = function (_AbstractNode) {
                 this._compressorNodes[i].release.value = value;
             }
         }
+    }, {
+        key: "getRelease",
+        value: function getRelease() {
+            /// the parameter is the same for all channels
+
+            return this.getCompressorOfFirstChannel().release.value;
+        }
+
+        //==============================================================================
+        /**
+         * Updates the connections of the audio graph
+         */
+
+    }, {
+        key: "_updateAudioGraph",
+        value: function _updateAudioGraph() {
+
+            var numChannels = this.getNumChannels();
+
+            /// first of all, disconnect everything
+            this._input.disconnect();
+            this._splitterNode.disconnect();
+            this._mergerNode.disconnect();
+            for (var i = 0; i < numChannels; i++) {
+                this._compressorNodes[i].disconnect();
+            }
+
+            if (this.bypass === true || numChannels === 0) {
+
+                this._input.connect(this._output);
+            } else {
+
+                /// split the input streams into N independent channels
+                this._input.connect(this._splitterNode);
+
+                /// connect a compressorNodes to each channel
+                for (var i = 0; i < numChannels; i++) {
+                    this._splitterNode.connect(this._compressorNodes[i], i);
+                }
+
+                /// then merge the output of the N compressorNodes
+                for (var i = 0; i < numChannels; i++) {
+                    this._compressorNodes[i].connect(this._mergerNode, 0, i);
+                }
+
+                this._mergerNode.connect(this._output);
+            }
+        }
+    }, {
+        key: "bypass",
+        set: function set(value) {
+
+            if (value !== this._isBypass) {
+                this._isBypass = value;
+                this._updateAudioGraph();
+            }
+        }
+
+        /**
+         * Returns true if the processor is bypassed
+         */
+        ,
+        get: function get() {
+            return this._isBypass;
+        }
     }]);
 
     return MultichannelCompressorNode;
@@ -2119,15 +2205,15 @@ exports.default = MultichannelCompressorNode;
 },{"../core/index.js":2}],8:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
 var _set = function set(object, property, value, receiver) { var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent !== null) { set(parent, property, value, receiver); } } else if ("value" in desc && desc.writable) { desc.value = value; } else { var setter = desc.set; if (setter !== undefined) { setter.call(receiver, value); } } return value; };
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 
 var _index = require('../core/index.js');
 
@@ -2180,10 +2266,8 @@ var HeadphonesEqualization = function (_CascadeNode) {
      * @type {string} value : the name of the preset (they are hard-coded) 
      */
 
-
     _createClass(HeadphonesEqualization, [{
         key: '_updateCascade',
-
 
         //==============================================================================
         value: function _updateCascade() {
@@ -2247,13 +2331,17 @@ exports.default = HeadphonesEqualization;
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+	value: true
 });
-exports.TransauralShufflerNode = exports.TransauralFeedforwardNode = exports.TransauralNode = exports.SumDiffNode = exports.HeadphonesEqualization = exports.CascadeNode = undefined;
+exports.VirtualSpeakersNode = exports.TransauralShufflerNode = exports.TransauralFeedforwardNode = exports.TransauralNode = exports.SumDiffNode = exports.HeadphonesEqualization = exports.AnalysisNode = exports.CascadeNode = undefined;
 
 var _cascade = require('./cascade.js');
 
 var _cascade2 = _interopRequireDefault(_cascade);
+
+var _analysis = require('./analysis.js');
+
+var _analysis2 = _interopRequireDefault(_analysis);
 
 var _headphoneequalization = require('./headphoneequalization.js');
 
@@ -2264,6 +2352,10 @@ var _transaural = require('./transaural.js');
 var _sumdiff = require('./sumdiff.js');
 
 var _sumdiff2 = _interopRequireDefault(_sumdiff);
+
+var _virtualspeakers = require('./virtualspeakers.js');
+
+var _virtualspeakers2 = _interopRequireDefault(_virtualspeakers);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -2278,12 +2370,14 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 /************************************************************************************/
 
 exports.CascadeNode = _cascade2.default;
+exports.AnalysisNode = _analysis2.default;
 exports.HeadphonesEqualization = _headphoneequalization2.default;
 exports.SumDiffNode = _sumdiff2.default;
 exports.TransauralNode = _transaural.TransauralNode;
 exports.TransauralFeedforwardNode = _transaural.TransauralFeedforwardNode;
 exports.TransauralShufflerNode = _transaural.TransauralShufflerNode;
-},{"./cascade.js":6,"./headphoneequalization.js":8,"./sumdiff.js":12,"./transaural.js":13}],10:[function(require,module,exports){
+exports.VirtualSpeakersNode = _virtualspeakers2.default;
+},{"./analysis.js":5,"./cascade.js":6,"./headphoneequalization.js":8,"./sumdiff.js":12,"./transaural.js":13,"./virtualspeakers.js":14}],10:[function(require,module,exports){
 "use strict";Object.defineProperty(exports,"__esModule",{value:true});exports.getKemar2btFilters=getKemar2btFilters; /************************************************************************************/ /*!
  *   @file       kemar.js
  *   @brief      Kemar hard-coded filters
@@ -2305,10 +2399,6 @@ var sumFilter=getKemar2btSumFilter(samplerate,speakerSpan);var diffFilter=getKem
 },{}],11:[function(require,module,exports){
 'use strict';
 
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
@@ -2322,6 +2412,10 @@ var _set = function set(object, property, value, receiver) { var desc = Object.g
  *
  */
 /************************************************************************************/
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 
 var _index = require('../core/index.js');
 
@@ -2374,10 +2468,8 @@ var PhoneNode = function (_CascadeNode) {
      * @type {number} gainRequest : the gain in dB (0 for no gain)
      */
 
-
     _createClass(PhoneNode, [{
         key: '_updateCascades',
-
 
         //==============================================================================
         value: function _updateCascades() {
@@ -2557,12 +2649,12 @@ exports.default = SumDiffNode;
 },{"../core/index.js":2}],13:[function(require,module,exports){
 'use strict';
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.TransauralFeedforwardNode = exports.TransauralShufflerNode = undefined;
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _index = require('../core/index.js');
 
@@ -2620,10 +2712,8 @@ var TransauralNode = function (_AbstractNode) {
      * @type {number}
      */
 
-
     _createClass(TransauralNode, [{
         key: '_updateAudioGraph',
-
 
         //==============================================================================
         /**
@@ -2746,7 +2836,6 @@ var TransauralShufflerNode = exports.TransauralShufflerNode = function (_Transau
      * Updates the connections of the audio graph
      */
 
-
     _createClass(TransauralShufflerNode, [{
         key: '_updateAudioGraph',
         value: function _updateAudioGraph() {
@@ -2820,11 +2909,11 @@ var TransauralFeedforwardNode = exports.TransauralFeedforwardNode = function (_T
 },{"../core/index.js":2,"./kemar.js":10,"./sumdiff.js":12}],14:[function(require,module,exports){
 'use strict';
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _index = require('../core/index.js');
 
@@ -2906,13 +2995,13 @@ var VirtualSpeakersNode = function (_AbstractNode) {
         }
 
         /// connect the output of the splitter to the respective gain nodes
-        for (var _i = 0; _i < totalNumberOfChannels_; _i++) {
-            _this._splitterNode.connect(_this._gainNodes[_i], _i);
+        for (var i = 0; i < totalNumberOfChannels_; i++) {
+            _this._splitterNode.connect(_this._gainNodes[i], i);
         }
 
         /// connect the output of the gain nodes to the respective binaural source
-        for (var _i2 = 0; _i2 < totalNumberOfChannels_; _i2++) {
-            _this._binauralPanner.connectInputByIndex(_i2, _this._gainNodes[_i2], 0, 0);
+        for (var i = 0; i < totalNumberOfChannels_; i++) {
+            _this._binauralPanner.connectInputByIndex(i, _this._gainNodes[i], 0, 0);
         }
 
         /// sanity checks
@@ -2930,7 +3019,6 @@ var VirtualSpeakersNode = function (_AbstractNode) {
     }
 
     //==============================================================================
-
 
     _createClass(VirtualSpeakersNode, [{
         key: 'getNumChannels',
@@ -2961,7 +3049,6 @@ var VirtualSpeakersNode = function (_AbstractNode) {
 
     }, {
         key: 'getFallbackUrl',
-
 
         //==============================================================================
         /**
@@ -3068,7 +3155,6 @@ var VirtualSpeakersNode = function (_AbstractNode) {
                 for (var _iterator = asdc[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
                     var stream = _step.value;
 
-
                     /// positions expressed with Spat4 navigation coordinate
                     var azimuths = stream.channelPositions;
 
@@ -3153,13 +3239,13 @@ var VirtualSpeakersNode = function (_AbstractNode) {
 }(_index2.default);
 
 exports.default = VirtualSpeakersNode;
-},{"../core/index.js":2,"binaural":44}],15:[function(require,module,exports){
+},{"../core/index.js":2,"binaural":45}],15:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
 		value: true
 });
-exports.binaural = exports.unittests = exports.utilities = exports.AudioStreamDescription = exports.AudioStreamDescriptionCollection = exports.SmartFader = exports.ObjectSpatialiserAndMixer = exports.NoiseAdaptation = exports.MultichannelSpatialiser = exports.DialogEnhancement = exports.StreamSelector = exports.HeadphonesEqualization = exports.SumDiffNode = exports.CascadeNode = undefined;
+exports.binaural = exports.unittests = exports.utilities = exports.AudioStreamDescription = exports.AudioStreamDescriptionCollection = exports.SmartFader = exports.ObjectSpatialiserAndMixer = exports.NoiseAdaptation = exports.MultichannelSpatialiser = exports.DialogEnhancement = exports.ReceiverMix = exports.StreamSelector = exports.HeadphonesEqualization = exports.SumDiffNode = exports.CascadeNode = undefined;
 
 var _index = require('./dialog-enhancement/index.js');
 
@@ -3187,15 +3273,19 @@ var _index12 = require('./stream-selector/index.js');
 
 var _index13 = _interopRequireDefault(_index12);
 
-var _index14 = require('./dsp/index.js');
+var _index14 = require('./receiver-mix/index.js');
+
+var _index15 = _interopRequireDefault(_index14);
+
+var _index16 = require('./dsp/index.js');
 
 var _utils = require('./core/utils.js');
 
 var _utils2 = _interopRequireDefault(_utils);
 
-var _index15 = require('./testing/index.js');
+var _index17 = require('./testing/index.js');
 
-var _index16 = _interopRequireDefault(_index15);
+var _index18 = _interopRequireDefault(_index17);
 
 var _binaural = require('binaural');
 
@@ -3203,10 +3293,11 @@ var _binaural2 = _interopRequireDefault(_binaural);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-exports.CascadeNode = _index14.CascadeNode;
-exports.SumDiffNode = _index14.SumDiffNode;
-exports.HeadphonesEqualization = _index14.HeadphonesEqualization;
+exports.CascadeNode = _index16.CascadeNode;
+exports.SumDiffNode = _index16.SumDiffNode;
+exports.HeadphonesEqualization = _index16.HeadphonesEqualization;
 exports.StreamSelector = _index13.default;
+exports.ReceiverMix = _index15.default;
 exports.DialogEnhancement = _index2.default;
 exports.MultichannelSpatialiser = _index4.default;
 exports.NoiseAdaptation = _index6.default;
@@ -3215,16 +3306,16 @@ exports.SmartFader = _index10.default;
 exports.AudioStreamDescriptionCollection = _index11.AudioStreamDescriptionCollection;
 exports.AudioStreamDescription = _index11.AudioStreamDescription;
 exports.utilities = _utils2.default;
-exports.unittests = _index16.default;
+exports.unittests = _index18.default;
 exports.binaural = _binaural2.default;
-},{"./core/index.js":2,"./core/utils.js":3,"./dialog-enhancement/index.js":4,"./dsp/index.js":9,"./multichannel-spatialiser/index.js":16,"./noise-adaptation/index.js":18,"./object-spatialiser-and-mixer/index.js":19,"./smart-fader/index.js":20,"./stream-selector/index.js":21,"./testing/index.js":22,"binaural":44}],16:[function(require,module,exports){
+},{"./core/index.js":2,"./core/utils.js":3,"./dialog-enhancement/index.js":4,"./dsp/index.js":9,"./multichannel-spatialiser/index.js":16,"./noise-adaptation/index.js":18,"./object-spatialiser-and-mixer/index.js":19,"./receiver-mix/index.js":20,"./smart-fader/index.js":21,"./stream-selector/index.js":22,"./testing/index.js":23,"binaural":45}],16:[function(require,module,exports){
 'use strict';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _index = require('../core/index.js');
 
@@ -3316,7 +3407,6 @@ var MultichannelSpatialiser = function (_AbstractNode) {
      * @type {string} url
      */
 
-
     _createClass(MultichannelSpatialiser, [{
         key: 'loadHrtfSet',
         value: function loadHrtfSet(url) {
@@ -3332,13 +3422,11 @@ var MultichannelSpatialiser = function (_AbstractNode) {
     }, {
         key: 'activeStreamsChanged',
 
-
         /**
          * Notification when the active stream(s) changes
          */
         value: function activeStreamsChanged() {}
         /// nothing to do, for the moment
-
 
         //==============================================================================
         /**
@@ -3455,7 +3543,6 @@ var MultichannelSpatialiser = function (_AbstractNode) {
 
     }, {
         key: 'bypassHeadphoneEqualization',
-
 
         /**
          * Enable or bypass the headphone equalization
@@ -3695,7 +3782,6 @@ var StreamRouting = function (_AbstractNode) {
                 for (var _iterator = asdc[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
                     var stream = _step.value;
 
-
                     var numChannelsForThisStream = stream.numChannels;
 
                     for (var k = 0; k < numChannelsForThisStream; k++) {
@@ -3752,11 +3838,11 @@ exports.default = StreamRouting;
 },{"../core/index.js":2}],18:[function(require,module,exports){
 'use strict';
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _index = require('../core/index.js');
 
@@ -3794,7 +3880,6 @@ var NoiseAdaptation = function (_AbstractNode) {
    * @todo: track noise, add compression, improve voice if no headphone
    */
 
-
   _createClass(NoiseAdaptation, [{
     key: '_process',
     value: function _process() {}
@@ -3825,11 +3910,11 @@ exports.default = NoiseAdaptation;
 },{"../core/index.js":2}],19:[function(require,module,exports){
 'use strict';
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _index = require('../multichannel-spatialiser/index.js');
 
@@ -3854,7 +3939,6 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
  *
  */
 /************************************************************************************/
-
 
 var ObjectSpatialiserAndMixer = function (_MultichannelSpatiali) {
     _inherits(ObjectSpatialiserAndMixer, _MultichannelSpatiali);
@@ -3894,7 +3978,6 @@ var ObjectSpatialiserAndMixer = function (_MultichannelSpatiali) {
      *
      * @details The values are expressed with Spat4 navigational coordinates
      */
-
 
     _createClass(ObjectSpatialiserAndMixer, [{
         key: 'setCommentaryPosition',
@@ -4059,7 +4142,6 @@ var ObjectSpatialiserAndMixer = function (_MultichannelSpatiali) {
             try {
                 for (var _iterator = asdc[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
                     var stream = _step.value;
-
 
                     if (stream.commentary === true) {
 
@@ -4266,7 +4348,6 @@ var ObjectSpatialiserAndMixer = function (_MultichannelSpatiali) {
                 for (var _iterator2 = asdc[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
                     var stream = _step2.value;
 
-
                     if (stream.dialog === true && stream.type === "Mono") {
                         return sourceIndex;
                     } else {
@@ -4301,7 +4382,6 @@ var ObjectSpatialiserAndMixer = function (_MultichannelSpatiali) {
     }, {
         key: '_process',
 
-
         //==============================================================================
         /**
          * Process: "position" + "gain"
@@ -4330,13 +4410,494 @@ exports.default = ObjectSpatialiserAndMixer;
 },{"../core/utils.js":3,"../multichannel-spatialiser/index.js":16}],20:[function(require,module,exports){
 'use strict';
 
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
+var _index = require('../core/index.js');
+
+var _index2 = _interopRequireDefault(_index);
+
+var _analysis = require('../dsp/analysis.js');
+
+var _analysis2 = _interopRequireDefault(_analysis);
+
+var _utils = require('../core/utils.js');
+
+var _utils2 = _interopRequireDefault(_utils);
+
+var _compressor = require('../dsp/compressor.js');
+
+var _compressor2 = _interopRequireDefault(_compressor);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /************************************************************************************/
+/*!
+ *   @file       index.js
+ *   @brief      Implements the Receiver-Mix : the so-called Receiver-Mix 
+ *				 corresponds to the 2nd part of the “OBJECT SPATIALISER AND MIXER”
+ *				 This module inspects the RMS of the main programme, the RMS of the commentary
+ *				 and it applies dynamic compression on the main programme if necessary
+ *
+ *   @author     Thibaut Carpentier, Samuel Goldszmidt
+ *   @date       01/2016
+ *
+ */
+/************************************************************************************/
+
+var ReceiverMix = function (_AbstractNode) {
+    _inherits(ReceiverMix, _AbstractNode);
+
+    //==============================================================================
+    /**
+     * @param {AudioContext} audioContext - audioContext instance.
+     * @param {AudioStreamDescriptionCollection} audioStreamDescriptionCollection - audioStreamDescriptionCollection.
+     */
+
+    function ReceiverMix(audioContext) {
+        var audioStreamDescriptionCollection = arguments.length <= 1 || arguments[1] === undefined ? undefined : arguments[1];
+
+        _classCallCheck(this, ReceiverMix);
+
+        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(ReceiverMix).call(this, audioContext, audioStreamDescriptionCollection));
+
+        _this._isBypass = false;
+
+        if (typeof audioStreamDescriptionCollection === "undefined") {
+            throw new Error("the audioStreamDescriptionCollection must be defined !");
+        }
+
+        /// first of all, check if there is a commentary stream.
+        /// if not, the Receiver-Mix has nothing to do (just bypass)
+
+        var hasComment = _this.hasCommentary;
+
+        /// create an analyzer node for computing the RMS of the main programme
+        _this._analysisNodeMain = new _analysis2.default(audioContext);
+
+        /// create an analyzer node for computing the RMS of the commentary
+        _this._analysisNodeCommentary = new _analysis2.default(audioContext);
+
+        /// this is the N value in the .pdf :
+        /// when the RMS of the commentary is > N (expressed in dB), the programme P must be analyzed
+        _this._thresholdForCommentary = ReceiverMix.defaultForCommentaryThreshold;
+
+        /// this is the X value in the .pdf :
+        /// when the RMS of the programme P is > X, the programme is compressed
+        _this._thresholdForProgramme = ReceiverMix.defaultForProgrammeThreshold;
+
+        ///@todo : fix the number of channels
+        _this._dynamicCompressorNode = new _compressor2.default(audioContext, 1);
+
+        _this._updateAudioGraph();
+        return _this;
+    }
+
+    //==============================================================================
+    /**
+     * Enable or bypass the processor
+     * @type {boolean}
+     */
+
+    _createClass(ReceiverMix, [{
+        key: 'activeStreamsChanged',
+
+        //==============================================================================
+        /**
+         * Notification when the active stream(s) changes
+         * (i.e. whenever a check box is modified)
+         */
+        value: function activeStreamsChanged() {}
+        ///@todo
+
+        //==============================================================================
+        /**
+         * Returns true if there is at least one commentary among all the streams     
+         */
+
+    }, {
+        key: 'getNumberOfChannelsInTheProgramme',
+
+        //==============================================================================
+        /**
+         * Returns the number of channels in the "main" programme.
+         * The 
+         */
+        value: function getNumberOfChannelsInTheProgramme() {
+
+            /// retrieves the AudioStreamDescriptionCollection
+            var asdc = this._audioStreamDescriptionCollection;
+
+            if (asdc.hasActiveStream === false) {
+
+                throw new Error("no programme running !");
+                return 0;
+            }
+
+            /// retrieves the active AudioStreamDescription(s)
+            var asd = asdc.actives;
+
+            for (var i = 0; i < asd.length; i++) {
+
+                var stream_ = asd[i];
+
+                if (stream_.type === "Stereo" && stream_.active === true) {
+                    /// this is the right one
+                    return stream_.numChannels();
+                }
+            }
+
+            throw new Error("no programme running !");
+            return 0;
+        }
+
+        //==============================================================================
+        /**
+         * Set the gate threshold (in dB) for the commentary
+         * @type {number}
+         */
+
+    }, {
+        key: 'setThresholdForCommentaryFromGui',
+
+        /**
+         * Sets the gate threshold (in dB) for the commentary, according to a slider in the GUI
+         * theSlider : the slider
+         * return the actual value of the gate threshold (in dB) for the commentary
+         */
+        value: function setThresholdForCommentaryFromGui(theSlider) {
+
+            /// the value of the fader
+            var valueFader = parseFloat(theSlider.value);
+
+            // get the bounds of the fader (GUI)
+            var minFader = parseFloat(theSlider.min);
+            var maxFader = parseFloat(theSlider.max);
+
+            // get the actual bounds for this parameter
+
+            var _ReceiverMix$rangeFor = _slicedToArray(ReceiverMix.rangeForCommentaryThreshold, 2);
+
+            var minValue = _ReceiverMix$rangeFor[0];
+            var maxValue = _ReceiverMix$rangeFor[1];
+
+            /// scale from GUI to DSP
+
+            var value = M4DPAudioModules.utilities.scale(valueFader, minFader, maxFader, minValue, maxValue);
+
+            this.thresholdForCommentary = value;
+
+            return value;
+        }
+
+        /**
+         * Returns the current value of compression ratio, already scaled for the GUI
+         * theSlider : the slider
+         */
+
+    }, {
+        key: 'getThresholdForCommentaryFromGui',
+        value: function getThresholdForCommentaryFromGui(theSlider) {
+
+            // get the bounds of the fader (GUI)
+            var minFader = parseFloat(theSlider.min);
+            var maxFader = parseFloat(theSlider.max);
+
+            // get the actual bounds for this parameter
+
+            var _ReceiverMix$rangeFor2 = _slicedToArray(ReceiverMix.rangeForCommentaryThreshold, 2);
+
+            var minValue = _ReceiverMix$rangeFor2[0];
+            var maxValue = _ReceiverMix$rangeFor2[1];
+
+            var actualValue = this.thresholdForCommentary;
+
+            /// scale from DSP to GUI
+            var value = M4DPAudioModules.utilities.scale(actualValue, minValue, maxValue, minFader, maxFader);
+
+            return value;
+        }
+
+        /**
+         * Get the dB range
+         * @type {array}     
+         */
+
+    }, {
+        key: 'setThresholdForProgrammeFromGui',
+
+        /**
+         * Sets the gate threshold (in dB) for the programme, according to a slider in the GUI
+         * theSlider : the slider
+         * return the actual value of the gate threshold (in dB) for the programme
+         */
+        value: function setThresholdForProgrammeFromGui(theSlider) {
+
+            /// the value of the fader
+            var valueFader = parseFloat(theSlider.value);
+
+            // get the bounds of the fader (GUI)
+            var minFader = parseFloat(theSlider.min);
+            var maxFader = parseFloat(theSlider.max);
+
+            // get the actual bounds for this parameter
+
+            var _ReceiverMix$rangeFor3 = _slicedToArray(ReceiverMix.rangeForProgrammeThreshold, 2);
+
+            var minValue = _ReceiverMix$rangeFor3[0];
+            var maxValue = _ReceiverMix$rangeFor3[1];
+
+            /// scale from GUI to DSP
+
+            var value = M4DPAudioModules.utilities.scale(valueFader, minFader, maxFader, minValue, maxValue);
+
+            this.thresholdForProgramme = value;
+
+            return value;
+        }
+
+        /**
+         * Returns the current value of compression ratio, already scaled for the GUI
+         * theSlider : the slider
+         */
+
+    }, {
+        key: 'getThresholdForProgrammeFromGui',
+        value: function getThresholdForProgrammeFromGui(theSlider) {
+
+            // get the bounds of the fader (GUI)
+            var minFader = parseFloat(theSlider.min);
+            var maxFader = parseFloat(theSlider.max);
+
+            // get the actual bounds for this parameter
+
+            var _ReceiverMix$rangeFor4 = _slicedToArray(ReceiverMix.rangeForProgrammeThreshold, 2);
+
+            var minValue = _ReceiverMix$rangeFor4[0];
+            var maxValue = _ReceiverMix$rangeFor4[1];
+
+            var actualValue = this.thresholdForProgramme;
+
+            /// scale from DSP to GUI
+            var value = M4DPAudioModules.utilities.scale(actualValue, minValue, maxValue, minFader, maxFader);
+
+            return value;
+        }
+
+        /**
+         * Get the dB range
+         * @type {array}     
+         */
+
+    }, {
+        key: 'setCompressorThreshold',
+
+        //==============================================================================
+        value: function setCompressorThreshold(value) {
+            this._dynamicCompressorNode.setThreshold(value);
+        }
+    }, {
+        key: 'getCompressorThreshold',
+        value: function getCompressorThreshold() {
+            return this._dynamicCompressorNode.getThreshold();
+        }
+    }, {
+        key: 'setCompressorRatio',
+        value: function setCompressorRatio(value) {
+            this._dynamicCompressorNode.setRatio(value);
+        }
+    }, {
+        key: 'getCompressorRatio',
+        value: function getCompressorRatio() {
+            return this._dynamicCompressorNode.getRatio();
+        }
+    }, {
+        key: 'setCompressorAttack',
+        value: function setCompressorAttack(value) {
+            this._dynamicCompressorNode.setAttack(value);
+        }
+    }, {
+        key: 'getCompressorAttack',
+        value: function getCompressorAttack() {
+            return this._dynamicCompressorNode.getAttack();
+        }
+    }, {
+        key: 'setCompressorRelease',
+        value: function setCompressorRelease(value) {
+            this._dynamicCompressorNode.setRelease(value);
+        }
+    }, {
+        key: 'getCompressorRelease',
+        value: function getCompressorRelease() {
+            return this._dynamicCompressorNode.getRelease();
+        }
+
+        //==============================================================================
+        /**
+         * Updates the connections of the audio graph
+         */
+
+    }, {
+        key: '_updateAudioGraph',
+        value: function _updateAudioGraph() {
+
+            /// first of all, disconnect everything
+            this._input.disconnect();
+
+            if (this.bypass === true || this.hasCommentary === false) {
+
+                this._input.connect(this._output);
+            } else {
+
+                /// @todo
+            }
+        }
+    }, {
+        key: 'bypass',
+        set: function set(value) {
+
+            if (value !== this._isBypass) {
+                this._isBypass = value;
+                this._updateAudioGraph();
+            }
+        }
+
+        /**
+         * Returns true if the processor is bypassed
+         */
+        ,
+        get: function get() {
+            return this._isBypass;
+        }
+    }, {
+        key: 'hasCommentary',
+        get: function get() {
+            return this._audioStreamDescriptionCollection.hasCommentary;
+        }
+    }, {
+        key: 'thresholdForCommentary',
+        set: function set(valueIndB) {
+            var _ReceiverMix$rangeFor5 = _slicedToArray(ReceiverMix.rangeForCommentaryThreshold, 2);
+
+            var minValue = _ReceiverMix$rangeFor5[0];
+            var maxValue = _ReceiverMix$rangeFor5[1];
+
+            this._thresholdForCommentary = _utils2.default.clamp(valueIndB, minValue, maxValue);
+        }
+
+        /**
+         * Get the gate threshold (in dB) for the commentary
+         * @type {number}
+         */
+        ,
+        get: function get() {
+            return this._thresholdForCommentary;
+        }
+    }, {
+        key: 'thresholdForProgramme',
+
+        //==============================================================================
+        /**
+         * Set the gate threshold (in dB) for the commentary
+         * @type {number}
+         */
+        set: function set(valueIndB) {
+            this._thresholdForProgramme = valueIndB;
+        }
+        /**
+         * Get the gate threshold (in dB) for the commentary
+         * @type {number}
+         */
+        ,
+        get: function get() {
+            return this._thresholdForProgramme;
+        }
+    }], [{
+        key: 'rangeForCommentaryThreshold',
+        get: function get() {
+            return [-60, 30];
+        }
+    }, {
+        key: 'minForCommentaryThreshold',
+        get: function get() {
+            var _ReceiverMix$rangeFor6 = _slicedToArray(ReceiverMix.rangeForCommentaryThreshold, 2);
+
+            var minValue = _ReceiverMix$rangeFor6[0];
+            var maxValue = _ReceiverMix$rangeFor6[1];
+
+            return minValue;
+        }
+    }, {
+        key: 'maxForCommentaryThreshold',
+        get: function get() {
+            var _ReceiverMix$rangeFor7 = _slicedToArray(ReceiverMix.rangeForProgrammeThreshold, 2);
+
+            var minValue = _ReceiverMix$rangeFor7[0];
+            var maxValue = _ReceiverMix$rangeFor7[1];
+
+            return maxValue;
+        }
+
+        /**
+         * Returns the default value (in dB)
+         * @type {number}
+         */
+
+    }, {
+        key: 'defaultForCommentaryThreshold',
+
+        /**
+         * Returns the default value (in dB)
+         * @type {number}
+         */
+        get: function get() {
+            return -10;
+        }
+    }, {
+        key: 'rangeForProgrammeThreshold',
+        get: function get() {
+            return [-60, 30];
+        }
+    }, {
+        key: 'minForProgrammeThreshold',
+        get: function get() {
+            var _ReceiverMix$rangeFor8 = _slicedToArray(ReceiverMix.rangeForProgrammeThreshold, 2);
+
+            var minValue = _ReceiverMix$rangeFor8[0];
+            var maxValue = _ReceiverMix$rangeFor8[1];
+
+            return minValue;
+        }
+    }, {
+        key: 'defaultForProgrammeThreshold',
+        get: function get() {
+            return -15;
+        }
+    }]);
+
+    return ReceiverMix;
+}(_index2.default);
+
+exports.default = ReceiverMix;
+},{"../core/index.js":2,"../core/utils.js":3,"../dsp/analysis.js":5,"../dsp/compressor.js":7}],21:[function(require,module,exports){
+'use strict';
+
 var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 
 var _index = require('../core/index.js');
 
@@ -4366,7 +4927,6 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
  */
 /************************************************************************************/
 
-
 var SmartFader = function (_AbstractNode) {
     _inherits(SmartFader, _AbstractNode);
 
@@ -4389,6 +4949,7 @@ var SmartFader = function (_AbstractNode) {
         _this._compressionRatio = SmartFader.defaultCompressionRatio;
         _this._attackTime = SmartFader.defaultAttackTime;
         _this._releaseTime = SmartFader.defaultReleaseTime;
+        _this._isBypass = false;
 
         /// the total number of incoming channels, including all the streams
         /// (mainAudio, extendedAmbience, extendedComments and extendedDialogs)
@@ -4399,11 +4960,7 @@ var SmartFader = function (_AbstractNode) {
         _this._dynamicCompressorNode = new _compressor2.default(audioContext, totalNumberOfChannels_);
 
         /// connect the audio nodes
-        {
-            _this._input.connect(_this._gainNode);
-            _this._gainNode.connect(_this._dynamicCompressorNode._input);
-            _this._dynamicCompressorNode.connect(_this._output);
-        }
+        _this._updateAudioGraph();
 
         /// initialization
         {
@@ -4415,14 +4972,12 @@ var SmartFader = function (_AbstractNode) {
 
     //==============================================================================
     /**
-     * Set the dB value
-     * @type {number}
+     * Enable or bypass the processor
+     * @type {boolean}
      */
-
 
     _createClass(SmartFader, [{
         key: 'setdBFromGui',
-
 
         //==============================================================================
         /**
@@ -4475,7 +5030,6 @@ var SmartFader = function (_AbstractNode) {
             var minValue = _SmartFader$dBRange2[0];
             var maxValue = _SmartFader$dBRange2[1];
 
-
             var actualValue = this.dB;
 
             /// scale from DSP to GUI
@@ -4493,7 +5047,6 @@ var SmartFader = function (_AbstractNode) {
     }, {
         key: 'activeStreamsChanged',
 
-
         /**
          * Notification when the active stream(s) changes
          */
@@ -4509,7 +5062,6 @@ var SmartFader = function (_AbstractNode) {
 
     }, {
         key: 'setCompressionRatioFromGui',
-
 
         //==============================================================================
         /**
@@ -4562,7 +5114,6 @@ var SmartFader = function (_AbstractNode) {
             var minValue = _SmartFader$compressi2[0];
             var maxValue = _SmartFader$compressi2[1];
 
-
             var actualValue = this.compressionRatio;
 
             /// scale from DSP to GUI
@@ -4579,7 +5130,6 @@ var SmartFader = function (_AbstractNode) {
 
     }, {
         key: 'setAttackTimeFromGui',
-
 
         //==============================================================================
         /**
@@ -4632,7 +5182,6 @@ var SmartFader = function (_AbstractNode) {
             var minValue = _SmartFader$attackTim2[0];
             var maxValue = _SmartFader$attackTim2[1];
 
-
             var actualValue = this.attackTime;
 
             /// scale from DSP to GUI
@@ -4649,7 +5198,6 @@ var SmartFader = function (_AbstractNode) {
 
     }, {
         key: 'setReleaseTimeFromGui',
-
 
         //==============================================================================
         /**
@@ -4701,7 +5249,6 @@ var SmartFader = function (_AbstractNode) {
 
             var minValue = _SmartFader$releaseTi2[0];
             var maxValue = _SmartFader$releaseTi2[1];
-
 
             var actualValue = this.releaseTime;
 
@@ -4802,6 +5349,54 @@ var SmartFader = function (_AbstractNode) {
 
             this._gainNode.gain.value = lin;
         }
+
+        //==============================================================================
+        /**
+         * Updates the connections of the audio graph
+         */
+
+    }, {
+        key: '_updateAudioGraph',
+        value: function _updateAudioGraph() {
+
+            /// first of all, disconnect everything
+            this._input.disconnect();
+            this._gainNode.disconnect();
+            this._dynamicCompressorNode.disconnect();
+
+            if (this.bypass === true) {
+                this._input.connect(this._output);
+            } else {
+
+                this._input.connect(this._gainNode);
+                this._gainNode.connect(this._dynamicCompressorNode._input);
+                this._dynamicCompressorNode.connect(this._output);
+            }
+        }
+    }, {
+        key: 'bypass',
+        set: function set(value) {
+
+            if (value !== this._isBypass) {
+                this._isBypass = value;
+                this._updateAudioGraph();
+            }
+        }
+
+        /**
+         * Returns true if the processor is bypassed
+         */
+        ,
+        get: function get() {
+            return this._isBypass;
+        }
+
+        //==============================================================================
+        /**
+         * Set the dB value
+         * @type {number}
+         */
+
     }, {
         key: 'dB',
         set: function set(value) {
@@ -4852,7 +5447,6 @@ var SmartFader = function (_AbstractNode) {
             var minValue = _SmartFader$compressi3[0];
             var maxValue = _SmartFader$compressi3[1];
 
-
             this._compressionRatio = _utils2.default.clamp(value, minValue, maxValue);
 
             this._updateCompressorSettings();
@@ -4878,7 +5472,6 @@ var SmartFader = function (_AbstractNode) {
 
             var minValue = _SmartFader$attackTim3[0];
             var maxValue = _SmartFader$attackTim3[1];
-
 
             this._attackTime = _utils2.default.clamp(value, minValue, maxValue);
 
@@ -4906,7 +5499,6 @@ var SmartFader = function (_AbstractNode) {
             var minValue = _SmartFader$releaseTi3[0];
             var maxValue = _SmartFader$releaseTi3[1];
 
-
             this._releaseTime = _utils2.default.clamp(value, minValue, maxValue);
 
             this._updateCompressorSettings();
@@ -4932,7 +5524,6 @@ var SmartFader = function (_AbstractNode) {
 
             var minValue = _SmartFader$dBRange3[0];
             var maxValue = _SmartFader$dBRange3[1];
-
 
             return _utils2.default.clamp(value, minValue, maxValue);
         }
@@ -5114,14 +5705,14 @@ var SmartFader = function (_AbstractNode) {
 }(_index2.default);
 
 exports.default = SmartFader;
-},{"../core/index.js":2,"../core/utils.js":3,"../dsp/compressor.js":7}],21:[function(require,module,exports){
+},{"../core/index.js":2,"../core/utils.js":3,"../dsp/compressor.js":7}],22:[function(require,module,exports){
 'use strict';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _index = require('../core/index.js');
 
@@ -5167,10 +5758,11 @@ var StreamSelector = function (_AbstractNode) {
         _this._splitterNode = undefined;
         _this._mergerNode = undefined;
         _this._gainNode = [];
+        _this._isBypass = false;
 
         /// the total number of incoming channels, including all the streams
         /// (mainAudio, extendedAmbience, extendedComments and extendedDialogs)
-        var totalNumberOfChannels_ = _this._audioStreamDescriptionCollection.totalNumberOfChannels;
+        var totalNumberOfChannels_ = _this.getTotalNumberOfChannels();
 
         /// sanity check
         /// mainAudio (2) + extendedAmbience (6) + extendedComments (1) + extendedDialogs (1) = 10
@@ -5192,37 +5784,38 @@ var StreamSelector = function (_AbstractNode) {
             throw new Error("Pas bon");
         }
 
-        /// create 10 gainNodes
+        /// create N gainNodes
         for (var i = 0; i < totalNumberOfChannels_; i++) {
             var newGainNode = audioContext.createGain();
             _this._gainNode.push(newGainNode);
         }
 
-        /// split the input streams into 10 independent channels
-        _this._input.connect(_this._splitterNode);
-
-        /// connect a gainNode to each channel
-        for (var _i = 0; _i < totalNumberOfChannels_; _i++) {
-            _this._splitterNode.connect(_this._gainNode[_i], _i);
-        }
-
-        /// then merge the output of the 10 gainNodes
-        for (var _i2 = 0; _i2 < totalNumberOfChannels_; _i2++) {
-            _this._gainNode[_i2].connect(_this._mergerNode, 0, _i2);
-        }
-
-        _this._mergerNode.connect(_this._output);
+        _this._updateAudioGraph();
         return _this;
     }
 
-    /**
-     * Notification when the active stream(s) changes
-     * (i.e. whenever a check box is modified)
-     */
-
+    //==============================================================================
 
     _createClass(StreamSelector, [{
+        key: 'getTotalNumberOfChannels',
+        value: function getTotalNumberOfChannels() {
+            return this._audioStreamDescriptionCollection.totalNumberOfChannels;
+        }
+
+        //==============================================================================
+        /**
+         * Enable or bypass the processor
+         * @type {boolean}
+         */
+
+    }, {
         key: 'activeStreamsChanged',
+
+        //==============================================================================
+        /**
+         * Notification when the active stream(s) changes
+         * (i.e. whenever a check box is modified)
+         */
         value: function activeStreamsChanged() {
             this._update();
         }
@@ -5256,7 +5849,6 @@ var StreamSelector = function (_AbstractNode) {
             try {
                 for (var _iterator = asdc[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
                     var stream = _step.value;
-
 
                     var isActive = stream.active;
 
@@ -5296,13 +5888,69 @@ var StreamSelector = function (_AbstractNode) {
                 }
             }
         }
+
+        //==============================================================================
+        /**
+         * Updates the connections of the audio graph
+         */
+
+    }, {
+        key: '_updateAudioGraph',
+        value: function _updateAudioGraph() {
+
+            var totalNumberOfChannels_ = this.getTotalNumberOfChannels();
+
+            /// first of all, disconnect everything
+            this._input.disconnect();
+            this._splitterNode.disconnect();
+            for (var i = 0; i < totalNumberOfChannels_; i++) {
+                this._gainNode[i].disconnect();
+            }
+            this._mergerNode.disconnect();
+
+            if (this.bypass === true || totalNumberOfChannels_ === 0) {
+                this._input.connect(this._output);
+            } else {
+                /// split the input streams into N independent channels
+                this._input.connect(this._splitterNode);
+
+                /// connect a gainNode to each channel
+                for (var i = 0; i < totalNumberOfChannels_; i++) {
+                    this._splitterNode.connect(this._gainNode[i], i);
+                }
+
+                /// then merge the output of the N gainNodes
+                for (var i = 0; i < totalNumberOfChannels_; i++) {
+                    this._gainNode[i].connect(this._mergerNode, 0, i);
+                }
+
+                this._mergerNode.connect(this._output);
+            }
+        }
+    }, {
+        key: 'bypass',
+        set: function set(value) {
+
+            if (value !== this._isBypass) {
+                this._isBypass = value;
+                this._updateAudioGraph();
+            }
+        }
+
+        /**
+         * Returns true if the processor is bypassed
+         */
+        ,
+        get: function get() {
+            return this._isBypass;
+        }
     }]);
 
     return StreamSelector;
 }(_index2.default);
 
 exports.default = StreamSelector;
-},{"../core/index.js":2,"../core/utils.js":3}],22:[function(require,module,exports){
+},{"../core/index.js":2,"../core/utils.js":3}],23:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -5376,7 +6024,7 @@ var unittests = {
 };
 
 exports.default = unittests;
-},{"./testanalysis.js":23,"./testbinaural.js":24,"./testbiquad.js":25,"./testcascade.js":26,"./testmultichannel.js":27,"./testphone.js":28,"./testrouting.js":29,"./testsofa.js":30,"./testsumdiff.js":31,"./testtransaural.js":32}],23:[function(require,module,exports){
+},{"./testanalysis.js":24,"./testbinaural.js":25,"./testbiquad.js":26,"./testcascade.js":27,"./testmultichannel.js":28,"./testphone.js":29,"./testrouting.js":30,"./testsofa.js":31,"./testsumdiff.js":32,"./testtransaural.js":33}],24:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -5485,7 +6133,7 @@ var analysistests = {
 };
 
 exports.default = analysistests;
-},{"../core/bufferutils.js":1,"../dsp/analysis.js":5,"../dsp/phone.js":11}],24:[function(require,module,exports){
+},{"../core/bufferutils.js":1,"../dsp/analysis.js":5,"../dsp/phone.js":11}],25:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -5583,7 +6231,7 @@ var binauraltests = {
 };
 
 exports.default = binauraltests;
-},{"../core/bufferutils.js":1,"./testsofa.js":30}],25:[function(require,module,exports){
+},{"../core/bufferutils.js":1,"./testsofa.js":31}],26:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -5680,7 +6328,7 @@ var biquadtests = {
 };
 
 exports.default = biquadtests;
-},{"../core/bufferutils.js":1}],26:[function(require,module,exports){
+},{"../core/bufferutils.js":1}],27:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -5788,7 +6436,7 @@ var cascadetests = {
 };
 
 exports.default = cascadetests;
-},{"../core/bufferutils.js":1,"../dsp/cascade.js":6}],27:[function(require,module,exports){
+},{"../core/bufferutils.js":1,"../dsp/cascade.js":6}],28:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -5870,7 +6518,7 @@ var multichanneltests = {
 };
 
 exports.default = multichanneltests;
-},{"../core/bufferutils.js":1}],28:[function(require,module,exports){
+},{"../core/bufferutils.js":1}],29:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -5966,7 +6614,7 @@ var phonetests = {
 };
 
 exports.default = phonetests;
-},{"../core/bufferutils.js":1,"../dsp/phone.js":11}],29:[function(require,module,exports){
+},{"../core/bufferutils.js":1,"../dsp/phone.js":11}],30:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -6056,7 +6704,7 @@ var routingtests = {
 };
 
 exports.default = routingtests;
-},{"../core/bufferutils.js":1,"../multichannel-spatialiser/routing.js":17}],30:[function(require,module,exports){
+},{"../core/bufferutils.js":1,"../multichannel-spatialiser/routing.js":17}],31:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -6210,7 +6858,7 @@ var sofatests = {
 };
 
 exports.default = sofatests;
-},{"../core/utils.js":3,"binaural":44}],31:[function(require,module,exports){
+},{"../core/utils.js":3,"binaural":45}],32:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -6296,7 +6944,7 @@ var sumdifftests = {
 };
 
 exports.default = sumdifftests;
-},{"../core/bufferutils.js":1,"../dsp/sumdiff.js":12}],32:[function(require,module,exports){
+},{"../core/bufferutils.js":1,"../dsp/sumdiff.js":12}],33:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -6379,7 +7027,7 @@ var transauraltests = {
 };
 
 exports.default = transauraltests;
-},{"../core/bufferutils.js":1,"../dsp/transaural.js":13}],33:[function(require,module,exports){
+},{"../core/bufferutils.js":1,"../dsp/transaural.js":13}],34:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -7097,7 +7745,7 @@ var BinauralPanner = exports.BinauralPanner = function () {
 }();
 
 exports.default = BinauralPanner;
-},{"../geometry/Listener":40,"../geometry/coordinates":41,"../sofa/HrtfSet":46,"./Source":34,"gl-matrix":52}],34:[function(require,module,exports){
+},{"../geometry/Listener":41,"../geometry/coordinates":42,"../sofa/HrtfSet":47,"./Source":35,"gl-matrix":53}],35:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -7372,7 +8020,7 @@ var Source = exports.Source = function () {
 }();
 
 exports.default = Source;
-},{}],35:[function(require,module,exports){
+},{}],36:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -7398,7 +8046,7 @@ exports.default = {
   Source: _Source2.default,
   utilities: _utilities2.default
 };
-},{"./BinauralPanner":33,"./Source":34,"./utilities":36}],36:[function(require,module,exports){
+},{"./BinauralPanner":34,"./Source":35,"./utilities":37}],37:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -7547,7 +8195,7 @@ exports.default = {
   createNoiseBuffer: createNoiseBuffer,
   resampleFloat32Array: resampleFloat32Array
 };
-},{}],37:[function(require,module,exports){
+},{}],38:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -7563,7 +8211,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 exports.default = {
   utilities: _utilities2.default
 };
-},{"./utilities":38}],38:[function(require,module,exports){
+},{"./utilities":39}],39:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -7612,7 +8260,7 @@ exports.default = {
   almostEquals: almostEquals,
   almostEqualsModulo: almostEqualsModulo
 };
-},{}],39:[function(require,module,exports){
+},{}],40:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -7681,7 +8329,7 @@ exports.default = {
   distanceSquared: distanceSquared,
   tree: _kd2.default
 };
-},{"kd.tree":62}],40:[function(require,module,exports){
+},{"kd.tree":63}],41:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -7933,7 +8581,7 @@ var Listener = exports.Listener = function () {
 }();
 
 exports.default = Listener;
-},{"../geometry/coordinates":41,"gl-matrix":52}],41:[function(require,module,exports){
+},{"../geometry/coordinates":42,"gl-matrix":53}],42:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -8470,7 +9118,7 @@ exports.default = {
   systemToGl: systemToGl,
   systemType: systemType
 };
-},{"./degree":42}],42:[function(require,module,exports){
+},{"./degree":43}],43:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -8562,7 +9210,7 @@ exports.default = {
   toRadian: toRadian,
   toRadianFactor: toRadianFactor
 };
-},{}],43:[function(require,module,exports){
+},{}],44:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -8593,7 +9241,7 @@ exports.default = {
   KdTree: _KdTree2.default,
   Listener: _Listener2.default
 };
-},{"./KdTree":39,"./Listener":40,"./coordinates":41,"./degree":42}],44:[function(require,module,exports){
+},{"./KdTree":40,"./Listener":41,"./coordinates":42,"./degree":43}],45:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -8635,7 +9283,7 @@ exports.default = {
   info: _info2.default,
   sofa: _sofa2.default
 };
-},{"./audio":35,"./common":37,"./geometry":43,"./info":45,"./sofa":48}],45:[function(require,module,exports){
+},{"./audio":36,"./common":38,"./geometry":44,"./info":46,"./sofa":49}],46:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -8700,7 +9348,7 @@ exports.default = {
   name: name,
   version: version
 };
-},{"../package.json":63}],46:[function(require,module,exports){
+},{"../package.json":64}],47:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -9594,7 +10242,7 @@ var HrtfSet = exports.HrtfSet = function () {
 }();
 
 exports.default = HrtfSet;
-},{"../audio/utilities":36,"../geometry/KdTree":39,"../geometry/coordinates":41,"../info":45,"./parseDataSet":49,"./parseSofa":50,"gl-matrix":52}],47:[function(require,module,exports){
+},{"../audio/utilities":37,"../geometry/KdTree":40,"../geometry/coordinates":42,"../info":46,"./parseDataSet":50,"./parseSofa":51,"gl-matrix":53}],48:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -9887,7 +10535,7 @@ var ServerDataBase = exports.ServerDataBase = function () {
 }();
 
 exports.default = ServerDataBase;
-},{"./parseDataSet":49,"./parseXml":51}],48:[function(require,module,exports){
+},{"./parseDataSet":50,"./parseXml":52}],49:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -9916,7 +10564,7 @@ exports.default = {
   HrtfSet: _HrtfSet2.default,
   ServerDataBase: _ServerDataBase2.default
 };
-},{"./HrtfSet":46,"./ServerDataBase":47}],49:[function(require,module,exports){
+},{"./HrtfSet":47,"./ServerDataBase":48}],50:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -10065,7 +10713,7 @@ function parseDataSet(input) {
 }
 
 exports.default = parseDataSet;
-},{}],50:[function(require,module,exports){
+},{}],51:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -10325,7 +10973,7 @@ exports.default = {
   parseSofa: parseSofa,
   conformSofaCoordinateSystem: conformSofaCoordinateSystem
 };
-},{}],51:[function(require,module,exports){
+},{}],52:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -10379,7 +11027,7 @@ if (typeof window.DOMParser !== 'undefined') {
 }
 
 exports.default = parseXml;
-},{}],52:[function(require,module,exports){
+},{}],53:[function(require,module,exports){
 /**
  * @fileoverview gl-matrix - High performance matrix and vector operations
  * @author Brandon Jones
@@ -10417,7 +11065,7 @@ exports.quat = require("./gl-matrix/quat.js");
 exports.vec2 = require("./gl-matrix/vec2.js");
 exports.vec3 = require("./gl-matrix/vec3.js");
 exports.vec4 = require("./gl-matrix/vec4.js");
-},{"./gl-matrix/common.js":53,"./gl-matrix/mat2.js":54,"./gl-matrix/mat2d.js":55,"./gl-matrix/mat3.js":56,"./gl-matrix/mat4.js":57,"./gl-matrix/quat.js":58,"./gl-matrix/vec2.js":59,"./gl-matrix/vec3.js":60,"./gl-matrix/vec4.js":61}],53:[function(require,module,exports){
+},{"./gl-matrix/common.js":54,"./gl-matrix/mat2.js":55,"./gl-matrix/mat2d.js":56,"./gl-matrix/mat3.js":57,"./gl-matrix/mat4.js":58,"./gl-matrix/quat.js":59,"./gl-matrix/vec2.js":60,"./gl-matrix/vec3.js":61,"./gl-matrix/vec4.js":62}],54:[function(require,module,exports){
 /* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -10489,7 +11137,7 @@ glMatrix.equals = function(a, b) {
 
 module.exports = glMatrix;
 
-},{}],54:[function(require,module,exports){
+},{}],55:[function(require,module,exports){
 /* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -10927,7 +11575,7 @@ mat2.multiplyScalarAndAdd = function(out, a, b, scale) {
 
 module.exports = mat2;
 
-},{"./common.js":53}],55:[function(require,module,exports){
+},{"./common.js":54}],56:[function(require,module,exports){
 /* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -11398,7 +12046,7 @@ mat2d.equals = function (a, b) {
 
 module.exports = mat2d;
 
-},{"./common.js":53}],56:[function(require,module,exports){
+},{"./common.js":54}],57:[function(require,module,exports){
 /* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -12146,7 +12794,7 @@ mat3.equals = function (a, b) {
 
 module.exports = mat3;
 
-},{"./common.js":53}],57:[function(require,module,exports){
+},{"./common.js":54}],58:[function(require,module,exports){
 /* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -14284,7 +14932,7 @@ mat4.equals = function (a, b) {
 
 module.exports = mat4;
 
-},{"./common.js":53}],58:[function(require,module,exports){
+},{"./common.js":54}],59:[function(require,module,exports){
 /* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -14886,7 +15534,7 @@ quat.equals = vec4.equals;
 
 module.exports = quat;
 
-},{"./common.js":53,"./mat3.js":56,"./vec3.js":60,"./vec4.js":61}],59:[function(require,module,exports){
+},{"./common.js":54,"./mat3.js":57,"./vec3.js":61,"./vec4.js":62}],60:[function(require,module,exports){
 /* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -15475,7 +16123,7 @@ vec2.equals = function (a, b) {
 
 module.exports = vec2;
 
-},{"./common.js":53}],60:[function(require,module,exports){
+},{"./common.js":54}],61:[function(require,module,exports){
 /* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -16254,7 +16902,7 @@ vec3.equals = function (a, b) {
 
 module.exports = vec3;
 
-},{"./common.js":53}],61:[function(require,module,exports){
+},{"./common.js":54}],62:[function(require,module,exports){
 /* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -16865,7 +17513,7 @@ vec4.equals = function (a, b) {
 
 module.exports = vec4;
 
-},{"./common.js":53}],62:[function(require,module,exports){
+},{"./common.js":54}],63:[function(require,module,exports){
 /**
  * AUTHOR OF INITIAL JS LIBRARY
  * k-d Tree JavaScript - V 1.0
@@ -17324,7 +17972,7 @@ module.exports = {
   }
 }
 
-},{}],63:[function(require,module,exports){
+},{}],64:[function(require,module,exports){
 module.exports={
   "name": "binaural",
   "exports": "binaural",
@@ -17351,11 +17999,11 @@ module.exports={
   "license": "BSD-3-Clause",
   "dependencies": {
     "gl-matrix": "^2.3.1",
-    "kd.tree": "github:akshaylive/node-kdt#39bc780704a324393bca68a17cf7bc71be8544c6"
+    "kd.tree": "git+https://github.com/akshaylive/node-kdt#39bc780704a324393bca68a17cf7bc71be8544c6"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Ircam-RnD/binauralFIR.git"
+    "url": "https://github.com/Ircam-RnD/binauralFIR"
   },
   "engines": {
     "node": "0.12 || 4.2",
@@ -17377,17 +18025,16 @@ module.exports={
     "testling": "^1.7.1",
     "watch": "^0.17.1"
   },
-  "gitHead": "243186477809856778c0978fbbfbf9623b303bbf",
   "readme": "# Binaural #\n\nThis library permits to render sources in three-dimensional space with\nbinaural audio.\n\nThis library provides an access to a server, in order to load a set of\n[HRTF]. The set of filters applies to any number of sources, given their\nposition, and a listener.\n\nThis library is compatible with the [Web Audio API]. The novelty of this\nlibrary is that it permits to use a custom [HRTF] dataset (see\n[T. Carpentier article]).\n\nIt is possible to use it without a server, with a direct URL to an [HRTF]\nset.\n\n## Documentation ##\n\nYou can consult the [API documentation] for the complete documentation.\n\n### BinauralPanner ###\n\nA `BinauralPanner` is a panner for use with the [Web Audio API]. It\nspatialises multiple audio sources, given a set of head-related transfer\nfunctions [HRTF]s, and a listener.\n\n### ServerDataBase ###\n\n**The public server that hosts a database of individual [HRTF]s is available\nfor beta-testers only and will open to public in 2016.**\n\nThe `ServerDataBase` retrieves a catalogue from a [SOFA] server. From the\ncatalogue, it get URLs matching optional filters: data-base, sample-rate,\nand any free pattern.\n\n### HRTF dataset ###\n\nYou can use any [HRTF] data-set that follows the [SOFA] standard, in JSON\nformat, using finite impulse responses (FIR). Second-order sections (SOS)\nare not supported, yet. See the [examples HRTF directory] for a few samples.\n\n### Coordinate system types ###\n\nSee the files in [src/geometry], for conversions:\n- openGL, [SOFA], and Spat4 (Ircam) conventions\n- cartesian and spherical coordinates\n- radian and degree angles\n\n\n## Examples ##\n\nPlease see the [examples directory] for complete code, and the [examples online].\n\nSee also the [API documentation] for the complete options.\n\n### BinauralPanner ###\nGiven an audio element, and a global binaural module,\n\n```html\n<html>\n    <head>\n        <script src=\"../binaural.js\"></script>\n    </head>\n    <body>\n        <audio id=\"source\" src=\"./snd/breakbeat.wav\" controls loop></audio>\n    </body>\n</html>\n```\n\ncreate a source audio node,\n\n```js\nvar audioContext = new AudioContext();\nvar $mediaElement = document.querySelector('#source');\nvar player = audioContext.createMediaElementSource($mediaElement);\n```\n\ninstantiate a `BinauralPanner` and connect it.\n\n```js\nvar binauralPanner = new binaural.audio.BinauralPanner({\n    audioContext,\n    crossfadeDuration: 0.05, // in seconds\n    coordinateSystem: 'sofaSpherical', // [azimuth, elevation, distance]\n    sourceCount: 1,\n    sourcePositions: [ [0, 0, 1] ], // initial position\n});\nbinauralPanner.connectOutputs(audioContext.destination);\nbinauralPanner.connectInputByIndex(0, player);\n\n```\n\nLoad an HRTF set (this returns a promise).\n\n```js\nbinauralPanner.loadHrtfSet(url)\n    .then(function () {\n        console.log('loaded');\n    })\n    .catch(function (error) {\n        console.log('Error while loading ' + url\n                    + error.message);\n    });\n```\n\nThen, any source can move:\n\n```js\n$azimuth.on(\"input\", function(event) {\n    // get current position\n    var position = binauralPanner.getSourcePositionByIndex(0);\n\n    // update azimuth\n    position[0] = event.target.value;\n    binauralPanner.setSourcePositionByIndex(0, position);\n\n    // update filters\n    window.requestAnimationFrame(function () {\n        binauralPanner.update();\n    });\n}\n```\n\nNote that a call to the `update` method actually updates the filters.\n\n### ServerDataBase ###\n\nInstantiate a `ServerDataBase`\n\n```js\nvar serverDataBase = new binaural.sofa.ServerDataBase();\n```\n\nand load the catalogue from the server. This returns a promise.\n\n```js\nvar catalogLoaded = serverDataBase.loadCatalogue();\n```\n\nFind URLs with `HRIR` convention, `COMPENSATED` equalisation, and a\nsample-rate matching those of the audio context.\n\n```js\nvar urlsFound = catalogLoaded.then(function () {\n    var urls = serverDataBase.getUrls({\n        convention: 'HRIR',\n        equalisation: 'COMPENSATED',\n        sampleRate: audioContext.sampleRate,\n    });\n    return urls;\n})\n.catch(function(error) {\n    console.log('Error accessing HRTF server. ' + error.message);\n});\n```\n\nThen, a `BinauralPanner` can load one of these URLs\n\n```js\nurlsFound.then(function(urls) {\n    binauralPanner.loadHrtfSet(urls[0])\n        .then(function () {\n            console.log('loaded');\n        })\n        .catch(function (error) {\n            console.log('Error while loading ' + url\n                + error.message);\n        });\n});\n```\n\n## Issues ##\n\n- the [examples HRTF directory] is too big for a repository: this is a\n  problem for cloning, and for installing with npm.\n- documentation and distribution files should go to a release branch\n  (`gh-pages`?) to limit the history on real commits.\n- re-sampling is broken on full set (Chrome 48 issue): too many parallel\n  audio contexts?\n- no HTTPS on SOFA server, yet (mixed content blocked). Let's Encrypt is on\n  the way.\n- clicks on Firefox 44-45 (during update of `convolver.buffer`)\n- in documentation, links to BinauralPanner methods are broken (esdoc)\n- ServerDataBase: avoid server with free pattern filter?\n\n## To do ##\n\n- attenuation with distance\n- dry/wet outputs for (shared) reverberation\n- support for infinite impulse responses, once [IIRFilterNode] is\n  implemented.\n\n## Developers ##\n\nThe source code is in the [src directory], in [ES2015] standard. `npm run\ncompile` with [Babel] to the [dist directory]. Note that there is a\n[.babelrc] file. `npm run bundle` runs the linters, the tests,\ngenerates the documentation, and compiles the code.\n\nBe sure to commit the distribution files and the documentation for any\nrelease, and tag it.\n\n### Style ###\n\n`npm run lint` to check that the code conforms with [.eslintrc] and\n[.jscsrc] files. The rules derive from [AirBnB] with these\nmajor points:\n- [ES2015]\n- no `'strict'` globally (already there via babel)\n- enforce curly braces (`if`, `for`, etc.)\n- allow spaces and new lines, with fewer requirements: use them for clarity\n\n### Test ###\n\nFor any function or method, there is at least a test. The hierarchy in the\n[test directory] is the same as in the [src directory].\n\n- `npm run test` for all automated tests\n- `npm run test-listen` for supervised listening tests. The test files must\n  end with `_listen.js`\n- `npm run test-issues` for unsolved issues. The issues may depend on the\n  host: operating system, user-agent, sound-device, sample-rate, etc. The\n  test files must end with `_issues.js`\n\n### Documentation ###\n\nDocument any public function and method with [JSDoc], and generate the HTML\npages with `npm run doc`. At this point, neither\n[jsdoc](https://www.npmjs.com/package/jsdoc) nor\n[esdoc](https://www.npmjs.com/package/esdoc) gives perfect\ntranscription. (See the [jsdoc.json] and [esdoc.json] files.)\n\n## License\n\nThis module is released under the [BSD-3-Clause] license.\n\n## Acknowledgements\n\nThis research was developped by both [Acoustic And Cognitive Spaces] and\n[Analysis of Musical Practices] IRCAM research teams. A previous version\nwas part of the WAVE project, funded by ANR (French National Research\nAgency). The current version, supporting multiple sources and a listener,\nthe SOFA standard, and the access to a server, is part of the [CoSiMa]\nproject, funded by ANR.\n\n[//]: # (Avoid relative links for use with https://github.com/README.md)\n[//]: # (and http://cdn.rawgit.com/Ircam-RnD/binauralFIR/next/doc/index.html)\n\n[AirBnB]: https://github.com/airbnb/javascript/\n[API documentation directory]: https://github.com/Ircam-RnD/binauralFIR/tree/next/doc/\n[API documentation]: http://cdn.rawgit.com/Ircam-RnD/binauralFIR/next/doc/index.html\n[Acoustic And Cognitive Spaces]: http://recherche.ircam.fr/equipes/salles/\n[Analysis of Musical Practices]: http://apm.ircam.fr/\n[Babel]: https://babeljs.io/\n[.babelrc]: https://github.com/Ircam-RnD/binauralFIR/tree/next/.babelrc\n[BSD-3-Clause]: http://opensource.org/licenses/BSD-3-Clause\n[T. Carpentier article]: http://wac.ircam.fr/pdf/demo/wac15_submission_16.pdf\n[CoSiMa]: http://cosima.ircam.fr/\n[dist directory]:  https://github.com/Ircam-RnD/binauralFIR/tree/next/dist/\n[documentation]: #documentation\n[ES2015]: https://babeljs.io/docs/learn-es2015/\n[.eslintrc]: https://github.com/Ircam-RnD/binauralFIR/tree/next/.eslintrc\n[esdoc.json]: https://github.com/Ircam-RnD/binauralFIR/tree/next/esdoc.json\n[examples directory]: https://github.com/Ircam-RnD/binauralFIR/tree/next/examples/\n[examples HRTF directory]: https://github.com/Ircam-RnD/binauralFIR/tree/next/examples/hrtf/\n[examples online]: http://cdn.rawgit.com/Ircam-RnD/binauralFIR/next/examples/index.html\n[.jscsrc]: https://github.com/Ircam-RnD/binauralFIR/tree/next/.jscsrc\n[JSDoc]: http://usejsdoc.org/\n[jsdoc.json]: https://github.com/Ircam-RnD/binauralFIR/tree/next/jsdoc.json\n[HRTF]: http://en.wikipedia.org/wiki/Head-related_transfer_function\n[IIRFilterNode]: https://webaudio.github.io/web-audio-api/#idl-def-IIRFilterNode\n[SOFA]: http://www.aes.org/publications/standards/search.cfm?docID=99\n[test directory]: https://github.com/Ircam-RnD/binauralFIR/tree/next/test\n[src directory]: https://github.com/Ircam-RnD/binauralFIR/tree/next/src\n[src/geometry]: https://github.com/Ircam-RnD/binauralFIR/tree/next/src/geometry\n[Web Audio API]: https://webaudio.github.io/web-audio-api/",
   "readmeFilename": "README.md",
   "bugs": {
     "url": "https://github.com/Ircam-RnD/binauralFIR/issues"
   },
-  "homepage": "https://github.com/Ircam-RnD/binauralFIR#readme",
+  "homepage": "https://github.com/Ircam-RnD/binauralFIR",
   "_id": "binaural@0.3.7",
-  "_shasum": "5dd96e9882dece178a995834b39fc363f04513da",
-  "_from": "ircam-rnd/binauralFIR#0.3.7",
-  "_resolved": "git://github.com/ircam-rnd/binauralFIR.git#243186477809856778c0978fbbfbf9623b303bbf"
+  "_shasum": "995aa879fd5cb31b796f707b5da3c7bcbec2ea37",
+  "_resolved": "git+https://github.com/Ircam-RnD/binauralFIR#243186477809856778c0978fbbfbf9623b303bbf",
+  "_from": "binaural@git+https://github.com/Ircam-RnD/binauralFIR#0.3.7"
 }
 
 },{}]},{},[15])(15)

@@ -1,59 +1,102 @@
 <!doctype html>
 <html>
 <head>
-  <meta charset="utf-8">
+ 	<meta charset="utf-8">
 	<title>Dotscreen - IRCAM - sandbox</title>
 	<link rel="stylesheet" type="text/css" href="./style.css">
 </head>
 <body>
-	<video class="mainPlayer" id="videoPlayerMain" autoplay controls>
-	</video>
-	<video class="pipPlayer" id="videoPlayerPip" muted autoplay>
-	</video>
-	<video class="audioPlayer" id="playerAudioFiveDotOne" autoplay>
-	</video>
-	<video class="audioPlayer" id="playerAudioDescription" autoplay>
-	</video>
-	<video class="audioPlayer" id="playerDialogue" autoplay>
-	</video>
+	<style>
+	body
+	{
+		font-size:12px;
+	}
+	</style>
+	<video class="mainPlayer" id="videoPlayerMain" autoplay controls></video>
+	<video class="pipPlayer" id="videoPlayerPip" muted autoplay></video>
+	<video class="audioPlayer" id="playerAudioFiveDotOne" autoplay></video>
+	<video class="audioPlayer" id="playerAudioDescription" autoplay></video>
+	<video class="audioPlayer" id="playerDialogue" autoplay></video>
 	<div class="checkboxStyle">
-		<input type="checkbox" id="checkbox-video" name="checkbox-video" value="Video" onClick="onCheckVideo();"/><span style="color:#fff">Main audio</span><br/>
-		<input type="checkbox" id="checkbox-extended-ambience" name="checkbox-extended-ambience" value="ExAmbience" onClick="onCheckExAmbience();"/><span style="color:#fff">Extended ambiance</span><br/>
-		<input type="checkbox" id="checkbox-extended-comments" name="checkbox-extended-comments" value="ExComments" onClick="onCheckExComments();"/><span style="color:#fff">Extended comments</span><br/>
-		<input type="checkbox" id="checkbox-extended-dialogs" name="checkbox-extended-dialogs" value="ExDialogs" onClick="onCheckExDialogs();"/><span style="color:#fff">Extended dialogs</span><br/>
-		<input type="checkbox" id="checkbox-lsf" name="checkbox-lsf" value="LSF" onClick="onCheckLSF();"/><span style="color:#fff">LSF</span><br/><br/>
-		
-		<br/><span style="color:#fff">Trim Levels</span><br/>
-		<input type="range" id="trimMain" min="-60" max="30" step="1"><span style="color:#fff" id="label-trim-main">Main Audio</span><br/>
-		<input type="range" id="trimAmbiance" min="-60" max="30" step="1"><span style="color:#fff" id="label-trim-ambiance">Extended ambiance</span><br/>
-		<input type="range" id="trimComments" min="-60" max="30" step="1"><span style="color:#fff" id="label-trim-comments">Extended comments</span><br/>
-		<input type="range" id="trimDialog" min="-60" max="30" step="1"><span style="color:#fff" id="label-trim-dialog">Extended dialogs</span><br/><br/>
 
-		<select id="configuration-selector"></select><span style="color:#fff">Configuration</span><br/><br/>
-
-		<input type="range" id="smartFaderDB" min="-10" max="10" step="0.1"><span style="color:#fff" id="label-smart-fader">Smart Fader</span>
-		<span style="color:#fff" id="label-compression">  (Compression)</span><br/>	
-		
-		<input type="range" id="compressionRatio" min="1" max="10" step="1"><span style="color:#fff" id="label-compression-ratio">Compression ratio</span><br/>
-		<input type="range" id="attackTime" min="0" max="100" step="0.1"><span style="color:#fff" id="label-attack-time">Attack time</span><br/>
-		<input type="range" id="releaseTime" min="0" max="100" step="0.1"><span style="color:#fff" id="label-release-time">Release time</span><br/><br/>
-
-		<select id="hrtf-selector"></select><br/>
-		<input type="checkbox" id="checkbox-equalization" name="checkbox-equalization" value="Equalization" onClick="onCheckEqualization();"/><span style="color:#fff" id="label-equalization">Headphones EQ</span><br/>
-		<input type="range" id="gainOffset" min="-12" max="12" step="0.1"><span style="color:#fff" id="label-gain-offset">Gain Offset</span><br/>
-		<select id="spatialisation-mode-menu"></select><span style="color:#fff">Spatialization mode</span><br/>
-		<input type="range" id="yawFader" min="-180" max="180" step="1"><span style="color:#fff" id="label-yaw">Listener yaw</span><br/>		
+		<span style="color:#fff">----Trim Levels----</span>
+		<input type="checkbox" id="checkbox-trim-bypass" name="checkbox-trim-bypass" onClick="onCheckTrimBypass();"/>
+		<span style="color:#fff">bypass</span>
 		<br/>
+		<input type="checkbox" id="checkbox-video" name="checkbox-video" value="Video" onClick="onCheckVideo();"/>
+		<span style="color:#fff">Main audio</span><br/>
+		<input type="checkbox" id="checkbox-extended-ambience" name="checkbox-extended-ambience" value="ExAmbience" onClick="onCheckExAmbience();"/>
+		<span style="color:#fff">Extended ambiance</span><br/>
+		<input type="checkbox" id="checkbox-extended-comments" name="checkbox-extended-comments" value="ExComments" onClick="onCheckExComments();"/>
+		<span style="color:#fff">Extended comments</span><br/>
+		<input type="checkbox" id="checkbox-extended-dialogs" name="checkbox-extended-dialogs" value="ExDialogs" onClick="onCheckExDialogs();"/><span style="color:#fff">Extended dialogs</span><br/>
+		<input type="checkbox" id="checkbox-lsf" name="checkbox-lsf" value="LSF" onClick="onCheckLSF();"/>
+		<span style="color:#fff">LSF</span><br/>
+		
+		<input type="range" id="slider-trim-main" min="-60" max="30" step="1" style="width:100px; height:10px">
+		<span style="color:#fff" id="label-trim-main">Main Audio</span><br/>
+		<input type="range" id="slider-trim-ambiance" min="-60" max="30" step="1" style="width:100px; height:10px">
+		<span style="color:#fff" id="label-trim-ambiance">Extended ambiance</span><br/>
+		<input type="range" id="slider-trim-comments" min="-60" max="30" step="1" style="width:100px; height:10px">
+		<span style="color:#fff" id="label-trim-comments">Extended comments</span><br/>
+		<input type="range" id="slider-trim-dialog" min="-60" max="30" step="1" style="width:100px; height:10px">
+		<span style="color:#fff" id="label-trim-dialog">Extended dialogs</span><br/>
+
+		<br/><span style="color:#fff">----Smart Fader----</span>
+		<input type="checkbox" id="checkbox-smart-fader-bypass" name="checkbox-smart-fader-bypass" onClick="onCheckSmartFaderBypass();"/>
+		<span style="color:#fff">bypass</span>
+		<br/>
+		<input type="range" id="slider-smart-fader" min="-10" max="10" step="0.1" style="width:100px; height:10px">
+		<span style="color:#fff" id="label-smart-fader">Smart Fader</span>
+		<span style="color:#fff" id="label-smart-fader-compression">  (Compression)</span><br/>	
+		
+		<input type="range" id="slider-smart-fader-ratio" min="1" max="10" step="1" style="width:100px; height:10px">
+		<span style="color:#fff" id="label-smart-fader-ratio">Compression ratio</span><br/>
+		<input type="range" id="slider-smart-fader-attack" min="0" max="100" step="0.1" style="width:100px; height:10px">
+		<span style="color:#fff" id="label-smart-fader-attack">Attack time</span><br/>
+		<input type="range" id="slider-smart-fader-release" min="0" max="100" step="0.1" style="width:100px; height:10px">
+		<span style="color:#fff" id="label-smart-fader-release">Release time</span><br/>
+
+		<br/><span style="color:#fff">----Receiver Mix----</span>
+		<input type="checkbox" id="checkbox-receiver-mix-bypass" name="checkbox-receiver-mix-bypass" onClick="onCheckReceiverMixBypass();"/>
+		<span style="color:#fff">bypass</span>
+		<br/>
+		<input type="range" id="slider-receiver-mix-N" min="-60" max="30" step="1" style="width:100px; height:10px">
+		<span style="color:#fff" id="label-receiver-mix-N">N</span><br/>
+		<input type="range" id="slider-receiver-mix-X" min="-60" max="30" step="1" style="width:100px; height:10px">
+		<span style="color:#fff" id="label-receiver-mix-X">X</span><br/>
+		<input type="range" id="slider-receiver-mix-ratio" min="1" max="10" step="1" style="width:100px; height:10px">
+		<span style="color:#fff" id="label-receiver-mix-ratio">Compression ratio</span><br/>
+
+		<br/><span style="color:#fff">----Spatialiser----</span><br/>
+		<select id="configuration-selector" style="height:10px"></select>
+		<span style="color:#fff">Configuration</span><br/>
+		<select id="hrtf-selector" style="height:10px"></select><br/>
+		<input type="checkbox" id="checkbox-headphones-equalization" name="checkbox-equalization" value="Equalization" onClick="onCheckEqualization();"/><span style="color:#fff" id="label-headphones-equalization">Headphones EQ</span><br/>
+		<input type="range" id="slider-gain-offset" min="-12" max="12" step="0.1">
+		<span style="color:#fff" id="label-gain-offset">Gain Offset</span><br/>
+		<select id="spatialisation-mode-menu"></select>
+		<span style="color:#fff">Spatialization mode</span><br/>
+		<input type="range" id="slider-listener-yaw" min="-180" max="180" step="1">
+		<span style="color:#fff" id="label-listener-yaw">Listener yaw</span><br/>		
 		<br/>
 		<span style="color:#fff">Extended comments position</span><br/>
-		<input type="range" id="azimCommentsFader" min="-180" max="180" step="1"><span style="color:#fff" id="label-azim-comments">azim</span><br/>
-		<input type="range" id="elevCommentsFader" min="-40" max="90" step="1"><span style="color:#fff" id="label-elev-comments">elev</span><br/>
-		<input type="range" id="distCommentsFader" min="0.5" max="10" step="0.05"><span style="color:#fff" id="label-dist-comments">dist</span><br/>
+		<input type="range" id="slider-azim-comments" min="-180" max="180" step="1" style="width:100px; height:10px">
+		<span style="color:#fff" id="label-azim-comments">azim</span><br/>
+		<input type="range" id="slider-elev-comments" min="-40" max="90" step="1" style="width:100px; height:10px">
+		<span style="color:#fff" id="label-elev-comments">elev</span><br/>
+		<input type="range" id="slider-dist-comments" min="0.5" max="10" step="0.05" style="width:100px; height:10px">
+		<span style="color:#fff" id="label-dist-comments">dist</span>
 		<br/>
 		<span style="color:#fff">Extended dialog position</span><br/>
-		<input type="range" id="azimDialogFader" min="-180" max="180" step="1"><span style="color:#fff" id="label-azim-dialog">azim</span><br/>
-		<input type="range" id="elevDialogFader" min="-40" max="90" step="1"><span style="color:#fff" id="label-elev-dialog">elev</span><br/>
-		<input type="range" id="distDialogFader" min="0.5" max="10" step="0.05"><span style="color:#fff" id="label-dist-dialog">dist</span><br/>
+		<input type="range" id="slider-azim-dialog" min="-180" max="180" step="1" style="width:100px; height:10px">
+		<span style="color:#fff" id="label-azim-dialog">azim</span><br/>
+		<input type="range" id="slider-elev-dialog" min="-40" max="90" step="1" style="width:100px; height:10px">
+		<span style="color:#fff" id="label-elev-dialog">elev</span><br/>
+		<input type="range" id="slider-dist-dialog" min="0.5" max="10" step="0.05" style="width:100px; height:10px">
+		<span style="color:#fff" id="label-dist-dialog">dist</span><br/>
+
+
 	</div>
 
 	

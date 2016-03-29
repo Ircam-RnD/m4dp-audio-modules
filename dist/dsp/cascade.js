@@ -1,10 +1,10 @@
 "use strict";
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _index = require("../core/index.js");
 
@@ -57,10 +57,8 @@ var CascadeNode = function (_AbstractNode) {
      * @type {boolean}
      */
 
-
     _createClass(CascadeNode, [{
         key: "setFrequency",
-
 
         //==============================================================================
         /**
@@ -247,7 +245,6 @@ var CascadeNode = function (_AbstractNode) {
     }, {
         key: "_updateAudioGraph",
 
-
         //==============================================================================
         /**
          * Updates the connections of the audio graph
@@ -269,8 +266,8 @@ var CascadeNode = function (_AbstractNode) {
                 this._biquadNodes[numCascades_ - 1].connect(this._output);
 
                 /// connect the cascades
-                for (var _i = numCascades_ - 1; _i > 0; _i--) {
-                    this._biquadNodes[_i - 1].connect(this._biquadNodes[_i]);
+                for (var i = numCascades_ - 1; i > 0; i--) {
+                    this._biquadNodes[i - 1].connect(this._biquadNodes[i]);
                 }
 
                 /// connect the 1st biquad to the input

@@ -1,10 +1,10 @@
 "use strict";
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -39,7 +39,6 @@ var AbstractNode = function () {
      * Connect the audio node
      * @param {AudioNode} node - an AudioNode to connect to.
      */
-
 
     _createClass(AbstractNode, [{
         key: "connect",
@@ -76,7 +75,6 @@ var AbstractNode = function () {
  * Container for AudioStreamDescription
  */
 
-
 exports.default = AbstractNode;
 
 var AudioStreamDescriptionCollection = exports.AudioStreamDescriptionCollection = function () {
@@ -96,17 +94,14 @@ var AudioStreamDescriptionCollection = exports.AudioStreamDescriptionCollection 
      * @type {AudioStreamDescription[]}
      */
 
-
     _createClass(AudioStreamDescriptionCollection, [{
         key: "activeStreamsChanged",
-
 
         /**
          * Notification when the active stream(s) changes
          */
         value: function activeStreamsChanged() {}
         /// nothing to do in the base class
-
 
         /**
          * Notification when the trim of stream(s) changes
@@ -116,7 +111,6 @@ var AudioStreamDescriptionCollection = exports.AudioStreamDescriptionCollection 
         key: "streamsTrimChanged",
         value: function streamsTrimChanged() {}
         /// nothing to do in the base class  
-
 
         /**
          * Get the current dialog audio stream description of the collection
@@ -375,7 +369,6 @@ var AudioStreamDescriptionCollection = exports.AudioStreamDescriptionCollection 
  * AudioStreamDescription describes a stream.
  */
 
-
 var AudioStreamDescription = exports.AudioStreamDescription = function () {
     /**
      * AudioStreamDescription constructor
@@ -412,10 +405,8 @@ var AudioStreamDescription = exports.AudioStreamDescription = function () {
      * @type {number[]}
      */
 
-
     _createClass(AudioStreamDescription, [{
         key: "channelIsCenter",
-
 
         //==============================================================================
         /**
@@ -537,7 +528,6 @@ var AudioStreamDescription = exports.AudioStreamDescription = function () {
 
     }, {
         key: "setTrimFromGui",
-
 
         //==============================================================================
         /**
@@ -759,18 +749,6 @@ var AudioStreamDescription = exports.AudioStreamDescription = function () {
 
     return AudioStreamDescription;
 }();
-
-/**
- * HRTF
- * @todo: to be defined
- * @typedef {Object} HRTF
- */
-
-/**
- * EqPreset
- * @todo: to be defined
- * @typedef {Object} EqPreset
- */
 
 /**
 * @external {AudioContext} https://developer.mozilla.org/fr/docs/Web/API/AudioContext

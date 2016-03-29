@@ -1,10 +1,10 @@
 'use strict';
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _index = require('../core/index.js');
 
@@ -50,10 +50,11 @@ var StreamSelector = function (_AbstractNode) {
         _this._splitterNode = undefined;
         _this._mergerNode = undefined;
         _this._gainNode = [];
+        _this._isBypass = false;
 
         /// the total number of incoming channels, including all the streams
         /// (mainAudio, extendedAmbience, extendedComments and extendedDialogs)
-        var totalNumberOfChannels_ = _this._audioStreamDescriptionCollection.totalNumberOfChannels;
+        var totalNumberOfChannels_ = _this.getTotalNumberOfChannels();
 
         /// sanity check
         /// mainAudio (2) + extendedAmbience (6) + extendedComments (1) + extendedDialogs (1) = 10
@@ -75,37 +76,38 @@ var StreamSelector = function (_AbstractNode) {
             throw new Error("Pas bon");
         }
 
-        /// create 10 gainNodes
+        /// create N gainNodes
         for (var i = 0; i < totalNumberOfChannels_; i++) {
             var newGainNode = audioContext.createGain();
             _this._gainNode.push(newGainNode);
         }
 
-        /// split the input streams into 10 independent channels
-        _this._input.connect(_this._splitterNode);
-
-        /// connect a gainNode to each channel
-        for (var _i = 0; _i < totalNumberOfChannels_; _i++) {
-            _this._splitterNode.connect(_this._gainNode[_i], _i);
-        }
-
-        /// then merge the output of the 10 gainNodes
-        for (var _i2 = 0; _i2 < totalNumberOfChannels_; _i2++) {
-            _this._gainNode[_i2].connect(_this._mergerNode, 0, _i2);
-        }
-
-        _this._mergerNode.connect(_this._output);
+        _this._updateAudioGraph();
         return _this;
     }
 
-    /**
-     * Notification when the active stream(s) changes
-     * (i.e. whenever a check box is modified)
-     */
-
+    //==============================================================================
 
     _createClass(StreamSelector, [{
+        key: 'getTotalNumberOfChannels',
+        value: function getTotalNumberOfChannels() {
+            return this._audioStreamDescriptionCollection.totalNumberOfChannels;
+        }
+
+        //==============================================================================
+        /**
+         * Enable or bypass the processor
+         * @type {boolean}
+         */
+
+    }, {
         key: 'activeStreamsChanged',
+
+        //==============================================================================
+        /**
+         * Notification when the active stream(s) changes
+         * (i.e. whenever a check box is modified)
+         */
         value: function activeStreamsChanged() {
             this._update();
         }
@@ -139,7 +141,6 @@ var StreamSelector = function (_AbstractNode) {
             try {
                 for (var _iterator = asdc[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
                     var stream = _step.value;
-
 
                     var isActive = stream.active;
 
@@ -178,6 +179,62 @@ var StreamSelector = function (_AbstractNode) {
                     }
                 }
             }
+        }
+
+        //==============================================================================
+        /**
+         * Updates the connections of the audio graph
+         */
+
+    }, {
+        key: '_updateAudioGraph',
+        value: function _updateAudioGraph() {
+
+            var totalNumberOfChannels_ = this.getTotalNumberOfChannels();
+
+            /// first of all, disconnect everything
+            this._input.disconnect();
+            this._splitterNode.disconnect();
+            for (var i = 0; i < totalNumberOfChannels_; i++) {
+                this._gainNode[i].disconnect();
+            }
+            this._mergerNode.disconnect();
+
+            if (this.bypass === true || totalNumberOfChannels_ === 0) {
+                this._input.connect(this._output);
+            } else {
+                /// split the input streams into N independent channels
+                this._input.connect(this._splitterNode);
+
+                /// connect a gainNode to each channel
+                for (var i = 0; i < totalNumberOfChannels_; i++) {
+                    this._splitterNode.connect(this._gainNode[i], i);
+                }
+
+                /// then merge the output of the N gainNodes
+                for (var i = 0; i < totalNumberOfChannels_; i++) {
+                    this._gainNode[i].connect(this._mergerNode, 0, i);
+                }
+
+                this._mergerNode.connect(this._output);
+            }
+        }
+    }, {
+        key: 'bypass',
+        set: function set(value) {
+
+            if (value !== this._isBypass) {
+                this._isBypass = value;
+                this._updateAudioGraph();
+            }
+        }
+
+        /**
+         * Returns true if the processor is bypassed
+         */
+        ,
+        get: function get() {
+            return this._isBypass;
         }
     }]);
 

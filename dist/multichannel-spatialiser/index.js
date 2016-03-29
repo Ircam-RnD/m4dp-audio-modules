@@ -1,10 +1,10 @@
 'use strict';
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _index = require('../core/index.js');
 
@@ -96,7 +96,6 @@ var MultichannelSpatialiser = function (_AbstractNode) {
      * @type {string} url
      */
 
-
     _createClass(MultichannelSpatialiser, [{
         key: 'loadHrtfSet',
         value: function loadHrtfSet(url) {
@@ -112,13 +111,11 @@ var MultichannelSpatialiser = function (_AbstractNode) {
     }, {
         key: 'activeStreamsChanged',
 
-
         /**
          * Notification when the active stream(s) changes
          */
         value: function activeStreamsChanged() {}
         /// nothing to do, for the moment
-
 
         //==============================================================================
         /**
@@ -235,7 +232,6 @@ var MultichannelSpatialiser = function (_AbstractNode) {
 
     }, {
         key: 'bypassHeadphoneEqualization',
-
 
         /**
          * Enable or bypass the headphone equalization

@@ -81,7 +81,6 @@ function dB2lin(value) {
 function arrayAlmostEqual(array1, array2) {
     var tolerance = arguments.length <= 2 || arguments[2] === undefined ? 0 : arguments[2];
 
-
     if (tolerance < 0.0) {
         throw new Error("pas bon");
     }

@@ -1,10 +1,10 @@
 'use strict';
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _index = require('../core/index.js');
 
@@ -86,13 +86,13 @@ var VirtualSpeakersNode = function (_AbstractNode) {
         }
 
         /// connect the output of the splitter to the respective gain nodes
-        for (var _i = 0; _i < totalNumberOfChannels_; _i++) {
-            _this._splitterNode.connect(_this._gainNodes[_i], _i);
+        for (var i = 0; i < totalNumberOfChannels_; i++) {
+            _this._splitterNode.connect(_this._gainNodes[i], i);
         }
 
         /// connect the output of the gain nodes to the respective binaural source
-        for (var _i2 = 0; _i2 < totalNumberOfChannels_; _i2++) {
-            _this._binauralPanner.connectInputByIndex(_i2, _this._gainNodes[_i2], 0, 0);
+        for (var i = 0; i < totalNumberOfChannels_; i++) {
+            _this._binauralPanner.connectInputByIndex(i, _this._gainNodes[i], 0, 0);
         }
 
         /// sanity checks
@@ -110,7 +110,6 @@ var VirtualSpeakersNode = function (_AbstractNode) {
     }
 
     //==============================================================================
-
 
     _createClass(VirtualSpeakersNode, [{
         key: 'getNumChannels',
@@ -141,7 +140,6 @@ var VirtualSpeakersNode = function (_AbstractNode) {
 
     }, {
         key: 'getFallbackUrl',
-
 
         //==============================================================================
         /**
@@ -247,7 +245,6 @@ var VirtualSpeakersNode = function (_AbstractNode) {
             try {
                 for (var _iterator = asdc[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
                     var stream = _step.value;
-
 
                     /// positions expressed with Spat4 navigation coordinate
                     var azimuths = stream.channelPositions;

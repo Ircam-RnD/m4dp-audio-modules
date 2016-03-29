@@ -1,13 +1,17 @@
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+	value: true
 });
-exports.TransauralShufflerNode = exports.TransauralFeedforwardNode = exports.TransauralNode = exports.SumDiffNode = exports.HeadphonesEqualization = exports.CascadeNode = undefined;
+exports.VirtualSpeakersNode = exports.TransauralShufflerNode = exports.TransauralFeedforwardNode = exports.TransauralNode = exports.SumDiffNode = exports.HeadphonesEqualization = exports.AnalysisNode = exports.CascadeNode = undefined;
 
 var _cascade = require('./cascade.js');
 
 var _cascade2 = _interopRequireDefault(_cascade);
+
+var _analysis = require('./analysis.js');
+
+var _analysis2 = _interopRequireDefault(_analysis);
 
 var _headphoneequalization = require('./headphoneequalization.js');
 
@@ -18,6 +22,10 @@ var _transaural = require('./transaural.js');
 var _sumdiff = require('./sumdiff.js');
 
 var _sumdiff2 = _interopRequireDefault(_sumdiff);
+
+var _virtualspeakers = require('./virtualspeakers.js');
+
+var _virtualspeakers2 = _interopRequireDefault(_virtualspeakers);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -32,8 +40,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 /************************************************************************************/
 
 exports.CascadeNode = _cascade2.default;
+exports.AnalysisNode = _analysis2.default;
 exports.HeadphonesEqualization = _headphoneequalization2.default;
 exports.SumDiffNode = _sumdiff2.default;
 exports.TransauralNode = _transaural.TransauralNode;
 exports.TransauralFeedforwardNode = _transaural.TransauralFeedforwardNode;
 exports.TransauralShufflerNode = _transaural.TransauralShufflerNode;
+exports.VirtualSpeakersNode = _virtualspeakers2.default;

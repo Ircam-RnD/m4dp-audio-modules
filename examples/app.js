@@ -3,7 +3,7 @@
 //M4DPAudioModules.unittests.biquadtests.testBiquadNode();
 //M4DPAudioModules.unittests.binauraltests.testBinauralNode();
 //M4DPAudioModules.unittests.testCascadeNode();
-M4DPAudioModules.unittests.analysistests.testAnalysisNode();
+//M4DPAudioModules.unittests.analysistests.testAnalysisNode();
 //M4DPAudioModules.unittests.phonetests.testPhoneNode();
 //M4DPAudioModules.unittests.testBinaural();
 //M4DPAudioModules.unittests.testHrtfFromSofaServer();
@@ -19,21 +19,33 @@ var dumpObject = function(obj) {
     }
 };
 
+function prepareMediaPlayer( dashContext ){
+    var player = new MediaPlayer( dashContext );
+    player.startup();
+    player.setAutoPlay(false);
+    player.attachView(videoPlayerMainMediaElement);
+    player.getDebug().setLogToBrowserConsole(false);
 
+    return player;
+}
+
+
+//==============================================================================
 /// player pour la video principale
-videoPlayerMainMediaElement           = document.getElementById('videoPlayerMain');
+var videoPlayerMainMediaElement           = document.getElementById('videoPlayerMain');
 /// player pour la video LSF (langue des signes)
-videoPlayerPipMediaElement            = document.getElementById('videoPlayerPip');
+var videoPlayerPipMediaElement            = document.getElementById('videoPlayerPip');
 /// player pour l'audio 5.1
-playerAudioFiveDotOneMediaElement     = document.getElementById('playerAudioFiveDotOne');
+var playerAudioFiveDotOneMediaElement     = document.getElementById('playerAudioFiveDotOne');
 /// player pour l'audio description
-playerAudioDescriptionMediaElement    = document.getElementById('playerAudioDescription');
+var playerAudioDescriptionMediaElement    = document.getElementById('playerAudioDescription');
 /// player pour les dialgoues
-playerDialogueMediaElement            = document.getElementById('playerDialogue');
+var playerDialogueMediaElement            = document.getElementById('playerDialogue');
 
 
 var context = new Dash.di.DashContext();
 
+//==============================================================================
 /*
 /// les premières URLs fournies par DotScreen
 var urlMain = "http://medias2.francetv.fr/innovation/media4D/m4dp-set1-LMDJ/manifest.mpd";
@@ -54,39 +66,47 @@ var urlAudioDescription    = dashUrlAudioDescription;
 var urlDialogue            = dashUrlDial;
 
 //==============================================================================
-var playerMain = new MediaPlayer(context);
+var playerMain              = prepareMediaPlayer( context );
+var playerPip               = prepareMediaPlayer( context );
+var playerAudioFiveDotOne   = prepareMediaPlayer( context );
+var playerAudioDescription  = prepareMediaPlayer( context );
+var playerDialogue          = prepareMediaPlayer( context );
+
+/*
+var playerMain = new MediaPlayer( context );
 playerMain.startup();
 playerMain.setAutoPlay(false);
 playerMain.attachView(videoPlayerMainMediaElement);
 playerMain.getDebug().setLogToBrowserConsole(false);
 
-var playerPip = new MediaPlayer(context);
+var playerPip = new MediaPlayer( context );
 playerPip.startup();
 playerPip.setAutoPlay(false);
-playerPip.attachView(videoPlayerPipMediaElement);
+playerPip.attachView(videoPlayerMainMediaElement);
 playerPip.getDebug().setLogToBrowserConsole(false);
 
-var playerAudioFiveDotOne = new MediaPlayer(context);
+var playerAudioFiveDotOne = new MediaPlayer( context );
 playerAudioFiveDotOne.startup();
 playerAudioFiveDotOne.setAutoPlay(false);
-playerAudioFiveDotOne.attachView(playerAudioFiveDotOneMediaElement);
+playerAudioFiveDotOne.attachView(videoPlayerMainMediaElement);
 playerAudioFiveDotOne.getDebug().setLogToBrowserConsole(false);
 
-var playerAudioDescription = new MediaPlayer(context);
+var playerAudioDescription = new MediaPlayer( context );
 playerAudioDescription.startup();
 playerAudioDescription.setAutoPlay(false);
-playerAudioDescription.attachView(playerAudioDescriptionMediaElement);
+playerAudioDescription.attachView(videoPlayerMainMediaElement);
 playerAudioDescription.getDebug().setLogToBrowserConsole(false);
 
-var playerDialogue = new MediaPlayer(context);
+var playerDialogue = new MediaPlayer( context );
 playerDialogue.startup();
 playerDialogue.setAutoPlay(false);
-playerDialogue.attachView(playerDialogueMediaElement);
+playerDialogue.attachView(videoPlayerMainMediaElement);
 playerDialogue.getDebug().setLogToBrowserConsole(false);
-
-var controller = new MediaController();
+*/
 
 //dumpObject( playerMain );
+
+var controller = new MediaController();
 
 videoPlayerMainMediaElement.controller           = controller;
 videoPlayerPipMediaElement.controller            = controller;
@@ -96,6 +116,13 @@ playerDialogueMediaElement.controller            = controller;
 
 var audioContext = new (window.AudioContext || window.webkitAudioContext)();
 //console.debug("######### audioContext: " + audioContext);
+
+//==============================================================================
+// check if the DASH streams are ready
+var audioMainReady          = playerMain.isReady();
+var audioFiveDotOneReady    = playerAudioFiveDotOne.isReady();
+var audioDescriptionReady   = playerAudioDescription.isReady();
+var audioDialogReady        = playerDialogue.isReady();
 
 //==============================================================================
 var audioSourceMain          = audioContext.createMediaElementSource( videoPlayerMainMediaElement );
@@ -173,7 +200,7 @@ var asdc = new M4DPAudioModules.AudioStreamDescriptionCollection(
 // M4DPAudioModules
 
 /// connect either the multichannel spatializer or the object spatializer
-var ModulesConfiguration = 
+var ModulesConfiguration =
 {
     kMultichannelSpatialiser : 0,
     kObjectSpatialiserAndMixer : 1
@@ -183,6 +210,7 @@ var config = ModulesConfiguration.kMultichannelSpatialiser;
 
 var streamSelector  = new M4DPAudioModules.StreamSelector( audioContext, asdc );
 var smartFader      = new M4DPAudioModules.SmartFader( audioContext, asdc );
+var receiverMix     = new M4DPAudioModules.ReceiverMix( audioContext, asdc );
 //var noiseAdaptation = new M4DPAudioModules.NoiseAdaptation(audioContext);
 //var dialogEnhancement = new M4DPAudioModules.DialogEnhancement(audioContext);    
 var multichannelSpatialiser = new M4DPAudioModules.MultichannelSpatialiser( audioContext, asdc, 'binaural' );
@@ -248,23 +276,25 @@ var checkboxExAmbience = document.getElementById('checkbox-extended-ambience');
 var checkboxExComments = document.getElementById('checkbox-extended-comments');
 var checkboxExDialogs = document.getElementById('checkbox-extended-dialogs');
 var checkboxLSF = document.getElementById('checkbox-lsf');
-var smartFaderDB = document.getElementById('smartFaderDB');
-var compressionRatio = document.getElementById('compressionRatio');
-var attackTime = document.getElementById('attackTime');
-var releaseTime = document.getElementById('releaseTime');
-var checkboxEqualization = document.getElementById('checkbox-equalization');
-var gainOffsetFader = document.getElementById('gainOffset');
-var yawFader = document.getElementById('yawFader');
-var azimCommentsFader = document.getElementById('azimCommentsFader');
-var elevCommentsFader = document.getElementById('elevCommentsFader');
-var distCommentsFader = document.getElementById('distCommentsFader');
-var azimDialogFader = document.getElementById('azimDialogFader');
-var elevDialogFader = document.getElementById('elevDialogFader');
-var distDialogFader = document.getElementById('distDialogFader');
-var trimMain = document.getElementById('trimMain');
-var trimAmbiance = document.getElementById('trimAmbiance');
-var trimComments = document.getElementById('trimComments');
-var trimDialog = document.getElementById('trimDialog');
+var sliderSmartFader = document.getElementById('slider-smart-fader');
+var sliderSmartFaderRatio = document.getElementById('slider-smart-fader-ratio');
+var sliderSmartFaderAttack = document.getElementById('slider-smart-fader-attack');
+var sliderSmartFaderRelease = document.getElementById('slider-smart-fader-release');
+var checkboxHeadphonesEqualization = document.getElementById('checkbox-headphones-equalization');
+var sliderGainOffset = document.getElementById('slider-gain-offset');
+var sliderListenerYaw = document.getElementById('slider-listener-yaw');
+var sliderAzimComments = document.getElementById('slider-azim-comments');
+var sliderElevComments = document.getElementById('slider-elev-comments');
+var sliderDistComments = document.getElementById('slider-dist-comments');
+var sliderAzimDialog = document.getElementById('slider-azim-dialog');
+var sliderElevDialog = document.getElementById('slider-elev-dialog');
+var sliderDistDialog = document.getElementById('slider-dist-dialog');
+var sliderTrimMain = document.getElementById('slider-trim-main');
+var sliderTrimAmbiance = document.getElementById('slider-trim-ambiance');
+var sliderTrimComments = document.getElementById('slider-trim-comments');
+var sliderTrimDialog = document.getElementById('slider-trim-dialog');
+var sliderReceiverMixN = document.getElementById('slider-receiver-mix-N');
+var sliderReceiverMixX = document.getElementById('slider-receiver-mix-X');
 
 //==============================================================================
 // initialize the GUI stuffs
@@ -276,6 +306,7 @@ initializeDropDownMenus();
 function updateWAAConnections(){
     
     smartFader.disconnect();
+    receiverMix.disconnect();
     multichannelSpatialiser.disconnect();
     objectSpatialiserAndMixer.disconnect();
 
@@ -297,7 +328,7 @@ function updateWAAConnections(){
     processor.connect( audioContext.destination );
 
     var $hrtfSet = document.querySelector('#hrtf-selector');
-    if( $hrtfSet.onchange != null ){    
+    if( $hrtfSet.onchange != null ){
         $hrtfSet.onchange();
     }
 }
@@ -319,34 +350,35 @@ function prepareModeSelectionMenu(){
 
     $menu.onchange = function ()
     {
-        /// retrieve selected mode
+        /// retrieve the selected mode
         var selection = $menu.value;
 
+        var visibility = true;
+        
         if( selection === 'binaural' ){
-            setElementVisibility('checkbox-equalization', true);
-            setElementVisibility('label-equalization', true);
+            visibility = true;
         }
         else{
-            setElementVisibility('checkbox-equalization', false);
-            setElementVisibility('label-equalization', false);
+            visibility = false;
         }
+        setElementVisibility('checkbox-headphones-equalization', visibility);
+        setElementVisibility('label-headphones-equalization', visibility);
+
 
         if( selection === 'multichannel' ){
-            setElementVisibility('yawFader', false);
-            setElementVisibility('label-yaw', false);
-            setElementVisibility('gainOffset', false);
-            setElementVisibility('label-gain-offset', false);
-            setElementVisibility('hrtf-selector', false);
+            visibility = false;
         }
         else{
-            setElementVisibility('yawFader', true);
-            setElementVisibility('label-yaw', true);
-            setElementVisibility('gainOffset', true);
-            setElementVisibility('label-gain-offset', true);
-            setElementVisibility('hrtf-selector', true);
+            visibility = true;
         }
+        setElementVisibility('slider-listener-yaw', visibility);
+        setElementVisibility('label-listener-yaw', visibility);
+        setElementVisibility('slider-gain-offset', visibility);
+        setElementVisibility('label-gain-offset', visibility);
+        setElementVisibility('hrtf-selector', visibility);
 
-        multichannelSpatialiser.outputType = selection;
+
+        multichannelSpatialiser.outputType   = selection;
         objectSpatialiserAndMixer.outputType = selection;
     };
 
@@ -387,18 +419,18 @@ function prepareConfiguration(){
             config = ModulesConfiguration.kObjectSpatialiserAndMixer;
         }
 
-        setElementVisibility('azimCommentsFader', displayDialogPosition);
+        setElementVisibility('slider-azim-comments', displayDialogPosition);
         setElementVisibility('label-azim-comments', displayDialogPosition);
-        setElementVisibility('elevCommentsFader', displayDialogPosition);
+        setElementVisibility('slider-elev-comments', displayDialogPosition);
         setElementVisibility('label-elev-comments', displayDialogPosition);
-        setElementVisibility('distCommentsFader', displayDialogPosition);
+        setElementVisibility('slider-dist-comments', displayDialogPosition);
         setElementVisibility('label-dist-comments', displayDialogPosition);
 
-        setElementVisibility('azimDialogFader', displayDialogPosition);
+        setElementVisibility('slider-azim-dialog', displayDialogPosition);
         setElementVisibility('label-azim-dialog', displayDialogPosition);
-        setElementVisibility('elevDialogFader', displayDialogPosition);
+        setElementVisibility('slider-elev-dialog', displayDialogPosition);
         setElementVisibility('label-elev-dialog', displayDialogPosition);
-        setElementVisibility('distDialogFader', displayDialogPosition);
+        setElementVisibility('slider-dist-dialog', displayDialogPosition);
         setElementVisibility('label-dist-dialog', displayDialogPosition);
 
         /// and update the WAA connections
@@ -513,6 +545,7 @@ function updateActiveStreams(){
     /// notify the modification of active streams
     streamSelector.activeStreamsChanged();
     smartFader.activeStreamsChanged();
+    receiverMix.activeStreamsChanged();
     multichannelSpatialiser.activeStreamsChanged();
     objectSpatialiserAndMixer.activeStreamsChanged();
 }
@@ -522,6 +555,41 @@ function updateStreamsTrim(){
     streamSelector.streamsTrimChanged();    
 }
 
+//==============================================================================
+function onCheckTrimBypass(){
+
+    var checkbox = document.getElementById('checkbox-trim-bypass');
+
+    if (checkbox.checked) {
+        streamSelector.bypass = true;
+    } else {
+        streamSelector.bypass = false;
+    }
+}
+
+function onCheckSmartFaderBypass(){
+
+    var checkbox = document.getElementById('checkbox-smart-fader-bypass');
+
+    if (checkbox.checked) {
+        smartFader.bypass = true;
+    } else {
+        smartFader.bypass = false;
+    }
+}
+
+function onCheckReceiverMixBypass(){
+
+    var checkbox = document.getElementById('checkbox-receiver-mix-bypass');
+
+    if (checkbox.checked) {
+        receiverMix.bypass = true;
+    } else {
+        receiverMix.bypass = false;
+    }
+}
+
+//==============================================================================
 function onCheckVideo() {
     //console.debug("######### onCheckVideo: "+checkboxVideo.checked);
     if (checkboxVideo.checked) {
@@ -566,11 +634,11 @@ function onCheckExDialogs() {
 }
 
 function onCheckEqualization() {
-    //console.debug("######### onCheckEqualization: "+checkboxEqualization.checked);
+    //console.debug("######### onCheckEqualization: "+checkboxHeadphonesEqualization.checked);
     
     multichannelSpatialiser.eqPreset = "eq1";
 
-    if (checkboxEqualization.checked) {
+    if (checkboxHeadphonesEqualization.checked) {
         multichannelSpatialiser.bypassHeadphoneEqualization( false );
     } else {
         multichannelSpatialiser.bypassHeadphoneEqualization( true );
@@ -606,12 +674,12 @@ function initializeDropDownMenus(){
 //==============================================================================
 function initializeCheckBoxes(){
 
-    checkboxVideo.checked             = true;
-    checkboxExAmbience.checked         = false;
-    checkboxExComments.checked         = false;
-    checkboxExDialogs.checked         = false;
+    checkboxVideo.checked           = true;
+    checkboxExAmbience.checked      = false;
+    checkboxExComments.checked      = false;
+    checkboxExDialogs.checked       = false;
     checkboxLSF.checked             = true;
-    checkboxEqualization.checked     = false;
+    checkboxHeadphonesEqualization.checked    = false;
 
     onCheckVideo();
     onCheckExAmbience();
@@ -625,58 +693,80 @@ function initializeCheckBoxes(){
 function initializeSliders(){
 
     /// make sure the sliders are properly initialized, with scaled values
-    smartFaderDB.value = smartFader.getdBForGui( smartFaderDB );
-    compressionRatio.value = smartFader.getCompressionRatioForGui( compressionRatio );
-    attackTime.value = smartFader.getAttackTimeForGui( attackTime );
-    releaseTime.value = smartFader.getReleaseTimeForGui( releaseTime );
+    sliderSmartFader.value          = smartFader.getdBForGui( sliderSmartFader );
+    sliderSmartFaderRatio.value     = smartFader.getCompressionRatioForGui( sliderSmartFaderRatio );
+    sliderSmartFaderAttack.value    = smartFader.getAttackTimeForGui( sliderSmartFaderAttack );
+    sliderSmartFaderRelease.value   = smartFader.getReleaseTimeForGui( sliderSmartFaderRelease );
 
-    trimMain.value = 0;
-    trimAmbiance.value = 0;
-    trimComments.value = 0;
-    trimDialog.value = 0;
+    sliderTrimMain.value        = 0;
+    sliderTrimAmbiance.value    = 0;
+    sliderTrimComments.value    = 0;
+    sliderTrimDialog.value      = 0;
 
-    azimCommentsFader.value = 0;
-    elevCommentsFader.value = 0;
-    distCommentsFader.value = 1;
-    azimDialogFader.value = 0;
-    elevDialogFader.value = 0;
-    distDialogFader.value = 1;
+    sliderReceiverMixN.value = receiverMix.getThresholdForCommentaryFromGui( sliderReceiverMixN );
+    sliderReceiverMixX.value = receiverMix.getThresholdForProgrammeFromGui( sliderReceiverMixX );
+
+    sliderAzimComments.value = 0;
+    sliderElevComments.value = 0;
+    sliderDistComments.value = 1;
+
+    sliderAzimDialog.value = 0;
+    sliderElevDialog.value = 0;
+    sliderDistDialog.value = 1;
 }
+
+//==============================================================================
+/**
+ * Callback when the Receiver-Mix slider changes
+ */
+sliderReceiverMixN.addEventListener('input', function(){
+
+    var value = receiverMix.setThresholdForCommentaryFromGui( sliderReceiverMixN );
+
+    document.getElementById('label-receiver-mix-N').textContent = 'N = ' + Math.round(value).toString() + ' dB (gate for comments)';
+});
+
+sliderReceiverMixX.addEventListener('input', function(){
+
+    var value = receiverMix.setThresholdForProgrammeFromGui( sliderReceiverMixX );
+
+    document.getElementById('label-receiver-mix-X').textContent = 'X = ' + Math.round(value).toString() + ' dB (gate for program)';
+});
 
 //==============================================================================
 /**
  * Callback when the trim slider changes
  */
-trimMain.addEventListener('input', function(){
+sliderTrimMain.addEventListener('input', function(){
 
-    var value = mainAudioASD.setTrimFromGui( trimMain );
+    var value = mainAudioASD.setTrimFromGui( sliderTrimMain );
 
     updateStreamsTrim();
 
     document.getElementById('label-trim-main').textContent = 'Main Audio = ' + Math.round(value).toString() + ' dB';
 });
 
-trimAmbiance.addEventListener('input', function(){
+sliderTrimAmbiance.addEventListener('input', function(){
 
-    var value = extendedAmbienceASD.setTrimFromGui( trimAmbiance );
+    var value = extendedAmbienceASD.setTrimFromGui( sliderTrimAmbiance );
 
     updateStreamsTrim();
 
     document.getElementById('label-trim-ambiance').textContent = 'Extended ambiance = ' + Math.round(value).toString() + ' dB';
 });
 
-trimComments.addEventListener('input', function(){
+sliderTrimComments.addEventListener('input', function(){
 
-    var value = extendedCommentsASD.setTrimFromGui( trimComments );
+    var value = extendedCommentsASD.setTrimFromGui( sliderTrimComments );
 
     updateStreamsTrim();
 
     document.getElementById('label-trim-comments').textContent = 'Extended comments = ' + Math.round(value).toString() + ' dB';
 });
 
-trimDialog.addEventListener('input', function(){
+sliderTrimDialog.addEventListener('input', function(){
 
-    var value = extendedDialogsASD.setTrimFromGui( trimDialog );
+    var value = extendedDialogsASD.setTrimFromGui( sliderTrimDialog );
 
     updateStreamsTrim();
 
@@ -687,24 +777,24 @@ trimDialog.addEventListener('input', function(){
 /**
  * Callback when the dB slider changes
  */
-smartFaderDB.addEventListener('input', function(){
+sliderSmartFader.addEventListener('input', function(){
 
-    var value = smartFader.setdBFromGui( smartFaderDB );
+    var value = smartFader.setdBFromGui( sliderSmartFader );
 
     document.getElementById('label-smart-fader').textContent = 'Smart Fader = ' + Math.round(value).toString() + ' dB';
 });
 
 //==============================================================================
-gainOffsetFader.addEventListener('input', function(){
+sliderGainOffset.addEventListener('input', function(){
 
-    var value = parseFloat( gainOffsetFader.value );
+    var value = parseFloat( sliderGainOffset.value );
     /// this is in [-12 12] range
 
     document.getElementById('label-gain-offset').textContent = 'Gain Offset = ' + Math.round(value).toString() + ' dB';
 
     /// un gain d’offset afin de maintenir un niveau subjectif apres l’enclenchement du process de spatialisation
 
-    multichannelSpatialiser.offsetGain = value;
+    multichannelSpatialiser.offsetGain   = value;
     objectSpatialiserAndMixer.offsetGain = value;
 });
 
@@ -712,13 +802,13 @@ gainOffsetFader.addEventListener('input', function(){
 /**
  * Callback when the yaw slider changes
  */
-yawFader.addEventListener('input', function(){
+sliderListenerYaw.addEventListener('input', function(){
 
-    var valueFader = parseFloat( yawFader.value );
+    var valueFader = parseFloat( sliderListenerYaw.value );
 
-    document.getElementById('label-yaw').textContent = 'Listener yaw = ' + valueFader;
+    document.getElementById('label-listener-yaw').textContent = 'Listener yaw = ' + valueFader;
 
-    multichannelSpatialiser.listenerYaw = valueFader;
+    multichannelSpatialiser.listenerYaw   = valueFader;
     objectSpatialiserAndMixer.listenerYaw = valueFader;
 });
 
@@ -726,9 +816,9 @@ yawFader.addEventListener('input', function(){
 /**
  * Callback when the azim slider changes
  */
-azimCommentsFader.addEventListener('input', function(){
+sliderAzimComments.addEventListener('input', function(){
 
-    var value = objectSpatialiserAndMixer.setCommentaryAzimuthFromGui( azimCommentsFader );
+    var value = objectSpatialiserAndMixer.setCommentaryAzimuthFromGui( sliderAzimComments );
     
     document.getElementById('label-azim-comments').textContent = 'azim = ' + value;    
 });
@@ -737,9 +827,9 @@ azimCommentsFader.addEventListener('input', function(){
 /**
  * Callback when the elev slider changes
  */
-elevCommentsFader.addEventListener('input', function(){
+sliderElevComments.addEventListener('input', function(){
 
-    var value = objectSpatialiserAndMixer.setCommentaryElevationFromGui( elevCommentsFader );
+    var value = objectSpatialiserAndMixer.setCommentaryElevationFromGui( sliderElevComments );
 
     document.getElementById('label-elev-comments').textContent = 'elev = ' + value;    
 });
@@ -748,9 +838,9 @@ elevCommentsFader.addEventListener('input', function(){
 /**
  * Callback when the azim slider changes
  */
-distCommentsFader.addEventListener('input', function(){
+sliderDistComments.addEventListener('input', function(){
 
-    var value = objectSpatialiserAndMixer.setCommentaryDistanceFromGui( distCommentsFader );
+    var value = objectSpatialiserAndMixer.setCommentaryDistanceFromGui( sliderDistComments );
     
     document.getElementById('label-dist-comments').textContent = 'dist = ' + value + ' m';    
 });
@@ -759,9 +849,9 @@ distCommentsFader.addEventListener('input', function(){
 /**
  * Callback when the azim slider changes
  */
-azimDialogFader.addEventListener('input', function(){
+sliderAzimDialog.addEventListener('input', function(){
 
-    var value = objectSpatialiserAndMixer.setDialogAzimuthFromGui( azimDialogFader );
+    var value = objectSpatialiserAndMixer.setDialogAzimuthFromGui( sliderAzimDialog );
     
     document.getElementById('label-azim-dialog').textContent = 'azim = ' + value;    
 });
@@ -770,9 +860,9 @@ azimDialogFader.addEventListener('input', function(){
 /**
  * Callback when the elev slider changes
  */
-elevDialogFader.addEventListener('input', function(){
+sliderElevDialog.addEventListener('input', function(){
 
-    var value = objectSpatialiserAndMixer.setDialogElevationFromGui( elevDialogFader );
+    var value = objectSpatialiserAndMixer.setDialogElevationFromGui( sliderElevDialog );
 
     document.getElementById('label-elev-dialog').textContent = 'elev = ' + value;    
 });
@@ -781,44 +871,44 @@ elevDialogFader.addEventListener('input', function(){
 /**
  * Callback when the elev slider changes
  */
-distDialogFader.addEventListener('input', function(){
+sliderDistDialog.addEventListener('input', function(){
 
-    var value = objectSpatialiserAndMixer.setDialogDistanceFromGui( distDialogFader );
+    var value = objectSpatialiserAndMixer.setDialogDistanceFromGui( sliderDistDialog );
 
     document.getElementById('label-dist-dialog').textContent = 'dist = ' + value + ' m';    
 });
 
 //==============================================================================
 /**
- * Callback when the compressionRatio slider changes
+ * Callback when the sliderSmartFaderRatio slider changes
  */
-compressionRatio.addEventListener('input', function(){
+sliderSmartFaderRatio.addEventListener('input', function(){
 
-    var value = smartFader.setCompressionRatioFromGui( compressionRatio );
+    var value = smartFader.setCompressionRatioFromGui( sliderSmartFaderRatio );
 
-    document.getElementById('label-compression-ratio').textContent = 'Compression ratio = ' + value + ':1';
+    document.getElementById('label-smart-fader-ratio').textContent = 'Compression ratio = ' + value + ':1';
 });
 
 //==============================================================================
 /**
- * Callback when the compressionRatio slider changes
+ * Callback when the sliderSmartFaderRatio slider changes
  */
-attackTime.addEventListener('input', function(){
+sliderSmartFaderAttack.addEventListener('input', function(){
 
-    var value = smartFader.setAttackTimeFromGui( attackTime );
+    var value = smartFader.setAttackTimeFromGui( sliderSmartFaderAttack );
 
-    document.getElementById('label-attack-time').textContent = 'Attack time = ' + Math.round(value).toString()  + ' ms';
+    document.getElementById('label-smart-fader-attack').textContent = 'Attack time = ' + Math.round(value).toString()  + ' ms';
 });
 
 //==============================================================================
 /**
- * Callback when the compressionRatio slider changes
+ * Callback when the sliderSmartFaderRatio slider changes
  */
-releaseTime.addEventListener('input', function(){
+sliderSmartFaderRelease.addEventListener('input', function(){
 
-    var value = smartFader.setReleaseTimeFromGui( releaseTime );
+    var value = smartFader.setReleaseTimeFromGui( sliderSmartFaderRelease );
 
-    document.getElementById('label-release-time').textContent = 'Release time = ' + Math.round(value).toString()  + ' ms';
+    document.getElementById('label-smart-fader-release').textContent = 'Release time = ' + Math.round(value).toString()  + ' ms';
 });
 
 //==============================================================================
@@ -827,30 +917,32 @@ setInterval(function(){
     var isCompressed = smartFader.dynamicCompressionState;
 
     if( isCompressed === true){
-        document.getElementById('label-compression').style.color = "rgba(255, 0, 0, 0.7)";
+        document.getElementById('label-smart-fader-compression').style.color = "rgba(255, 0, 0, 0.7)";
     }
     else{
-        document.getElementById('label-compression').style.color = "rgba(255, 255, 255, 0.7)";
+        document.getElementById('label-smart-fader-compression').style.color = "rgba(255, 255, 255, 0.7)";
     }
 }, 500);
 
 //==============================================================================
 var inputEvent = new Event('input');
-trimMain.dispatchEvent(inputEvent);
-trimAmbiance.dispatchEvent(inputEvent);
-trimComments.dispatchEvent(inputEvent);
-trimDialog.dispatchEvent(inputEvent);
-smartFaderDB.dispatchEvent(inputEvent);
-compressionRatio.dispatchEvent(inputEvent);
-attackTime.dispatchEvent(inputEvent);
-releaseTime.dispatchEvent(inputEvent);
-yawFader.dispatchEvent(inputEvent);
-azimCommentsFader.dispatchEvent(inputEvent);
-elevCommentsFader.dispatchEvent(inputEvent);
-distCommentsFader.dispatchEvent(inputEvent);
-azimDialogFader.dispatchEvent(inputEvent);
-elevDialogFader.dispatchEvent(inputEvent);
-distDialogFader.dispatchEvent(inputEvent);
-gainOffsetFader.dispatchEvent(inputEvent);
+sliderTrimMain.dispatchEvent(inputEvent);
+sliderTrimAmbiance.dispatchEvent(inputEvent);
+sliderTrimComments.dispatchEvent(inputEvent);
+sliderTrimDialog.dispatchEvent(inputEvent);
+sliderSmartFader.dispatchEvent(inputEvent);
+sliderReceiverMixN.dispatchEvent(inputEvent);
+sliderReceiverMixX.dispatchEvent(inputEvent);
+sliderSmartFaderRatio.dispatchEvent(inputEvent);
+sliderSmartFaderAttack.dispatchEvent(inputEvent);
+sliderSmartFaderRelease.dispatchEvent(inputEvent);
+sliderListenerYaw.dispatchEvent(inputEvent);
+sliderAzimComments.dispatchEvent(inputEvent);
+sliderElevComments.dispatchEvent(inputEvent);
+sliderDistComments.dispatchEvent(inputEvent);
+sliderAzimDialog.dispatchEvent(inputEvent);
+sliderElevDialog.dispatchEvent(inputEvent);
+sliderDistDialog.dispatchEvent(inputEvent);
+sliderGainOffset.dispatchEvent(inputEvent);
 
 
