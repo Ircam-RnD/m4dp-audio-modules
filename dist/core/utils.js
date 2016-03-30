@@ -3,9 +3,11 @@
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+exports.mean = mean;
 exports.clamp = clamp;
 exports.scale = scale;
 exports.lin2dB = lin2dB;
+exports.lin2dBsafe = lin2dBsafe;
 exports.dB2lin = dB2lin;
 exports.arrayAlmostEqual = arrayAlmostEqual;
 exports.deg2rad = deg2rad;
@@ -14,6 +16,7 @@ exports.modulo = modulo;
 exports.nav2trig = nav2trig;
 exports.trig2nav = trig2nav;
 exports.ms2sec = ms2sec;
+exports.sec2ms = sec2ms;
 /************************************************************************************/
 /*!
  *   @file       utils.js
@@ -23,6 +26,22 @@ exports.ms2sec = ms2sec;
  *
  */
 /************************************************************************************/
+
+function mean(array) {
+
+    if (array.length === 0) {
+        throw new Error("pas bon");
+    }
+
+    var total = 0;
+    for (var i = 0; i < array.length; i++) {
+        total += array[i];
+    }
+    var avg = total / array.length;
+
+    return avg;
+}
+
 /**
  * Clips a value within a given range
  * @type {number} value the value to be clipped
@@ -68,6 +87,15 @@ function lin2dB(value) {
 }
 
 /**
+ * linear gain to decibel conversion
+ *
+ */
+function lin2dBsafe(value) {
+
+    return 20 * Math.log10(Math.max(value, 1e-9));
+}
+
+/**
  * amplitude decibel to linear gain conversion
  *
  */
@@ -80,6 +108,7 @@ function dB2lin(value) {
  */
 function arrayAlmostEqual(array1, array2) {
     var tolerance = arguments.length <= 2 || arguments[2] === undefined ? 0 : arguments[2];
+
 
     if (tolerance < 0.0) {
         throw new Error("pas bon");
@@ -166,11 +195,17 @@ function ms2sec(ms) {
     return ms / 1000.;
 }
 
+function sec2ms(sec) {
+    return sec * 1000;
+}
+
 //==============================================================================
 var utilities = {
+    mean: mean,
     clamp: clamp,
     scale: scale,
     lin2dB: lin2dB,
+    lin2dBsafe: lin2dBsafe,
     dB2lin: dB2lin,
     deg2rad: deg2rad,
     rad2deg: rad2deg,
@@ -178,6 +213,7 @@ var utilities = {
     nav2trig: nav2trig,
     trig2nav: trig2nav,
     ms2sec: ms2sec,
+    sec2ms: sec2ms,
     arrayAlmostEqual: arrayAlmostEqual
 };
 

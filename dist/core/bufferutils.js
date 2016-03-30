@@ -26,6 +26,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function writeTextDataToFile(text) {
     var textFile = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
 
+
     var data = new Blob([text], { type: 'text/plain' });
 
     // If we are replacing a previously generated file we need to
@@ -144,6 +145,7 @@ function fillChannel(buffer) {
     var channelIndex = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
     var value = arguments.length <= 2 || arguments[2] === undefined ? 0.0 : arguments[2];
 
+
     var numChannels = buffer.numberOfChannels;
     var numSamples = buffer.length;
 
@@ -194,6 +196,7 @@ function clearBuffer(buffer) {
 function makeImpulse(buffer) {
     var channelIndex = arguments.length <= 1 || arguments[1] === undefined ? 0 : arguments[1];
     var sampleIndex = arguments.length <= 2 || arguments[2] === undefined ? 0 : arguments[2];
+
 
     var numChannels = buffer.numberOfChannels;
     var numSamples = buffer.length;

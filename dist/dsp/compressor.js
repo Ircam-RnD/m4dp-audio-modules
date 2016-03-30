@@ -1,14 +1,18 @@
-"use strict";
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+'use strict';
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _index = require("../core/index.js");
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _index = require('../core/index.js');
 
 var _index2 = _interopRequireDefault(_index);
+
+var _utils = require('../core/utils.js');
+
+var _utils2 = _interopRequireDefault(_utils);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -62,11 +66,15 @@ var MultichannelCompressorNode = function (_AbstractNode) {
         _this._splitterNode = undefined;
         _this._mergerNode = undefined;
         _this._isBypass = false;
+        _this._drywet = 100;
 
         /// sanity checks
         if (numChannels <= 0) {
             throw new Error("Pas bon");
         }
+
+        _this._gainDry = audioContext.createGain();
+        _this._gainWet = audioContext.createGain();
 
         _this._splitterNode = audioContext.createChannelSplitter(numChannels);
 
@@ -89,17 +97,18 @@ var MultichannelCompressorNode = function (_AbstractNode) {
         }
 
         _this._updateAudioGraph();
+
+        /// default it totally wet
+        _this.drywet = _this._drywet;
         return _this;
     }
 
     //==============================================================================
-    /**
-     * Enable or bypass the processor
-     * @type {boolean}
-     */
+
 
     _createClass(MultichannelCompressorNode, [{
-        key: "getNumChannels",
+        key: 'getNumChannels',
+
 
         //==============================================================================
         value: function getNumChannels() {
@@ -109,7 +118,7 @@ var MultichannelCompressorNode = function (_AbstractNode) {
         //==============================================================================
 
     }, {
-        key: "getCompressorOfFirstChannel",
+        key: 'getCompressorOfFirstChannel',
         value: function getCompressorOfFirstChannel() {
 
             if (this.getNumChannels() <= 0) {
@@ -122,7 +131,7 @@ var MultichannelCompressorNode = function (_AbstractNode) {
         //==============================================================================
 
     }, {
-        key: "getReductionForChannel",
+        key: 'getReductionForChannel',
         value: function getReductionForChannel(channelIndex) {
 
             /// representing the amount of gain reduction currently applied by the compressor to the signal.
@@ -139,7 +148,7 @@ var MultichannelCompressorNode = function (_AbstractNode) {
         //==============================================================================
 
     }, {
-        key: "getReduction",
+        key: 'getReduction',
         value: function getReduction() {
 
             /// returns the minimum reduction among all channels
@@ -158,9 +167,16 @@ var MultichannelCompressorNode = function (_AbstractNode) {
         }
 
         //==============================================================================
+        /**
+         * Returns the dynamic compression state (i.e. true if actually compressing)
+         * @type {boolean}
+         */
 
     }, {
-        key: "setThreshold",
+        key: 'setThreshold',
+
+
+        //==============================================================================
         value: function setThreshold(value) {
             /// the parameter is applied similarly to all channels
 
@@ -171,7 +187,7 @@ var MultichannelCompressorNode = function (_AbstractNode) {
             }
         }
     }, {
-        key: "getThreshold",
+        key: 'getThreshold',
         value: function getThreshold() {
             /// the parameter is the same for all channels
 
@@ -181,7 +197,10 @@ var MultichannelCompressorNode = function (_AbstractNode) {
         //==============================================================================
 
     }, {
-        key: "setRatio",
+        key: 'setRatio',
+
+
+        //==============================================================================
         value: function setRatio(value) {
             /// the parameter is applied similarly to all channels
 
@@ -192,7 +211,7 @@ var MultichannelCompressorNode = function (_AbstractNode) {
             }
         }
     }, {
-        key: "getRatio",
+        key: 'getRatio',
         value: function getRatio() {
             /// the parameter is the same for all channels
 
@@ -202,7 +221,10 @@ var MultichannelCompressorNode = function (_AbstractNode) {
         //==============================================================================
 
     }, {
-        key: "setAttack",
+        key: 'setAttack',
+
+
+        //==============================================================================
         value: function setAttack(value) {
             /// the parameter is applied similarly to all channels
 
@@ -213,7 +235,7 @@ var MultichannelCompressorNode = function (_AbstractNode) {
             }
         }
     }, {
-        key: "getAttack",
+        key: 'getAttack',
         value: function getAttack() {
             /// the parameter is the same for all channels
 
@@ -223,7 +245,10 @@ var MultichannelCompressorNode = function (_AbstractNode) {
         //==============================================================================
 
     }, {
-        key: "setRelease",
+        key: 'setRelease',
+
+
+        //==============================================================================
         value: function setRelease(value) {
             /// the parameter is applied similarly to all channels
 
@@ -234,7 +259,7 @@ var MultichannelCompressorNode = function (_AbstractNode) {
             }
         }
     }, {
-        key: "getRelease",
+        key: 'getRelease',
         value: function getRelease() {
             /// the parameter is the same for all channels
 
@@ -242,12 +267,15 @@ var MultichannelCompressorNode = function (_AbstractNode) {
         }
 
         //==============================================================================
+
+    }, {
+        key: '_updateAudioGraph',
+
+
+        //==============================================================================
         /**
          * Updates the connections of the audio graph
          */
-
-    }, {
-        key: "_updateAudioGraph",
         value: function _updateAudioGraph() {
 
             var numChannels = this.getNumChannels();
@@ -260,29 +288,66 @@ var MultichannelCompressorNode = function (_AbstractNode) {
                 this._compressorNodes[i].disconnect();
             }
 
+            this._gainWet.disconnect();
+            this._gainDry.disconnect();
+
             if (this.bypass === true || numChannels === 0) {
 
                 this._input.connect(this._output);
             } else {
 
-                /// split the input streams into N independent channels
+                /// split the input streams into N independent channels           
                 this._input.connect(this._splitterNode);
+                this._input.connect(this._gainDry);
 
                 /// connect a compressorNodes to each channel
-                for (var i = 0; i < numChannels; i++) {
-                    this._splitterNode.connect(this._compressorNodes[i], i);
+                for (var _i = 0; _i < numChannels; _i++) {
+                    this._splitterNode.connect(this._compressorNodes[_i], _i);
                 }
 
                 /// then merge the output of the N compressorNodes
-                for (var i = 0; i < numChannels; i++) {
-                    this._compressorNodes[i].connect(this._mergerNode, 0, i);
+                for (var _i2 = 0; _i2 < numChannels; _i2++) {
+                    this._compressorNodes[_i2].connect(this._mergerNode, 0, _i2);
                 }
 
-                this._mergerNode.connect(this._output);
+                this._mergerNode.connect(this._gainWet);
+
+                this._gainWet.connect(this._output);
+                this._gainDry.connect(this._output);
             }
+
+            /// update the drywet
+            this.drywet = this._drywet;
         }
     }, {
-        key: "bypass",
+        key: 'drywet',
+        set: function set(value) {
+
+            /// 100% --> totally wet
+            /// 0% --> totally dry
+
+            var percent = _utils2.default.clamp(value, 0, 100);
+
+            this._drywet = percent;
+
+            var wet = percent;
+            var dry = 100 - percent;
+
+            this._gainDry.gain.value = dry / 100.;
+            this._gainWet.gain.value = wet / 100.;
+        },
+        get: function get() {
+            return this._drywet;
+        }
+
+        //==============================================================================
+        /**
+         * Enable or bypass the processor
+         * @type {boolean}
+         */
+
+    }, {
+        key: 'bypass',
         set: function set(value) {
 
             if (value !== this._isBypass) {
@@ -297,6 +362,88 @@ var MultichannelCompressorNode = function (_AbstractNode) {
         ,
         get: function get() {
             return this._isBypass;
+        }
+    }, {
+        key: 'dynamicCompressionState',
+        get: function get() {
+
+            var reduction = this.getReduction();
+
+            var state = reduction < -0.5 ? true : false;
+
+            return state;
+        }
+    }], [{
+        key: 'minThreshold',
+        get: function get() {
+            /// minimum value of the WAA
+            return -100;
+        }
+    }, {
+        key: 'maxThreshold',
+        get: function get() {
+            /// maximum value of the WAA
+            return 0;
+        }
+    }, {
+        key: 'defaultThreshold',
+        get: function get() {
+            /// default value of the WAA
+            return -24;
+        }
+    }, {
+        key: 'minRatio',
+        get: function get() {
+            /// minimum value of the WAA
+            return 1;
+        }
+    }, {
+        key: 'maxRatio',
+        get: function get() {
+            /// maximum value of the WAA
+            return 20;
+        }
+    }, {
+        key: 'defaultRatio',
+        get: function get() {
+            /// default value of the WAA
+            return 12;
+        }
+    }, {
+        key: 'minAttack',
+        get: function get() {
+            /// minimum value of the WAA (in seconds)
+            return 0;
+        }
+    }, {
+        key: 'maxAttack',
+        get: function get() {
+            /// maximum value of the WAA (in seconds)
+            return 1;
+        }
+    }, {
+        key: 'defaultAttack',
+        get: function get() {
+            /// default value of the WAA (in seconds)
+            return 0.003;
+        }
+    }, {
+        key: 'minRelease',
+        get: function get() {
+            /// minimum value of the WAA (in seconds)
+            return 0;
+        }
+    }, {
+        key: 'maxRelease',
+        get: function get() {
+            /// maximum value of the WAA (in seconds)
+            return 1;
+        }
+    }, {
+        key: 'defaultRelease',
+        get: function get() {
+            /// default value of the WAA (in seconds)
+            return 0.25;
         }
     }]);
 

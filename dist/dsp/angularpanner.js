@@ -1,10 +1,10 @@
 'use strict';
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _index = require('../core/index.js');
 
@@ -70,8 +70,10 @@ var AngularPannerNode = function (_AbstractNode) {
   * @type {number} azimuth angle in degrees, expressed with spat4 navigation coordinates
   */
 
+
 	_createClass(AngularPannerNode, [{
 		key: '_computeGains',
+
 
 		//==============================================================================
 		/**
@@ -151,15 +153,15 @@ var AngularPannerNode = function (_AbstractNode) {
 				leftaz = _utils2.default.nav2trig(leftaz);
 				rightaz = _utils2.default.nav2trig(rightaz);
 
-				var azimuth = _utils2.default.nav2trig(az);
+				var _azimuth = _utils2.default.nav2trig(az);
 
-				var normangle = 1.57079632679 * (azimuth - leftaz) / (rightaz - leftaz);
+				var _normangle = 1.57079632679 * (_azimuth - leftaz) / (rightaz - leftaz);
 
 				/// gains for L R C Lfe Ls Rs
 				var gains = [0, 0, 0, 0, 0, 0];
 
-				gains[leftIndex] = Math.cos(normangle);
-				gains[rightIndex] = Math.sin(normangle);
+				gains[leftIndex] = Math.cos(_normangle);
+				gains[rightIndex] = Math.sin(_normangle);
 
 				return gains;
 			}

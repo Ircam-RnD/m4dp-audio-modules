@@ -1,10 +1,10 @@
 'use strict';
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _index = require('../multichannel-spatialiser/index.js');
 
@@ -29,6 +29,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
  *
  */
 /************************************************************************************/
+
 
 var ObjectSpatialiserAndMixer = function (_MultichannelSpatiali) {
     _inherits(ObjectSpatialiserAndMixer, _MultichannelSpatiali);
@@ -68,6 +69,7 @@ var ObjectSpatialiserAndMixer = function (_MultichannelSpatiali) {
      *
      * @details The values are expressed with Spat4 navigational coordinates
      */
+
 
     _createClass(ObjectSpatialiserAndMixer, [{
         key: 'setCommentaryPosition',
@@ -180,9 +182,9 @@ var ObjectSpatialiserAndMixer = function (_MultichannelSpatiali) {
         key: '_updateCommentaryPosition',
         value: function _updateCommentaryPosition() {
 
-            var sourceIndex = this._getSourceIndexForCommentary();
+            var channelIndex = this._getChannelIndexForExtendedCommentary();
 
-            if (sourceIndex >= 0) {
+            if (channelIndex >= 0) {
 
                 /// convert to SOFA spherical coordinate
                 var sofaAzim = -1. * this._CommentaryAzimuth;
@@ -192,14 +194,14 @@ var ObjectSpatialiserAndMixer = function (_MultichannelSpatiali) {
                 var sofaPos = [sofaAzim, sofaElev, sofaDist];
 
                 if (typeof this._virtualSpeakers._binauralPanner !== 'undefined') {
-                    this._virtualSpeakers._binauralPanner.setSourcePositionByIndex(sourceIndex, sofaPos);
+                    this._virtualSpeakers._binauralPanner.setSourcePositionByIndex(channelIndex, sofaPos);
                     this._virtualSpeakers._binauralPanner.update();
 
                     /// now, apply a simple gain to attenuate according to distance
                     var drop = ObjectSpatialiserAndMixer.distanceToDrop(this._CommentaryDistance);
                     var dropLin = _utils2.default.dB2lin(drop);
 
-                    this._virtualSpeakers.setGainForVirtualSource(sourceIndex, dropLin);
+                    this._virtualSpeakers.setGainForVirtualSource(channelIndex, dropLin);
                 }
             } else {
                 /// there is no commentary stream
@@ -215,53 +217,14 @@ var ObjectSpatialiserAndMixer = function (_MultichannelSpatiali) {
          */
 
     }, {
-        key: '_getSourceIndexForCommentary',
-        value: function _getSourceIndexForCommentary() {
+        key: '_getChannelIndexForExtendedCommentary',
+        value: function _getChannelIndexForExtendedCommentary() {
 
             /// retrieves the AudioStreamDescriptionCollection
             /// (mainAudio, extendedAmbience, extendedComments and extendedDialogs)
-            var asdc = this._audioStreamDescriptionCollection.streams;
+            var asdc = this._audioStreamDescriptionCollection;
 
-            var sourceIndex = 0;
-
-            /// go through all the streams
-            var _iteratorNormalCompletion = true;
-            var _didIteratorError = false;
-            var _iteratorError = undefined;
-
-            try {
-                for (var _iterator = asdc[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-                    var stream = _step.value;
-
-                    if (stream.commentary === true) {
-
-                        if (stream.type !== "Mono") {
-                            throw new Error("The commentary must be mono!");
-                        }
-
-                        return sourceIndex;
-                    } else {
-                        var numChannelsForThisStream = stream.numChannels;
-
-                        sourceIndex += numChannelsForThisStream;
-                    }
-                }
-            } catch (err) {
-                _didIteratorError = true;
-                _iteratorError = err;
-            } finally {
-                try {
-                    if (!_iteratorNormalCompletion && _iterator.return) {
-                        _iterator.return();
-                    }
-                } finally {
-                    if (_didIteratorError) {
-                        throw _iteratorError;
-                    }
-                }
-            }
-
-            return -1;
+            return asdc.channelIndexForExtendedCommentary;
         }
 
         //==============================================================================
@@ -385,9 +348,9 @@ var ObjectSpatialiserAndMixer = function (_MultichannelSpatiali) {
         key: '_updateDialogPosition',
         value: function _updateDialogPosition() {
 
-            var sourceIndex = this._getSourceIndexForDialog();
+            var channelIndex = this._getChannelIndexForExtendedDialog();
 
-            if (sourceIndex >= 0) {
+            if (channelIndex >= 0) {
 
                 /// convert to SOFA spherical coordinate
                 var sofaAzim = -1. * this._DialogAzimuth;
@@ -397,14 +360,14 @@ var ObjectSpatialiserAndMixer = function (_MultichannelSpatiali) {
                 var sofaPos = [sofaAzim, sofaElev, sofaDist];
 
                 if (typeof this._virtualSpeakers._binauralPanner !== 'undefined') {
-                    this._virtualSpeakers._binauralPanner.setSourcePositionByIndex(sourceIndex, sofaPos);
+                    this._virtualSpeakers._binauralPanner.setSourcePositionByIndex(channelIndex, sofaPos);
                     this._virtualSpeakers._binauralPanner.update();
 
                     /// now, apply a simple gain to attenuate according to distance
                     var drop = ObjectSpatialiserAndMixer.distanceToDrop(this._DialogDistance);
                     var dropLin = _utils2.default.dB2lin(drop);
 
-                    this._virtualSpeakers.setGainForVirtualSource(sourceIndex, dropLin);
+                    this._virtualSpeakers.setGainForVirtualSource(channelIndex, dropLin);
                 }
             } else {
                 /// there is no dialog stream
@@ -420,48 +383,14 @@ var ObjectSpatialiserAndMixer = function (_MultichannelSpatiali) {
          */
 
     }, {
-        key: '_getSourceIndexForDialog',
-        value: function _getSourceIndexForDialog() {
+        key: '_getChannelIndexForExtendedDialog',
+        value: function _getChannelIndexForExtendedDialog() {
 
             /// retrieves the AudioStreamDescriptionCollection
             /// (mainAudio, extendedAmbience, extendedComments and extendedDialogs)
-            var asdc = this._audioStreamDescriptionCollection.streams;
+            var asdc = this._audioStreamDescriptionCollection;
 
-            var sourceIndex = 0;
-
-            /// go through all the streams
-            var _iteratorNormalCompletion2 = true;
-            var _didIteratorError2 = false;
-            var _iteratorError2 = undefined;
-
-            try {
-                for (var _iterator2 = asdc[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-                    var stream = _step2.value;
-
-                    if (stream.dialog === true && stream.type === "Mono") {
-                        return sourceIndex;
-                    } else {
-                        var numChannelsForThisStream = stream.numChannels;
-
-                        sourceIndex += numChannelsForThisStream;
-                    }
-                }
-            } catch (err) {
-                _didIteratorError2 = true;
-                _iteratorError2 = err;
-            } finally {
-                try {
-                    if (!_iteratorNormalCompletion2 && _iterator2.return) {
-                        _iterator2.return();
-                    }
-                } finally {
-                    if (_didIteratorError2) {
-                        throw _iteratorError2;
-                    }
-                }
-            }
-
-            return -1;
+            return asdc.channelIndexForExtendedDialog;
         }
 
         /**
@@ -471,6 +400,7 @@ var ObjectSpatialiserAndMixer = function (_MultichannelSpatiali) {
 
     }, {
         key: '_process',
+
 
         //==============================================================================
         /**

@@ -19,40 +19,28 @@ var dumpObject = function(obj) {
     }
 };
 
-function prepareMediaPlayer( dashContext ){
-    var player = new MediaPlayer( dashContext );
-    player.startup();
-    player.setAutoPlay(false);
-    player.attachView(videoPlayerMainMediaElement);
-    player.getDebug().setLogToBrowserConsole(false);
 
-    return player;
-}
-
-
-//==============================================================================
 /// player pour la video principale
-var videoPlayerMainMediaElement           = document.getElementById('videoPlayerMain');
+videoPlayerMainMediaElement           = document.getElementById('videoPlayerMain');
 /// player pour la video LSF (langue des signes)
-var videoPlayerPipMediaElement            = document.getElementById('videoPlayerPip');
+videoPlayerPipMediaElement            = document.getElementById('videoPlayerPip');
 /// player pour l'audio 5.1
-var playerAudioFiveDotOneMediaElement     = document.getElementById('playerAudioFiveDotOne');
+playerAudioFiveDotOneMediaElement     = document.getElementById('playerAudioFiveDotOne');
 /// player pour l'audio description
-var playerAudioDescriptionMediaElement    = document.getElementById('playerAudioDescription');
+playerAudioDescriptionMediaElement    = document.getElementById('playerAudioDescription');
 /// player pour les dialgoues
-var playerDialogueMediaElement            = document.getElementById('playerDialogue');
+playerDialogueMediaElement            = document.getElementById('playerDialogue');
 
 
 var context = new Dash.di.DashContext();
 
-//==============================================================================
 /*
 /// les premières URLs fournies par DotScreen
 var urlMain = "http://medias2.francetv.fr/innovation/media4D/m4dp-set1-LMDJ/manifest.mpd";
 var urlPip = "http://medias2.francetv.fr/innovation/media4D/m4dp-set1-LMDJ/manifest-lsf.mpd";
 var urlAudio = "http://medias2.francetv.fr/innovation/media4D/m4dp-set1-LMDJ/manifest-ad.mpd";
 */
-
+                                  
 var dashUrlAudioPrincipale     = 'http://videos-pmd.francetv.fr/innovation/media4D/m4d-LMDJ-ondemand-3lsf/manifest.mpd';
 var dashUrlAudioDescription    = 'http://videos-pmd.francetv.fr/innovation/media4D/m4d-LMDJ-ondemand-3lsf/manifest-ad.mpd';
 var dashUrlFiveDotOne          = 'http://videos-pmd.francetv.fr/innovation/media4D/m4d-LMDJ-ondemand-3lsf/manifest-ea3.mpd'; /// L R C LFE Ls Rs ?
@@ -66,47 +54,39 @@ var urlAudioDescription    = dashUrlAudioDescription;
 var urlDialogue            = dashUrlDial;
 
 //==============================================================================
-var playerMain              = prepareMediaPlayer( context );
-var playerPip               = prepareMediaPlayer( context );
-var playerAudioFiveDotOne   = prepareMediaPlayer( context );
-var playerAudioDescription  = prepareMediaPlayer( context );
-var playerDialogue          = prepareMediaPlayer( context );
-
-/*
-var playerMain = new MediaPlayer( context );
+var playerMain = new MediaPlayer(context);
 playerMain.startup();
 playerMain.setAutoPlay(false);
 playerMain.attachView(videoPlayerMainMediaElement);
 playerMain.getDebug().setLogToBrowserConsole(false);
 
-var playerPip = new MediaPlayer( context );
+var playerPip = new MediaPlayer(context);
 playerPip.startup();
 playerPip.setAutoPlay(false);
-playerPip.attachView(videoPlayerMainMediaElement);
+playerPip.attachView(videoPlayerPipMediaElement);
 playerPip.getDebug().setLogToBrowserConsole(false);
 
-var playerAudioFiveDotOne = new MediaPlayer( context );
+var playerAudioFiveDotOne = new MediaPlayer(context);
 playerAudioFiveDotOne.startup();
 playerAudioFiveDotOne.setAutoPlay(false);
-playerAudioFiveDotOne.attachView(videoPlayerMainMediaElement);
+playerAudioFiveDotOne.attachView(playerAudioFiveDotOneMediaElement);
 playerAudioFiveDotOne.getDebug().setLogToBrowserConsole(false);
 
-var playerAudioDescription = new MediaPlayer( context );
+var playerAudioDescription = new MediaPlayer(context);
 playerAudioDescription.startup();
 playerAudioDescription.setAutoPlay(false);
-playerAudioDescription.attachView(videoPlayerMainMediaElement);
+playerAudioDescription.attachView(playerAudioDescriptionMediaElement);
 playerAudioDescription.getDebug().setLogToBrowserConsole(false);
 
-var playerDialogue = new MediaPlayer( context );
+var playerDialogue = new MediaPlayer(context);
 playerDialogue.startup();
 playerDialogue.setAutoPlay(false);
-playerDialogue.attachView(videoPlayerMainMediaElement);
+playerDialogue.attachView(playerDialogueMediaElement);
 playerDialogue.getDebug().setLogToBrowserConsole(false);
-*/
-
-//dumpObject( playerMain );
 
 var controller = new MediaController();
+
+//dumpObject( playerMain );
 
 videoPlayerMainMediaElement.controller           = controller;
 videoPlayerPipMediaElement.controller            = controller;
@@ -208,13 +188,13 @@ var ModulesConfiguration =
 
 var config = ModulesConfiguration.kMultichannelSpatialiser;
 
-var streamSelector  = new M4DPAudioModules.StreamSelector( audioContext, asdc );
-var smartFader      = new M4DPAudioModules.SmartFader( audioContext, asdc );
-var receiverMix     = new M4DPAudioModules.ReceiverMix( audioContext, asdc );
+var streamSelector              = new M4DPAudioModules.StreamSelector( audioContext, asdc );
+var smartFader                  = new M4DPAudioModules.SmartFader( audioContext, asdc );
+var dialogEnhancement           = new M4DPAudioModules.DialogEnhancement( audioContext, asdc );
+var receiverMix                 = new M4DPAudioModules.ReceiverMix( audioContext, asdc );
 //var noiseAdaptation = new M4DPAudioModules.NoiseAdaptation(audioContext);
-//var dialogEnhancement = new M4DPAudioModules.DialogEnhancement(audioContext);    
-var multichannelSpatialiser = new M4DPAudioModules.MultichannelSpatialiser( audioContext, asdc, 'binaural' );
-var objectSpatialiserAndMixer = new M4DPAudioModules.ObjectSpatialiserAndMixer( audioContext, asdc, 'binaural' );
+var multichannelSpatialiser     = new M4DPAudioModules.MultichannelSpatialiser( audioContext, asdc, 'binaural' );
+var objectSpatialiserAndMixer   = new M4DPAudioModules.ObjectSpatialiserAndMixer( audioContext, asdc, 'binaural' );
 
 //==============================================================================    
 {
@@ -295,6 +275,10 @@ var sliderTrimComments = document.getElementById('slider-trim-comments');
 var sliderTrimDialog = document.getElementById('slider-trim-dialog');
 var sliderReceiverMixN = document.getElementById('slider-receiver-mix-N');
 var sliderReceiverMixX = document.getElementById('slider-receiver-mix-X');
+var sliderReceiverMixRatio = document.getElementById('slider-receiver-mix-ratio');
+var sliderReceiverMixThreshold = document.getElementById('slider-receiver-mix-threshold');
+var sliderReceiverMixAttack = document.getElementById('slider-receiver-mix-attack');
+var sliderReceiverMixRelease = document.getElementById('slider-receiver-mix-release');
 
 //==============================================================================
 // initialize the GUI stuffs
@@ -306,6 +290,7 @@ initializeDropDownMenus();
 function updateWAAConnections(){
     
     smartFader.disconnect();
+    dialogEnhancement.disconnect();
     receiverMix.disconnect();
     multichannelSpatialiser.disconnect();
     objectSpatialiserAndMixer.disconnect();
@@ -322,12 +307,16 @@ function updateWAAConnections(){
         throw new Error( "Invalid configuration" );
     }
     
-    smartFader.connect( processor._input );
+    smartFader.connect( dialogEnhancement._input );
+
+    dialogEnhancement.connect( receiverMix._input );
+
+    receiverMix.connect( processor._input );
 
     /// apply the multichannel spatialiser
     processor.connect( audioContext.destination );
 
-    var $hrtfSet = document.querySelector('#hrtf-selector');
+    var $hrtfSet = document.querySelector('#hrtf-selection-menu');
     if( $hrtfSet.onchange != null ){
         $hrtfSet.onchange();
     }
@@ -345,7 +334,7 @@ function setElementVisibility( elementId, visibility ){
 }
 
 //==============================================================================
-function prepareModeSelectionMenu(){
+function prepareSpatializationModeMenu(){
     var $menu = document.querySelector('#spatialisation-mode-menu');
 
     $menu.onchange = function ()
@@ -375,7 +364,7 @@ function prepareModeSelectionMenu(){
         setElementVisibility('label-listener-yaw', visibility);
         setElementVisibility('slider-gain-offset', visibility);
         setElementVisibility('label-gain-offset', visibility);
-        setElementVisibility('hrtf-selector', visibility);
+        setElementVisibility('hrtf-selection-menu', visibility);
 
 
         multichannelSpatialiser.outputType   = selection;
@@ -399,9 +388,38 @@ function prepareModeSelectionMenu(){
 }
 
 //==============================================================================
-function prepareConfiguration(){
+function prepareDialogEnhancementMenu(){
+    
+    var $menu = document.querySelector('#dialog-enhancement-menu');
+    
+    $menu.onchange = function ()
+    {
+        /// retrieve selected mode
+        var selection = $menu.value;
+
+        dialogEnhancement.setModeFromString( selection );
+    }
+
+    $option = document.createElement('option');
+    $option.textContent = 'Mode 1';
+    $menu.add($option);
+
+    $option = document.createElement('option');
+    $option.textContent = 'Mode 2';
+    $menu.add($option);
+    
+    $option = document.createElement('option');
+    $option.textContent = 'Mode 3';
+    $menu.add($option);
+
+    $menu.value = 'Mode 1';
+    $menu.onchange();
+}
+
+//==============================================================================
+function prepareModulesConfigurationMenu(){
     // configuration set selection menu
-    var $menu = document.querySelector('#configuration-selector');
+    var $menu = document.querySelector('#modules-configuration-menu');
 
     $menu.onchange = function ()
     {
@@ -450,10 +468,10 @@ function prepareConfiguration(){
 }
 
 //==============================================================================
-function prepareSofaCatalog(){
+function prepareHrtfSelectionMenu(){
     
     // HRTF set selection menu
-    var $hrtfSet = document.querySelector('#hrtf-selector');
+    var $hrtfSet = document.querySelector('#hrtf-selection-menu');
     $hrtfSet.onchange = function ()
     {
         /// sets the color to red while loading
@@ -545,6 +563,7 @@ function updateActiveStreams(){
     /// notify the modification of active streams
     streamSelector.activeStreamsChanged();
     smartFader.activeStreamsChanged();
+    dialogEnhancement.activeStreamsChanged();
     receiverMix.activeStreamsChanged();
     multichannelSpatialiser.activeStreamsChanged();
     objectSpatialiserAndMixer.activeStreamsChanged();
@@ -575,6 +594,17 @@ function onCheckSmartFaderBypass(){
         smartFader.bypass = true;
     } else {
         smartFader.bypass = false;
+    }
+}
+
+function onCheckDialogEnhancementBypass(){
+
+    var checkbox = document.getElementById('checkbox-dialog-enhancement-bypass');
+
+    if (checkbox.checked) {
+        dialogEnhancement.bypass = true;
+    } else {
+        dialogEnhancement.bypass = false;
     }
 }
 
@@ -637,11 +667,14 @@ function onCheckEqualization() {
     //console.debug("######### onCheckEqualization: "+checkboxHeadphonesEqualization.checked);
     
     multichannelSpatialiser.eqPreset = "eq1";
+    objectSpatialiserAndMixer.eqPreset = "eq1";
 
     if (checkboxHeadphonesEqualization.checked) {
         multichannelSpatialiser.bypassHeadphoneEqualization( false );
+        objectSpatialiserAndMixer.bypassHeadphoneEqualization( false );
     } else {
         multichannelSpatialiser.bypassHeadphoneEqualization( true );
+        objectSpatialiserAndMixer.bypassHeadphoneEqualization( true );
     }
 }
 
@@ -663,12 +696,14 @@ function onCheckLSF() {
 //==============================================================================
 function initializeDropDownMenus(){
 
-    prepareConfiguration();
+    prepareModulesConfigurationMenu();
+
+    prepareDialogEnhancementMenu();
 
     /// prepare the sofa catalog of HRTF
-    prepareSofaCatalog();
+    prepareHrtfSelectionMenu();
 
-    prepareModeSelectionMenu();
+    prepareSpatializationModeMenu();
 }
 
 //==============================================================================
@@ -698,6 +733,11 @@ function initializeSliders(){
     sliderSmartFaderAttack.value    = smartFader.getAttackTimeForGui( sliderSmartFaderAttack );
     sliderSmartFaderRelease.value   = smartFader.getReleaseTimeForGui( sliderSmartFaderRelease );
 
+    sliderReceiverMixRatio.value    = receiverMix.getCompressionRatioForGui( sliderReceiverMixRatio );
+    sliderReceiverMixThreshold.value    = receiverMix.getCompressorThresholdForGui( sliderReceiverMixThreshold );
+    sliderReceiverMixAttack.value   = receiverMix.getAttackTimeForGui( sliderReceiverMixAttack );
+    sliderReceiverMixRelease.value  = receiverMix.getReleaseTimeForGui( sliderReceiverMixRelease );
+
     sliderTrimMain.value        = 0;
     sliderTrimAmbiance.value    = 0;
     sliderTrimComments.value    = 0;
@@ -723,14 +763,14 @@ sliderReceiverMixN.addEventListener('input', function(){
 
     var value = receiverMix.setThresholdForCommentaryFromGui( sliderReceiverMixN );
 
-    document.getElementById('label-receiver-mix-N').textContent = 'N = ' + Math.round(value).toString() + ' dB (gate for comments)';
+    document.getElementById('label-receiver-mix-N').textContent = 'N = ' + Math.round(value).toFixed(1) + ' dB (gate for comments)';
 });
 
 sliderReceiverMixX.addEventListener('input', function(){
 
     var value = receiverMix.setThresholdForProgrammeFromGui( sliderReceiverMixX );
 
-    document.getElementById('label-receiver-mix-X').textContent = 'X = ' + Math.round(value).toString() + ' dB (gate for program)';
+    document.getElementById('label-receiver-mix-X').textContent = 'X = ' + Math.round(value).toFixed(1) + ' dB (gate for program)';
 });
 
 //==============================================================================
@@ -743,7 +783,7 @@ sliderTrimMain.addEventListener('input', function(){
 
     updateStreamsTrim();
 
-    document.getElementById('label-trim-main').textContent = 'Main Audio = ' + Math.round(value).toString() + ' dB';
+    document.getElementById('label-trim-main').textContent = 'Main Audio = ' + Math.round(value).toFixed(1) + ' dB';
 });
 
 sliderTrimAmbiance.addEventListener('input', function(){
@@ -752,7 +792,7 @@ sliderTrimAmbiance.addEventListener('input', function(){
 
     updateStreamsTrim();
 
-    document.getElementById('label-trim-ambiance').textContent = 'Extended ambiance = ' + Math.round(value).toString() + ' dB';
+    document.getElementById('label-trim-ambiance').textContent = 'Extended ambiance = ' + Math.round(value).toFixed(1) + ' dB';
 });
 
 sliderTrimComments.addEventListener('input', function(){
@@ -761,7 +801,7 @@ sliderTrimComments.addEventListener('input', function(){
 
     updateStreamsTrim();
 
-    document.getElementById('label-trim-comments').textContent = 'Extended comments = ' + Math.round(value).toString() + ' dB';
+    document.getElementById('label-trim-comments').textContent = 'Extended comments = ' + Math.round(value).toFixed(1) + ' dB';
 });
 
 sliderTrimDialog.addEventListener('input', function(){
@@ -770,7 +810,7 @@ sliderTrimDialog.addEventListener('input', function(){
 
     updateStreamsTrim();
 
-    document.getElementById('label-trim-dialog').textContent = 'Extended dialog = ' + Math.round(value).toString() + ' dB';
+    document.getElementById('label-trim-dialog').textContent = 'Extended dialog = ' + Math.round(value).toFixed(1) + ' dB';
 });
 
 //==============================================================================
@@ -781,7 +821,7 @@ sliderSmartFader.addEventListener('input', function(){
 
     var value = smartFader.setdBFromGui( sliderSmartFader );
 
-    document.getElementById('label-smart-fader').textContent = 'Smart Fader = ' + Math.round(value).toString() + ' dB';
+    document.getElementById('label-smart-fader').textContent = 'Smart Fader = ' + Math.round(value).toFixed(1) + ' dB';
 });
 
 //==============================================================================
@@ -790,7 +830,7 @@ sliderGainOffset.addEventListener('input', function(){
     var value = parseFloat( sliderGainOffset.value );
     /// this is in [-12 12] range
 
-    document.getElementById('label-gain-offset').textContent = 'Gain Offset = ' + Math.round(value).toString() + ' dB';
+    document.getElementById('label-gain-offset').textContent = 'Gain Offset = ' + Math.round(value).toFixed(1) + ' dB';
 
     /// un gain d’offset afin de maintenir un niveau subjectif apres l’enclenchement du process de spatialisation
 
@@ -842,7 +882,7 @@ sliderDistComments.addEventListener('input', function(){
 
     var value = objectSpatialiserAndMixer.setCommentaryDistanceFromGui( sliderDistComments );
     
-    document.getElementById('label-dist-comments').textContent = 'dist = ' + value + ' m';    
+    document.getElementById('label-dist-comments').textContent = 'dist = ' + value.toFixed(2) + ' m';    
 });
 
 //==============================================================================
@@ -875,7 +915,7 @@ sliderDistDialog.addEventListener('input', function(){
 
     var value = objectSpatialiserAndMixer.setDialogDistanceFromGui( sliderDistDialog );
 
-    document.getElementById('label-dist-dialog').textContent = 'dist = ' + value + ' m';    
+    document.getElementById('label-dist-dialog').textContent = 'dist = ' + value.toFixed(2) + ' m';    
 });
 
 //==============================================================================
@@ -912,6 +952,51 @@ sliderSmartFaderRelease.addEventListener('input', function(){
 });
 
 //==============================================================================
+/**
+ * Callback when the sliderSmartFaderRatio slider changes
+ */
+sliderReceiverMixRatio.addEventListener('input', function(){
+
+    var value = receiverMix.setCompressionRatioFromGui( sliderReceiverMixRatio );
+
+    document.getElementById('label-receiver-mix-ratio').textContent = 'Compression ratio = ' + value + ':1';
+});
+
+//==============================================================================
+/**
+ * Callback when the sliderSmartFaderRatio slider changes
+ */
+sliderReceiverMixThreshold.addEventListener('input', function(){
+
+    var value = receiverMix.setCompressorThresholdFromGui( sliderReceiverMixThreshold );
+
+    document.getElementById('label-receiver-mix-threshold').textContent = 'Compression threshold = ' + value.toFixed(1) + ' dB';
+});
+
+//==============================================================================
+/**
+ * Callback when the sliderSmartFaderRatio slider changes
+ */
+sliderReceiverMixAttack.addEventListener('input', function(){
+
+    var value = receiverMix.setAttackTimeFromGui( sliderReceiverMixAttack );
+
+    document.getElementById('label-receiver-mix-attack').textContent = 'Attack time = ' + Math.round(value).toString()  + ' ms';
+});
+
+//==============================================================================
+/**
+ * Callback when the sliderSmartFaderRatio slider changes
+ */
+sliderReceiverMixRelease.addEventListener('input', function(){
+
+    var value = receiverMix.setReleaseTimeFromGui( sliderReceiverMixRelease );
+
+    document.getElementById('label-receiver-mix-release').textContent = 'Release time = ' + Math.round(value).toString()  + ' ms';
+});
+
+
+//==============================================================================
 /// Refresh the dynamic compression state every 500 msec
 setInterval(function(){
     var isCompressed = smartFader.dynamicCompressionState;
@@ -922,7 +1007,24 @@ setInterval(function(){
     else{
         document.getElementById('label-smart-fader-compression').style.color = "rgba(255, 255, 255, 0.7)";
     }
-}, 500);
+
+    var rmsCommentary = receiverMix.getRmsForCommentaryAsString();
+    document.getElementById('label-receiver-mix-commentary-rms').textContent = rmsCommentary;
+
+    var rmsProgram = receiverMix.getRmsForProgramAsString();
+    document.getElementById('label-receiver-mix-program-rms').textContent = rmsProgram;    
+
+    var receiverMixCompression = receiverMix.dynamicCompressionState;
+
+    document.getElementById('label-receiver-mix-compression').textContent = "Compression";
+    if( receiverMixCompression === true){
+        document.getElementById('label-receiver-mix-compression').style.color = "rgba(255, 0, 0, 0.7)";
+    }
+    else{        
+        document.getElementById('label-receiver-mix-compression').style.color = "rgba(255, 255, 255, 0.7)";
+    }     
+
+}, 200);
 
 //==============================================================================
 var inputEvent = new Event('input');
@@ -933,6 +1035,10 @@ sliderTrimDialog.dispatchEvent(inputEvent);
 sliderSmartFader.dispatchEvent(inputEvent);
 sliderReceiverMixN.dispatchEvent(inputEvent);
 sliderReceiverMixX.dispatchEvent(inputEvent);
+sliderReceiverMixRatio.dispatchEvent(inputEvent);
+sliderReceiverMixThreshold.dispatchEvent(inputEvent);
+sliderReceiverMixAttack.dispatchEvent(inputEvent);
+sliderReceiverMixRelease.dispatchEvent(inputEvent);
 sliderSmartFaderRatio.dispatchEvent(inputEvent);
 sliderSmartFaderAttack.dispatchEvent(inputEvent);
 sliderSmartFaderRelease.dispatchEvent(inputEvent);

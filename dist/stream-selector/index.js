@@ -1,10 +1,10 @@
 'use strict';
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _index = require('../core/index.js');
 
@@ -13,6 +13,10 @@ var _index2 = _interopRequireDefault(_index);
 var _utils = require('../core/utils.js');
 
 var _utils2 = _interopRequireDefault(_utils);
+
+var _multichannelgain = require('../dsp/multichannelgain.js');
+
+var _multichannelgain2 = _interopRequireDefault(_multichannelgain);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -47,10 +51,7 @@ var StreamSelector = function (_AbstractNode) {
 
         var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(StreamSelector).call(this, audioContext, audioStreamDescriptionCollection));
 
-        _this._splitterNode = undefined;
-        _this._mergerNode = undefined;
-        _this._gainNode = [];
-        _this._isBypass = false;
+        _this._gainsNode = 'undefined';
 
         /// the total number of incoming channels, including all the streams
         /// (mainAudio, extendedAmbience, extendedComments and extendedDialogs)
@@ -62,31 +63,14 @@ var StreamSelector = function (_AbstractNode) {
             throw new Error("Ca parait pas bon...");
         }
 
-        _this._splitterNode = audioContext.createChannelSplitter(totalNumberOfChannels_);
-
-        _this._mergerNode = audioContext.createChannelMerger(totalNumberOfChannels_);
-
-        /// sanity checks
-        if (_this._splitterNode.numberOfInputs != 1 || _this._splitterNode.numberOfOutputs != totalNumberOfChannels_) {
-            throw new Error("Pas bon");
-        }
-
-        /// sanity checks
-        if (_this._mergerNode.numberOfInputs != totalNumberOfChannels_ || _this._mergerNode.numberOfOutputs != 1) {
-            throw new Error("Pas bon");
-        }
-
-        /// create N gainNodes
-        for (var i = 0; i < totalNumberOfChannels_; i++) {
-            var newGainNode = audioContext.createGain();
-            _this._gainNode.push(newGainNode);
-        }
+        _this._gainsNode = new _multichannelgain2.default(audioContext, totalNumberOfChannels_);
 
         _this._updateAudioGraph();
         return _this;
     }
 
     //==============================================================================
+
 
     _createClass(StreamSelector, [{
         key: 'getTotalNumberOfChannels',
@@ -102,6 +86,7 @@ var StreamSelector = function (_AbstractNode) {
 
     }, {
         key: 'activeStreamsChanged',
+
 
         //==============================================================================
         /**
@@ -142,6 +127,7 @@ var StreamSelector = function (_AbstractNode) {
                 for (var _iterator = asdc[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
                     var stream = _step.value;
 
+
                     var isActive = stream.active;
 
                     /// linear gain value
@@ -156,11 +142,11 @@ var StreamSelector = function (_AbstractNode) {
 
                     for (var i = 0; i < numChannelsForThisStream; i++) {
 
-                        if (channelIndex >= this._gainNode.length) {
+                        if (channelIndex >= this._gainsNode.getNumChannels()) {
                             throw new Error("Y'a un bug qq part...");
                         }
 
-                        this._gainNode[channelIndex].gain.value = overallGain;
+                        this._gainsNode.setGain(channelIndex, overallGain);
 
                         channelIndex++;
                     }
@@ -190,43 +176,17 @@ var StreamSelector = function (_AbstractNode) {
         key: '_updateAudioGraph',
         value: function _updateAudioGraph() {
 
-            var totalNumberOfChannels_ = this.getTotalNumberOfChannels();
-
             /// first of all, disconnect everything
             this._input.disconnect();
-            this._splitterNode.disconnect();
-            for (var i = 0; i < totalNumberOfChannels_; i++) {
-                this._gainNode[i].disconnect();
-            }
-            this._mergerNode.disconnect();
+            this._gainsNode.disconnect();
 
-            if (this.bypass === true || totalNumberOfChannels_ === 0) {
-                this._input.connect(this._output);
-            } else {
-                /// split the input streams into N independent channels
-                this._input.connect(this._splitterNode);
-
-                /// connect a gainNode to each channel
-                for (var i = 0; i < totalNumberOfChannels_; i++) {
-                    this._splitterNode.connect(this._gainNode[i], i);
-                }
-
-                /// then merge the output of the N gainNodes
-                for (var i = 0; i < totalNumberOfChannels_; i++) {
-                    this._gainNode[i].connect(this._mergerNode, 0, i);
-                }
-
-                this._mergerNode.connect(this._output);
-            }
+            this._input.connect(this._gainsNode._input);
+            this._gainsNode.connect(this._output);
         }
     }, {
         key: 'bypass',
         set: function set(value) {
-
-            if (value !== this._isBypass) {
-                this._isBypass = value;
-                this._updateAudioGraph();
-            }
+            this._gainsNode.bypass = value;
         }
 
         /**
@@ -234,7 +194,7 @@ var StreamSelector = function (_AbstractNode) {
          */
         ,
         get: function get() {
-            return this._isBypass;
+            return this._gainsNode.bypass;
         }
     }]);
 

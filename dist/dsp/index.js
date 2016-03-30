@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
-exports.VirtualSpeakersNode = exports.TransauralShufflerNode = exports.TransauralFeedforwardNode = exports.TransauralNode = exports.SumDiffNode = exports.HeadphonesEqualization = exports.AnalysisNode = exports.CascadeNode = undefined;
+exports.MultichannelGainNode = exports.VirtualSpeakersNode = exports.TransauralShufflerNode = exports.TransauralFeedforwardNode = exports.TransauralNode = exports.SumDiffNode = exports.HeadphonesEqualization = exports.AnalysisNode = exports.CascadeNode = undefined;
 
 var _cascade = require('./cascade.js');
 
@@ -27,17 +27,11 @@ var _virtualspeakers = require('./virtualspeakers.js');
 
 var _virtualspeakers2 = _interopRequireDefault(_virtualspeakers);
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var _multichannelgain = require('./multichannelgain.js');
 
-/************************************************************************************/
-/*!
- *   @file       index.js
- *   @brief      Exports the dsp modules
- *   @author     Thibaut Carpentier
- *   @date       01/2016
- *
- */
-/************************************************************************************/
+var _multichannelgain2 = _interopRequireDefault(_multichannelgain);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.CascadeNode = _cascade2.default;
 exports.AnalysisNode = _analysis2.default;
@@ -47,3 +41,12 @@ exports.TransauralNode = _transaural.TransauralNode;
 exports.TransauralFeedforwardNode = _transaural.TransauralFeedforwardNode;
 exports.TransauralShufflerNode = _transaural.TransauralShufflerNode;
 exports.VirtualSpeakersNode = _virtualspeakers2.default;
+exports.MultichannelGainNode = _multichannelgain2.default; /************************************************************************************/
+/*!
+ *   @file       index.js
+ *   @brief      Exports the dsp modules
+ *   @author     Thibaut Carpentier
+ *   @date       01/2016
+ *
+ */
+/************************************************************************************/

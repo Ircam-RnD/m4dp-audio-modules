@@ -1,12 +1,12 @@
 'use strict';
 
-var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _index = require('../core/index.js');
 
@@ -35,6 +35,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
  *
  */
 /************************************************************************************/
+
 
 var SmartFader = function (_AbstractNode) {
     _inherits(SmartFader, _AbstractNode);
@@ -85,8 +86,10 @@ var SmartFader = function (_AbstractNode) {
      * @type {boolean}
      */
 
+
     _createClass(SmartFader, [{
         key: 'setdBFromGui',
+
 
         //==============================================================================
         /**
@@ -139,6 +142,7 @@ var SmartFader = function (_AbstractNode) {
             var minValue = _SmartFader$dBRange2[0];
             var maxValue = _SmartFader$dBRange2[1];
 
+
             var actualValue = this.dB;
 
             /// scale from DSP to GUI
@@ -156,6 +160,7 @@ var SmartFader = function (_AbstractNode) {
     }, {
         key: 'activeStreamsChanged',
 
+
         /**
          * Notification when the active stream(s) changes
          */
@@ -171,6 +176,7 @@ var SmartFader = function (_AbstractNode) {
 
     }, {
         key: 'setCompressionRatioFromGui',
+
 
         //==============================================================================
         /**
@@ -223,6 +229,7 @@ var SmartFader = function (_AbstractNode) {
             var minValue = _SmartFader$compressi2[0];
             var maxValue = _SmartFader$compressi2[1];
 
+
             var actualValue = this.compressionRatio;
 
             /// scale from DSP to GUI
@@ -239,6 +246,7 @@ var SmartFader = function (_AbstractNode) {
 
     }, {
         key: 'setAttackTimeFromGui',
+
 
         //==============================================================================
         /**
@@ -291,6 +299,7 @@ var SmartFader = function (_AbstractNode) {
             var minValue = _SmartFader$attackTim2[0];
             var maxValue = _SmartFader$attackTim2[1];
 
+
             var actualValue = this.attackTime;
 
             /// scale from DSP to GUI
@@ -307,6 +316,7 @@ var SmartFader = function (_AbstractNode) {
 
     }, {
         key: 'setReleaseTimeFromGui',
+
 
         //==============================================================================
         /**
@@ -358,6 +368,7 @@ var SmartFader = function (_AbstractNode) {
 
             var minValue = _SmartFader$releaseTi2[0];
             var maxValue = _SmartFader$releaseTi2[1];
+
 
             var actualValue = this.releaseTime;
 
@@ -542,11 +553,7 @@ var SmartFader = function (_AbstractNode) {
             into the DynamicsCompressorNode. The range of this value is between -20 and 0 (in dB).
             */
 
-            var reduction = this._dynamicCompressorNode.getReduction();
-
-            var state = reduction < -0.5 ? true : false;
-
-            return state;
+            return this._dynamicCompressorNode.dynamicCompressionState;
         }
     }, {
         key: 'compressionRatio',
@@ -555,6 +562,7 @@ var SmartFader = function (_AbstractNode) {
 
             var minValue = _SmartFader$compressi3[0];
             var maxValue = _SmartFader$compressi3[1];
+
 
             this._compressionRatio = _utils2.default.clamp(value, minValue, maxValue);
 
@@ -582,6 +590,7 @@ var SmartFader = function (_AbstractNode) {
             var minValue = _SmartFader$attackTim3[0];
             var maxValue = _SmartFader$attackTim3[1];
 
+
             this._attackTime = _utils2.default.clamp(value, minValue, maxValue);
 
             this._updateCompressorSettings();
@@ -608,6 +617,7 @@ var SmartFader = function (_AbstractNode) {
             var minValue = _SmartFader$releaseTi3[0];
             var maxValue = _SmartFader$releaseTi3[1];
 
+
             this._releaseTime = _utils2.default.clamp(value, minValue, maxValue);
 
             this._updateCompressorSettings();
@@ -633,6 +643,7 @@ var SmartFader = function (_AbstractNode) {
 
             var minValue = _SmartFader$dBRange3[0];
             var maxValue = _SmartFader$dBRange3[1];
+
 
             return _utils2.default.clamp(value, minValue, maxValue);
         }
@@ -683,27 +694,17 @@ var SmartFader = function (_AbstractNode) {
     }, {
         key: 'compressionRatioRange',
         get: function get() {
-            return [1, 10];
+            return [SmartFader.minCompressionRatioRange, SmartFader.maxCompressionRatioRange];
         }
     }, {
         key: 'minCompressionRatioRange',
         get: function get() {
-            var _SmartFader$compressi4 = _slicedToArray(SmartFader.compressionRatioRange, 2);
-
-            var minValue = _SmartFader$compressi4[0];
-            var maxValue = _SmartFader$compressi4[1];
-
-            return minValue;
+            return _compressor2.default.minRatio;
         }
     }, {
         key: 'maxCompressionRatioRange',
         get: function get() {
-            var _SmartFader$compressi5 = _slicedToArray(SmartFader.compressionRatioRange, 2);
-
-            var minValue = _SmartFader$compressi5[0];
-            var maxValue = _SmartFader$compressi5[1];
-
-            return maxValue;
+            return _compressor2.default.maxRatio;
         }
 
         /**
@@ -719,7 +720,7 @@ var SmartFader = function (_AbstractNode) {
     }, {
         key: 'attackTimeRange',
         get: function get() {
-            return [5, 500];
+            return [SmartFader.minAttackTimeRange, SmartFader.maxAttackTimeRange];
         }
 
         /**
@@ -729,12 +730,7 @@ var SmartFader = function (_AbstractNode) {
     }, {
         key: 'minAttackTimeRange',
         get: function get() {
-            var _SmartFader$attackTim4 = _slicedToArray(SmartFader.attackTimeRange, 2);
-
-            var minValue = _SmartFader$attackTim4[0];
-            var maxValue = _SmartFader$attackTim4[1];
-
-            return minValue;
+            return _utils2.default.sec2ms(_compressor2.default.minAttack);
         }
 
         /**
@@ -744,12 +740,8 @@ var SmartFader = function (_AbstractNode) {
     }, {
         key: 'maxAttackTimeRange',
         get: function get() {
-            var _SmartFader$attackTim5 = _slicedToArray(SmartFader.attackTimeRange, 2);
 
-            var minValue = _SmartFader$attackTim5[0];
-            var maxValue = _SmartFader$attackTim5[1];
-
-            return maxValue;
+            return _utils2.default.sec2ms(_compressor2.default.maxAttack);
         }
 
         /**
@@ -765,7 +757,7 @@ var SmartFader = function (_AbstractNode) {
     }, {
         key: 'releaseTimeRange',
         get: function get() {
-            return [5, 1000];
+            return [SmartFader.minReleaseTimeRange, SmartFader.maxReleaseTimeRange];
         }
 
         /**
@@ -775,12 +767,7 @@ var SmartFader = function (_AbstractNode) {
     }, {
         key: 'minReleaseTimeRange',
         get: function get() {
-            var _SmartFader$releaseTi4 = _slicedToArray(SmartFader.releaseTimeRange, 2);
-
-            var minValue = _SmartFader$releaseTi4[0];
-            var maxValue = _SmartFader$releaseTi4[1];
-
-            return minValue;
+            return _utils2.default.sec2ms(_compressor2.default.minRelease);
         }
 
         /**
@@ -790,12 +777,7 @@ var SmartFader = function (_AbstractNode) {
     }, {
         key: 'maxReleaseTimeRange',
         get: function get() {
-            var _SmartFader$releaseTi5 = _slicedToArray(SmartFader.releaseTimeRange, 2);
-
-            var minValue = _SmartFader$releaseTi5[0];
-            var maxValue = _SmartFader$releaseTi5[1];
-
-            return maxValue;
+            return _utils2.default.sec2ms(_compressor2.default.maxRelease);
         }
 
         /**
