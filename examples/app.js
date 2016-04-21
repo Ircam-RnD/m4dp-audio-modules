@@ -217,7 +217,7 @@ playerMain.getDebug().setLogToBrowserConsole(false);
 playerPip = new MediaPlayer(context);
 playerPip.startup();
 playerPip.setAutoPlay(false);
-if(urlPip){
+if( urlPip ){
     playerPip.attachView(videoPlayerPipMediaElement);
 }
 playerPip.getDebug().setLogToBrowserConsole(false);
@@ -225,19 +225,25 @@ playerPip.getDebug().setLogToBrowserConsole(false);
 var playerAudioFiveDotOne = new MediaPlayer(context);
 playerAudioFiveDotOne.startup();
 playerAudioFiveDotOne.setAutoPlay(false);
-playerAudioFiveDotOne.attachView(playerAudioFiveDotOneMediaElement);
+if( urlAudioFiveDotOne ){
+    playerAudioFiveDotOne.attachView(playerAudioFiveDotOneMediaElement);
+}
 playerAudioFiveDotOne.getDebug().setLogToBrowserConsole(false);
 
 var playerAudioDescription = new MediaPlayer(context);
 playerAudioDescription.startup();
 playerAudioDescription.setAutoPlay(false);
-playerAudioDescription.attachView(playerAudioDescriptionMediaElement);
+if( urlAudioDescription ){
+    playerAudioDescription.attachView(playerAudioDescriptionMediaElement);
+}
 playerAudioDescription.getDebug().setLogToBrowserConsole(false);
 
 var playerDialogue = new MediaPlayer(context);
 playerDialogue.startup();
 playerDialogue.setAutoPlay(false);
-playerDialogue.attachView(playerDialogueMediaElement);
+if( urlDialogue ){
+    playerDialogue.attachView(playerDialogueMediaElement);
+}
 playerDialogue.getDebug().setLogToBrowserConsole(false);
 
 controller = new MediaController();
@@ -245,12 +251,18 @@ controller = new MediaController();
 //dumpObject( playerMain );
 
 videoPlayerMainMediaElement.controller           = controller;
-if(urlPip){
+if( urlPip ){
     videoPlayerPipMediaElement.controller            = controller;
 }
-playerAudioFiveDotOneMediaElement.controller     = controller;
-playerAudioDescriptionMediaElement.controller    = controller;
-playerDialogueMediaElement.controller            = controller;
+if( urlAudioFiveDotOne ){
+    playerAudioFiveDotOneMediaElement.controller     = controller;
+}
+if( urlAudioDescription ){
+    playerAudioDescriptionMediaElement.controller    = controller;
+}
+if( urlDialogue ){
+    playerDialogueMediaElement.controller            = controller;
+}
 
 audioContext = new (window.AudioContext || window.webkitAudioContext)();
 //console.debug("######### audioContext: " + audioContext);
@@ -301,6 +313,18 @@ var mainData = program.dataMain;
 var eaData = program.dataEA;
 var adData = program.dataAD;
 var diData = program.dataDI;
+
+/// Workaround when all the streams are not in the EBU Core
+if( typeof( program.dataEA.type ) === "undefined" ){
+    eaData.type = "MultiWithLFE";
+}
+if( typeof( program.dataAD.type ) === "undefined" ){
+    adData.type = "Mono";
+}
+if( typeof( program.dataDI.type ) === "undefined" ){
+    diData.type = "Mono";
+}
+
 // Son principal
 mainAudioASD = new M4DPAudioModules.AudioStreamDescription(
         type = mainData.type,
@@ -314,7 +338,7 @@ mainAudioASD = new M4DPAudioModules.AudioStreamDescription(
 // Ambiance (pour le 5.1)
 extendedAmbienceASD = new M4DPAudioModules.AudioStreamDescription(
         type = eaData.type,
-        active = mode === "5.1",
+        active = ( typeof( program.dataEA.type ) != "undefined" && mode === "5.1" ),
         loudness = parseInt(eaData.loudness,10),
         maxTruePeak = parseInt(eaData.maxTruePeak,10),
         dialog = eaData.dialog === "true",
@@ -334,7 +358,7 @@ extendedCommentsASD = new M4DPAudioModules.AudioStreamDescription(
 // Dialogue (pour le 5.1)
 extendedDialogsASD = new M4DPAudioModules.AudioStreamDescription(
         type = diData.type,
-        active = mode === "5.1",
+        active = ( typeof( program.dataDI.type ) != "undefined" && mode === "5.1" ),
         loudness = parseInt(diData.loudness,10),
         maxTruePeak = parseInt(diData.maxTruePeak,10),
         dialog = diData.dialog === "true",
@@ -407,20 +431,32 @@ objectSpatialiserAndMixer   = new M4DPAudioModules.ObjectSpatialiserAndMixer( au
 
 //==============================================================================
 playerMain.attachSource( urlMain );
-if(urlPip){
+if( urlPip ){
     playerPip.attachSource( urlPip );
 }
-playerAudioFiveDotOne.attachSource( urlAudioFiveDotOne );
-playerAudioDescription.attachSource( urlAudioDescription );
-playerDialogue.attachSource( urlDialogue );
+if( urlAudioFiveDotOne ){
+    playerAudioFiveDotOne.attachSource( urlAudioFiveDotOne );
+}
+if( urlAudioDescription ){
+    playerAudioDescription.attachSource( urlAudioDescription );
+}
+if( urlDialogue ){
+    playerDialogue.attachSource( urlDialogue );
+}
 
 playerMain.play();
-if(urlPip){
+if( urlPip ){
     playerPip.play();
 }
-playerAudioFiveDotOne.play();
-playerAudioDescription.play();
-playerDialogue.play();
+if( urlAudioFiveDotOne ){
+    playerAudioFiveDotOne.play();
+}
+if( urlAudioDescription ){
+    playerAudioDescription.play();
+}
+if( urlDialogue ){
+    playerDialogue.play();
+}
 
 //==============================================================================
 // initialize the GUI stuffs
@@ -872,7 +908,7 @@ function onCheckVideo() {
 function onCheckExAmbience() {
     //console.debug("######### onCheckExAmbience: "+checkboxExAmbience.checked);
     //onCheckEx();
-    if (checkboxExAmbience.checked) {
+    if (checkboxExAmbience.checked ){    
         extendedAmbienceASD.active = true;
     } else {
         extendedAmbienceASD.active = false;
@@ -883,7 +919,7 @@ function onCheckExAmbience() {
 function onCheckExComments() {
     //console.debug("######### onCheckExComments: "+checkboxExComments.checked);
     //onCheckEx();
-    if (checkboxExComments.checked) {
+    if (checkboxExComments.checked ){    
         extendedCommentsASD.active = true;
     } else {
         extendedCommentsASD.active = false;
@@ -894,7 +930,7 @@ function onCheckExComments() {
 function onCheckExDialogs() {
     //console.debug("######### onCheckExDialogs: "+checkboxExDialogs.checked);
     //onCheckEx();
-    if (checkboxExDialogs.checked) {
+    if (checkboxExDialogs.checked ){    
         extendedDialogsASD.active = true;
     } else {
         extendedDialogsASD.active = false;

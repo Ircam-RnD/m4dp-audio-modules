@@ -1041,10 +1041,9 @@ var AudioStreamDescription = exports.AudioStreamDescription = function () {
     }
 
     //==============================================================================
-    /**
-     * Get channel position based on audio stream type
-     * @type {number[]}
-     */
+    /// if one of the value is NaN, this most likely means the stream was
+    /// actually not in the EBU core.
+    /// it should thus be considered as inactive   
 
 
     _createClass(AudioStreamDescription, [{
@@ -1208,6 +1207,19 @@ var AudioStreamDescription = exports.AudioStreamDescription = function () {
          */
 
     }, {
+        key: "hasNaN",
+        get: function get() {
+
+            return isNaN(this._maxTruePeak) || isNaN(this._loudness);
+        }
+
+        //==============================================================================
+        /**
+         * Get channel position based on audio stream type
+         * @type {number[]}
+         */
+
+    }, {
         key: "channelPositions",
         get: function get() {
             switch (this._type) {
@@ -1274,7 +1286,7 @@ var AudioStreamDescription = exports.AudioStreamDescription = function () {
          */
         ,
         get: function get() {
-            return this._active;
+            return this._active && this.hasNaN === false;
         }
 
         //==============================================================================
