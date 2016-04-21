@@ -20,6 +20,152 @@ var dumpObject = function(obj) {
 };
 
 
+
+function typeOf(obj) {
+    return({}).toString.call(obj).slice(8, -1).toLowerCase();
+}
+
+function querySt(ji) {
+    var hu = window.location.search.substring(1);
+    var gy = hu.split("&");
+    for (var i = 0; i < gy.length; i++) {
+        var ft = gy[i].split("=");
+        //alert(ft);
+        if (ft[0] == ji) {
+            return ft[1];
+        }
+    }
+    return "";
+}
+
+var getElementFromXML = function(item, ns, prefix, attr){
+    if($(item).length){
+        
+        // Ne doit pas utiliser getElementsByTagName avec un object jQuery
+        if(item.length){
+            item = item[0];
+        }
+        
+        // Méthode pour Chrome
+        var collection = $(item).find(ns).filter(function(){
+            if($(this)[0].prefix === prefix){
+                return true;
+            }
+        });
+        
+        // Méthode pour Firefox
+        if(!collection.length){
+            collection = $(item.getElementsByTagName(prefix+':'+ns));
+        }
+        
+        if(collection.length){          
+            return collection.filter(function(){
+                if(typeOf(attr) === "object" && attr.type && attr.value){
+                    return $(this).attr(attr.type) === attr.value;
+                }else{
+                    return true;
+                }
+            }).eq(0);       
+        }
+    }
+};
+
+$(function () {
+    //var ebucoreUrl = querySt("ebucore") || "xml/EBUcore_M4DP_LMDJ.xml", program;
+    var ebucoreUrl = querySt("ebucore") || "xml/EBUCore_M4DP_ALEXHUGO.xml", program;
+    //var ebucoreUrl = querySt("ebucore") || "xml/EBUCore_M4DP_JT_20h00.xml", program;
+    //var ebucoreUrl = querySt("ebucore") || "xml/EBUCore_M4DP_METEO.xml", program;
+    //var ebucoreUrl = querySt("ebucore") || "xml/EBUCore_M4DP_TCHOUPI.xml", program;
+    
+    if(ebucoreUrl){
+        $.ajax({
+            url : ebucoreUrl,
+            timeout:30 * 1000,
+            success: function(xml, status, xhr){
+                if(!((typeOf(xml) === "document" || typeOf(xml) === "xmldocument") && xml.getElementsByTagName('ebucore:ebuCoreMain'))){
+                    return {};
+                }
+
+                var getLinkDetails = function(ctn){
+                    var data = {
+                        dataMain:{},
+                        dataLS:{},
+                        dataAD:{},
+                        dataEA:{},
+                        dataDI:{}
+                    };
+
+                    if($(ctn).length){
+
+                        var getData = function($data){
+                            var data = {};
+                            $data.children().each(function(){
+                                if($(this).attr("typeLabel")){
+                                    data[$(this).attr("typeLabel")] = $(this).text().trim();
+                                }
+                            });
+                            return data;
+                        };
+
+                        // Main
+                        var $data = $(getElementFromXML(ctn, "format", "ebucore", {type:"formatName", value:"Main"})),
+                            $audioFormat = getElementFromXML($data, "audioFormat", "ebucore");
+                        if($data.length && $audioFormat.length && $audioFormat.attr("audioPresenceFlag") === "true"){
+                            data.dataMain = getData($audioFormat);
+                            data.dataMain.url = getElementFromXML($data, "locator", "ebucore").text().trim();
+                        }
+
+                        // LS
+                        $data = $(getElementFromXML(ctn, "format", "ebucore", {type:"formatName", value:"SL"}));
+                        if($data.length && $data.attr("videoPresenceFlag") === "true"){
+                            data.dataLS = {
+                                url:getElementFromXML($data, "locator", "ebucore").text().trim()
+                            };
+                        }
+
+                        // AD
+                        $data = $(getElementFromXML(ctn, "format", "ebucore", {type:"formatName", value:"AD"}));
+                        $audioFormat = getElementFromXML($data, "audioFormat", "ebucore");
+                        if($data.length && $audioFormat.length && $audioFormat.attr("audioPresenceFlag") === "true"){
+                            data.dataAD = getData($audioFormat);
+                            data.dataAD.url = getElementFromXML($data, "locator", "ebucore").text().trim();
+                        }
+
+                        // EA
+                        $data = $(getElementFromXML(ctn, "format", "ebucore", {type:"formatName", value:"EA3"}));
+                        $audioFormat = getElementFromXML($data, "audioFormat", "ebucore");
+                        if($data.length && $audioFormat.length && $audioFormat.attr("audioPresenceFlag") === "true"){
+                            data.dataEA = getData($audioFormat);
+                            data.dataEA.url = getElementFromXML($data, "locator", "ebucore").text().trim();
+                        }
+
+                        // DI
+                        $data = $(getElementFromXML(ctn, "format", "ebucore", {type:"formatName", value:"DI"}));
+                        $audioFormat = getElementFromXML($data, "audioFormat", "ebucore");
+                        if($data.length && $audioFormat.length && $audioFormat.attr("audioPresenceFlag") === "true"){
+                            data.dataDI = getData($audioFormat);
+                            data.dataDI.url = getElementFromXML($data, "locator", "ebucore").text().trim();
+                        }
+                    }
+                    return data;
+                };
+                
+                program = getLinkDetails(getElementFromXML(xml, "part", "ebucore", {type:"partName", value:"Links"}));
+                if(typeOf(program) === "object"){
+                    initPlayer(program);
+                }
+            },
+            error : function(xhr, erreur, e){
+
+            }
+        });
+    }
+});
+
+
+var initPlayer = function(program){
+    var mode = querySt("mode") || "5.1";
+
 /// player pour la video principale
 videoPlayerMainMediaElement           = document.getElementById('videoPlayerMain');
 /// player pour la video LSF (langue des signes)
@@ -40,15 +186,23 @@ var urlMain = "http://medias2.francetv.fr/innovation/media4D/m4dp-set1-LMDJ/mani
 var urlPip = "http://medias2.francetv.fr/innovation/media4D/m4dp-set1-LMDJ/manifest-lsf.mpd";
 var urlAudio = "http://medias2.francetv.fr/innovation/media4D/m4dp-set1-LMDJ/manifest-ad.mpd";
 */
-                                  
+       
+/*                                  
 var dashUrlAudioPrincipale     = 'http://videos-pmd.francetv.fr/innovation/media4D/m4d-LMDJ-ondemand-3lsf/manifest.mpd';
 var dashUrlAudioDescription    = 'http://videos-pmd.francetv.fr/innovation/media4D/m4d-LMDJ-ondemand-3lsf/manifest-ad.mpd';
 var dashUrlFiveDotOne          = 'http://videos-pmd.francetv.fr/innovation/media4D/m4d-LMDJ-ondemand-3lsf/manifest-ea3.mpd'; /// L R C LFE Ls Rs ?
 var dashUrlDial                = 'http://videos-pmd.francetv.fr/innovation/media4D/m4d-LMDJ-ondemand-3lsf/manifest-di.mpd';
 var dashUrlLsf                 = 'http://videos-pmd.francetv.fr/innovation/media4D/m4d-LMDJ-ondemand-3lsf/manifest-lsf.mpd';
+*/
+
+var dashUrlAudioPrincipale     = program.dataMain.url;
+var dashUrlAudioDescription    = program.dataAD.url;
+var dashUrlFiveDotOne          = program.dataEA.url; /// L R C LFE Ls Rs ?
+var dashUrlDial                = program.dataDI.url;
+var dashUrlLsf                 = program.dataLS.url;
 
 var urlMain                = dashUrlAudioPrincipale;
-var urlPip                 = dashUrlLsf;
+urlPip                     = dashUrlLsf;
 var urlAudioFiveDotOne     = dashUrlFiveDotOne;
 var urlAudioDescription    = dashUrlAudioDescription;
 var urlDialogue            = dashUrlDial;
@@ -60,10 +214,12 @@ playerMain.setAutoPlay(false);
 playerMain.attachView(videoPlayerMainMediaElement);
 playerMain.getDebug().setLogToBrowserConsole(false);
 
-var playerPip = new MediaPlayer(context);
+playerPip = new MediaPlayer(context);
 playerPip.startup();
 playerPip.setAutoPlay(false);
-playerPip.attachView(videoPlayerPipMediaElement);
+if(urlPip){
+    playerPip.attachView(videoPlayerPipMediaElement);
+}
 playerPip.getDebug().setLogToBrowserConsole(false);
 
 var playerAudioFiveDotOne = new MediaPlayer(context);
@@ -84,17 +240,19 @@ playerDialogue.setAutoPlay(false);
 playerDialogue.attachView(playerDialogueMediaElement);
 playerDialogue.getDebug().setLogToBrowserConsole(false);
 
-var controller = new MediaController();
+controller = new MediaController();
 
 //dumpObject( playerMain );
 
 videoPlayerMainMediaElement.controller           = controller;
-videoPlayerPipMediaElement.controller            = controller;
+if(urlPip){
+    videoPlayerPipMediaElement.controller            = controller;
+}
 playerAudioFiveDotOneMediaElement.controller     = controller;
 playerAudioDescriptionMediaElement.controller    = controller;
 playerDialogueMediaElement.controller            = controller;
 
-var audioContext = new (window.AudioContext || window.webkitAudioContext)();
+audioContext = new (window.AudioContext || window.webkitAudioContext)();
 //console.debug("######### audioContext: " + audioContext);
 
 //==============================================================================
@@ -139,38 +297,49 @@ channelSplitterDialogue.connect( channelMerger, 0, 9 );
 
 //==============================================================================
 // Configure the AudioStreamDescription according to the EBU Core file(s)
-var mainAudioASD = new M4DPAudioModules.AudioStreamDescription(
-        type = "Stereo",
-        active = true,
-        loudness = -22.1,
-        maxTruePeak = -5.1,
-        dialog = true,
-        ambiance = true,
-        commentary = false);
-var extendedAmbienceASD = new M4DPAudioModules.AudioStreamDescription(
-        type = "MultiWithLFE",
+var mainData = program.dataMain;
+var eaData = program.dataEA;
+var adData = program.dataAD;
+var diData = program.dataDI;
+// Son principal
+mainAudioASD = new M4DPAudioModules.AudioStreamDescription(
+        type = mainData.type,
+        active = mode === "stereo",
+        loudness = parseInt(mainData.loudness,10),
+        maxTruePeak = parseInt(mainData.maxTruePeak,10),
+        dialog = mainData.dialog === "true",
+        ambiance = mainData.ambiance === "true",
+        commentary = mainData.commentary === "true");
+
+// Ambiance (pour le 5.1)
+extendedAmbienceASD = new M4DPAudioModules.AudioStreamDescription(
+        type = eaData.type,
+        active = mode === "5.1",
+        loudness = parseInt(eaData.loudness,10),
+        maxTruePeak = parseInt(eaData.maxTruePeak,10),
+        dialog = eaData.dialog === "true",
+        ambiance = eaData.ambiance === "true",
+        commentary = eaData.commentary === "true");
+
+// Audio description
+extendedCommentsASD = new M4DPAudioModules.AudioStreamDescription(
+        type = adData.type,
         active = false,
-        loudness = -19.6,
-        maxTruePeak = -5.9,
-        dialog = false,
-        ambiance = true,
-        commentary = false);
-var extendedCommentsASD = new M4DPAudioModules.AudioStreamDescription(
-        type = "Mono",
-        active = false,
-        loudness = -23,
-        maxTruePeak = -1,
-        dialog = false,
-        ambiance = false,
-        commentary = true);
-var extendedDialogsASD = new M4DPAudioModules.AudioStreamDescription(
-        type = "Mono",
-        active = false,
-        loudness = -22.7,
-        maxTruePeak = -6.1,
-        dialog = true,
-        ambiance = false,
-        commentary = false);
+        loudness = parseInt(adData.loudness,10),
+        maxTruePeak = parseInt(adData.maxTruePeak,10),
+        dialog = adData.dialog === "true",
+        ambiance = adData.ambiance === "true",
+        commentary = adData.commentary === "true");
+
+// Dialogue (pour le 5.1)
+extendedDialogsASD = new M4DPAudioModules.AudioStreamDescription(
+        type = diData.type,
+        active = mode === "5.1",
+        loudness = parseInt(diData.loudness,10),
+        maxTruePeak = parseInt(diData.maxTruePeak,10),
+        dialog = diData.dialog === "true",
+        ambiance = diData.ambiance === "true",
+        commentary = diData.commentary === "true");
 
 var asdc = new M4DPAudioModules.AudioStreamDescriptionCollection(
         [mainAudioASD, extendedAmbienceASD, extendedCommentsASD, extendedDialogsASD]
@@ -180,21 +349,21 @@ var asdc = new M4DPAudioModules.AudioStreamDescriptionCollection(
 // M4DPAudioModules
 
 /// connect either the multichannel spatializer or the object spatializer
-var ModulesConfiguration =
+ModulesConfiguration =
 {
     kMultichannelSpatialiser : 0,
     kObjectSpatialiserAndMixer : 1
 };
 
-var config = ModulesConfiguration.kMultichannelSpatialiser;
+config = ModulesConfiguration.kMultichannelSpatialiser;
 
-var streamSelector              = new M4DPAudioModules.StreamSelector( audioContext, asdc );
-var smartFader                  = new M4DPAudioModules.SmartFader( audioContext, asdc );
-var dialogEnhancement           = new M4DPAudioModules.DialogEnhancement( audioContext, asdc );
-var receiverMix                 = new M4DPAudioModules.ReceiverMix( audioContext, asdc );
-//var noiseAdaptation = new M4DPAudioModules.NoiseAdaptation(audioContext);
-var multichannelSpatialiser     = new M4DPAudioModules.MultichannelSpatialiser( audioContext, asdc, 'binaural' );
-var objectSpatialiserAndMixer   = new M4DPAudioModules.ObjectSpatialiserAndMixer( audioContext, asdc, 'binaural' );
+streamSelector              = new M4DPAudioModules.StreamSelector( audioContext, asdc );
+smartFader                  = new M4DPAudioModules.SmartFader( audioContext, asdc );
+dialogEnhancement           = new M4DPAudioModules.DialogEnhancement( audioContext, asdc );
+receiverMix                 = new M4DPAudioModules.ReceiverMix( audioContext, asdc );
+//noiseAdaptation = new M4DPAudioModules.NoiseAdaptation(audioContext);
+multichannelSpatialiser     = new M4DPAudioModules.MultichannelSpatialiser( audioContext, asdc, 'binaural' );
+objectSpatialiserAndMixer   = new M4DPAudioModules.ObjectSpatialiserAndMixer( audioContext, asdc, 'binaural' );
 
 //==============================================================================    
 {
@@ -238,16 +407,87 @@ var objectSpatialiserAndMixer   = new M4DPAudioModules.ObjectSpatialiserAndMixer
 
 //==============================================================================
 playerMain.attachSource( urlMain );
-playerPip.attachSource( urlPip );
+if(urlPip){
+    playerPip.attachSource( urlPip );
+}
 playerAudioFiveDotOne.attachSource( urlAudioFiveDotOne );
 playerAudioDescription.attachSource( urlAudioDescription );
 playerDialogue.attachSource( urlDialogue );
 
 playerMain.play();
-playerPip.play();
+if(urlPip){
+    playerPip.play();
+}
 playerAudioFiveDotOne.play();
 playerAudioDescription.play();
 playerDialogue.play();
+
+//==============================================================================
+// initialize the GUI stuffs
+initializeSliders();
+initializeCheckBoxes();
+initializeDropDownMenus();
+
+
+//==============================================================================
+/// Refresh the dynamic compression state every 500 msec
+setInterval(function(){
+    var isCompressed = smartFader.dynamicCompressionState;
+
+    if( isCompressed === true){
+        document.getElementById('label-smart-fader-compression').style.color = "rgba(255, 0, 0, 0.7)";
+    }
+    else{
+        document.getElementById('label-smart-fader-compression').style.color = "rgba(255, 255, 255, 0.7)";
+    }
+
+    var rmsCommentary = receiverMix.getRmsForCommentaryAsString();
+    document.getElementById('label-receiver-mix-commentary-rms').textContent = rmsCommentary;
+
+    var rmsProgram = receiverMix.getRmsForProgramAsString();
+    document.getElementById('label-receiver-mix-program-rms').textContent = rmsProgram;    
+
+    var receiverMixCompression = receiverMix.dynamicCompressionState;
+
+    document.getElementById('label-receiver-mix-compression').textContent = "Compression";
+    if( receiverMixCompression === true){
+        document.getElementById('label-receiver-mix-compression').style.color = "rgba(255, 0, 0, 0.7)";
+    }
+    else{        
+        document.getElementById('label-receiver-mix-compression').style.color = "rgba(255, 255, 255, 0.7)";
+    }     
+
+}, 250);
+
+//==============================================================================
+var inputEvent = new Event('input');
+sliderTrimMain.dispatchEvent(inputEvent);
+sliderTrimAmbiance.dispatchEvent(inputEvent);
+sliderTrimComments.dispatchEvent(inputEvent);
+sliderTrimDialog.dispatchEvent(inputEvent);
+sliderSmartFader.dispatchEvent(inputEvent);
+sliderReceiverMixN.dispatchEvent(inputEvent);
+sliderReceiverMixX.dispatchEvent(inputEvent);
+sliderReceiverMixRatio.dispatchEvent(inputEvent);
+sliderReceiverMixThreshold.dispatchEvent(inputEvent);
+sliderReceiverMixAttack.dispatchEvent(inputEvent);
+sliderReceiverMixRelease.dispatchEvent(inputEvent);
+sliderReceiverMixRefreshRms.dispatchEvent(inputEvent);
+sliderReceiverMixHoldTime.dispatchEvent(inputEvent);
+sliderSmartFaderRatio.dispatchEvent(inputEvent);
+sliderSmartFaderAttack.dispatchEvent(inputEvent);
+sliderSmartFaderRelease.dispatchEvent(inputEvent);
+sliderListenerYaw.dispatchEvent(inputEvent);
+sliderAzimComments.dispatchEvent(inputEvent);
+sliderElevComments.dispatchEvent(inputEvent);
+sliderDistComments.dispatchEvent(inputEvent);
+sliderAzimDialog.dispatchEvent(inputEvent);
+sliderElevDialog.dispatchEvent(inputEvent);
+sliderDistDialog.dispatchEvent(inputEvent);
+sliderGainOffset.dispatchEvent(inputEvent);
+sliderDialogEnhancementBalance.dispatchEvent(inputEvent);
+
+};
 
 //==============================================================================
 // Retrieves the controllers from the GUI
@@ -283,11 +523,7 @@ var sliderReceiverMixRefreshRms = document.getElementById('slider-receiver-mix-r
 var sliderReceiverMixHoldTime = document.getElementById('slider-receiver-mix-holdtime');
 var sliderDialogEnhancementBalance = document.getElementById('slider-dialog-enhancement-balance');
 
-//==============================================================================
-// initialize the GUI stuffs
-initializeSliders();
-initializeCheckBoxes();
-initializeDropDownMenus();
+
 
 //==============================================================================
 function updateWAAConnections(){
@@ -682,8 +918,8 @@ function onCheckEqualization() {
 }
 
 function onCheckLSF() {
-    //console.debug("######### onCheckLSF: "+checkboxLSF.checked);
-    if (checkboxLSF.checked) {
+    console.debug("######### onCheckLSF: "+checkboxLSF.checked);
+    if (checkboxLSF.checked && urlPip) {
         controller.currentTime = videoPlayerMainMediaElement.currentTime;
         videoPlayerPipMediaElement.controller = controller;
         playerPip.startup();
@@ -1032,61 +1268,4 @@ sliderReceiverMixHoldTime.addEventListener('input', function(){
     document.getElementById('label-receiver-mix-holdtime').textContent = 'Hold time = ' + Math.round(value).toString()  + ' ms';
 });
 
-//==============================================================================
-/// Refresh the dynamic compression state every 500 msec
-setInterval(function(){
-    var isCompressed = smartFader.dynamicCompressionState;
-
-    if( isCompressed === true){
-        document.getElementById('label-smart-fader-compression').style.color = "rgba(255, 0, 0, 0.7)";
-    }
-    else{
-        document.getElementById('label-smart-fader-compression').style.color = "rgba(255, 255, 255, 0.7)";
-    }
-
-    var rmsCommentary = receiverMix.getRmsForCommentaryAsString();
-    document.getElementById('label-receiver-mix-commentary-rms').textContent = rmsCommentary;
-
-    var rmsProgram = receiverMix.getRmsForProgramAsString();
-    document.getElementById('label-receiver-mix-program-rms').textContent = rmsProgram;    
-
-    var receiverMixCompression = receiverMix.dynamicCompressionState;
-
-    document.getElementById('label-receiver-mix-compression').textContent = "Compression";
-    if( receiverMixCompression === true){
-        document.getElementById('label-receiver-mix-compression').style.color = "rgba(255, 0, 0, 0.7)";
-    }
-    else{        
-        document.getElementById('label-receiver-mix-compression').style.color = "rgba(255, 255, 255, 0.7)";
-    }     
-
-}, 250);
-
-//==============================================================================
-var inputEvent = new Event('input');
-sliderTrimMain.dispatchEvent(inputEvent);
-sliderTrimAmbiance.dispatchEvent(inputEvent);
-sliderTrimComments.dispatchEvent(inputEvent);
-sliderTrimDialog.dispatchEvent(inputEvent);
-sliderSmartFader.dispatchEvent(inputEvent);
-sliderReceiverMixN.dispatchEvent(inputEvent);
-sliderReceiverMixX.dispatchEvent(inputEvent);
-sliderReceiverMixRatio.dispatchEvent(inputEvent);
-sliderReceiverMixThreshold.dispatchEvent(inputEvent);
-sliderReceiverMixAttack.dispatchEvent(inputEvent);
-sliderReceiverMixRelease.dispatchEvent(inputEvent);
-sliderReceiverMixRefreshRms.dispatchEvent(inputEvent);
-sliderReceiverMixHoldTime.dispatchEvent(inputEvent);
-sliderSmartFaderRatio.dispatchEvent(inputEvent);
-sliderSmartFaderAttack.dispatchEvent(inputEvent);
-sliderSmartFaderRelease.dispatchEvent(inputEvent);
-sliderListenerYaw.dispatchEvent(inputEvent);
-sliderAzimComments.dispatchEvent(inputEvent);
-sliderElevComments.dispatchEvent(inputEvent);
-sliderDistComments.dispatchEvent(inputEvent);
-sliderAzimDialog.dispatchEvent(inputEvent);
-sliderElevDialog.dispatchEvent(inputEvent);
-sliderDistDialog.dispatchEvent(inputEvent);
-sliderGainOffset.dispatchEvent(inputEvent);
-sliderDialogEnhancementBalance.dispatchEvent(inputEvent);
 
