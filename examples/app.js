@@ -72,10 +72,12 @@ var getElementFromXML = function(item, ns, prefix, attr){
 
 $(function () {
     //var ebucoreUrl = querySt("ebucore") || "xml/EBUcore_M4DP_LMDJ.xml", program;
-    var ebucoreUrl = querySt("ebucore") || "xml/EBUCore_M4DP_ALEXHUGO.xml", program;
+    //var ebucoreUrl = querySt("ebucore") || "xml/EBUCore_M4DP_ALEXHUGO.xml", program;
     //var ebucoreUrl = querySt("ebucore") || "xml/EBUCore_M4DP_JT_20h00.xml", program;
     //var ebucoreUrl = querySt("ebucore") || "xml/EBUCore_M4DP_METEO.xml", program;
     //var ebucoreUrl = querySt("ebucore") || "xml/EBUCore_M4DP_TCHOUPI.xml", program;
+    var ebucoreUrl = querySt("ebucore") || "xml/EBUCore_M4DP_RUGBY_AVC.xml", program;
+    //var ebucoreUrl = querySt("ebucore") || "xml/EBUCore_M4DP_RUGBY_HEVC.xml", program;
     
     if(ebucoreUrl){
         $.ajax({

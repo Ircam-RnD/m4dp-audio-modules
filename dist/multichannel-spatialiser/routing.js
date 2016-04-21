@@ -65,7 +65,7 @@ var StreamRouting = function (_AbstractNode) {
         /// sanity check
         /// mainAudio (2) + extendedAmbience (6) + extendedComments (1) + extendedDialogs (1) = 10
         if (totalNumberOfChannels_ != 10) {
-            throw new Error("Ca parait pas bon...");
+            console.log("warning : total number of channels = " + totalNumberOfChannels_);
         }
 
         _this._splitterNode = audioContext.createChannelSplitter(totalNumberOfChannels_);
