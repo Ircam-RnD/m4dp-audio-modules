@@ -62,6 +62,9 @@ var ReceiverMix = function (_AbstractNode) {
 
         _this._isBypass = false;
         _this._shouldCompress = false;
+        _this._rmsRefreshInterval = 100; /// interval (in msec for refreshing the RMS measurement)
+        _this._durationHold = 0; /// how long (in msec) the compressor has been on hold
+        _this._minimumHoldTime = 1500; /// hold time in msec) for the compressor
 
         if (typeof audioStreamDescriptionCollection === "undefined") {
             throw new Error("the audioStreamDescriptionCollection must be defined !");
@@ -121,9 +124,13 @@ var ReceiverMix = function (_AbstractNode) {
 
         _this._updateAudioGraph();
 
-        window.setInterval(function () {
-            _this._updateCompressor();
+        /*
+        window.setInterval( () => {
+            this._updateCompressor();
         }, 100);
+        */
+
+        _this._updateCompressor();
         return _this;
     }
 
@@ -527,6 +534,63 @@ var ReceiverMix = function (_AbstractNode) {
 
         //==============================================================================
         /**
+         * Sets the refresh interval for RMS measurement (in msec)
+         * theSlider : the slider
+         * return the actual value of the refresh interval (in msec)
+         */
+
+    }, {
+        key: 'setRefreshRmsTimeFromGui',
+        value: function setRefreshRmsTimeFromGui(theSlider) {
+
+            /// the value of the fader
+            var valueFader = parseFloat(theSlider.value);
+
+            // get the bounds of the fader (GUI)
+            var minFader = parseFloat(theSlider.min);
+            var maxFader = parseFloat(theSlider.max);
+
+            // get the actual bounds for this parameter
+            var minValue = 20;
+            var maxValue = 500;
+
+            /// scale from GUI to DSP
+
+            var value = M4DPAudioModules.utilities.scale(valueFader, minFader, maxFader, minValue, maxValue);
+
+            this._rmsRefreshInterval = value;
+
+            return value;
+        }
+
+        /**
+         * Returns the refresh interval for RMS measurement (in msec)
+         * theSlider : the slider
+         */
+
+    }, {
+        key: 'getRefreshRmsTimeForGui',
+        value: function getRefreshRmsTimeForGui(theSlider) {
+
+            // get the bounds of the fader (GUI)
+            var minFader = parseFloat(theSlider.min);
+            var maxFader = parseFloat(theSlider.max);
+
+            // get the actual bounds for this parameter
+            var minValue = 20;
+            var maxValue = 500;
+
+
+            var actualValue = this._rmsRefreshInterval;
+
+            /// scale from DSP to GUI
+            var value = M4DPAudioModules.utilities.scale(actualValue, minValue, maxValue, minFader, maxFader);
+
+            return value;
+        }
+
+        //==============================================================================
+        /**
          * Sets the attack time, according to a slider in the GUI
          * theSlider : the slider
          * return the actual value of the attack time (in msec)
@@ -644,6 +708,63 @@ var ReceiverMix = function (_AbstractNode) {
 
 
             var actualValue = this.getCompressorRatio();
+
+            /// scale from DSP to GUI
+            var value = M4DPAudioModules.utilities.scale(actualValue, minValue, maxValue, minFader, maxFader);
+
+            return value;
+        }
+
+        //==============================================================================
+        /**
+         * Sets the minimum hold time (in msec)
+         * theSlider : the slider
+         * return the actual value of the hold time
+         */
+
+    }, {
+        key: 'setMinimumHoldTimeFromGui',
+        value: function setMinimumHoldTimeFromGui(theSlider) {
+
+            /// the value of the fader
+            var valueFader = parseFloat(theSlider.value);
+
+            // get the bounds of the fader (GUI)
+            var minFader = parseFloat(theSlider.min);
+            var maxFader = parseFloat(theSlider.max);
+
+            // get the actual bounds for this parameter
+            var minValue = 1000;
+            var maxValue = 5000;
+
+            /// scale from GUI to DSP
+
+            var value = M4DPAudioModules.utilities.scale(valueFader, minFader, maxFader, minValue, maxValue);
+
+            this._minimumHoldTime = value;
+
+            return value;
+        }
+
+        /**
+         * Returns the minimum hold time (in msec)
+         * theSlider : the slider
+         */
+
+    }, {
+        key: 'getMinimumHoldTimeForGui',
+        value: function getMinimumHoldTimeForGui(theSlider) {
+
+            // get the bounds of the fader (GUI)
+            var minFader = parseFloat(theSlider.min);
+            var maxFader = parseFloat(theSlider.max);
+
+            // get the actual bounds for this parameter
+            var minValue = 1000;
+            var maxValue = 5000;
+
+
+            var actualValue = this._minimumHoldTime;
 
             /// scale from DSP to GUI
             var value = M4DPAudioModules.utilities.scale(actualValue, minValue, maxValue, minFader, maxFader);
@@ -896,9 +1017,36 @@ var ReceiverMix = function (_AbstractNode) {
 
         //==============================================================================
         /**
-         * This method should be called periodically
+         * This method should be called once, and then it repeats itself periodically
          */
         value: function _updateCompressor() {
+            var _this2 = this;
+
+            /// execute this function again, after a given interval       
+            window.setTimeout(function () {
+                _this2._updateCompressor();
+            }, this._rmsRefreshInterval);
+
+            /// in msec
+            /// once the compression gets activated,
+            /// we will hold it for at least 1500 msec
+            /// i.e. for 1500 msec, we suspend the RMS comparison,
+            /// and the compression remains with a dry/wet of 100%
+            var minimumHoldTime = this._minimumHoldTime;
+
+            ///@todo : the hold time could also appear in the GUI
+
+            if (this.bypass === false && this._shouldCompress === true && this._durationHold <= minimumHoldTime) {
+                /// hold the compressor for at least 1000 msec
+
+                /// increment the counter
+                this._durationHold += this._rmsRefreshInterval;
+
+                return;
+            }
+
+            /// the hold period is over; now, really compare the RMS,
+            /// to activate or not the compression
 
             this._shouldCompress = false;
 
@@ -926,10 +1074,16 @@ var ReceiverMix = function (_AbstractNode) {
                 //ratio = this._compressionRatio;
                 //this._dynamicCompressorNode.bypass = false;
                 this._dynamicCompressorNode.drywet = 100;
+
+                /// increment the counter
+                this._durationHold += this._rmsRefreshInterval;
             } else {
                 //ratio = 1.0;
                 //this._dynamicCompressorNode.bypass = true;
                 this._dynamicCompressorNode.drywet = 0;
+
+                /// increment the counter
+                this._durationHold = 0;
             }
         }
 

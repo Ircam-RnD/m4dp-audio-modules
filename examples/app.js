@@ -279,6 +279,9 @@ var sliderReceiverMixRatio = document.getElementById('slider-receiver-mix-ratio'
 var sliderReceiverMixThreshold = document.getElementById('slider-receiver-mix-threshold');
 var sliderReceiverMixAttack = document.getElementById('slider-receiver-mix-attack');
 var sliderReceiverMixRelease = document.getElementById('slider-receiver-mix-release');
+var sliderReceiverMixRefreshRms = document.getElementById('slider-receiver-mix-refresh-rms');
+var sliderReceiverMixHoldTime = document.getElementById('slider-receiver-mix-holdtime');
+var sliderDialogEnhancementBalance = document.getElementById('slider-dialog-enhancement-balance');
 
 //==============================================================================
 // initialize the GUI stuffs
@@ -737,14 +740,18 @@ function initializeSliders(){
     sliderReceiverMixThreshold.value    = receiverMix.getCompressorThresholdForGui( sliderReceiverMixThreshold );
     sliderReceiverMixAttack.value   = receiverMix.getAttackTimeForGui( sliderReceiverMixAttack );
     sliderReceiverMixRelease.value  = receiverMix.getReleaseTimeForGui( sliderReceiverMixRelease );
+    sliderReceiverMixRefreshRms.value  = receiverMix.getRefreshRmsTimeForGui( sliderReceiverMixRefreshRms );
+    sliderReceiverMixHoldTime.value  = receiverMix.getMinimumHoldTimeForGui( sliderReceiverMixHoldTime );
+    sliderReceiverMixN.value = receiverMix.getThresholdForCommentaryFromGui( sliderReceiverMixN );
+    sliderReceiverMixX.value = receiverMix.getThresholdForProgrammeFromGui( sliderReceiverMixX );
+
+    sliderDialogEnhancementBalance.value = dialogEnhancement.getBalanceFromGui( sliderDialogEnhancementBalance );
 
     sliderTrimMain.value        = 0;
     sliderTrimAmbiance.value    = 0;
     sliderTrimComments.value    = 0;
     sliderTrimDialog.value      = 0;
 
-    sliderReceiverMixN.value = receiverMix.getThresholdForCommentaryFromGui( sliderReceiverMixN );
-    sliderReceiverMixX.value = receiverMix.getThresholdForProgrammeFromGui( sliderReceiverMixX );
 
     sliderAzimComments.value = 0;
     sliderElevComments.value = 0;
@@ -771,6 +778,14 @@ sliderReceiverMixX.addEventListener('input', function(){
     var value = receiverMix.setThresholdForProgrammeFromGui( sliderReceiverMixX );
 
     document.getElementById('label-receiver-mix-X').textContent = 'X = ' + Math.round(value).toFixed(1) + ' dB (gate for program)';
+});
+
+//==============================================================================
+sliderDialogEnhancementBalance.addEventListener('input', function(){
+
+    var value = dialogEnhancement.setBalanceFromGui( sliderDialogEnhancementBalance );
+
+    document.getElementById('label-dialog-enhancement-balance').textContent = Math.round(value).toString() + ' % (ambiance | dialog)';
 });
 
 //==============================================================================
@@ -931,7 +946,7 @@ sliderSmartFaderRatio.addEventListener('input', function(){
 
 //==============================================================================
 /**
- * Callback when the sliderSmartFaderRatio slider changes
+ * Callback when the sliderSmartFaderAttack slider changes
  */
 sliderSmartFaderAttack.addEventListener('input', function(){
 
@@ -942,7 +957,7 @@ sliderSmartFaderAttack.addEventListener('input', function(){
 
 //==============================================================================
 /**
- * Callback when the sliderSmartFaderRatio slider changes
+ * Callback when the sliderSmartFaderRelease slider changes
  */
 sliderSmartFaderRelease.addEventListener('input', function(){
 
@@ -953,7 +968,7 @@ sliderSmartFaderRelease.addEventListener('input', function(){
 
 //==============================================================================
 /**
- * Callback when the sliderSmartFaderRatio slider changes
+ * Callback when the sliderReceiverMixRatio slider changes
  */
 sliderReceiverMixRatio.addEventListener('input', function(){
 
@@ -964,7 +979,7 @@ sliderReceiverMixRatio.addEventListener('input', function(){
 
 //==============================================================================
 /**
- * Callback when the sliderSmartFaderRatio slider changes
+ * Callback when the sliderReceiverMixThreshold slider changes
  */
 sliderReceiverMixThreshold.addEventListener('input', function(){
 
@@ -975,7 +990,7 @@ sliderReceiverMixThreshold.addEventListener('input', function(){
 
 //==============================================================================
 /**
- * Callback when the sliderSmartFaderRatio slider changes
+ * Callback when the sliderReceiverMixAttack slider changes
  */
 sliderReceiverMixAttack.addEventListener('input', function(){
 
@@ -986,7 +1001,7 @@ sliderReceiverMixAttack.addEventListener('input', function(){
 
 //==============================================================================
 /**
- * Callback when the sliderSmartFaderRatio slider changes
+ * Callback when the sliderReceiverMixRelease slider changes
  */
 sliderReceiverMixRelease.addEventListener('input', function(){
 
@@ -995,6 +1010,27 @@ sliderReceiverMixRelease.addEventListener('input', function(){
     document.getElementById('label-receiver-mix-release').textContent = 'Release time = ' + Math.round(value).toString()  + ' ms';
 });
 
+//==============================================================================
+/**
+ * Callback when the sliderReceiverMixRefreshRms slider changes
+ */
+sliderReceiverMixRefreshRms.addEventListener('input', function(){
+
+    var value = receiverMix.setRefreshRmsTimeFromGui( sliderReceiverMixRefreshRms );
+
+    document.getElementById('label-receiver-mix-refresh-rms').textContent = 'RMS refresh interval = ' + Math.round(value).toString()  + ' ms';
+});
+
+//==============================================================================
+/**
+ * Callback when the sliderReceiverMixHoldTime slider changes
+ */
+sliderReceiverMixHoldTime.addEventListener('input', function(){
+
+    var value = receiverMix.setMinimumHoldTimeFromGui( sliderReceiverMixHoldTime );
+
+    document.getElementById('label-receiver-mix-holdtime').textContent = 'Hold time = ' + Math.round(value).toString()  + ' ms';
+});
 
 //==============================================================================
 /// Refresh the dynamic compression state every 500 msec
@@ -1024,7 +1060,7 @@ setInterval(function(){
         document.getElementById('label-receiver-mix-compression').style.color = "rgba(255, 255, 255, 0.7)";
     }     
 
-}, 200);
+}, 250);
 
 //==============================================================================
 var inputEvent = new Event('input');
@@ -1039,6 +1075,8 @@ sliderReceiverMixRatio.dispatchEvent(inputEvent);
 sliderReceiverMixThreshold.dispatchEvent(inputEvent);
 sliderReceiverMixAttack.dispatchEvent(inputEvent);
 sliderReceiverMixRelease.dispatchEvent(inputEvent);
+sliderReceiverMixRefreshRms.dispatchEvent(inputEvent);
+sliderReceiverMixHoldTime.dispatchEvent(inputEvent);
 sliderSmartFaderRatio.dispatchEvent(inputEvent);
 sliderSmartFaderAttack.dispatchEvent(inputEvent);
 sliderSmartFaderRelease.dispatchEvent(inputEvent);
@@ -1050,5 +1088,5 @@ sliderAzimDialog.dispatchEvent(inputEvent);
 sliderElevDialog.dispatchEvent(inputEvent);
 sliderDistDialog.dispatchEvent(inputEvent);
 sliderGainOffset.dispatchEvent(inputEvent);
-
+sliderDialogEnhancementBalance.dispatchEvent(inputEvent);
 

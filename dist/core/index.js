@@ -127,6 +127,120 @@ var AudioStreamDescriptionCollection = exports.AudioStreamDescriptionCollection 
          */
 
     }, {
+        key: "isChannelForExtendedDialog",
+
+
+        //==============================================================================
+        /**
+         * Returns true if this channel index corresponds to the extended dialog
+         *      
+         */
+        value: function isChannelForExtendedDialog(channelIndex) {
+
+            if (channelIndex < 0 || channelIndex >= this.totalNumberOfChannels) {
+                throw new Error("Invalid channel index : " + channelIndex);
+            }
+
+            var index = 0;
+
+            /// go through all the streams
+            var _iteratorNormalCompletion = true;
+            var _didIteratorError = false;
+            var _iteratorError = undefined;
+
+            try {
+                for (var _iterator = this._streams[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                    var stream = _step.value;
+
+
+                    var numChannelsForThisStream = stream.numChannels;
+
+                    var isExtendedDialog = stream.isExtendedDialog;
+
+                    for (var k = 0; k < numChannelsForThisStream; k++) {
+
+                        if (channelIndex === index && isExtendedDialog === true) {
+                            return true;
+                        }
+
+                        index++;
+                    }
+                }
+            } catch (err) {
+                _didIteratorError = true;
+                _iteratorError = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion && _iterator.return) {
+                        _iterator.return();
+                    }
+                } finally {
+                    if (_didIteratorError) {
+                        throw _iteratorError;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        //==============================================================================
+        /**
+         * Returns true if this channel index corresponds to the extended ambiance
+         *      
+         */
+
+    }, {
+        key: "isChannelForExtendedAmbiance",
+        value: function isChannelForExtendedAmbiance(channelIndex) {
+
+            if (channelIndex < 0 || channelIndex >= this.totalNumberOfChannels) {
+                throw new Error("Invalid channel index : " + channelIndex);
+            }
+
+            var index = 0;
+
+            /// go through all the streams
+            var _iteratorNormalCompletion2 = true;
+            var _didIteratorError2 = false;
+            var _iteratorError2 = undefined;
+
+            try {
+                for (var _iterator2 = this._streams[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+                    var stream = _step2.value;
+
+
+                    var numChannelsForThisStream = stream.numChannels;
+
+                    var isExtendedAmbiance = stream.isExtendedAmbiance;
+
+                    for (var k = 0; k < numChannelsForThisStream; k++) {
+
+                        if (channelIndex === index && isExtendedAmbiance === true) {
+                            return true;
+                        }
+
+                        index++;
+                    }
+                }
+            } catch (err) {
+                _didIteratorError2 = true;
+                _iteratorError2 = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion2 && _iterator2.return) {
+                        _iterator2.return();
+                    }
+                } finally {
+                    if (_didIteratorError2) {
+                        throw _iteratorError2;
+                    }
+                }
+            }
+
+            return false;
+        }
+    }, {
         key: "streams",
         set: function set(streams) {
             this._streams = streams;
@@ -159,27 +273,27 @@ var AudioStreamDescriptionCollection = exports.AudioStreamDescriptionCollection 
         key: "totalNumberOfChannels",
         get: function get() {
             var totalNumberOfChannels_ = 0;
-            var _iteratorNormalCompletion = true;
-            var _didIteratorError = false;
-            var _iteratorError = undefined;
+            var _iteratorNormalCompletion3 = true;
+            var _didIteratorError3 = false;
+            var _iteratorError3 = undefined;
 
             try {
-                for (var _iterator = this._streams[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-                    var stream = _step.value;
+                for (var _iterator3 = this._streams[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+                    var stream = _step3.value;
 
                     totalNumberOfChannels_ += stream.numChannels;
                 }
             } catch (err) {
-                _didIteratorError = true;
-                _iteratorError = err;
+                _didIteratorError3 = true;
+                _iteratorError3 = err;
             } finally {
                 try {
-                    if (!_iteratorNormalCompletion && _iterator.return) {
-                        _iterator.return();
+                    if (!_iteratorNormalCompletion3 && _iterator3.return) {
+                        _iterator3.return();
                     }
                 } finally {
-                    if (_didIteratorError) {
-                        throw _iteratorError;
+                    if (_didIteratorError3) {
+                        throw _iteratorError3;
                     }
                 }
             }
@@ -197,76 +311,6 @@ var AudioStreamDescriptionCollection = exports.AudioStreamDescriptionCollection 
         key: "actives",
         get: function get() {
             var actives = [];
-            var _iteratorNormalCompletion2 = true;
-            var _didIteratorError2 = false;
-            var _iteratorError2 = undefined;
-
-            try {
-                for (var _iterator2 = this._streams[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-                    var stream = _step2.value;
-
-                    if (stream.active) {
-                        actives.push(stream);
-                    }
-                }
-            } catch (err) {
-                _didIteratorError2 = true;
-                _iteratorError2 = err;
-            } finally {
-                try {
-                    if (!_iteratorNormalCompletion2 && _iterator2.return) {
-                        _iterator2.return();
-                    }
-                } finally {
-                    if (_didIteratorError2) {
-                        throw _iteratorError2;
-                    }
-                }
-            }
-
-            return actives;
-        }
-
-        /**
-         * Returns true if at least one stream is currently active
-         * @type {boolean}
-         */
-
-    }, {
-        key: "hasActiveStream",
-        get: function get() {
-            var _iteratorNormalCompletion3 = true;
-            var _didIteratorError3 = false;
-            var _iteratorError3 = undefined;
-
-            try {
-                for (var _iterator3 = this._streams[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-                    var stream = _step3.value;
-
-                    if (stream.active === true) {
-                        return true;
-                    }
-                }
-            } catch (err) {
-                _didIteratorError3 = true;
-                _iteratorError3 = err;
-            } finally {
-                try {
-                    if (!_iteratorNormalCompletion3 && _iterator3.return) {
-                        _iterator3.return();
-                    }
-                } finally {
-                    if (_didIteratorError3) {
-                        throw _iteratorError3;
-                    }
-                }
-            }
-
-            return false;
-        }
-    }, {
-        key: "extendedDialog",
-        get: function get() {
             var _iteratorNormalCompletion4 = true;
             var _didIteratorError4 = false;
             var _iteratorError4 = undefined;
@@ -275,8 +319,8 @@ var AudioStreamDescriptionCollection = exports.AudioStreamDescriptionCollection 
                 for (var _iterator4 = this._streams[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
                     var stream = _step4.value;
 
-                    if (stream.isExtendedDialog === true) {
-                        return stream;
+                    if (stream.active) {
+                        actives.push(stream);
                     }
                 }
             } catch (err) {
@@ -294,15 +338,16 @@ var AudioStreamDescriptionCollection = exports.AudioStreamDescriptionCollection 
                 }
             }
 
-            return undefined;
+            return actives;
         }
 
         /**
-         * Returns true if there is at least one dialog among all the streams     
+         * Returns true if at least one stream is currently active
+         * @type {boolean}
          */
 
     }, {
-        key: "hasExtendedDialog",
+        key: "hasActiveStream",
         get: function get() {
             var _iteratorNormalCompletion5 = true;
             var _didIteratorError5 = false;
@@ -312,7 +357,7 @@ var AudioStreamDescriptionCollection = exports.AudioStreamDescriptionCollection 
                 for (var _iterator5 = this._streams[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
                     var stream = _step5.value;
 
-                    if (stream.isExtendedDialog === true) {
+                    if (stream.active === true) {
                         return true;
                     }
                 }
@@ -333,13 +378,8 @@ var AudioStreamDescriptionCollection = exports.AudioStreamDescriptionCollection 
 
             return false;
         }
-
-        /**
-         * Returns true if there is at least one dialog among all the streams     
-         */
-
     }, {
-        key: "hasActiveExtendedDialog",
+        key: "extendedDialog",
         get: function get() {
             var _iteratorNormalCompletion6 = true;
             var _didIteratorError6 = false;
@@ -349,8 +389,8 @@ var AudioStreamDescriptionCollection = exports.AudioStreamDescriptionCollection 
                 for (var _iterator6 = this._streams[Symbol.iterator](), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
                     var stream = _step6.value;
 
-                    if (stream.isExtendedDialog === true && stream.active === true) {
-                        return true;
+                    if (stream.isExtendedDialog === true) {
+                        return stream;
                     }
                 }
             } catch (err) {
@@ -368,16 +408,15 @@ var AudioStreamDescriptionCollection = exports.AudioStreamDescriptionCollection 
                 }
             }
 
-            return false;
+            return undefined;
         }
 
-        //==============================================================================
         /**
-         * Returns true if there is at least one ambiance among all the streams     
+         * Returns true if there is at least one dialog among all the streams     
          */
 
     }, {
-        key: "hasExtendedAmbiance",
+        key: "hasExtendedDialog",
         get: function get() {
             var _iteratorNormalCompletion7 = true;
             var _didIteratorError7 = false;
@@ -387,7 +426,7 @@ var AudioStreamDescriptionCollection = exports.AudioStreamDescriptionCollection 
                 for (var _iterator7 = this._streams[Symbol.iterator](), _step7; !(_iteratorNormalCompletion7 = (_step7 = _iterator7.next()).done); _iteratorNormalCompletion7 = true) {
                     var stream = _step7.value;
 
-                    if (stream.isExtendedAmbiance === true) {
+                    if (stream.isExtendedDialog === true) {
                         return true;
                     }
                 }
@@ -410,11 +449,11 @@ var AudioStreamDescriptionCollection = exports.AudioStreamDescriptionCollection 
         }
 
         /**
-         * Returns true if there is at least one ambiance among all the streams     
+         * Returns true if there is at least one dialog among all the streams     
          */
 
     }, {
-        key: "hasActiveExtendedAmbiance",
+        key: "hasActiveExtendedDialog",
         get: function get() {
             var _iteratorNormalCompletion8 = true;
             var _didIteratorError8 = false;
@@ -424,7 +463,7 @@ var AudioStreamDescriptionCollection = exports.AudioStreamDescriptionCollection 
                 for (var _iterator8 = this._streams[Symbol.iterator](), _step8; !(_iteratorNormalCompletion8 = (_step8 = _iterator8.next()).done); _iteratorNormalCompletion8 = true) {
                     var stream = _step8.value;
 
-                    if (stream.isExtendedAmbiance === true && stream.active === true) {
+                    if (stream.isExtendedDialog === true && stream.active === true) {
                         return true;
                     }
                 }
@@ -448,11 +487,11 @@ var AudioStreamDescriptionCollection = exports.AudioStreamDescriptionCollection 
 
         //==============================================================================
         /**
-         * Returns true if there is at least one commentary among all the streams     
+         * Returns true if there is at least one ambiance among all the streams     
          */
 
     }, {
-        key: "hasExtendedCommentary",
+        key: "hasExtendedAmbiance",
         get: function get() {
             var _iteratorNormalCompletion9 = true;
             var _didIteratorError9 = false;
@@ -462,7 +501,7 @@ var AudioStreamDescriptionCollection = exports.AudioStreamDescriptionCollection 
                 for (var _iterator9 = this._streams[Symbol.iterator](), _step9; !(_iteratorNormalCompletion9 = (_step9 = _iterator9.next()).done); _iteratorNormalCompletion9 = true) {
                     var stream = _step9.value;
 
-                    if (stream.isExtendedCommentary === true) {
+                    if (stream.isExtendedAmbiance === true) {
                         return true;
                     }
                 }
@@ -485,12 +524,11 @@ var AudioStreamDescriptionCollection = exports.AudioStreamDescriptionCollection 
         }
 
         /**
-         * Returns true if there is at least one commentary among all the streams,
-         * and if it is currently active     
+         * Returns true if there is at least one ambiance among all the streams     
          */
 
     }, {
-        key: "hasActiveExtendedCommentary",
+        key: "hasActiveExtendedAmbiance",
         get: function get() {
             var _iteratorNormalCompletion10 = true;
             var _didIteratorError10 = false;
@@ -500,7 +538,7 @@ var AudioStreamDescriptionCollection = exports.AudioStreamDescriptionCollection 
                 for (var _iterator10 = this._streams[Symbol.iterator](), _step10; !(_iteratorNormalCompletion10 = (_step10 = _iterator10.next()).done); _iteratorNormalCompletion10 = true) {
                     var stream = _step10.value;
 
-                    if (stream.isExtendedCommentary === true && stream.active === true) {
+                    if (stream.isExtendedAmbiance === true && stream.active === true) {
                         return true;
                     }
                 }
@@ -524,6 +562,82 @@ var AudioStreamDescriptionCollection = exports.AudioStreamDescriptionCollection 
 
         //==============================================================================
         /**
+         * Returns true if there is at least one commentary among all the streams     
+         */
+
+    }, {
+        key: "hasExtendedCommentary",
+        get: function get() {
+            var _iteratorNormalCompletion11 = true;
+            var _didIteratorError11 = false;
+            var _iteratorError11 = undefined;
+
+            try {
+                for (var _iterator11 = this._streams[Symbol.iterator](), _step11; !(_iteratorNormalCompletion11 = (_step11 = _iterator11.next()).done); _iteratorNormalCompletion11 = true) {
+                    var stream = _step11.value;
+
+                    if (stream.isExtendedCommentary === true) {
+                        return true;
+                    }
+                }
+            } catch (err) {
+                _didIteratorError11 = true;
+                _iteratorError11 = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion11 && _iterator11.return) {
+                        _iterator11.return();
+                    }
+                } finally {
+                    if (_didIteratorError11) {
+                        throw _iteratorError11;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        /**
+         * Returns true if there is at least one commentary among all the streams,
+         * and if it is currently active     
+         */
+
+    }, {
+        key: "hasActiveExtendedCommentary",
+        get: function get() {
+            var _iteratorNormalCompletion12 = true;
+            var _didIteratorError12 = false;
+            var _iteratorError12 = undefined;
+
+            try {
+                for (var _iterator12 = this._streams[Symbol.iterator](), _step12; !(_iteratorNormalCompletion12 = (_step12 = _iterator12.next()).done); _iteratorNormalCompletion12 = true) {
+                    var stream = _step12.value;
+
+                    if (stream.isExtendedCommentary === true && stream.active === true) {
+                        return true;
+                    }
+                }
+            } catch (err) {
+                _didIteratorError12 = true;
+                _iteratorError12 = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion12 && _iterator12.return) {
+                        _iterator12.return();
+                    }
+                } finally {
+                    if (_didIteratorError12) {
+                        throw _iteratorError12;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        //==============================================================================
+        /**
          * This function returns the index of the source which corresponds to the mono commentary
          * 
          * Returns -1 if there is no commentary
@@ -536,13 +650,13 @@ var AudioStreamDescriptionCollection = exports.AudioStreamDescriptionCollection 
             var channelIndex = 0;
 
             /// go through all the streams
-            var _iteratorNormalCompletion11 = true;
-            var _didIteratorError11 = false;
-            var _iteratorError11 = undefined;
+            var _iteratorNormalCompletion13 = true;
+            var _didIteratorError13 = false;
+            var _iteratorError13 = undefined;
 
             try {
-                for (var _iterator11 = this._streams[Symbol.iterator](), _step11; !(_iteratorNormalCompletion11 = (_step11 = _iterator11.next()).done); _iteratorNormalCompletion11 = true) {
-                    var stream = _step11.value;
+                for (var _iterator13 = this._streams[Symbol.iterator](), _step13; !(_iteratorNormalCompletion13 = (_step13 = _iterator13.next()).done); _iteratorNormalCompletion13 = true) {
+                    var stream = _step13.value;
 
 
                     if (stream.isExtendedCommentary === true) {
@@ -559,16 +673,16 @@ var AudioStreamDescriptionCollection = exports.AudioStreamDescriptionCollection 
                     }
                 }
             } catch (err) {
-                _didIteratorError11 = true;
-                _iteratorError11 = err;
+                _didIteratorError13 = true;
+                _iteratorError13 = err;
             } finally {
                 try {
-                    if (!_iteratorNormalCompletion11 && _iterator11.return) {
-                        _iterator11.return();
+                    if (!_iteratorNormalCompletion13 && _iterator13.return) {
+                        _iterator13.return();
                     }
                 } finally {
-                    if (_didIteratorError11) {
-                        throw _iteratorError11;
+                    if (_didIteratorError13) {
+                        throw _iteratorError13;
                     }
                 }
             }
@@ -590,13 +704,13 @@ var AudioStreamDescriptionCollection = exports.AudioStreamDescriptionCollection 
             var channelIndex = 0;
 
             /// go through all the streams
-            var _iteratorNormalCompletion12 = true;
-            var _didIteratorError12 = false;
-            var _iteratorError12 = undefined;
+            var _iteratorNormalCompletion14 = true;
+            var _didIteratorError14 = false;
+            var _iteratorError14 = undefined;
 
             try {
-                for (var _iterator12 = this._streams[Symbol.iterator](), _step12; !(_iteratorNormalCompletion12 = (_step12 = _iterator12.next()).done); _iteratorNormalCompletion12 = true) {
-                    var stream = _step12.value;
+                for (var _iterator14 = this._streams[Symbol.iterator](), _step14; !(_iteratorNormalCompletion14 = (_step14 = _iterator14.next()).done); _iteratorNormalCompletion14 = true) {
+                    var stream = _step14.value;
 
 
                     if (stream.isExtendedDialog === true) {
@@ -613,16 +727,16 @@ var AudioStreamDescriptionCollection = exports.AudioStreamDescriptionCollection 
                     }
                 }
             } catch (err) {
-                _didIteratorError12 = true;
-                _iteratorError12 = err;
+                _didIteratorError14 = true;
+                _iteratorError14 = err;
             } finally {
                 try {
-                    if (!_iteratorNormalCompletion12 && _iterator12.return) {
-                        _iterator12.return();
+                    if (!_iteratorNormalCompletion14 && _iterator14.return) {
+                        _iterator14.return();
                     }
                 } finally {
-                    if (_didIteratorError12) {
-                        throw _iteratorError12;
+                    if (_didIteratorError14) {
+                        throw _iteratorError14;
                     }
                 }
             }

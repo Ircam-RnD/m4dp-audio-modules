@@ -14,6 +14,8 @@ var _multichannelgain = require('../dsp/multichannelgain.js');
 
 var _multichannelgain2 = _interopRequireDefault(_multichannelgain);
 
+var _utils = require('../core/utils.js');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -30,6 +32,9 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
  */
 /************************************************************************************/
 
+//import utilities from '../core/utils.js';
+
+
 var DialogEnhancement = function (_AbstractNode) {
     _inherits(DialogEnhancement, _AbstractNode);
 
@@ -45,21 +50,30 @@ var DialogEnhancement = function (_AbstractNode) {
         var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(DialogEnhancement).call(this, audioContext, audioStreamDescriptionCollection));
 
         _this._mode = 1;
-        _this._dialogGain = 0.0;
-        _this._isBypass = true;
+        _this._balance = 100.0;
+        _this._isBypass = false;
+        _this._processor1 = new DialogEnhancementProcessorMode1(audioContext, audioStreamDescriptionCollection);
 
         _this._updateAudioGraph();
         return _this;
     }
 
     //==============================================================================
-    /**
-     * Enable or bypass the processor
-     * @type {boolean}
-     */
 
 
     _createClass(DialogEnhancement, [{
+        key: 'getTotalNumberOfChannels',
+        value: function getTotalNumberOfChannels() {
+            return this._audioStreamDescriptionCollection.totalNumberOfChannels;
+        }
+
+        //==============================================================================
+        /**
+         * Enable or bypass the processor
+         * @type {boolean}
+         */
+
+    }, {
         key: 'activeStreamsChanged',
 
 
@@ -94,11 +108,54 @@ var DialogEnhancement = function (_AbstractNode) {
          */
 
     }, {
-        key: '_update',
+        key: 'setBalanceFromGui',
+        value: function setBalanceFromGui(theSlider) {
+            /// the value of the fader
+            var valueFader = parseFloat(theSlider.value);
 
+            // get the bounds of the fader (GUI)
+            var minFader = parseFloat(theSlider.min);
+            var maxFader = parseFloat(theSlider.max);
+
+            // get the actual bounds for this parameter
+            var minValue = 0;
+            var maxValue = 100;
+
+            /// scale from GUI to DSP
+            var value = (0, _utils.scale)(valueFader, minFader, maxFader, minValue, maxValue);
+
+            this.balance = value;
+
+            return value;
+        }
+    }, {
+        key: 'getBalanceFromGui',
+        value: function getBalanceFromGui(theSlider) {
+
+            // get the bounds of the fader (GUI)
+            var minFader = parseFloat(theSlider.min);
+            var maxFader = parseFloat(theSlider.max);
+
+            // get the actual bounds for this parameter
+            var minValue = 0;
+            var maxValue = 100;
+
+            var actualValue = this.balance;
+
+            /// scale from DSP to GUI
+            var value = M4DPAudioModules.utilities.scale(actualValue, minValue, maxValue, minFader, maxFader);
+
+            return value;
+        }
 
         //==============================================================================
-        value: function _update() {}
+
+    }, {
+        key: '_update',
+        value: function _update() {
+
+            this._processor1.balance = this.balance;
+        }
 
         //==============================================================================
         /**
@@ -142,11 +199,21 @@ var DialogEnhancement = function (_AbstractNode) {
 
             /// first of all, disconnect everything
             this._input.disconnect();
+            this._processor1.disconnect();
 
             if (this.bypass === true || this._canProcessCurrentMode() === false) {
 
                 this._input.connect(this._output);
-            } else {}
+            } else {
+
+                var mode = this.mode;
+
+                if (mode === 1) {
+
+                    this._input.connect(this._processor1._input);
+                    this._processor1.connect(this._output);
+                }
+            }
 
             this._update();
         }
@@ -211,29 +278,28 @@ var DialogEnhancement = function (_AbstractNode) {
             return this._mode;
         }
 
-        //==============================================================================
+        //==============================================================================       
         /**
-         * Set dialogGain
-         * @type {number}
-         * @todo give range of accepted values
+         * Sets the balance (in 0 - 100 %) between dialogs and ambiance
+         *      
          */
 
     }, {
-        key: 'dialogGain',
+        key: 'balance',
         set: function set(value) {
 
-            this._dialogGain = value;
+            this._balance = value;
 
             this._update();
         }
+
         /**
-         * Get dialogGain
-         * @type {number}
-         * @todo give range of accepted values
+         * Returns the balance (in 0 - 100 %) between dialogs and ambiance
+         * @type {number}     
          */
         ,
         get: function get() {
-            return this._dialogGain;
+            return this._balance;
         }
     }]);
 
@@ -241,3 +307,145 @@ var DialogEnhancement = function (_AbstractNode) {
 }(_index2.default);
 
 exports.default = DialogEnhancement;
+
+var DialogEnhancementProcessorMode1 = function (_AbstractNode2) {
+    _inherits(DialogEnhancementProcessorMode1, _AbstractNode2);
+
+    //==============================================================================
+    /**
+     * @param {AudioContext} audioContext - audioContext instance.
+     * @param {AudioStreamDescriptionCollection} audioStreamDescriptionCollection - audioStreamDescriptionCollection.     
+     */
+
+    function DialogEnhancementProcessorMode1(audioContext, audioStreamDescriptionCollection) {
+        _classCallCheck(this, DialogEnhancementProcessorMode1);
+
+        var _this2 = _possibleConstructorReturn(this, Object.getPrototypeOf(DialogEnhancementProcessorMode1).call(this, audioContext, audioStreamDescriptionCollection));
+
+        _this2._balance = 100;
+
+        /// the total number of incoming channels, including all the streams
+        /// (mainAudio, extendedAmbience, extendedComments and extendedDialogs)
+        var totalNumberOfChannels_ = _this2.getTotalNumberOfChannels();
+
+        _this2._gainsNode = new _multichannelgain2.default(audioContext, totalNumberOfChannels_);
+
+        _this2._updateAudioGraph();
+        return _this2;
+    }
+
+    //==============================================================================
+
+
+    _createClass(DialogEnhancementProcessorMode1, [{
+        key: 'getTotalNumberOfChannels',
+        value: function getTotalNumberOfChannels() {
+            return this._audioStreamDescriptionCollection.totalNumberOfChannels;
+        }
+
+        //==============================================================================
+        /**
+         * Returns the current number of channels
+         */
+
+    }, {
+        key: 'getNumChannels',
+        value: function getNumChannels() {
+            return this._gainsNode.getNumChannels();
+        }
+
+        //==============================================================================       
+        /**
+         * Sets the balance (in 0 - 100 %) between dialogs and ambiance
+         *      
+         */
+
+    }, {
+        key: 'isChannelForExtendedDialog',
+
+
+        //==============================================================================
+        /**
+         * Returns true if this channel index corresponds to the extended dialog
+         *      
+         */
+        value: function isChannelForExtendedDialog(channelIndex) {
+
+            return this._audioStreamDescriptionCollection.isChannelForExtendedDialog(channelIndex);
+        }
+
+        //==============================================================================
+        /**
+         * Returns true if this channel index corresponds to the extended ambiance
+         *      
+         */
+
+    }, {
+        key: 'isChannelForExtendedAmbiance',
+        value: function isChannelForExtendedAmbiance(channelIndex) {
+            return this._audioStreamDescriptionCollection.isChannelForExtendedAmbiance(channelIndex);
+        }
+
+        //==============================================================================
+        /**
+         * Updates the gains for each channel
+         *      
+         */
+
+    }, {
+        key: '_update',
+        value: function _update() {
+
+            var gainForDialogs = (0, _utils.scale)(this.balance, 0., 100., 0., 1.);
+            var gainForAmbiance = 1.0 - gainForDialogs;
+
+            for (var k = 0; k < this.getNumChannels(); k++) {
+
+                if (this.isChannelForExtendedDialog(k) === true) {
+                    this._gainsNode.setGain(k, gainForDialogs);
+                } else if (this.isChannelForExtendedAmbiance(k) === true) {
+                    this._gainsNode.setGain(k, gainForAmbiance);
+                } else {
+                    this._gainsNode.setGain(k, 1.0);
+                }
+            }
+        }
+
+        //==============================================================================
+        /**
+         * Updates the connections of the audio graph
+         */
+
+    }, {
+        key: '_updateAudioGraph',
+        value: function _updateAudioGraph() {
+
+            /// first of all, disconnect everything
+            this._input.disconnect();
+            this._gainsNode.disconnect();
+
+            this._input.connect(this._gainsNode._input);
+            this._gainsNode.connect(this._output);
+
+            this._update();
+        }
+    }, {
+        key: 'balance',
+        set: function set(value) {
+
+            /// 100% --> only the dialogs
+            /// 0% --> only the ambiance
+
+            var percent = (0, _utils.clamp)(value, 0., 100.);
+
+            this._balance = percent;
+
+            this._update();
+        },
+        get: function get() {
+            return this._balance;
+        }
+    }]);
+
+    return DialogEnhancementProcessorMode1;
+}(_index2.default);

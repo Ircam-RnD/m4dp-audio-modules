@@ -107,6 +107,21 @@ var MultichannelGainNode = function (_AbstractNode) {
 
         //==============================================================================
         /**
+         * Sets the same gain to all channels
+         * @param {float} value: linear gain
+         */
+
+    }, {
+        key: 'setAllGains',
+        value: function setAllGains(value) {
+
+            for (var k = 0; k < this.getNumChannels(); k++) {
+                this.setGain(k, value);
+            }
+        }
+
+        //==============================================================================
+        /**
          * Sets the gain of the i-th channel
          * @param {int} channelIndex
          * @param {float} value: linear gain
