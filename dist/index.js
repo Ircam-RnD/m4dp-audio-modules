@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
 		value: true
 });
-exports.binaural = exports.unittests = exports.utilities = exports.AudioStreamDescription = exports.AudioStreamDescriptionCollection = exports.SmartFader = exports.ObjectSpatialiserAndMixer = exports.NoiseAdaptation = exports.MultichannelSpatialiser = exports.DialogEnhancement = exports.ReceiverMix = exports.StreamSelector = exports.HeadphonesEqualization = exports.SumDiffNode = exports.CascadeNode = undefined;
+exports.binaural = exports.unittests = exports.utilities = exports.AudioStreamDescription = exports.AudioStreamDescriptionCollection = exports.SmartFader = exports.ObjectSpatialiserAndMixer = exports.NoiseAdaptation = exports.MultichannelSpatialiser = exports.DialogEnhancement = exports.ReceiverMix = exports.StreamSelector = exports.HeadphonesEqualization = exports.CenterEnhancementNode = exports.LRMSNode = exports.SumDiffNode = exports.CascadeNode = undefined;
 
 var _index = require('./dialog-enhancement/index.js');
 
@@ -53,6 +53,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 exports.CascadeNode = _index16.CascadeNode;
 exports.SumDiffNode = _index16.SumDiffNode;
+exports.LRMSNode = _index16.LRMSNode;
+exports.CenterEnhancementNode = _index16.CenterEnhancementNode;
 exports.HeadphonesEqualization = _index16.HeadphonesEqualization;
 exports.StreamSelector = _index13.default;
 exports.ReceiverMix = _index15.default;

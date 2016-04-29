@@ -71,8 +71,8 @@ var getElementFromXML = function(item, ns, prefix, attr){
 };
 
 $(function () {
-    //var ebucoreUrl = querySt("ebucore") || "xml/EBUcore_M4DP_LMDJ.xml", program;
-    var ebucoreUrl = querySt("ebucore") || "xml/EBUCore_M4DP_ALEXHUGO.xml", program;
+    var ebucoreUrl = querySt("ebucore") || "xml/EBUcore_M4DP_LMDJ.xml", program;
+    //var ebucoreUrl = querySt("ebucore") || "xml/EBUCore_M4DP_ALEXHUGO.xml", program;
     //var ebucoreUrl = querySt("ebucore") || "xml/EBUCore_M4DP_JT_20h00.xml", program;
     //var ebucoreUrl = querySt("ebucore") || "xml/EBUCore_M4DP_METEO.xml", program;
     //var ebucoreUrl = querySt("ebucore") || "xml/EBUCore_M4DP_TCHOUPI.xml", program;
@@ -523,7 +523,7 @@ sliderAzimDialog.dispatchEvent(inputEvent);
 sliderElevDialog.dispatchEvent(inputEvent);
 sliderDistDialog.dispatchEvent(inputEvent);
 sliderGainOffset.dispatchEvent(inputEvent);
-sliderDialogEnhancementBalance.dispatchEvent(inputEvent);
+sliderDialogEnhancementMode1.dispatchEvent(inputEvent);
 
 };
 
@@ -559,7 +559,8 @@ var sliderReceiverMixAttack = document.getElementById('slider-receiver-mix-attac
 var sliderReceiverMixRelease = document.getElementById('slider-receiver-mix-release');
 var sliderReceiverMixRefreshRms = document.getElementById('slider-receiver-mix-refresh-rms');
 var sliderReceiverMixHoldTime = document.getElementById('slider-receiver-mix-holdtime');
-var sliderDialogEnhancementBalance = document.getElementById('slider-dialog-enhancement-balance');
+var sliderDialogEnhancementMode1 = document.getElementById('slider-dialog-enhancement-mode1');
+
 
 
 
@@ -664,34 +665,6 @@ function prepareSpatializationModeMenu(){
     $menu.onchange();
 }
 
-//==============================================================================
-function prepareDialogEnhancementMenu(){
-    
-    var $menu = document.querySelector('#dialog-enhancement-menu');
-    
-    $menu.onchange = function ()
-    {
-        /// retrieve selected mode
-        var selection = $menu.value;
-
-        dialogEnhancement.setModeFromString( selection );
-    }
-
-    $option = document.createElement('option');
-    $option.textContent = 'Mode 1';
-    $menu.add($option);
-
-    $option = document.createElement('option');
-    $option.textContent = 'Mode 2';
-    $menu.add($option);
-    
-    $option = document.createElement('option');
-    $option.textContent = 'Mode 3';
-    $menu.add($option);
-
-    $menu.value = 'Mode 1';
-    $menu.onchange();
-}
 
 //==============================================================================
 function prepareModulesConfigurationMenu(){
@@ -844,6 +817,23 @@ function updateActiveStreams(){
     receiverMix.activeStreamsChanged();
     multichannelSpatialiser.activeStreamsChanged();
     objectSpatialiserAndMixer.activeStreamsChanged();
+
+    /// update the dialog enhancement
+    var value = dialogEnhancement.mode;
+    document.getElementById('label-dialog-current-mode').textContent = 'current mode : ' + value;
+    
+    var inputEvent = new Event('input');
+    sliderDialogEnhancementMode1.dispatchEvent(inputEvent);
+
+    if( value == 0 ){
+        setElementVisibility( 'label-dialog-enhancement-mode1', false );
+    }
+    else{
+        setElementVisibility( 'label-dialog-enhancement-mode1', true );
+    }
+    
+    setElementVisibility( 'slider-dialog-enhancement-mode1', true );        
+    
 }
 
 function updateStreamsTrim(){
@@ -975,8 +965,6 @@ function initializeDropDownMenus(){
 
     prepareModulesConfigurationMenu();
 
-    prepareDialogEnhancementMenu();
-
     /// prepare the sofa catalog of HRTF
     prepareHrtfSelectionMenu();
 
@@ -1019,7 +1007,7 @@ function initializeSliders(){
     sliderReceiverMixN.value = receiverMix.getThresholdForCommentaryFromGui( sliderReceiverMixN );
     sliderReceiverMixX.value = receiverMix.getThresholdForProgrammeFromGui( sliderReceiverMixX );
 
-    sliderDialogEnhancementBalance.value = dialogEnhancement.getBalanceFromGui( sliderDialogEnhancementBalance );
+    sliderDialogEnhancementMode1.value = dialogEnhancement.getBalanceFromGui( sliderDialogEnhancementMode1 );
 
     sliderTrimMain.value        = 0;
     sliderTrimAmbiance.value    = 0;
@@ -1055,11 +1043,23 @@ sliderReceiverMixX.addEventListener('input', function(){
 });
 
 //==============================================================================
-sliderDialogEnhancementBalance.addEventListener('input', function(){
+sliderDialogEnhancementMode1.addEventListener('input', function(){
 
-    var value = dialogEnhancement.setBalanceFromGui( sliderDialogEnhancementBalance );
+    var value = dialogEnhancement.setBalanceFromGui( sliderDialogEnhancementMode1 );
 
-    document.getElementById('label-dialog-enhancement-balance').textContent = Math.round(value).toString() + ' % (ambiance | dialog)';
+    var mode = dialogEnhancement.mode;
+
+    if( mode === 1 ){
+        document.getElementById('label-dialog-enhancement-mode1').textContent = Math.round(value).toString() + ' % (ambiance | dialog)';
+    }
+    else if( mode === 2 ){
+        var scaled = M4DPAudioModules.utilities.scale( value, 0, 100, -6, 6 );
+        document.getElementById('label-dialog-enhancement-mode1').textContent = Math.round(scaled).toFixed(1) + ' dB';   
+    }
+    else if( mode === 3 ){
+        var scaled = M4DPAudioModules.utilities.scale( value, 0, 100, 0, 6 );
+        document.getElementById('label-dialog-enhancement-mode1').textContent = Math.round(scaled).toFixed(1) + ' dB';   
+    }
 });
 
 //==============================================================================
