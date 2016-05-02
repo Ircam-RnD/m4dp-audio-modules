@@ -71,13 +71,15 @@ var getElementFromXML = function(item, ns, prefix, attr){
 };
 
 $(function () {
-    var ebucoreUrl = querySt("ebucore") || "xml/EBUcore_M4DP_LMDJ.xml", program;
+    //var ebucoreUrl = querySt("ebucore") || "xml/EBUcore_M4DP_LMDJ.xml", program;
     //var ebucoreUrl = querySt("ebucore") || "xml/EBUCore_M4DP_ALEXHUGO.xml", program;
     //var ebucoreUrl = querySt("ebucore") || "xml/EBUCore_M4DP_JT_20h00.xml", program;
     //var ebucoreUrl = querySt("ebucore") || "xml/EBUCore_M4DP_METEO.xml", program;
     //var ebucoreUrl = querySt("ebucore") || "xml/EBUCore_M4DP_TCHOUPI.xml", program;
     //var ebucoreUrl = querySt("ebucore") || "xml/EBUCore_M4DP_RUGBY_AVC.xml", program;
     //var ebucoreUrl = querySt("ebucore") || "xml/EBUCore_M4DP_RUGBY_HEVC.xml", program;
+    var ebucoreUrl = querySt("ebucore") || "xml/EBUCore_M4DP_CSOJ_AVC.xml", program;
+    //var ebucoreUrl = querySt("ebucore") || "xml/EBUCore_M4DP_CSOJ_HEVC.xml", program;
     
     if(ebucoreUrl){
         $.ajax({
@@ -166,7 +168,6 @@ $(function () {
 
 
 var initPlayer = function(program){
-    var mode = querySt("mode") || "5.1";
 
 /// player pour la video principale
 videoPlayerMainMediaElement           = document.getElementById('videoPlayerMain');
@@ -311,10 +312,10 @@ channelSplitterDialogue.connect( channelMerger, 0, 9 );
 
 //==============================================================================
 // Configure the AudioStreamDescription according to the EBU Core file(s)
-var mainData = program.dataMain;
-var eaData = program.dataEA;
-var adData = program.dataAD;
-var diData = program.dataDI;
+var mainData = JSON.parse(JSON.stringify(program.dataMain));
+var eaData = JSON.parse(JSON.stringify(program.dataEA));
+var adData = JSON.parse(JSON.stringify(program.dataAD));
+var diData = JSON.parse(JSON.stringify(program.dataDI));
 
 /// Workaround when all the streams are not in the EBU Core
 if( typeof( program.dataEA.type ) === "undefined" ){
@@ -330,9 +331,9 @@ if( typeof( program.dataDI.type ) === "undefined" ){
 // Son principal
 mainAudioASD = new M4DPAudioModules.AudioStreamDescription(
         type = mainData.type,
-        active = mode === "stereo",
-        loudness = parseInt(mainData.loudness,10),
-        maxTruePeak = parseInt(mainData.maxTruePeak,10),
+        active = true,
+        loudness = parseFloat(mainData.loudness,10),
+        maxTruePeak = parseFloat(mainData.maxTruePeak,10),
         dialog = mainData.dialog === "true",
         ambiance = mainData.ambiance === "true",
         commentary = mainData.commentary === "true");
@@ -340,9 +341,9 @@ mainAudioASD = new M4DPAudioModules.AudioStreamDescription(
 // Ambiance (pour le 5.1)
 extendedAmbienceASD = new M4DPAudioModules.AudioStreamDescription(
         type = eaData.type,
-        active = ( typeof( program.dataEA.type ) != "undefined" && mode === "5.1" ),
-        loudness = parseInt(eaData.loudness,10),
-        maxTruePeak = parseInt(eaData.maxTruePeak,10),
+        active = typeof( program.dataEA.type ) != "undefined",
+        loudness = parseFloat(eaData.loudness,10),
+        maxTruePeak = parseFloat(eaData.maxTruePeak,10),
         dialog = eaData.dialog === "true",
         ambiance = eaData.ambiance === "true",
         commentary = eaData.commentary === "true");
@@ -351,8 +352,8 @@ extendedAmbienceASD = new M4DPAudioModules.AudioStreamDescription(
 extendedCommentsASD = new M4DPAudioModules.AudioStreamDescription(
         type = adData.type,
         active = false,
-        loudness = parseInt(adData.loudness,10),
-        maxTruePeak = parseInt(adData.maxTruePeak,10),
+        loudness = parseFloat(adData.loudness,10),
+        maxTruePeak = parseFloat(adData.maxTruePeak,10),
         dialog = adData.dialog === "true",
         ambiance = adData.ambiance === "true",
         commentary = adData.commentary === "true");
@@ -360,9 +361,9 @@ extendedCommentsASD = new M4DPAudioModules.AudioStreamDescription(
 // Dialogue (pour le 5.1)
 extendedDialogsASD = new M4DPAudioModules.AudioStreamDescription(
         type = diData.type,
-        active = ( typeof( program.dataDI.type ) != "undefined" && mode === "5.1" ),
-        loudness = parseInt(diData.loudness,10),
-        maxTruePeak = parseInt(diData.maxTruePeak,10),
+        active = typeof( program.dataDI.type ) != "undefined",
+        loudness = parseFloat(diData.loudness,10),
+        maxTruePeak = parseFloat(diData.maxTruePeak,10),
         dialog = diData.dialog === "true",
         ambiance = diData.ambiance === "true",
         commentary = diData.commentary === "true");
