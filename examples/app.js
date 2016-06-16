@@ -721,6 +721,14 @@ function prepareModulesConfigurationMenu(){
 //==============================================================================
 function prepareHrtfSelectionMenu(){
     
+    var currentProcessor = undefined;
+    if( config == ModulesConfiguration.kMultichannelSpatialiser ){
+        currentProcessor = multichannelSpatialiser;
+    }
+    else{
+        currentProcessor = objectSpatialiserAndMixer;
+    }
+
     // HRTF set selection menu
     var $hrtfSet = document.querySelector('#hrtf-selection-menu');
     $hrtfSet.onchange = function ()
@@ -730,14 +738,6 @@ function prepareHrtfSelectionMenu(){
         
         /// retrieve the URL selected in the menu 
         var url = $hrtfSet.value;
-
-        var currentProcessor = undefined;
-        if( config == ModulesConfiguration.kMultichannelSpatialiser ){
-            currentProcessor = multichannelSpatialiser;
-        }
-        else{
-            currentProcessor = objectSpatialiserAndMixer;
-        }
 
         /// load the URL in the spatialiser
         currentProcessor.loadHrtfSet( url )
@@ -766,6 +766,15 @@ function prepareHrtfSelectionMenu(){
                  });
 
                  var $option;
+
+                 sofaUrl = currentProcessor._virtualSpeakers.getFallbackUrls();
+
+                 sofaUrl.forEach( function (url) {
+                     $option = document.createElement('option');
+                     $option.textContent = url;
+                     $hrtfSet.add($option);
+                  });
+                 
                  urls.forEach( function (url) {
                      $option = document.createElement('option');
                      $option.textContent = url;
@@ -786,22 +795,16 @@ function prepareHrtfSelectionMenu(){
 
                  console.log('could not access bili2.ircam.fr...');
 
-                var currentProcessor = undefined;
-                if( config == ModulesConfiguration.kMultichannelSpatialiser ){
-                    currentProcessor = multichannelSpatialiser;
-                }
-                else{
-                    currentProcessor = objectSpatialiserAndMixer;
-                }
-
-                 sofaUrl = currentProcessor._virtualSpeakers.getFallbackUrl();
+                 sofaUrl = currentProcessor._virtualSpeakers.getFallbackUrls();
 
                  var $option;
-                 $option = document.createElement('option');
-                 $option.textContent = sofaUrl;
-                 $hrtfSet.add($option);
+                 sofaUrl.forEach( function (url) {
+                    $option = document.createElement('option');
+                    $option.textContent = url;
+                    $hrtfSet.add($option);
+                 });
                  
-                 $hrtfSet.value = sofaUrl;
+                 $hrtfSet.value = sofaUrl[0];
                  $hrtfSet.onchange();
 
                  return sofaUrl;
