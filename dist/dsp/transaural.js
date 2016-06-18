@@ -73,13 +73,11 @@ var TransauralNode = function (_AbstractNode) {
          * Updates the connections of the audio graph
          */
         value: function _updateAudioGraph() {
-
             if (this.bypass === true) {
                 this._input.disconnect();
                 this._input.connect(this._output);
             } else {
                 //this._updateTransauralAudioGraph();
-
             }
         }
     }, {
@@ -98,7 +96,6 @@ var TransauralNode = function (_AbstractNode) {
 
             if (0 < spanInDegress && spanInDegress <= 60) {
                 this._speakersSpan = spanInDegress;
-
                 this._updateAudioGraph();
             } else {
                 throw new Error("Invalid speakerSpan " + spanInDegress);
@@ -114,7 +111,6 @@ var TransauralNode = function (_AbstractNode) {
     }, {
         key: 'bypass',
         set: function set(value) {
-
             if (value !== this._isBypass) {
                 this._isBypass = value;
                 this._updateAudioGraph();
@@ -193,7 +189,6 @@ var TransauralShufflerNode = exports.TransauralShufflerNode = function (_Transau
     _createClass(TransauralShufflerNode, [{
         key: '_updateAudioGraph',
         value: function _updateAudioGraph() {
-
             if (this.bypass === true) {
                 this._input.disconnect();
                 this._input.connect(this._output);
@@ -204,7 +199,6 @@ var TransauralShufflerNode = exports.TransauralShufflerNode = function (_Transau
     }, {
         key: '_updateTransauralAudioGraph',
         value: function _updateTransauralAudioGraph() {
-
             this._input.disconnect();
 
             this._input.connect(this._sumDiffNode1._input);
@@ -217,7 +211,6 @@ var TransauralShufflerNode = exports.TransauralShufflerNode = function (_Transau
     }, {
         key: '_updateFilters',
         value: function _updateFilters() {
-
             var span = this.speakersSpan;
 
             var firBuffer = undefined;

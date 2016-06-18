@@ -1,0 +1,86 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXFileReference section */
+		F8A2F3B51D15885300FC48AE /* examples */ = {isa = PBXFileReference; lastKnownFileType = folder; name = examples; path = ../examples; sourceTree = "<group>"; };
+		F8A2F3B61D15885300FC48AE /* lib */ = {isa = PBXFileReference; lastKnownFileType = folder; name = lib; path = ../lib; sourceTree = "<group>"; };
+		F8A2F3B71D15885300FC48AE /* node_modules */ = {isa = PBXFileReference; lastKnownFileType = folder; name = node_modules; path = ../node_modules; sourceTree = "<group>"; };
+		F8A2F3BD1D1588A600FC48AE /* bundle.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = bundle.js; path = ../bundle.js; sourceTree = "<group>"; };
+		F8A2F3BE1D1588A600FC48AE /* esdoc.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = esdoc.json; path = ../esdoc.json; sourceTree = "<group>"; };
+		F8A2F3BF1D1588A700FC48AE /* package.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; name = package.json; path = ../package.json; sourceTree = "<group>"; };
+		F8A2F3C01D1588A700FC48AE /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
+		F8A2F3C11D1588A800FC48AE /* TODO */ = {isa = PBXFileReference; lastKnownFileType = text; name = TODO; path = ../TODO; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		F8A2F3AE1D15883F00FC48AE = {
+			isa = PBXGroup;
+			children = (
+				F8A2F3BD1D1588A600FC48AE /* bundle.js */,
+				F8A2F3BE1D1588A600FC48AE /* esdoc.json */,
+				F8A2F3BF1D1588A700FC48AE /* package.json */,
+				F8A2F3C01D1588A700FC48AE /* README.md */,
+				F8A2F3C11D1588A800FC48AE /* TODO */,
+				F8A2F3B51D15885300FC48AE /* examples */,
+				F8A2F3B61D15885300FC48AE /* lib */,
+				F8A2F3B71D15885300FC48AE /* node_modules */,
+			);
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXProject section */
+		F8A2F3AF1D15883F00FC48AE /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0730;
+			};
+			buildConfigurationList = F8A2F3B21D15883F00FC48AE /* Build configuration list for PBXProject "m4dp" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = F8A2F3AE1D15883F00FC48AE;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+			);
+		};
+/* End PBXProject section */
+
+/* Begin XCBuildConfiguration section */
+		F8A2F3B31D15883F00FC48AE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Debug;
+		};
+		F8A2F3B41D15883F00FC48AE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		F8A2F3B21D15883F00FC48AE /* Build configuration list for PBXProject "m4dp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F8A2F3B31D15883F00FC48AE /* Debug */,
+				F8A2F3B41D15883F00FC48AE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = F8A2F3AF1D15883F00FC48AE /* Project object */;
+}

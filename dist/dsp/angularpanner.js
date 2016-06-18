@@ -60,7 +60,6 @@ var AngularPannerNode = function (_AbstractNode) {
 
 		var numInputs = 1;
 		var numOutputs = mode === 'stereo' ? 2 : 6;
-
 		return _this;
 	}
 
@@ -80,9 +79,7 @@ var AngularPannerNode = function (_AbstractNode) {
    * Quick and dirty way to compute the speakers gains
    */
 		value: function _computeGains() {
-
 			if (this._mode === 'stereo') {
-
 				/// azimuth in radians (trigo)
 				var azimuth = _utils2.default.nav2trig(this._sourceAzim);
 
@@ -99,7 +96,6 @@ var AngularPannerNode = function (_AbstractNode) {
 
 				return gains;
 			} else {
-
 				/// source azimuth expressed in [-180 180]
 				var az = this._sourceAzim;
 
@@ -169,13 +165,11 @@ var AngularPannerNode = function (_AbstractNode) {
 	}, {
 		key: '_updateGains',
 		value: function _updateGains() {
-
 			var gains = this._computeGains();
 		}
 	}, {
 		key: 'sourceAzimuth',
 		set: function set(value) {
-
 			/// make sure the azim angle is expressed in [-180 180]
 			this._sourceAzim = _utils2.default.trig2nav(_utils2.default.nav2trig(value));
 

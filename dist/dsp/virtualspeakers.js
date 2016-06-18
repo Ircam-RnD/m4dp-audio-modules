@@ -123,7 +123,6 @@ var VirtualSpeakersNode = function (_AbstractNode) {
     }, {
         key: 'setGainForVirtualSource',
         value: function setGainForVirtualSource(sourceIndex, linearGain) {
-
             var numChannels = this.getNumChannels();
 
             if (sourceIndex < 0 || sourceIndex >= numChannels) {
@@ -216,7 +215,6 @@ var VirtualSpeakersNode = function (_AbstractNode) {
             var sofaPositions = [];
 
             for (var i = -180; i <= 180; i += 1) {
-
                 /// positions expressed with Spat4 navigation coordinate
                 var azimuth = i;
 
@@ -239,7 +237,6 @@ var VirtualSpeakersNode = function (_AbstractNode) {
     }, {
         key: '_getSofaPositions',
         value: function _getSofaPositions() {
-
             /// retrieves the AudioStreamDescriptionCollection
             /// (mainAudio, extendedAmbience, extendedComments and extendedDialogs)
             var asdc = this._audioStreamDescriptionCollection.streams;
@@ -257,14 +254,12 @@ var VirtualSpeakersNode = function (_AbstractNode) {
                 for (var _iterator = asdc[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
                     var stream = _step.value;
 
-
                     /// positions expressed with Spat4 navigation coordinate
                     var azimuths = stream.channelPositions;
 
                     var numChannelsForThisStream = stream.numChannels;
 
                     for (var i = 0; i < numChannelsForThisStream; i++) {
-
                         /// positions expressed with Spat4 navigation coordinate
                         var azimuth = azimuths[i];
 

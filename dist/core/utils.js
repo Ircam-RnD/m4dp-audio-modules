@@ -7,6 +7,7 @@ exports.mean = mean;
 exports.clamp = clamp;
 exports.scale = scale;
 exports.lin2dB = lin2dB;
+exports.lin2powdB = lin2powdB;
 exports.lin2dBsafe = lin2dBsafe;
 exports.dB2lin = dB2lin;
 exports.arrayAlmostEqual = arrayAlmostEqual;
@@ -28,7 +29,6 @@ exports.sec2ms = sec2ms;
 /************************************************************************************/
 
 function mean(array) {
-
     if (array.length === 0) {
         throw new Error("pas bon");
     }
@@ -50,7 +50,6 @@ function mean(array) {
  *
  */
 function clamp(value, min, max) {
-
     if (max < min) {
         throw new Error("pas bon");
     }
@@ -63,7 +62,6 @@ function clamp(value, min, max) {
  *
  */
 function scale(value, minIn, maxIn, minOut, maxOut) {
-
     if (maxIn === minIn) {
         throw new Error("pas bon");
     }
@@ -78,7 +76,6 @@ function scale(value, minIn, maxIn, minOut, maxOut) {
  *
  */
 function lin2dB(value) {
-
     if (value <= 0) {
         throw new Error("pas bon");
     }
@@ -86,12 +83,27 @@ function lin2dB(value) {
     return 20 * Math.log10(value);
 }
 
+/************************************************************************************/
+/*!
+ *  @brief          linear gain to power decibel conversion
+ *  @param[in]      lin : linear value
+ *
+ *  @details        y = 10 * log10( x )
+ */
+/************************************************************************************/
+function lin2powdB(value) {
+    if (value <= 0) {
+        throw new Error("pas bon");
+    }
+
+    return 10. * Math.log10(value);
+}
+
 /**
  * linear gain to decibel conversion
  *
  */
 function lin2dBsafe(value) {
-
     return 20 * Math.log10(Math.max(value, 1e-9));
 }
 
@@ -108,7 +120,6 @@ function dB2lin(value) {
  */
 function arrayAlmostEqual(array1, array2) {
     var tolerance = arguments.length <= 2 || arguments[2] === undefined ? 0 : arguments[2];
-
 
     if (tolerance < 0.0) {
         throw new Error("pas bon");
@@ -153,7 +164,6 @@ function rad2deg(value) {
  * modulo (%) binary operator returning positive results
  */
 function modulo(x, modu) {
-
     var y = x;
     while (y < 0.0) {
         y += modu;
@@ -206,6 +216,7 @@ var utilities = {
     scale: scale,
     lin2dB: lin2dB,
     lin2dBsafe: lin2dBsafe,
+    lin2powdB: lin2powdB,
     dB2lin: dB2lin,
     deg2rad: deg2rad,
     rad2deg: rad2deg,

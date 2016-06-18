@@ -36,9 +36,6 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
  */
 /************************************************************************************/
 
-//import utilities from '../core/utils.js';
-
-
 var DialogEnhancement = function (_AbstractNode) {
     _inherits(DialogEnhancement, _AbstractNode);
 
@@ -88,7 +85,6 @@ var DialogEnhancement = function (_AbstractNode) {
          * Notification when the active stream(s) changes
          */
         value: function activeStreamsChanged() {
-
             this._chooseAppropriateMode();
 
             this._updateAudioGraph();
@@ -102,7 +98,6 @@ var DialogEnhancement = function (_AbstractNode) {
 
         //==============================================================================
         value: function _chooseAppropriateMode() {
-
             var mode = 0; ///< 0 corresponds to bypass
 
             if (this.hasActiveExtendedDialog === true && this.hasActiveExtendedAmbiance === true) {
@@ -131,7 +126,6 @@ var DialogEnhancement = function (_AbstractNode) {
     }, {
         key: 'setModeFromString',
         value: function setModeFromString(value) {
-
             if (value == 'Mode 1') {
                 this.mode = 1;
             } else if (value == 'Mode 2') {
@@ -194,7 +188,6 @@ var DialogEnhancement = function (_AbstractNode) {
     }, {
         key: '_update',
         value: function _update() {
-
             this._processor1.balance = this.balance;
             this._processor2.balance = this.balance;
             this._processor3.balance = this.balance;
@@ -217,7 +210,6 @@ var DialogEnhancement = function (_AbstractNode) {
             var mode = this.mode;
 
             if (this.bypass === true || mode === 0) {
-
                 this._input.connect(this._output);
             } else {
 
@@ -238,7 +230,6 @@ var DialogEnhancement = function (_AbstractNode) {
     }, {
         key: 'bypass',
         set: function set(value) {
-
             if (value !== this._isBypass) {
                 this._isBypass = value;
                 this._updateAudioGraph();
@@ -280,7 +271,6 @@ var DialogEnhancement = function (_AbstractNode) {
     }, {
         key: 'mode',
         set: function set(value) {
-
             console.log('DialogEnhancement to mode ' + value);
 
             if (value < 0 || value > 3) {
@@ -288,7 +278,6 @@ var DialogEnhancement = function (_AbstractNode) {
             }
 
             if (value != this._mode) {
-
                 this._mode = value;
                 this._updateAudioGraph();
             }
@@ -306,9 +295,7 @@ var DialogEnhancement = function (_AbstractNode) {
     }, {
         key: 'balance',
         set: function set(value) {
-
             this._balance = value;
-
             this._update();
         }
 
@@ -389,7 +376,6 @@ var DialogEnhancementProcessorMode1 = function (_AbstractNode2) {
          *      
          */
         value: function isChannelForExtendedDialog(channelIndex) {
-
             return this._audioStreamDescriptionCollection.isChannelForExtendedDialog(channelIndex);
         }
 
@@ -419,7 +405,6 @@ var DialogEnhancementProcessorMode1 = function (_AbstractNode2) {
             var gainForAmbiance = 1.0 - gainForDialogs;
 
             for (var k = 0; k < this.getNumChannels(); k++) {
-
                 if (this.isChannelForExtendedDialog(k) === true) {
                     this._gainsNode.setGain(k, gainForDialogs);
                 } else if (this.isChannelForExtendedAmbiance(k) === true) {
@@ -451,7 +436,6 @@ var DialogEnhancementProcessorMode1 = function (_AbstractNode2) {
     }, {
         key: 'balance',
         set: function set(value) {
-
             /// 100% --> only the dialogs
             /// 0% --> only the ambiance
 
@@ -549,7 +533,6 @@ var DialogEnhancementProcessorMode2 = function (_AbstractNode3) {
             var gainForDialogs = (0, _utils.dB2lin)(balanceIndB);
 
             for (var k = 0; k < this.getNumChannels(); k++) {
-
                 if (this.isChannelCenter(k) === true) {
                     this._gainsNode.setGain(k, gainForDialogs);
                 } else {
@@ -579,7 +562,6 @@ var DialogEnhancementProcessorMode2 = function (_AbstractNode3) {
     }, {
         key: 'balance',
         set: function set(value) {
-
             /// 100% --> +6 dB for the dialog
             /// 0% --> -6 dB for the dialog
 
@@ -673,7 +655,6 @@ var DialogEnhancementProcessorMode3 = function (_AbstractNode4) {
          *      
          */
         value: function _update() {
-
             var balanceIndB = (0, _utils.scale)(this.balance, 0., 100., 0., 12.);
 
             this._centerEnhancement.gain = balanceIndB;
@@ -681,7 +662,6 @@ var DialogEnhancementProcessorMode3 = function (_AbstractNode4) {
     }, {
         key: 'balance',
         set: function set(value) {
-
             /// 100% --> +6 dB for the dialog
             /// 0% --> -6 dB for the dialog
 

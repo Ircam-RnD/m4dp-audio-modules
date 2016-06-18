@@ -120,7 +120,6 @@ var MultichannelCompressorNode = function (_AbstractNode) {
     }, {
         key: 'getCompressorOfFirstChannel',
         value: function getCompressorOfFirstChannel() {
-
             if (this.getNumChannels() <= 0) {
                 throw new Error("smothing is wrong");
             }
@@ -133,7 +132,6 @@ var MultichannelCompressorNode = function (_AbstractNode) {
     }, {
         key: 'getReductionForChannel',
         value: function getReductionForChannel(channelIndex) {
-
             /// representing the amount of gain reduction currently applied by the compressor to the signal.
 
             var numChannels = this.getNumChannels();
@@ -150,14 +148,12 @@ var MultichannelCompressorNode = function (_AbstractNode) {
     }, {
         key: 'getReduction',
         value: function getReduction() {
-
             /// returns the minimum reduction among all channels
             var reduction = 0.0;
 
             var numChannels = this.getNumChannels();
 
             for (var i = 0; i < numChannels; i++) {
-
                 var reductionForThisChannel = this.getReductionForChannel(i);
 
                 reduction = Math.min(reduction, reductionForThisChannel);
@@ -179,7 +175,6 @@ var MultichannelCompressorNode = function (_AbstractNode) {
         //==============================================================================
         value: function setThreshold(value) {
             /// the parameter is applied similarly to all channels
-
             var numChannels = this.getNumChannels();
 
             for (var i = 0; i < numChannels; i++) {
@@ -292,7 +287,6 @@ var MultichannelCompressorNode = function (_AbstractNode) {
             this._gainDry.disconnect();
 
             if (this.bypass === true || numChannels === 0) {
-
                 this._input.connect(this._output);
             } else {
 
@@ -322,7 +316,6 @@ var MultichannelCompressorNode = function (_AbstractNode) {
     }, {
         key: 'drywet',
         set: function set(value) {
-
             /// 100% --> totally wet
             /// 0% --> totally dry
 
@@ -349,7 +342,6 @@ var MultichannelCompressorNode = function (_AbstractNode) {
     }, {
         key: 'bypass',
         set: function set(value) {
-
             if (value !== this._isBypass) {
                 this._isBypass = value;
                 this._updateAudioGraph();
@@ -366,7 +358,6 @@ var MultichannelCompressorNode = function (_AbstractNode) {
     }, {
         key: 'dynamicCompressionState',
         get: function get() {
-
             var reduction = this.getReduction();
 
             var state = reduction < -0.5 ? true : false;

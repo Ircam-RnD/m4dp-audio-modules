@@ -182,7 +182,6 @@ var ReceiverMix = function (_AbstractNode) {
             var asdc = this._audioStreamDescriptionCollection;
 
             if (asdc.hasActiveStream === false) {
-
                 throw new Error("no programme running !");
                 return 0;
             }
@@ -191,7 +190,6 @@ var ReceiverMix = function (_AbstractNode) {
             var asd = asdc.actives;
 
             for (var i = 0; i < asd.length; i++) {
-
                 var stream_ = asd[i];
 
                 if (stream_.type === "Stereo" && stream_.active === true) {
@@ -220,7 +218,6 @@ var ReceiverMix = function (_AbstractNode) {
          * return the actual value of the gate threshold (in dB) for the commentary
          */
         value: function setThresholdForCommentaryFromGui(theSlider) {
-
             /// the value of the fader
             var valueFader = parseFloat(theSlider.value);
 
@@ -252,7 +249,6 @@ var ReceiverMix = function (_AbstractNode) {
     }, {
         key: 'getThresholdForCommentaryFromGui',
         value: function getThresholdForCommentaryFromGui(theSlider) {
-
             // get the bounds of the fader (GUI)
             var minFader = parseFloat(theSlider.min);
             var maxFader = parseFloat(theSlider.max);
@@ -288,7 +284,6 @@ var ReceiverMix = function (_AbstractNode) {
          * return the actual value of the gate threshold (in dB) for the programme
          */
         value: function setThresholdForProgrammeFromGui(theSlider) {
-
             /// the value of the fader
             var valueFader = parseFloat(theSlider.value);
 
@@ -320,7 +315,6 @@ var ReceiverMix = function (_AbstractNode) {
     }, {
         key: 'getThresholdForProgrammeFromGui',
         value: function getThresholdForProgrammeFromGui(theSlider) {
-
             // get the bounds of the fader (GUI)
             var minFader = parseFloat(theSlider.min);
             var maxFader = parseFloat(theSlider.max);
@@ -378,7 +372,6 @@ var ReceiverMix = function (_AbstractNode) {
     }, {
         key: 'setCompressorAttack',
         value: function setCompressorAttack(valueInMilliseconds) {
-
             var value = _utils2.default.ms2sec(valueInMilliseconds);
 
             //console.log("compressor attack = " + value.toString() + ' sec');
@@ -448,7 +441,6 @@ var ReceiverMix = function (_AbstractNode) {
     }, {
         key: 'getCompressorThresholdForGui',
         value: function getCompressorThresholdForGui(theSlider) {
-
             // get the bounds of the fader (GUI)
             var minFader = parseFloat(theSlider.min);
             var maxFader = parseFloat(theSlider.max);
@@ -479,7 +471,6 @@ var ReceiverMix = function (_AbstractNode) {
     }, {
         key: 'setReleaseTimeFromGui',
         value: function setReleaseTimeFromGui(theSlider) {
-
             /// the value of the fader
             var valueFader = parseFloat(theSlider.value);
 
@@ -511,7 +502,6 @@ var ReceiverMix = function (_AbstractNode) {
     }, {
         key: 'getReleaseTimeForGui',
         value: function getReleaseTimeForGui(theSlider) {
-
             // get the bounds of the fader (GUI)
             var minFader = parseFloat(theSlider.min);
             var maxFader = parseFloat(theSlider.max);
@@ -542,7 +532,6 @@ var ReceiverMix = function (_AbstractNode) {
     }, {
         key: 'setRefreshRmsTimeFromGui',
         value: function setRefreshRmsTimeFromGui(theSlider) {
-
             /// the value of the fader
             var valueFader = parseFloat(theSlider.value);
 
@@ -571,7 +560,6 @@ var ReceiverMix = function (_AbstractNode) {
     }, {
         key: 'getRefreshRmsTimeForGui',
         value: function getRefreshRmsTimeForGui(theSlider) {
-
             // get the bounds of the fader (GUI)
             var minFader = parseFloat(theSlider.min);
             var maxFader = parseFloat(theSlider.max);
@@ -599,7 +587,6 @@ var ReceiverMix = function (_AbstractNode) {
     }, {
         key: 'setAttackTimeFromGui',
         value: function setAttackTimeFromGui(theSlider) {
-
             /// the value of the fader
             var valueFader = parseFloat(theSlider.value);
 
@@ -631,7 +618,6 @@ var ReceiverMix = function (_AbstractNode) {
     }, {
         key: 'getAttackTimeForGui',
         value: function getAttackTimeForGui(theSlider) {
-
             // get the bounds of the fader (GUI)
             var minFader = parseFloat(theSlider.min);
             var maxFader = parseFloat(theSlider.max);
@@ -662,7 +648,6 @@ var ReceiverMix = function (_AbstractNode) {
     }, {
         key: 'setCompressionRatioFromGui',
         value: function setCompressionRatioFromGui(theSlider) {
-
             /// the value of the fader
             var valueFader = parseFloat(theSlider.value);
 
@@ -694,7 +679,6 @@ var ReceiverMix = function (_AbstractNode) {
     }, {
         key: 'getCompressionRatioForGui',
         value: function getCompressionRatioForGui(theSlider) {
-
             // get the bounds of the fader (GUI)
             var minFader = parseFloat(theSlider.min);
             var maxFader = parseFloat(theSlider.max);
@@ -725,7 +709,6 @@ var ReceiverMix = function (_AbstractNode) {
     }, {
         key: 'setMinimumHoldTimeFromGui',
         value: function setMinimumHoldTimeFromGui(theSlider) {
-
             /// the value of the fader
             var valueFader = parseFloat(theSlider.value);
 
@@ -754,7 +737,6 @@ var ReceiverMix = function (_AbstractNode) {
     }, {
         key: 'getMinimumHoldTimeForGui',
         value: function getMinimumHoldTimeForGui(theSlider) {
-
             // get the bounds of the fader (GUI)
             var minFader = parseFloat(theSlider.min);
             var maxFader = parseFloat(theSlider.max);
@@ -808,7 +790,6 @@ var ReceiverMix = function (_AbstractNode) {
     }, {
         key: '_getChannelIndexForExtendedCommentary',
         value: function _getChannelIndexForExtendedCommentary() {
-
             /// retrieves the AudioStreamDescriptionCollection
             /// (mainAudio, extendedAmbience, extendedComments and extendedDialogs)
             var asdc = this._audioStreamDescriptionCollection;
@@ -823,7 +804,6 @@ var ReceiverMix = function (_AbstractNode) {
     }, {
         key: '_hasExtendedCommentaryToAnalyze',
         value: function _hasExtendedCommentaryToAnalyze() {
-
             var indexForExtendedCommentary = this._getChannelIndexForExtendedCommentary();
 
             return this.hasActiveExtendedCommentary === true && indexForExtendedCommentary >= 0;
@@ -849,12 +829,9 @@ var ReceiverMix = function (_AbstractNode) {
                 for (var _iterator = asdc.streams[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
                     var stream = _step.value;
 
-
                     if (stream.type === "Stereo" && stream.active === true) {
-
                         return stream;
                     } else if (stream.type === "MultiWithLFE" && stream.active === true) {
-
                         return stream;
                     }
                 }
@@ -890,7 +867,6 @@ var ReceiverMix = function (_AbstractNode) {
             if (typeof programStream === "undefined") {
                 return [];
             } else {
-
                 ///@todo : skip the LFE in case of 5.1
 
                 var channelIndex = 0;
@@ -906,13 +882,10 @@ var ReceiverMix = function (_AbstractNode) {
                     for (var _iterator2 = asdc.streams[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
                         var stream = _step2.value;
 
-
                         var numChannelsForThisStream = stream.numChannels;
 
                         if (stream === programStream) {
-
                             for (var k = 0; k < numChannelsForThisStream; k++) {
-
                                 var index = channelIndex + k;
                                 indices.push(index);
                             }
@@ -941,7 +914,6 @@ var ReceiverMix = function (_AbstractNode) {
     }, {
         key: '_hasProgramToAnalyze',
         value: function _hasProgramToAnalyze() {
-
             var programStream = this._getProgramStream();
 
             if (typeof programStream === "undefined") {
@@ -957,13 +929,11 @@ var ReceiverMix = function (_AbstractNode) {
         key: 'getRmsForProgram',
         value: function getRmsForProgram() {
             if (this._hasProgramToAnalyze() === true) {
-
                 var rms = [];
 
                 /// average rms among all channels
 
                 for (var i = 0; i < this._analysisNodeProgram.length; i++) {
-
                     var lin = this._analysisNodeProgram[i].getRMS();
 
                     rms.push(lin);
@@ -1053,9 +1023,7 @@ var ReceiverMix = function (_AbstractNode) {
             if (this.bypass === true) {
                 this._shouldCompress = false;
             } else {
-
                 if (this._hasExtendedCommentaryToAnalyze() === true) {
-
                     var C = this.getRmsForCommentary();
                     var P = this.getRmsForProgram();
 
@@ -1128,7 +1096,6 @@ var ReceiverMix = function (_AbstractNode) {
 
             /// connect the analyzers for the program
             if (this._hasProgramToAnalyze() === true) {
-
                 var numChannelsForProgramStream = this._getNumChannelsForProgramStream();
 
                 /// sanity check
@@ -1147,7 +1114,6 @@ var ReceiverMix = function (_AbstractNode) {
 
                 /// connect the (mono) analyzers to the channel splitter
                 for (var _i2 = 0; _i2 < numChannelsForProgramStream; _i2++) {
-
                     var splitterOutputIndex = indicesForProgram[_i2];
 
                     this._splitterNode.connect(this._analysisNodeProgram[_i2]._input, splitterOutputIndex, 0);
@@ -1234,13 +1200,11 @@ var ReceiverMix = function (_AbstractNode) {
                 var compressorIndex = 0;
 
                 for (var _i3 = 0; _i3 < totalNumberOfChannels_; _i3++) {
-
                     /// is this a channel that goes into the compressor ?
 
                     var shouldGoToCompressor = indicesForProgram.includes(_i3);
 
                     if (shouldGoToCompressor === true) {
-
                         this._splitterNode.connect(this._mergerBeforeCompressor, _i3, compressorIndex);
 
                         this._splitterAfterCompressor.connect(this._mergerNode, compressorIndex, _i3);
@@ -1263,7 +1227,6 @@ var ReceiverMix = function (_AbstractNode) {
     }, {
         key: 'bypass',
         set: function set(value) {
-
             if (value !== this._isBypass) {
                 this._isBypass = value;
                 this._updateAudioGraph();
@@ -1348,7 +1311,6 @@ var ReceiverMix = function (_AbstractNode) {
     }, {
         key: 'dynamicCompressionState',
         get: function get() {
-
             //return this._dynamicCompressorNode.dynamicCompressionState && this._shouldCompress;
             return this._shouldCompress;
         }

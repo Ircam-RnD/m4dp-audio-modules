@@ -1,7 +1,7 @@
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+    value: true
 });
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -27,247 +27,247 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 /************************************************************************************/
 
 var AnalysisNode = function (_AbstractNode) {
-  _inherits(AnalysisNode, _AbstractNode);
-
-  //==============================================================================
-  /**
-   * @brief This class implements the analysis on a single channel.
-   *        The analysis is based on AnalyserNode.
-   *
-   * @param {AudioContext} audioContext - audioContext instance.
-   */
-
-  function AnalysisNode(audioContext) {
-    _classCallCheck(this, AnalysisNode);
-
-    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(AnalysisNode).call(this, audioContext));
-
-    _this._analyser = audioContext.createAnalyser();
-    _this._input.connect(_this._analyser);
-
-    // default values
-    _this._analyser.fftSize = 2048;
-    _this._analyser.minDecibels = -100;
-    _this._analyser.maxDecibels = -30;
-    _this._analyser.smoothingTimeConstant = 0.85;
-    _this._voiceMinFrequency = 300;
-    _this._voiceMaxFrequency = 4000;
-
-    _this._analyserUpdate();
-    return _this;
-  }
-
-  //==============================================================================
-  /**
-   * Set the number of bins of the FFT
-   * @type {number} fftSize : a non-zero power of 2 in a range from 32 to 2048
-   */
-
-
-  _createClass(AnalysisNode, [{
-    key: 'getRMS',
-
+    _inherits(AnalysisNode, _AbstractNode);
 
     //==============================================================================
     /**
-     * Get the RMS of the analysed signal.
-     * @returns {number} RMS
-     */
-    value: function getRMS() {
-      this._analyser.getFloatTimeDomainData(this._analysed);
+    * @brief This class implements the analysis on a single channel.
+    *        The analysis is based on AnalyserNode.
+    *
+    * @param {AudioContext} audioContext - audioContext instance.
+    */
 
-      var rms = this._analysed.reduce(function (previous, current) {
-        return previous + current * current;
-      }, 0);
+    function AnalysisNode(audioContext) {
+        _classCallCheck(this, AnalysisNode);
 
-      return Math.sqrt(rms * this._binsGlobalNormalisation);
+        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(AnalysisNode).call(this, audioContext));
+
+        _this._analyser = audioContext.createAnalyser();
+        _this._input.connect(_this._analyser);
+
+        // default values
+        _this._analyser.fftSize = 2048;
+        _this._analyser.minDecibels = -100;
+        _this._analyser.maxDecibels = -30;
+        _this._analyser.smoothingTimeConstant = 0.85;
+        _this._voiceMinFrequency = 300;
+        _this._voiceMaxFrequency = 4000;
+
+        _this._analyserUpdate();
+        return _this;
     }
 
     //==============================================================================
     /**
-     * Get the emergence of the frequencies corresponding to the voice.
-     * @returns {number} emergence : the difference, of the normalised magnitudes,
-     * of the frequencies corresponding to the voice to the other frequencies.
-     */
+    * Set the number of bins of the FFT
+    * @type {number} fftSize : a non-zero power of 2 in a range from 32 to 2048
+    */
 
-  }, {
-    key: 'getVoiceEmergence',
-    value: function getVoiceEmergence() {
-      this._analyser.getFloatFrequencyData(this._analysed);
 
-      var nonVoiceMagnitude = 0;
+    _createClass(AnalysisNode, [{
+        key: 'getRMS',
 
-      var voiceMagnitude = 0;
 
-      var bin = 0;
+        //==============================================================================
+        /**
+        * Get the RMS of the analysed signal.
+        * @returns {number} RMS
+        */
+        value: function getRMS() {
+            this._analyser.getFloatTimeDomainData(this._analysed);
 
-      for (; bin < this._voiceMinBin; ++bin) {
-        nonVoiceMagnitude += this._analysed[bin];
-      }
+            var rms = this._analysed.reduce(function (previous, current) {
+                return previous + current * current;
+            }, 0);
 
-      for (; bin <= this._voiceMaxBin; ++bin) {
-        voiceMagnitude += this._analysed[bin];
-      }
+            return Math.sqrt(rms * this._binsGlobalNormalisation);
+        }
 
-      for (; bin < this._analyser.frequencyBinCount; ++bin) {
-        nonVoiceMagnitude += this._analysed[bin];
-      }
+        //==============================================================================
+        /**
+        * Get the emergence of the frequencies corresponding to the voice.
+        * @returns {number} emergence : the difference, of the normalised magnitudes,
+        * of the frequencies corresponding to the voice to the other frequencies.
+        */
 
-      return voiceMagnitude * this._binVoiceNormalisation - nonVoiceMagnitude * this._binNonVoiceNormalisation;
-    }
+    }, {
+        key: 'getVoiceEmergence',
+        value: function getVoiceEmergence() {
+            this._analyser.getFloatFrequencyData(this._analysed);
 
-    //==============================================================================
-    /**
-     * Update memory pre-allocation and pre-computed normalisation factors.
-     * @private
-     */
+            var nonVoiceMagnitude = 0;
 
-  }, {
-    key: '_analyserUpdate',
-    value: function _analyserUpdate() {
-      this._voiceMinBin = Math.max(1, // avoid first FFT bin
-      Math.min(this._analyser.frequencyBinCount - 1, Math.round(this._voiceMinFrequency * this._analyser.fftSize / this._audioContext.sampleRate)));
+            var voiceMagnitude = 0;
 
-      this._voiceMaxBin = Math.max(this._voiceMinBin, Math.min(this._analyser.frequencyBinCount - 1, Math.round(this._voiceMaxFrequency * this._analyser.fftSize / this._audioContext.sampleRate)));
+            var bin = 0;
 
-      this._binsGlobalNormalisation = 1 / this._analyser.frequencyBinCount;
+            for (; bin < this._voiceMinBin; ++bin) {
+                nonVoiceMagnitude += this._analysed[bin];
+            }
 
-      var voiceBinCount = this._voiceMaxBin - this._voiceMinBin + 1;
+            for (; bin <= this._voiceMaxBin; ++bin) {
+                voiceMagnitude += this._analysed[bin];
+            }
 
-      this._binVoiceNormalisation = 1 / voiceBinCount;
-      this._binNonVoiceNormalisation = 1 / (this._analyser.frequencyBinCount - voiceBinCount);
+            for (; bin < this._analyser.frequencyBinCount; ++bin) {
+                nonVoiceMagnitude += this._analysed[bin];
+            }
 
-      // pre-allocation
-      this._analysed = new Float32Array(this._analyser.frequencyBinCount);
-    }
-  }, {
-    key: 'analyserFftSize',
-    set: function set(fftSize) {
-      this._analyser.fftSize = fftSize;
-      this._analyserUpdate();
-    }
+            return voiceMagnitude * this._binVoiceNormalisation - nonVoiceMagnitude * this._binNonVoiceNormalisation;
+        }
 
-    /**
-     * Set the number of bins of the FFT
-     * @type {number} fftSize
-     */
-    ,
-    get: function get() {
-      return this._analyser.fftSize;
-    }
+        //==============================================================================
+        /**
+        * Update memory pre-allocation and pre-computed normalisation factors.
+        * @private
+        */
 
-    //==============================================================================
-    /**
-     * Set the minimum threshold for the spectrum of the analyser node
-     * @type {number} threshold : a value in dB
-     */
+    }, {
+        key: '_analyserUpdate',
+        value: function _analyserUpdate() {
+            this._voiceMinBin = Math.max(1, // avoid first FFT bin
+            Math.min(this._analyser.frequencyBinCount - 1, Math.round(this._voiceMinFrequency * this._analyser.fftSize / this._audioContext.sampleRate)));
 
-  }, {
-    key: 'analyserMinDecibels',
-    set: function set(threshold) {
-      this._analyser.minDecibels = threshold;
-      this._analyserUpdate();
-    }
+            this._voiceMaxBin = Math.max(this._voiceMinBin, Math.min(this._analyser.frequencyBinCount - 1, Math.round(this._voiceMaxFrequency * this._analyser.fftSize / this._audioContext.sampleRate)));
 
-    /**
-     * Get the minimum threshold for the spectrum of the analyser node
-     * @type {number} threshold
-     */
-    ,
-    get: function get() {
-      return this._analyser.minDecibels;
-    }
+            this._binsGlobalNormalisation = 1 / this._analyser.frequencyBinCount;
 
-    //==============================================================================
-    /**
-     * Set the maximum threshold for the spectrum of the analyser node
-     * @type {number} threshold : a value in dB
-     */
+            var voiceBinCount = this._voiceMaxBin - this._voiceMinBin + 1;
 
-  }, {
-    key: 'analyserMaxDecibels',
-    set: function set(threshold) {
-      this._analyser.maxDecibels = threshold;
-      this._analyserUpdate();
-    }
+            this._binVoiceNormalisation = 1 / voiceBinCount;
+            this._binNonVoiceNormalisation = 1 / (this._analyser.frequencyBinCount - voiceBinCount);
 
-    /**
-     * Get the maximum threshold for the spectrum of the analyser node
-     * @type {number} threshold
-     */
-    ,
-    get: function get() {
-      return this._analyser.maxDecibels;
-    }
+            // pre-allocation
+            this._analysed = new Float32Array(this._analyser.frequencyBinCount);
+        }
+    }, {
+        key: 'analyserFftSize',
+        set: function set(fftSize) {
+            this._analyser.fftSize = fftSize;
+            this._analyserUpdate();
+        }
 
-    //==============================================================================
-    /**
-     * Set the smoothing time constant for the spectrum of the analyser node
-     * @type {number} smoothing : it must be in the range 0 to 1 (0 meaning no time averaging).
-     */
+        /**
+        * Set the number of bins of the FFT
+        * @type {number} fftSize
+        */
+        ,
+        get: function get() {
+            return this._analyser.fftSize;
+        }
 
-  }, {
-    key: 'analyserSmoothingTimeConstant',
-    set: function set(smoothing) {
-      this._analyser.smoothingTimeConstant = smoothing;
-      this._analyserUpdate();
-    }
+        //==============================================================================
+        /**
+        * Set the minimum threshold for the spectrum of the analyser node
+        * @type {number} threshold : a value in dB
+        */
 
-    /**
-     * Get the smoothing time constant for the spectrum of the analyser node
-     * @type {number} smoothing : it must be in the range 0 to 1 (0 meaning no time averaging).
-     */
-    ,
-    get: function get() {
-      return this._analyser.smoothingTimeConstant;
-    }
+    }, {
+        key: 'analyserMinDecibels',
+        set: function set(threshold) {
+            this._analyser.minDecibels = threshold;
+            this._analyserUpdate();
+        }
 
-    //==============================================================================
-    /**
-     * Set the minimum frequency corresponding to the voice
-     * @type {number} frequency : in hertz
-     */
+        /**
+        * Get the minimum threshold for the spectrum of the analyser node
+        * @type {number} threshold
+        */
+        ,
+        get: function get() {
+            return this._analyser.minDecibels;
+        }
 
-  }, {
-    key: 'voiceMinFrequency',
-    set: function set(frequency) {
-      this._voiceMinFrequency = frequency;
-      this._analyserUpdate();
-    }
+        //==============================================================================
+        /**
+        * Set the maximum threshold for the spectrum of the analyser node
+        * @type {number} threshold : a value in dB
+        */
 
-    /**
-     * Get the minimum frequency corresponding to the voice
-     * @type {number} frequency : in hertz
-     */
-    ,
-    get: function get() {
-      return this._voiceMinFrequency;
-    }
+    }, {
+        key: 'analyserMaxDecibels',
+        set: function set(threshold) {
+            this._analyser.maxDecibels = threshold;
+            this._analyserUpdate();
+        }
 
-    //==============================================================================
-    /**
-     * Set the maximum frequency corresponding to the voice
-     * @type {number} frequency : in hertz
-     */
+        /**
+        * Get the maximum threshold for the spectrum of the analyser node
+        * @type {number} threshold
+        */
+        ,
+        get: function get() {
+            return this._analyser.maxDecibels;
+        }
 
-  }, {
-    key: 'voiceMaxFrequency',
-    set: function set(frequency) {
-      this._voiceMaxFrequency = frequency;
-      this._analyserUpdate();
-    }
+        //==============================================================================
+        /**
+        * Set the smoothing time constant for the spectrum of the analyser node
+        * @type {number} smoothing : it must be in the range 0 to 1 (0 meaning no time averaging).
+        */
 
-    /**
-     * Get the maximum frequency corresponding to the voice
-     * @type {number} frequency : in hertz
-     */
-    ,
-    get: function get() {
-      return this._voiceMaxFrequency;
-    }
-  }]);
+    }, {
+        key: 'analyserSmoothingTimeConstant',
+        set: function set(smoothing) {
+            this._analyser.smoothingTimeConstant = smoothing;
+            this._analyserUpdate();
+        }
 
-  return AnalysisNode;
+        /**
+        * Get the smoothing time constant for the spectrum of the analyser node
+        * @type {number} smoothing : it must be in the range 0 to 1 (0 meaning no time averaging).
+        */
+        ,
+        get: function get() {
+            return this._analyser.smoothingTimeConstant;
+        }
+
+        //==============================================================================
+        /**
+        * Set the minimum frequency corresponding to the voice
+        * @type {number} frequency : in hertz
+        */
+
+    }, {
+        key: 'voiceMinFrequency',
+        set: function set(frequency) {
+            this._voiceMinFrequency = frequency;
+            this._analyserUpdate();
+        }
+
+        /**
+        * Get the minimum frequency corresponding to the voice
+        * @type {number} frequency : in hertz
+        */
+        ,
+        get: function get() {
+            return this._voiceMinFrequency;
+        }
+
+        //==============================================================================
+        /**
+        * Set the maximum frequency corresponding to the voice
+        * @type {number} frequency : in hertz
+        */
+
+    }, {
+        key: 'voiceMaxFrequency',
+        set: function set(frequency) {
+            this._voiceMaxFrequency = frequency;
+            this._analyserUpdate();
+        }
+
+        /**
+        * Get the maximum frequency corresponding to the voice
+        * @type {number} frequency : in hertz
+        */
+        ,
+        get: function get() {
+            return this._voiceMaxFrequency;
+        }
+    }]);
+
+    return AnalysisNode;
 }(_index2.default);
 
 exports.default = AnalysisNode;

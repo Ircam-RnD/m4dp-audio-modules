@@ -44,19 +44,13 @@ var _testrouting = require('./testrouting.js');
 
 var _testrouting2 = _interopRequireDefault(_testrouting);
 
+var _testcompressorexpander = require('./testcompressorexpander.js');
+
+var _testcompressorexpander2 = _interopRequireDefault(_testcompressorexpander);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 //==============================================================================
-/************************************************************************************/
-/*!
- *   @file       index.js
- *   @brief      Export test modules
- *   @author     Thibaut Carpentier
- *   @date       01/2016
- *
- */
-/************************************************************************************/
-
 var unittests = {
     biquadtests: _testbiquad2.default,
     cascadetests: _testcascade2.default,
@@ -67,7 +61,16 @@ var unittests = {
     sumdifftests: _testsumdiff2.default,
     transauraltests: _testtransaural2.default,
     multichanneltests: _testmultichannel2.default,
-    routingtests: _testrouting2.default
-};
+    routingtests: _testrouting2.default,
+    compressorexpandertests: _testcompressorexpander2.default
+}; /************************************************************************************/
+/*!
+ *   @file       index.js
+ *   @brief      Export test modules
+ *   @author     Thibaut Carpentier
+ *   @date       01/2016
+ *
+ */
+/************************************************************************************/
 
 exports.default = unittests;

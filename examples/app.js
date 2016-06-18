@@ -2,7 +2,7 @@
 
 //M4DPAudioModules.unittests.biquadtests.testBiquadNode();
 //M4DPAudioModules.unittests.binauraltests.testBinauralNode();
-//M4DPAudioModules.unittests.testCascadeNode();
+//M4DPAudioModules.unittests.cascadetests.testCascadeNode();
 //M4DPAudioModules.unittests.analysistests.testAnalysisNode();
 //M4DPAudioModules.unittests.phonetests.testPhoneNode();
 //M4DPAudioModules.unittests.testBinaural();
@@ -11,6 +11,7 @@
 //M4DPAudioModules.unittests.transauraltests.testTransauralShuffler();
 //M4DPAudioModules.unittests.multichanneltests.testMultiChannel();
 //M4DPAudioModules.unittests.routingtests.testRouting();
+//M4DPAudioModules.unittests.compressorexpandertests.testCompressorExpanderNode();
 
 var dumpObject = function(obj) {
     console.debug("Dumping: "+obj);
@@ -167,364 +168,377 @@ $(function () {
 });
 
 
-var initPlayer = function(program){
-
-/// player pour la video principale
-videoPlayerMainMediaElement           = document.getElementById('videoPlayerMain');
-/// player pour la video LSF (langue des signes)
-videoPlayerPipMediaElement            = document.getElementById('videoPlayerPip');
-/// player pour l'audio 5.1
-playerAudioFiveDotOneMediaElement     = document.getElementById('playerAudioFiveDotOne');
-/// player pour l'audio description
-playerAudioDescriptionMediaElement    = document.getElementById('playerAudioDescription');
-/// player pour les dialgoues
-playerDialogueMediaElement            = document.getElementById('playerDialogue');
-
-
-var context = new Dash.di.DashContext();
-
-/*
-/// les premières URLs fournies par DotScreen
-var urlMain = "http://medias2.francetv.fr/innovation/media4D/m4dp-set1-LMDJ/manifest.mpd";
-var urlPip = "http://medias2.francetv.fr/innovation/media4D/m4dp-set1-LMDJ/manifest-lsf.mpd";
-var urlAudio = "http://medias2.francetv.fr/innovation/media4D/m4dp-set1-LMDJ/manifest-ad.mpd";
-*/
-       
-/*                                  
-var dashUrlAudioPrincipale     = 'http://videos-pmd.francetv.fr/innovation/media4D/m4d-LMDJ-ondemand-3lsf/manifest.mpd';
-var dashUrlAudioDescription    = 'http://videos-pmd.francetv.fr/innovation/media4D/m4d-LMDJ-ondemand-3lsf/manifest-ad.mpd';
-var dashUrlFiveDotOne          = 'http://videos-pmd.francetv.fr/innovation/media4D/m4d-LMDJ-ondemand-3lsf/manifest-ea3.mpd'; /// L R C LFE Ls Rs ?
-var dashUrlDial                = 'http://videos-pmd.francetv.fr/innovation/media4D/m4d-LMDJ-ondemand-3lsf/manifest-di.mpd';
-var dashUrlLsf                 = 'http://videos-pmd.francetv.fr/innovation/media4D/m4d-LMDJ-ondemand-3lsf/manifest-lsf.mpd';
-*/
-
-var dashUrlAudioPrincipale     = program.dataMain.url;
-var dashUrlAudioDescription    = program.dataAD.url;
-var dashUrlFiveDotOne          = program.dataEA.url; /// L R C LFE Ls Rs ?
-var dashUrlDial                = program.dataDI.url;
-var dashUrlLsf                 = program.dataLS.url;
-
-var urlMain                = dashUrlAudioPrincipale;
-urlPip                     = dashUrlLsf;
-var urlAudioFiveDotOne     = dashUrlFiveDotOne;
-var urlAudioDescription    = dashUrlAudioDescription;
-var urlDialogue            = dashUrlDial;
-
-//==============================================================================
-var playerMain = new MediaPlayer(context);
-playerMain.startup();
-playerMain.setAutoPlay(false);
-playerMain.attachView(videoPlayerMainMediaElement);
-playerMain.getDebug().setLogToBrowserConsole(false);
-
-playerPip = new MediaPlayer(context);
-playerPip.startup();
-playerPip.setAutoPlay(false);
-if( urlPip ){
-    playerPip.attachView(videoPlayerPipMediaElement);
-}
-playerPip.getDebug().setLogToBrowserConsole(false);
-
-var playerAudioFiveDotOne = new MediaPlayer(context);
-playerAudioFiveDotOne.startup();
-playerAudioFiveDotOne.setAutoPlay(false);
-if( urlAudioFiveDotOne ){
-    playerAudioFiveDotOne.attachView(playerAudioFiveDotOneMediaElement);
-}
-playerAudioFiveDotOne.getDebug().setLogToBrowserConsole(false);
-
-var playerAudioDescription = new MediaPlayer(context);
-playerAudioDescription.startup();
-playerAudioDescription.setAutoPlay(false);
-if( urlAudioDescription ){
-    playerAudioDescription.attachView(playerAudioDescriptionMediaElement);
-}
-playerAudioDescription.getDebug().setLogToBrowserConsole(false);
-
-var playerDialogue = new MediaPlayer(context);
-playerDialogue.startup();
-playerDialogue.setAutoPlay(false);
-if( urlDialogue ){
-    playerDialogue.attachView(playerDialogueMediaElement);
-}
-playerDialogue.getDebug().setLogToBrowserConsole(false);
-
-controller = new MediaController();
-
-//dumpObject( playerMain );
-
-videoPlayerMainMediaElement.controller           = controller;
-if( urlPip ){
-    videoPlayerPipMediaElement.controller            = controller;
-}
-if( urlAudioFiveDotOne ){
-    playerAudioFiveDotOneMediaElement.controller     = controller;
-}
-if( urlAudioDescription ){
-    playerAudioDescriptionMediaElement.controller    = controller;
-}
-if( urlDialogue ){
-    playerDialogueMediaElement.controller            = controller;
-}
-
-audioContext = new (window.AudioContext || window.webkitAudioContext)();
-//console.debug("######### audioContext: " + audioContext);
-
-//==============================================================================
-// check if the DASH streams are ready
-var audioMainReady          = playerMain.isReady();
-var audioFiveDotOneReady    = playerAudioFiveDotOne.isReady();
-var audioDescriptionReady   = playerAudioDescription.isReady();
-var audioDialogReady        = playerDialogue.isReady();
-
-//==============================================================================
-var audioSourceMain          = audioContext.createMediaElementSource( videoPlayerMainMediaElement );
-var audioSourceFiveDotOne    = audioContext.createMediaElementSource( playerAudioFiveDotOneMediaElement );
-var audioSourceDescription   = audioContext.createMediaElementSource( playerAudioDescriptionMediaElement );
-var audioSourceDialogue      = audioContext.createMediaElementSource( playerDialogueMediaElement );
-
-/// create a 10-channel stream containing all audio materials
-var channelMerger = audioContext.createChannelMerger(10);
-
-var channelSplitterMain         = audioContext.createChannelSplitter( 2 );
-var channelSplitterFiveDotOne   = audioContext.createChannelSplitter( 6 );
-var channelSplitterDescription  = audioContext.createChannelSplitter( 1 );
-var channelSplitterDialogue     = audioContext.createChannelSplitter( 1 );
-
-audioSourceMain.connect( channelSplitterMain );
-audioSourceFiveDotOne.connect( channelSplitterFiveDotOne );
-audioSourceDescription.connect( channelSplitterDescription );
-audioSourceDialogue.connect( channelSplitterDialogue );
-
-channelSplitterMain.connect( channelMerger, 0, 0 );
-channelSplitterMain.connect( channelMerger, 1, 1 );
-
-channelSplitterFiveDotOne.connect( channelMerger, 0, 2 );
-channelSplitterFiveDotOne.connect( channelMerger, 1, 3 );
-channelSplitterFiveDotOne.connect( channelMerger, 2, 4 );
-channelSplitterFiveDotOne.connect( channelMerger, 3, 5 );
-channelSplitterFiveDotOne.connect( channelMerger, 4, 6 );
-channelSplitterFiveDotOne.connect( channelMerger, 5, 7 );
-
-channelSplitterDescription.connect( channelMerger, 0, 8 );
-
-channelSplitterDialogue.connect( channelMerger, 0, 9 );
-
-//==============================================================================
-// Configure the AudioStreamDescription according to the EBU Core file(s)
-var mainData = JSON.parse(JSON.stringify(program.dataMain));
-var eaData = JSON.parse(JSON.stringify(program.dataEA));
-var adData = JSON.parse(JSON.stringify(program.dataAD));
-var diData = JSON.parse(JSON.stringify(program.dataDI));
-
-/// Workaround when all the streams are not in the EBU Core
-if( typeof( program.dataEA.type ) === "undefined" ){
-    eaData.type = "MultiWithLFE";
-}
-if( typeof( program.dataAD.type ) === "undefined" ){
-    adData.type = "Mono";
-}
-if( typeof( program.dataDI.type ) === "undefined" ){
-    diData.type = "Mono";
-}
-
-// Son principal
-mainAudioASD = new M4DPAudioModules.AudioStreamDescription(
-        type = mainData.type,
-        active = true,
-        loudness = parseFloat(mainData.loudness,10),
-        maxTruePeak = parseFloat(mainData.maxTruePeak,10),
-        dialog = mainData.dialog === "true",
-        ambiance = mainData.ambiance === "true",
-        commentary = mainData.commentary === "true");
-
-// Ambiance (pour le 5.1)
-extendedAmbienceASD = new M4DPAudioModules.AudioStreamDescription(
-        type = eaData.type,
-        active = typeof( program.dataEA.type ) != "undefined",
-        loudness = parseFloat(eaData.loudness,10),
-        maxTruePeak = parseFloat(eaData.maxTruePeak,10),
-        dialog = eaData.dialog === "true",
-        ambiance = eaData.ambiance === "true",
-        commentary = eaData.commentary === "true");
-
-// Audio description
-extendedCommentsASD = new M4DPAudioModules.AudioStreamDescription(
-        type = adData.type,
-        active = false,
-        loudness = parseFloat(adData.loudness,10),
-        maxTruePeak = parseFloat(adData.maxTruePeak,10),
-        dialog = adData.dialog === "true",
-        ambiance = adData.ambiance === "true",
-        commentary = adData.commentary === "true");
-
-// Dialogue (pour le 5.1)
-extendedDialogsASD = new M4DPAudioModules.AudioStreamDescription(
-        type = diData.type,
-        active = typeof( program.dataDI.type ) != "undefined",
-        loudness = parseFloat(diData.loudness,10),
-        maxTruePeak = parseFloat(diData.maxTruePeak,10),
-        dialog = diData.dialog === "true",
-        ambiance = diData.ambiance === "true",
-        commentary = diData.commentary === "true");
-
-var asdc = new M4DPAudioModules.AudioStreamDescriptionCollection(
-        [mainAudioASD, extendedAmbienceASD, extendedCommentsASD, extendedDialogsASD]
-        );
-
-//==============================================================================
-// M4DPAudioModules
-
-/// connect either the multichannel spatializer or the object spatializer
-ModulesConfiguration =
+var initPlayer = function(program)
 {
-    kMultichannelSpatialiser : 0,
-    kObjectSpatialiserAndMixer : 1
-};
 
-config = ModulesConfiguration.kMultichannelSpatialiser;
-
-streamSelector              = new M4DPAudioModules.StreamSelector( audioContext, asdc );
-smartFader                  = new M4DPAudioModules.SmartFader( audioContext, asdc );
-dialogEnhancement           = new M4DPAudioModules.DialogEnhancement( audioContext, asdc );
-receiverMix                 = new M4DPAudioModules.ReceiverMix( audioContext, asdc );
-//noiseAdaptation = new M4DPAudioModules.NoiseAdaptation(audioContext);
-multichannelSpatialiser     = new M4DPAudioModules.MultichannelSpatialiser( audioContext, asdc, 'binaural' );
-objectSpatialiserAndMixer   = new M4DPAudioModules.ObjectSpatialiserAndMixer( audioContext, asdc, 'binaural' );
-
-//==============================================================================    
-{
-    ///@bug : the channelSplitterMain MUST be connected to the AudioContext,
-    /// otherwise the video wont read.
-    /// so as a workaround, we just add a dummuy node, with 0 gain,
-    /// to connect the channelSplitterMain
-    var uselessGain = audioContext.createGain();
-    channelSplitterMain.connect( uselessGain, 0, 0 );
-    uselessGain.gain.value = 0.;
-    uselessGain.connect( audioContext.destination, 0, 0 );
-}    
-
-/// WAA connections
-{
-    /// receives 4 ADSC with 10 channels in total
-    channelMerger.connect( streamSelector._input );
-
-    /// mute or unmute the inactive streams
-    /// (process 10 channels in total)
-    streamSelector.connect( smartFader._input );
-}
-
-/*
-{
-    /// bout de code pour tester la reception des flux DASH
-
-    var extendedChannelSplitterNode2 = audioContext.createChannelSplitter(10);
-    channelMerger.connect( extendedChannelSplitterNode2 );
-
-    var channelMerger2 = audioContext.createChannelMerger(2);
-
-    extendedChannelSplitterNode2.connect( channelMerger2, 8, 0 );
-
-    channelMerger2.connect( audioContext.destination );
-}
-*/
-
-//==============================================================================
-//updateWAAConnections();
-
-//==============================================================================
-playerMain.attachSource( urlMain );
-if( urlPip ){
-    playerPip.attachSource( urlPip );
-}
-if( urlAudioFiveDotOne ){
-    playerAudioFiveDotOne.attachSource( urlAudioFiveDotOne );
-}
-if( urlAudioDescription ){
-    playerAudioDescription.attachSource( urlAudioDescription );
-}
-if( urlDialogue ){
-    playerDialogue.attachSource( urlDialogue );
-}
-
-playerMain.play();
-if( urlPip ){
-    playerPip.play();
-}
-if( urlAudioFiveDotOne ){
-    playerAudioFiveDotOne.play();
-}
-if( urlAudioDescription ){
-    playerAudioDescription.play();
-}
-if( urlDialogue ){
-    playerDialogue.play();
-}
-
-//==============================================================================
-// initialize the GUI stuffs
-initializeSliders();
-initializeCheckBoxes();
-initializeDropDownMenus();
+    /// player pour la video principale
+    videoPlayerMainMediaElement           = document.getElementById('videoPlayerMain');
+    /// player pour la video LSF (langue des signes)
+    videoPlayerPipMediaElement            = document.getElementById('videoPlayerPip');
+    /// player pour l'audio 5.1
+    playerAudioFiveDotOneMediaElement     = document.getElementById('playerAudioFiveDotOne');
+    /// player pour l'audio description
+    playerAudioDescriptionMediaElement    = document.getElementById('playerAudioDescription');
+    /// player pour les dialgoues
+    playerDialogueMediaElement            = document.getElementById('playerDialogue');
 
 
-//==============================================================================
-/// Refresh the dynamic compression state every 500 msec
-setInterval(function(){
-    var isCompressed = smartFader.dynamicCompressionState;
+    var context = new Dash.di.DashContext();
 
-    if( isCompressed === true){
-        document.getElementById('label-smart-fader-compression').style.color = "rgba(255, 0, 0, 0.7)";
+    /*
+    /// les premières URLs fournies par DotScreen
+    var urlMain = "http://medias2.francetv.fr/innovation/media4D/m4dp-set1-LMDJ/manifest.mpd";
+    var urlPip = "http://medias2.francetv.fr/innovation/media4D/m4dp-set1-LMDJ/manifest-lsf.mpd";
+    var urlAudio = "http://medias2.francetv.fr/innovation/media4D/m4dp-set1-LMDJ/manifest-ad.mpd";
+    */
+           
+    /*                                  
+    var dashUrlAudioPrincipale     = 'http://videos-pmd.francetv.fr/innovation/media4D/m4d-LMDJ-ondemand-3lsf/manifest.mpd';
+    var dashUrlAudioDescription    = 'http://videos-pmd.francetv.fr/innovation/media4D/m4d-LMDJ-ondemand-3lsf/manifest-ad.mpd';
+    var dashUrlFiveDotOne          = 'http://videos-pmd.francetv.fr/innovation/media4D/m4d-LMDJ-ondemand-3lsf/manifest-ea3.mpd'; /// L R C LFE Ls Rs ?
+    var dashUrlDial                = 'http://videos-pmd.francetv.fr/innovation/media4D/m4d-LMDJ-ondemand-3lsf/manifest-di.mpd';
+    var dashUrlLsf                 = 'http://videos-pmd.francetv.fr/innovation/media4D/m4d-LMDJ-ondemand-3lsf/manifest-lsf.mpd';
+    */
+
+    var dashUrlAudioPrincipale     = program.dataMain.url;
+    var dashUrlAudioDescription    = program.dataAD.url;
+    var dashUrlFiveDotOne          = program.dataEA.url; /// L R C LFE Ls Rs ?
+    var dashUrlDial                = program.dataDI.url;
+    var dashUrlLsf                 = program.dataLS.url;
+
+    var urlMain                = dashUrlAudioPrincipale;
+    urlPip                     = dashUrlLsf;
+    var urlAudioFiveDotOne     = dashUrlFiveDotOne;
+    var urlAudioDescription    = dashUrlAudioDescription;
+    var urlDialogue            = dashUrlDial;
+
+    //==============================================================================
+    var playerMain = new MediaPlayer(context);
+    playerMain.startup();
+    playerMain.setAutoPlay(false);
+    playerMain.attachView(videoPlayerMainMediaElement);
+    playerMain.getDebug().setLogToBrowserConsole(false);
+
+    playerPip = new MediaPlayer(context);
+    playerPip.startup();
+    playerPip.setAutoPlay(false);
+    if( urlPip ){
+        playerPip.attachView(videoPlayerPipMediaElement);
     }
-    else{
-        document.getElementById('label-smart-fader-compression').style.color = "rgba(255, 255, 255, 0.7)";
+    playerPip.getDebug().setLogToBrowserConsole(false);
+
+    var playerAudioFiveDotOne = new MediaPlayer(context);
+    playerAudioFiveDotOne.startup();
+    playerAudioFiveDotOne.setAutoPlay(false);
+    if( urlAudioFiveDotOne ){
+        playerAudioFiveDotOne.attachView(playerAudioFiveDotOneMediaElement);
+    }
+    playerAudioFiveDotOne.getDebug().setLogToBrowserConsole(false);
+
+    var playerAudioDescription = new MediaPlayer(context);
+    playerAudioDescription.startup();
+    playerAudioDescription.setAutoPlay(false);
+    if( urlAudioDescription ){
+        playerAudioDescription.attachView(playerAudioDescriptionMediaElement);
+    }
+    playerAudioDescription.getDebug().setLogToBrowserConsole(false);
+
+    var playerDialogue = new MediaPlayer(context);
+    playerDialogue.startup();
+    playerDialogue.setAutoPlay(false);
+    if( urlDialogue ){
+        playerDialogue.attachView(playerDialogueMediaElement);
+    }
+    playerDialogue.getDebug().setLogToBrowserConsole(false);
+
+    controller = new MediaController();
+
+    //dumpObject( playerMain );
+
+    videoPlayerMainMediaElement.controller           = controller;
+    if( urlPip ){
+        videoPlayerPipMediaElement.controller            = controller;
+    }
+    if( urlAudioFiveDotOne ){
+        playerAudioFiveDotOneMediaElement.controller     = controller;
+    }
+    if( urlAudioDescription ){
+        playerAudioDescriptionMediaElement.controller    = controller;
+    }
+    if( urlDialogue ){
+        playerDialogueMediaElement.controller            = controller;
     }
 
-    var rmsCommentary = receiverMix.getRmsForCommentaryAsString();
-    document.getElementById('label-receiver-mix-commentary-rms').textContent = rmsCommentary;
+    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    //console.debug("######### audioContext: " + audioContext);
 
-    var rmsProgram = receiverMix.getRmsForProgramAsString();
-    document.getElementById('label-receiver-mix-program-rms').textContent = rmsProgram;    
+    //==============================================================================
+    // check if the DASH streams are ready
+    var audioMainReady          = playerMain.isReady();
+    var audioFiveDotOneReady    = playerAudioFiveDotOne.isReady();
+    var audioDescriptionReady   = playerAudioDescription.isReady();
+    var audioDialogReady        = playerDialogue.isReady();
 
-    var receiverMixCompression = receiverMix.dynamicCompressionState;
+    //==============================================================================
+    var audioSourceMain          = audioContext.createMediaElementSource( videoPlayerMainMediaElement );
+    var audioSourceFiveDotOne    = audioContext.createMediaElementSource( playerAudioFiveDotOneMediaElement );
+    var audioSourceDescription   = audioContext.createMediaElementSource( playerAudioDescriptionMediaElement );
+    var audioSourceDialogue      = audioContext.createMediaElementSource( playerDialogueMediaElement );
 
-    document.getElementById('label-receiver-mix-compression').textContent = "Compression";
-    if( receiverMixCompression === true){
-        document.getElementById('label-receiver-mix-compression').style.color = "rgba(255, 0, 0, 0.7)";
+    /// create a 10-channel stream containing all audio materials
+    var channelMerger = audioContext.createChannelMerger(10);
+
+    var channelSplitterMain         = audioContext.createChannelSplitter( 2 );
+    var channelSplitterFiveDotOne   = audioContext.createChannelSplitter( 6 );
+    var channelSplitterDescription  = audioContext.createChannelSplitter( 1 );
+    var channelSplitterDialogue     = audioContext.createChannelSplitter( 1 );
+
+    audioSourceMain.connect( channelSplitterMain );
+    audioSourceFiveDotOne.connect( channelSplitterFiveDotOne );
+    audioSourceDescription.connect( channelSplitterDescription );
+    audioSourceDialogue.connect( channelSplitterDialogue );
+
+    channelSplitterMain.connect( channelMerger, 0, 0 );
+    channelSplitterMain.connect( channelMerger, 1, 1 );
+
+    channelSplitterFiveDotOne.connect( channelMerger, 0, 2 );
+    channelSplitterFiveDotOne.connect( channelMerger, 1, 3 );
+    channelSplitterFiveDotOne.connect( channelMerger, 2, 4 );
+    channelSplitterFiveDotOne.connect( channelMerger, 3, 5 );
+    channelSplitterFiveDotOne.connect( channelMerger, 4, 6 );
+    channelSplitterFiveDotOne.connect( channelMerger, 5, 7 );
+
+    channelSplitterDescription.connect( channelMerger, 0, 8 );
+
+    channelSplitterDialogue.connect( channelMerger, 0, 9 );
+
+    //==============================================================================
+    // Configure the AudioStreamDescription according to the EBU Core file(s)
+    var mainData = JSON.parse(JSON.stringify(program.dataMain));
+    var eaData = JSON.parse(JSON.stringify(program.dataEA));
+    var adData = JSON.parse(JSON.stringify(program.dataAD));
+    var diData = JSON.parse(JSON.stringify(program.dataDI));
+
+    /// Workaround when all the streams are not in the EBU Core
+    if( typeof( program.dataEA.type ) === "undefined" ){
+        eaData.type = "MultiWithLFE";
     }
-    else{        
-        document.getElementById('label-receiver-mix-compression').style.color = "rgba(255, 255, 255, 0.7)";
-    }     
+    if( typeof( program.dataAD.type ) === "undefined" ){
+        adData.type = "Mono";
+    }
+    if( typeof( program.dataDI.type ) === "undefined" ){
+        diData.type = "Mono";
+    }
 
-}, 250);
+    // Son principal
+    mainAudioASD = new M4DPAudioModules.AudioStreamDescription(
+            type = mainData.type,
+            active = true,
+            loudness = parseFloat(mainData.loudness,10),
+            maxTruePeak = parseFloat(mainData.maxTruePeak,10),
+            dialog = mainData.dialog === "true",
+            ambiance = mainData.ambiance === "true",
+            commentary = mainData.commentary === "true");
 
-//==============================================================================
-var inputEvent = new Event('input');
-sliderTrimMain.dispatchEvent(inputEvent);
-sliderTrimAmbiance.dispatchEvent(inputEvent);
-sliderTrimComments.dispatchEvent(inputEvent);
-sliderTrimDialog.dispatchEvent(inputEvent);
-sliderSmartFader.dispatchEvent(inputEvent);
-sliderReceiverMixN.dispatchEvent(inputEvent);
-sliderReceiverMixX.dispatchEvent(inputEvent);
-sliderReceiverMixRatio.dispatchEvent(inputEvent);
-sliderReceiverMixThreshold.dispatchEvent(inputEvent);
-sliderReceiverMixAttack.dispatchEvent(inputEvent);
-sliderReceiverMixRelease.dispatchEvent(inputEvent);
-sliderReceiverMixRefreshRms.dispatchEvent(inputEvent);
-sliderReceiverMixHoldTime.dispatchEvent(inputEvent);
-sliderSmartFaderRatio.dispatchEvent(inputEvent);
-sliderSmartFaderAttack.dispatchEvent(inputEvent);
-sliderSmartFaderRelease.dispatchEvent(inputEvent);
-sliderListenerYaw.dispatchEvent(inputEvent);
-sliderAzimComments.dispatchEvent(inputEvent);
-sliderElevComments.dispatchEvent(inputEvent);
-sliderDistComments.dispatchEvent(inputEvent);
-sliderAzimDialog.dispatchEvent(inputEvent);
-sliderElevDialog.dispatchEvent(inputEvent);
-sliderDistDialog.dispatchEvent(inputEvent);
-sliderGainOffset.dispatchEvent(inputEvent);
-sliderDialogEnhancementMode1.dispatchEvent(inputEvent);
+    // Ambiance (pour le 5.1)
+    extendedAmbienceASD = new M4DPAudioModules.AudioStreamDescription(
+            type = eaData.type,
+            active = typeof( program.dataEA.type ) != "undefined",
+            loudness = parseFloat(eaData.loudness,10),
+            maxTruePeak = parseFloat(eaData.maxTruePeak,10),
+            dialog = eaData.dialog === "true",
+            ambiance = eaData.ambiance === "true",
+            commentary = eaData.commentary === "true");
+
+    // Audio description
+    extendedCommentsASD = new M4DPAudioModules.AudioStreamDescription(
+            type = adData.type,
+            active = false,
+            loudness = parseFloat(adData.loudness,10),
+            maxTruePeak = parseFloat(adData.maxTruePeak,10),
+            dialog = adData.dialog === "true",
+            ambiance = adData.ambiance === "true",
+            commentary = adData.commentary === "true");
+
+    // Dialogue (pour le 5.1)
+    extendedDialogsASD = new M4DPAudioModules.AudioStreamDescription(
+            type = diData.type,
+            active = typeof( program.dataDI.type ) != "undefined",
+            loudness = parseFloat(diData.loudness,10),
+            maxTruePeak = parseFloat(diData.maxTruePeak,10),
+            dialog = diData.dialog === "true",
+            ambiance = diData.ambiance === "true",
+            commentary = diData.commentary === "true");
+
+    var asdc = new M4DPAudioModules.AudioStreamDescriptionCollection(
+            [mainAudioASD, extendedAmbienceASD, extendedCommentsASD, extendedDialogsASD]
+            );
+
+    //==============================================================================
+    // M4DPAudioModules
+
+    /// connect either the multichannel spatializer or the object spatializer
+    ModulesConfiguration =
+    {
+        kMultichannelSpatialiser : 0,
+        kObjectSpatialiserAndMixer : 1
+    };
+
+    config = ModulesConfiguration.kMultichannelSpatialiser;
+
+    streamSelector              = new M4DPAudioModules.StreamSelector( audioContext, asdc );
+    smartFader                  = new M4DPAudioModules.SmartFader( audioContext, asdc );
+    dialogEnhancement           = new M4DPAudioModules.DialogEnhancement( audioContext, asdc );
+    receiverMix                 = new M4DPAudioModules.ReceiverMix( audioContext, asdc );
+    //noiseAdaptation = new M4DPAudioModules.NoiseAdaptation(audioContext);
+    multichannelSpatialiser     = new M4DPAudioModules.MultichannelSpatialiser( audioContext, asdc, 'binaural' );
+    objectSpatialiserAndMixer   = new M4DPAudioModules.ObjectSpatialiserAndMixer( audioContext, asdc, 'binaural' );
+
+    compressorExpander          = new M4DPAudioModules.CompressorWithSideChain( audioContext, 10 );
+
+    //==============================================================================    
+    {
+        ///@bug : the channelSplitterMain MUST be connected to the AudioContext,
+        /// otherwise the video wont read.
+        /// so as a workaround, we just add a dummuy node, with 0 gain,
+        /// to connect the channelSplitterMain
+        var uselessGain = audioContext.createGain();
+        channelSplitterMain.connect( uselessGain, 0, 0 );
+        uselessGain.gain.value = 0.;
+        uselessGain.connect( audioContext.destination, 0, 0 );
+        
+    }    
+
+    /// WAA connections
+    {
+        /// receives 4 ADSC with 10 channels in total
+        channelMerger.connect( streamSelector._input );
+
+        /// mute or unmute the inactive streams
+        /// (process 10 channels in total)
+        streamSelector.connect( smartFader._input );
+    }
+
+
+    /*
+    {
+        /// bout de code pour tester la reception des flux DASH
+
+        var extendedChannelSplitterNode2 = audioContext.createChannelSplitter(10);
+        channelMerger.connect( extendedChannelSplitterNode2 );
+
+        var channelMerger2 = audioContext.createChannelMerger(2);
+
+        extendedChannelSplitterNode2.connect( channelMerger2, 8, 0 );
+
+        channelMerger2.connect( audioContext.destination );
+    }
+    */
+
+    //==============================================================================
+    updateWAAConnections();
+
+    //==============================================================================
+    playerMain.attachSource( urlMain );
+    if( urlPip )
+    {
+        playerPip.attachSource( urlPip );
+    }
+    if( urlAudioFiveDotOne )
+    {
+        playerAudioFiveDotOne.attachSource( urlAudioFiveDotOne );
+    }
+    if( urlAudioDescription )
+    {
+        playerAudioDescription.attachSource( urlAudioDescription );
+    }
+    if( urlDialogue )
+    {
+        playerDialogue.attachSource( urlDialogue );
+    }
+
+    playerMain.play();
+    if( urlPip )
+    {
+        playerPip.play();
+    }
+    if( urlAudioFiveDotOne )
+    {
+        playerAudioFiveDotOne.play();
+    }
+    if( urlAudioDescription )
+    {
+        playerAudioDescription.play();
+    }
+    if( urlDialogue )
+    {
+        playerDialogue.play();
+    }
+
+    //==============================================================================
+    // initialize the GUI stuffs
+    initializeSliders();
+    initializeCheckBoxes();
+    initializeDropDownMenus();
+
+
+    //==============================================================================
+    /// Refresh the dynamic compression state every 500 msec
+    setInterval(function(){
+        var isCompressed = smartFader.dynamicCompressionState;
+
+        if( isCompressed === true){
+            document.getElementById('label-smart-fader-compression').style.color = "rgba(255, 0, 0, 0.7)";
+        }
+        else{
+            document.getElementById('label-smart-fader-compression').style.color = "rgba(255, 255, 255, 0.7)";
+        }
+
+        var rmsCommentary = receiverMix.getRmsForCommentaryAsString();
+        document.getElementById('label-receiver-mix-commentary-rms').textContent = rmsCommentary;
+
+        var rmsProgram = receiverMix.getRmsForProgramAsString();
+        document.getElementById('label-receiver-mix-program-rms').textContent = rmsProgram;    
+
+        var receiverMixCompression = receiverMix.dynamicCompressionState;
+
+        document.getElementById('label-receiver-mix-compression').textContent = "Compression";
+        if( receiverMixCompression === true){
+            document.getElementById('label-receiver-mix-compression').style.color = "rgba(255, 0, 0, 0.7)";
+        }
+        else{        
+            document.getElementById('label-receiver-mix-compression').style.color = "rgba(255, 255, 255, 0.7)";
+        }     
+
+    }, 250);
+
+    //==============================================================================
+    var inputEvent = new Event('input');
+    sliderTrimMain.dispatchEvent(inputEvent);
+    sliderTrimAmbiance.dispatchEvent(inputEvent);
+    sliderTrimComments.dispatchEvent(inputEvent);
+    sliderTrimDialog.dispatchEvent(inputEvent);
+    sliderSmartFader.dispatchEvent(inputEvent);
+    sliderReceiverMixN.dispatchEvent(inputEvent);
+    sliderReceiverMixX.dispatchEvent(inputEvent);
+    sliderReceiverMixRatio.dispatchEvent(inputEvent);
+    sliderReceiverMixThreshold.dispatchEvent(inputEvent);
+    sliderReceiverMixAttack.dispatchEvent(inputEvent);
+    sliderReceiverMixRelease.dispatchEvent(inputEvent);
+    sliderReceiverMixRefreshRms.dispatchEvent(inputEvent);
+    sliderReceiverMixHoldTime.dispatchEvent(inputEvent);
+    sliderSmartFaderRatio.dispatchEvent(inputEvent);
+    sliderSmartFaderAttack.dispatchEvent(inputEvent);
+    sliderSmartFaderRelease.dispatchEvent(inputEvent);
+    sliderListenerYaw.dispatchEvent(inputEvent);
+    sliderAzimComments.dispatchEvent(inputEvent);
+    sliderElevComments.dispatchEvent(inputEvent);
+    sliderDistComments.dispatchEvent(inputEvent);
+    sliderAzimDialog.dispatchEvent(inputEvent);
+    sliderElevDialog.dispatchEvent(inputEvent);
+    sliderDistDialog.dispatchEvent(inputEvent);
+    sliderGainOffset.dispatchEvent(inputEvent);
+    sliderDialogEnhancementMode1.dispatchEvent(inputEvent);
 
 };
 
@@ -566,8 +580,9 @@ var sliderDialogEnhancementMode1 = document.getElementById('slider-dialog-enhanc
 
 
 //==============================================================================
-function updateWAAConnections(){
-    
+function updateWAAConnections()
+{
+   
     smartFader.disconnect();
     dialogEnhancement.disconnect();
     receiverMix.disconnect();
@@ -576,13 +591,16 @@ function updateWAAConnections(){
 
     var processor = undefined;
 
-    if( config == ModulesConfiguration.kMultichannelSpatialiser ){
+    if( config == ModulesConfiguration.kMultichannelSpatialiser )
+    {
         processor = multichannelSpatialiser;       
     }
-    else if( config == ModulesConfiguration.kObjectSpatialiserAndMixer ){
+    else if( config == ModulesConfiguration.kObjectSpatialiserAndMixer )
+    {
         processor = objectSpatialiserAndMixer;
     }
-    else{
+    else
+    {
         throw new Error( "Invalid configuration" );
     }
     
@@ -595,25 +613,36 @@ function updateWAAConnections(){
     /// apply the multichannel spatialiser
     processor.connect( audioContext.destination );
 
+    /*
+    processor.connect( compressorExpander._input );
+    
+    compressorExpander.connect( audioContext.destination );
+     */
+    
+    /// force a nofitication of the HRTF selection
     var $hrtfSet = document.querySelector('#hrtf-selection-menu');
-    if( $hrtfSet.onchange != null ){
+    if( $hrtfSet.onchange != null )
+    {
         $hrtfSet.onchange();
     }
 }
 
 //==============================================================================
-function setElementVisibility( elementId, visibility ){
-
-    if( visibility === true ){
+function setElementVisibility( elementId, visibility )
+{
+    if( visibility === true )
+    {
         document.getElementById(elementId).style.visibility = "";
     }
-    else{
+    else
+    {
         document.getElementById(elementId).style.visibility = "hidden";
     }
 }
 
 //==============================================================================
-function prepareSpatializationModeMenu(){
+function prepareSpatializationModeMenu()
+{
     var $menu = document.querySelector('#spatialisation-mode-menu');
 
     $menu.onchange = function ()
@@ -623,20 +652,24 @@ function prepareSpatializationModeMenu(){
 
         var visibility = true;
         
-        if( selection === 'binaural' ){
+        if( selection === 'binaural' )
+        {
             visibility = true;
         }
-        else{
+        else
+        {
             visibility = false;
         }
         setElementVisibility('checkbox-headphones-equalization', visibility);
         setElementVisibility('label-headphones-equalization', visibility);
 
 
-        if( selection === 'multichannel' ){
+        if( selection === 'multichannel' )
+        {
             visibility = false;
         }
-        else{
+        else
+        {
             visibility = true;
         }
         setElementVisibility('slider-listener-yaw', visibility);
@@ -668,7 +701,8 @@ function prepareSpatializationModeMenu(){
 
 
 //==============================================================================
-function prepareModulesConfigurationMenu(){
+function prepareModulesConfigurationMenu()
+{
     // configuration set selection menu
     var $menu = document.querySelector('#modules-configuration-menu');
 
@@ -679,11 +713,13 @@ function prepareModulesConfigurationMenu(){
 
         var displayDialogPosition = false;
 
-        if( selection === 'Multichannel Spatialiser' ){
+        if( selection === 'Multichannel Spatialiser' )
+        {
             displayDialogPosition = false;
             config = ModulesConfiguration.kMultichannelSpatialiser;
         }
-        else if( selection === 'Object Spatialiser and Mixer' ){
+        else if( selection === 'Object Spatialiser and Mixer' )
+        {
             displayDialogPosition = true;
             config = ModulesConfiguration.kObjectSpatialiserAndMixer;
         }
@@ -719,13 +755,16 @@ function prepareModulesConfigurationMenu(){
 }
 
 //==============================================================================
-function prepareHrtfSelectionMenu(){
+function prepareHrtfSelectionMenu()
+{
     
     var currentProcessor = undefined;
-    if( config == ModulesConfiguration.kMultichannelSpatialiser ){
+    if( config == ModulesConfiguration.kMultichannelSpatialiser )
+    {
         currentProcessor = multichannelSpatialiser;
     }
-    else{
+    else
+    {
         currentProcessor = objectSpatialiserAndMixer;
     }
 
@@ -750,8 +789,8 @@ function prepareHrtfSelectionMenu(){
         });
     };
 
-    if( $hrtfSet.options.length === 0 ){
-
+    if( $hrtfSet.options.length === 0 )
+    {
         /// populate the menu
 
         /// retrieves the catalog of URLs from the OpenDAP server
@@ -813,7 +852,8 @@ function prepareHrtfSelectionMenu(){
 }
 
 //==============================================================================
-function updateActiveStreams(){
+function updateActiveStreams()
+{
     /// notify the modification of active streams
     streamSelector.activeStreamsChanged();
     smartFader.activeStreamsChanged();
@@ -829,10 +869,12 @@ function updateActiveStreams(){
     var inputEvent = new Event('input');
     sliderDialogEnhancementMode1.dispatchEvent(inputEvent);
 
-    if( value == 0 ){
+    if( value == 0 )
+    {
         setElementVisibility( 'label-dialog-enhancement-mode1', false );
     }
-    else{
+    else
+    {
         setElementVisibility( 'label-dialog-enhancement-mode1', true );
     }
     
@@ -840,52 +882,65 @@ function updateActiveStreams(){
     
 }
 
-function updateStreamsTrim(){
+function updateStreamsTrim()
+{
     /// notify the modification of trim of streams
     streamSelector.streamsTrimChanged();    
 }
 
 //==============================================================================
-function onCheckTrimBypass(){
-
+function onCheckTrimBypass()
+{
     var checkbox = document.getElementById('checkbox-trim-bypass');
 
-    if (checkbox.checked) {
+    if( checkbox.checked )
+    {
         streamSelector.bypass = true;
-    } else {
+    }
+    else
+    {
         streamSelector.bypass = false;
     }
 }
 
-function onCheckSmartFaderBypass(){
-
+function onCheckSmartFaderBypass()
+{
     var checkbox = document.getElementById('checkbox-smart-fader-bypass');
 
-    if (checkbox.checked) {
+    if( checkbox.checked )
+    {
         smartFader.bypass = true;
-    } else {
+    }
+    else
+    {
         smartFader.bypass = false;
     }
 }
 
-function onCheckDialogEnhancementBypass(){
-
+function onCheckDialogEnhancementBypass()
+{
     var checkbox = document.getElementById('checkbox-dialog-enhancement-bypass');
 
-    if (checkbox.checked) {
+    if( checkbox.checked )
+    {
         dialogEnhancement.bypass = true;
-    } else {
+    }
+    else
+    {
         dialogEnhancement.bypass = false;
     }
 }
 
-function onCheckReceiverMixBypass(){
-
+function onCheckReceiverMixBypass()
+{
     var checkbox = document.getElementById('checkbox-receiver-mix-bypass');
 
-    if (checkbox.checked) {
+    if( checkbox.checked )
+    {
         receiverMix.bypass = true;
-    } else {
+    }
+    else
+    {
         receiverMix.bypass = false;
     }
 }
@@ -940,10 +995,13 @@ function onCheckEqualization() {
     multichannelSpatialiser.eqPreset = "eq1";
     objectSpatialiserAndMixer.eqPreset = "eq1";
 
-    if (checkboxHeadphonesEqualization.checked) {
+    if (checkboxHeadphonesEqualization.checked)
+    {
         multichannelSpatialiser.bypassHeadphoneEqualization( false );
         objectSpatialiserAndMixer.bypassHeadphoneEqualization( false );
-    } else {
+    }
+    else
+    {
         multichannelSpatialiser.bypassHeadphoneEqualization( true );
         objectSpatialiserAndMixer.bypassHeadphoneEqualization( true );
     }
@@ -965,8 +1023,8 @@ function onCheckLSF() {
 }
 
 //==============================================================================
-function initializeDropDownMenus(){
-
+function initializeDropDownMenus()
+{
     prepareModulesConfigurationMenu();
 
     /// prepare the sofa catalog of HRTF
@@ -976,8 +1034,8 @@ function initializeDropDownMenus(){
 }
 
 //==============================================================================
-function initializeCheckBoxes(){
-
+function initializeCheckBoxes()
+{
     checkboxVideo.checked           = true;
     checkboxExAmbience.checked      = false;
     checkboxExComments.checked      = false;
@@ -994,8 +1052,8 @@ function initializeCheckBoxes(){
 }
 
 //==============================================================================
-function initializeSliders(){
-
+function initializeSliders()
+{
     /// make sure the sliders are properly initialized, with scaled values
     sliderSmartFader.value          = smartFader.getdBForGui( sliderSmartFader );
     sliderSmartFaderRatio.value     = smartFader.getCompressionRatioForGui( sliderSmartFaderRatio );
@@ -1017,7 +1075,6 @@ function initializeSliders(){
     sliderTrimAmbiance.value    = 0;
     sliderTrimComments.value    = 0;
     sliderTrimDialog.value      = 0;
-
 
     sliderAzimComments.value = 0;
     sliderElevComments.value = 0;

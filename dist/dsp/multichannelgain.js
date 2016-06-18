@@ -114,7 +114,6 @@ var MultichannelGainNode = function (_AbstractNode) {
     }, {
         key: 'setAllGains',
         value: function setAllGains(value) {
-
             for (var k = 0; k < this.getNumChannels(); k++) {
                 this.setGain(k, value);
             }
@@ -130,7 +129,6 @@ var MultichannelGainNode = function (_AbstractNode) {
     }, {
         key: 'setGain',
         value: function setGain(channelIndex, value) {
-
             /// boundary check
             if (channelIndex < 0 || channelIndex >= this.getNumChannels()) {
                 throw new Error("Invalid channelIndex");
@@ -147,7 +145,6 @@ var MultichannelGainNode = function (_AbstractNode) {
     }, {
         key: 'getGain',
         value: function getGain(channelIndex) {
-
             /// boundary check
             if (channelIndex < 0 || channelIndex >= this.getNumChannels()) {
                 throw new Error("Invalid channelIndex");
@@ -176,7 +173,6 @@ var MultichannelGainNode = function (_AbstractNode) {
             }
 
             if (this.bypass === true || numChannels === 0) {
-
                 this._input.connect(this._output);
             } else {
 
@@ -199,7 +195,6 @@ var MultichannelGainNode = function (_AbstractNode) {
     }, {
         key: 'bypass',
         set: function set(value) {
-
             if (value !== this._isBypass) {
                 this._isBypass = value;
                 this._updateAudioGraph();
