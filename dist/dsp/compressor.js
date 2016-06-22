@@ -24,7 +24,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 /*!
  *   @file       compressor.js
  *   @brief      This class implements a multichannel Compressor
- *   @author     Thibaut Carpentier
+ *   @author     Thibaut Carpentier / Ircam CNRS UMR9912
  *   @date       01/2016
  *
  */

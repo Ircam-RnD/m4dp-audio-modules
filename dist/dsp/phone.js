@@ -12,7 +12,7 @@ var _set = function set(object, property, value, receiver) { var desc = Object.g
 /*!
  *   @file       phone.js
  *   @brief      This class implements the voice enhancement node
- *   @author     Thibaut Carpentier, Jean-Philippe Lambert
+ *   @author     Thibaut Carpentier, Jean-Philippe Lambert / Ircam CNRS UMR9912
  *   @date       04/2016
  *
  */

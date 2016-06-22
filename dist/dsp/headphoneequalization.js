@@ -28,7 +28,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 /*!
  *   @file       headphoneequalization.js
  *   @brief      This class implements the headphone equalization node
- *   @author     Thibaut Carpentier
+ *   @author     Thibaut Carpentier / Ircam CNRS UMR9912
  *   @date       01/2016
  *
  */

@@ -21,7 +21,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 /*!
  *   @file       testbinaural.js
  *   @brief      Misc test function for binaural
- *   @author     Thibaut Carpentier
+ *   @author     Thibaut Carpentier / Ircam CNRS UMR9912
  *   @date       01/2016
  *
  */

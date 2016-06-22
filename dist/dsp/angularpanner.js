@@ -24,7 +24,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 /*!
  *   @file       vbap.js
  *   @brief      This class implements pairwise amplitude panning for stereo or 5.1 setups
- *   @author     Thibaut Carpentier
+ *   @author     Thibaut Carpentier / Ircam CNRS UMR9912
  *   @date       01/2016
  *
  */

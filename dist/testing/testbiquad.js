@@ -83,7 +83,7 @@ function testBiquadNode() {
 /*!
  *   @file       testbiquad.js
  *   @brief      Misc test functions for BiquadFilterNode
- *   @author     Thibaut Carpentier
+ *   @author     Thibaut Carpentier / Ircam CNRS UMR9912
  *   @date       01/2016
  *
  */

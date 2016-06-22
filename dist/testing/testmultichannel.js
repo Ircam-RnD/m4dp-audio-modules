@@ -68,7 +68,7 @@ function testMultiChannel() {
 /*!
  *   @file       testmultichannel.js
  *   @brief      Misc test functions for 5.1
- *   @author     Thibaut Carpentier
+ *   @author     Thibaut Carpentier / Ircam CNRS UMR9912
  *   @date       01/2016
  *
  */

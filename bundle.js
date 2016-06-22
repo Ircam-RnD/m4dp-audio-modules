@@ -44,7 +44,7 @@ function writeTextDataToFile(text) {
 /*!
  *   @file       bufferutils.js
  *   @brief      Misc utility functions for AudioBuffer manipulation
- *   @author     Thibaut Carpentier
+ *   @author     Thibaut Carpentier / Ircam CNRS UMR9912
  *   @date       01/2016
  *
  */
@@ -1604,7 +1604,7 @@ exports.sec2ms = sec2ms;
 /*!
  *   @file       utils.js
  *   @brief      Misc utility functions
- *   @author     Thibaut Carpentier
+ *   @author     Thibaut Carpentier / Ircam CNRS UMR9912
  *   @date       01/2016
  *
  */
@@ -1884,7 +1884,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 /*!
  *   @file       
  *   @brief      Implements the DialogEnhancement of M4DP
- *   @author     Thibaut Carpentier
+ *   @author     Thibaut Carpentier / Ircam CNRS UMR9912
  *   @date       01/2016
  *
  */
@@ -2829,7 +2829,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 /*!
  *   @file       cascade.js
  *   @brief      This class implements a cascade of BiquadFilterNodes
- *   @author     Thibaut Carpentier
+ *   @author     Thibaut Carpentier / Ircam CNRS UMR9912
  *   @date       01/2016
  *
  */
@@ -3155,7 +3155,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
  *   @file       centerenhancement.js
  *   @brief      Enhance the center channel : Start from LR signals, do MS conversion
  *               apply filtering in M, then do MS to LR conversion
- *   @author     Thibaut Carpentier
+ *   @author     Thibaut Carpentier / Ircam CNRS UMR9912
  *   @date       01/2016
  *
  */
@@ -3270,7 +3270,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 /*!
  *   @file       compressor.js
  *   @brief      This class implements a multichannel Compressor
- *   @author     Thibaut Carpentier
+ *   @author     Thibaut Carpentier / Ircam CNRS UMR9912
  *   @date       01/2016
  *
  */
@@ -3716,7 +3716,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 /*!
  *   @file       compressorexpander.js
  *   @brief      This class implements a mono compressor/expander, ported from C++ to javascript
- *   @author     Thibaut Carpentier
+ *   @author     Thibaut Carpentier / Ircam CNRS UMR9912
  *   @date       06/2016
  *
  */
@@ -3773,6 +3773,7 @@ var CompressorExpanderNode = function (_AbstractNode) {
 
         _this._updateParameters();
 
+        /// the script processor part
         {
             var bufferSize = 0;
             /*
@@ -4219,7 +4220,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 /*!
  *   @file       compressorsidechain.js
  *   @brief      This class implements a mono compressor/expander, ported from C++ to javascript
- *   @author     Thibaut Carpentier
+ *   @author     Thibaut Carpentier / Ircam CNRS UMR9912
  *   @date       06/2016
  *
  */
@@ -4289,6 +4290,7 @@ var CompressorWithSideChain = function (_AbstractNode) {
 
         _this._updateParameters();
 
+        /// the script processor part
         {
             var bufferSize = 0;
             /*
@@ -4631,7 +4633,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 /*!
  *   @file       headphoneequalization.js
  *   @brief      This class implements the headphone equalization node
- *   @author     Thibaut Carpentier
+ *   @author     Thibaut Carpentier / Ircam CNRS UMR9912
  *   @date       01/2016
  *
  */
@@ -4733,7 +4735,7 @@ exports.default = HeadphonesEqualization;
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
-exports.CompressorWithSideChain = exports.MultiCompressorExpanderNode = exports.CompressorExpanderNode = exports.MultichannelGainNode = exports.VirtualSpeakersNode = exports.TransauralShufflerNode = exports.TransauralFeedforwardNode = exports.TransauralNode = exports.SumDiffNode = exports.HeadphonesEqualization = exports.AnalysisNode = exports.CascadeNode = undefined;
+exports.RmsMetering = exports.CompressorWithSideChain = exports.MultiCompressorExpanderNode = exports.CompressorExpanderNode = exports.MultichannelGainNode = exports.VirtualSpeakersNode = exports.TransauralShufflerNode = exports.TransauralFeedforwardNode = exports.TransauralNode = exports.SumDiffNode = exports.HeadphonesEqualization = exports.AnalysisNode = exports.CascadeNode = undefined;
 
 var _cascade = require('./cascade.js');
 
@@ -4767,7 +4769,21 @@ var _compressorsidechain = require('./compressorsidechain.js');
 
 var _compressorsidechain2 = _interopRequireDefault(_compressorsidechain);
 
+var _rmsmetering = require('./rmsmetering.js');
+
+var _rmsmetering2 = _interopRequireDefault(_rmsmetering);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/************************************************************************************/
+/*!
+ *   @file       index.js
+ *   @brief      Exports the dsp modules
+ *   @author     Thibaut Carpentier / Ircam CNRS UMR9912
+ *   @date       01/2016
+ *
+ */
+/************************************************************************************/
 
 exports.CascadeNode = _cascade2.default;
 exports.AnalysisNode = _analysis2.default;
@@ -4780,20 +4796,13 @@ exports.VirtualSpeakersNode = _virtualspeakers2.default;
 exports.MultichannelGainNode = _multichannelgain2.default;
 exports.CompressorExpanderNode = _compressorexpander.CompressorExpanderNode;
 exports.MultiCompressorExpanderNode = _compressorexpander.MultiCompressorExpanderNode;
-exports.CompressorWithSideChain = _compressorsidechain2.default; /************************************************************************************/
-/*!
- *   @file       index.js
- *   @brief      Exports the dsp modules
- *   @author     Thibaut Carpentier
- *   @date       01/2016
- *
- */
-/************************************************************************************/
-},{"./analysis.js":5,"./cascade.js":6,"./compressorexpander.js":9,"./compressorsidechain.js":10,"./headphoneequalization.js":11,"./multichannelgain.js":15,"./sumdiff.js":17,"./transaural.js":18,"./virtualspeakers.js":19}],13:[function(require,module,exports){
+exports.CompressorWithSideChain = _compressorsidechain2.default;
+exports.RmsMetering = _rmsmetering2.default;
+},{"./analysis.js":5,"./cascade.js":6,"./compressorexpander.js":9,"./compressorsidechain.js":10,"./headphoneequalization.js":11,"./multichannelgain.js":15,"./rmsmetering.js":17,"./sumdiff.js":18,"./transaural.js":19,"./virtualspeakers.js":20}],13:[function(require,module,exports){
 "use strict";Object.defineProperty(exports,"__esModule",{value:true});exports.getKemar2btFilters=getKemar2btFilters; /************************************************************************************/ /*!
  *   @file       kemar.js
  *   @brief      Kemar hard-coded filters
- *   @author     Thibaut Carpentier
+ *   @author     Thibaut Carpentier / Ircam CNRS UMR9912
  *   @date       01/2016
  *
  */ /************************************************************************************/function getKemar2btSumFilter(samplerate,speakerSpan){ /// kemar binaural to transaural FIR filter (for shuffler), Sum filter
@@ -4833,7 +4842,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 /*!
  *   @file       lrms.js
  *   @brief      LR to MS or MS to LR
- *   @author     Thibaut Carpentier
+ *   @author     Thibaut Carpentier / Ircam CNRS UMR9912
  *   @date       01/2016
  *
  */
@@ -4886,7 +4895,7 @@ var LRMSNode = function (_AbstractNode) {
 }(_index2.default);
 
 exports.default = LRMSNode;
-},{"../core/index.js":2,"./sumdiff.js":17}],15:[function(require,module,exports){
+},{"../core/index.js":2,"./sumdiff.js":18}],15:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -4913,7 +4922,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 /*!
  *   @file       multichannelgain.js
  *   @brief      This class implements a multichannel GainNode
- *   @author     Thibaut Carpentier
+ *   @author     Thibaut Carpentier / Ircam CNRS UMR9912
  *   @date       01/2016
  *
  */
@@ -5118,7 +5127,7 @@ var _set = function set(object, property, value, receiver) { var desc = Object.g
 /*!
  *   @file       phone.js
  *   @brief      This class implements the voice enhancement node
- *   @author     Thibaut Carpentier, Jean-Philippe Lambert
+ *   @author     Thibaut Carpentier, Jean-Philippe Lambert / Ircam CNRS UMR9912
  *   @date       04/2016
  *
  */
@@ -5285,6 +5294,296 @@ exports.default = PhoneNode;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+exports.MultiRMSMetering = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _index = require('../core/index.js');
+
+var _index2 = _interopRequireDefault(_index);
+
+var _utils = require('../core/utils.js');
+
+var _utils2 = _interopRequireDefault(_utils);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /************************************************************************************/
+/*!
+ *   @file       rmsmetering.js
+ *   @brief      RMS metering
+ *   @author     Thibaut Carpentier / Ircam CNRS UMR9912
+ *   @date       06/2016
+ *
+ */
+/************************************************************************************/
+
+/************************************************************************************/
+/*!
+ *  @class          RMSMetering
+ *  @brief          RMS metering using an averaging filter
+ *                  (first order low pass filter with smoothing factor)
+ *                  a.k.a Exponentially Weighted Moving Average a.k.a exponential smoothing
+ *  @ingroup        dsp
+ *
+ */
+/************************************************************************************/
+
+var RmsMetering = function (_AbstractNode) {
+    _inherits(RmsMetering, _AbstractNode);
+
+    /************************************************************************************/
+    /*!
+     *  @brief          Class constructor
+     *
+     */
+    /************************************************************************************/
+
+    function RmsMetering(audioContext) {
+        _classCallCheck(this, RmsMetering);
+
+        // default values
+
+        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(RmsMetering).call(this, audioContext));
+
+        _this._samplerate = _utils2.default.clamp(audioContext.sampleRate, 22050, 192000);
+        _this._value = 0.0;
+        _this._tau = 20.0; /// msec
+        _this._a = 0.0;
+        _this._b = 0.0;
+        _this._mem = 0.0;
+
+        _this.SetTimeConstant(_this._tau);
+
+        /// the script processor part
+        {
+            var bufferSize = 0;
+            /*
+             The buffer size in units of sample-frames. If specified, the bufferSize must be one of the following values:
+             256, 512, 1024, 2048, 4096, 8192, 16384. If it's not passed in, or if the value is 0,
+             then the implementation will choose the best buffer size for the given environment,
+             which will be a constant power of 2 throughout the lifetime of the node.
+             */
+            var numberOfInputChannels = 1;
+            var numberOfOutputChannels = 0;
+            _this._scriptNode = audioContext.createScriptProcessor(bufferSize, numberOfInputChannels, numberOfOutputChannels);
+
+            var metering = _this;
+
+            _this._scriptNode.onaudioprocess = function (audioProcessingEvent) {
+                var inputBuffer = audioProcessingEvent.inputBuffer;
+
+                if (inputBuffer.numberOfChannels != 1) {
+                    throw new Error("Pas bon");
+                }
+
+                var numSamples = inputBuffer.length;
+
+                var tmp = 0.0;
+
+                for (var i = 0; i < numSamples; i++) {
+                    var input = inputData[i];
+
+                    var x = metering._b * input * input;
+                    tmp = x + metering._a * metering._mem;
+                    metering._mem = tmp;
+                }
+
+                metering._value = tmp;
+            };
+        }
+
+        _this._input.connect(_this._scriptNode);
+        return _this;
+    }
+
+    /************************************************************************************/
+    /*!
+     *  @brief          Returns the current RMS value, in dB
+     *
+     */
+    /************************************************************************************/
+
+
+    _createClass(RmsMetering, [{
+        key: 'GetValuedB',
+        value: function GetValuedB() {
+            return _utils2.default.lin2powdB(this._value + 1e-12);
+        }
+    }, {
+        key: 'SetTimeConstant',
+        value: function SetTimeConstant(valueInMilliseconds) {
+            this._samplerate = _utils2.default.clamp(this._samplerate, 22050, 192000);
+
+            var sr = this._samplerate;
+
+            this._tau = _utils2.default.clamp(valueInMilliseconds, 5.0, 500.0);
+
+            var tauInSeconds = this._tau / 1000;
+
+            var dt = 1.0 / sr;
+
+            var alpha = 1.0 - Math.exp(-dt / tauInSeconds);
+
+            alpha = _utils2.default.clamp(alpha, 0.001, 0.999);
+
+            this._a = 1. - alpha;
+            this._b = 1. - this._a;
+        }
+
+        /************************************************************************************/
+        /*!
+         *  @brief          Clears the internal state of the object
+         *
+         */
+        /************************************************************************************/
+
+    }, {
+        key: 'clearState',
+        value: function clearState() {
+            this._mem = 0.0;
+            this._rms = 0.0;
+        }
+    }]);
+
+    return RmsMetering;
+}(_index2.default);
+
+/************************************************************************************/
+/*!
+ *  @class          MultiRMSMetering
+ *  @brief          multi-channel version of RMSMetering
+ *  @ingroup        dsp
+ *
+ */
+/************************************************************************************/
+
+
+exports.default = RmsMetering;
+
+var MultiRMSMetering = exports.MultiRMSMetering = function (_AbstractNode2) {
+    _inherits(MultiRMSMetering, _AbstractNode2);
+
+    /************************************************************************************/
+    /*!
+     *  @brief          Class constructor
+     *
+     */
+    /************************************************************************************/
+
+    function MultiRMSMetering(audioContext, numChannels) {
+        _classCallCheck(this, MultiRMSMetering);
+
+        var _this2 = _possibleConstructorReturn(this, Object.getPrototypeOf(MultiRMSMetering).call(this, audioContext));
+
+        _this2._meterNodes = [];
+        _this2._splitterNode = undefined;
+
+        /// sanity checks
+        if (numChannels <= 0) {
+            throw new Error("Pas bon");
+        }
+
+        _this2._splitterNode = audioContext.createChannelSplitter(numChannels);
+
+        /// sanity checks
+        if (_this2._splitterNode.numberOfInputs != 1 || _this2._splitterNode.numberOfOutputs != numChannels) {
+            throw new Error("Pas bon");
+        }
+
+        /// create N compressorNodes
+        for (var i = 0; i < numChannels; i++) {
+            var newCompressorNode = new RmsMetering(audioContext);
+            _this2._meterNodes.push(newCompressorNode);
+        }
+
+        /// create the audio graph
+        _this2._updateAudioGraph();
+        return _this2;
+    }
+
+    /************************************************************************************/
+    /*!
+     *  @brief          Returns the current number of channels
+     *
+     */
+    /************************************************************************************/
+
+
+    _createClass(MultiRMSMetering, [{
+        key: 'getNumChannels',
+        value: function getNumChannels() {
+            return this._meterNodes.length;
+        }
+    }, {
+        key: 'SetTimeConstant',
+        value: function SetTimeConstant(valueInMilliseconds) {
+            var numChannels = this.getNumChannels();
+
+            for (var i = 0; i < numChannels; i++) {
+                this._meterNodes[i].SetTimeConstant(valueInMilliseconds);
+            }
+        }
+
+        /************************************************************************************/
+        /*!
+         *  @brief          Returns the current RMS value, in dB
+         *
+         */
+        /************************************************************************************/
+
+    }, {
+        key: 'GetValuedB',
+        value: function GetValuedB(channelIndex) {
+            /// boundary check
+            if (channelIndex < 0 || channelIndex >= this.numChannels) {
+                throw new Error("Invalid channel index");
+            }
+
+            return this._meterNodes[channelIndex].GetValuedB();
+        }
+
+        /************************************************************************************/
+        /*!
+         *  @brief          Updates the connections of the audio graph
+         *
+         */
+        /************************************************************************************/
+
+    }, {
+        key: '_updateAudioGraph',
+        value: function _updateAudioGraph() {
+            var numChannels = this.getNumChannels();
+
+            /// first of all, disconnect everything
+            this._input.disconnect();
+            this._splitterNode.disconnect();
+            for (var i = 0; i < numChannels; i++) {
+                this._meterNodes[i].disconnect();
+            }
+
+            /// split the input streams into N independent channels
+            this._input.connect(this._splitterNode);
+
+            /// connect a compressorNode to each channel
+            for (var _i = 0; _i < numChannels; _i++) {
+                this._splitterNode.connect(this._meterNodes[_i]._input, _i);
+            }
+        }
+    }]);
+
+    return MultiRMSMetering;
+}(_index2.default);
+},{"../core/index.js":2,"../core/utils.js":3}],18:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 
 var _index = require('../core/index.js');
 
@@ -5300,7 +5599,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 /*!
  *   @file       sumdiff.js
  *   @brief      Helper class for Transaural (shuffler)
- *   @author     Thibaut Carpentier
+ *   @author     Thibaut Carpentier / Ircam CNRS UMR9912
  *   @date       01/2016
  *
  */
@@ -5355,7 +5654,7 @@ var SumDiffNode = function (_AbstractNode) {
 }(_index2.default);
 
 exports.default = SumDiffNode;
-},{"../core/index.js":2}],18:[function(require,module,exports){
+},{"../core/index.js":2}],19:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -5385,7 +5684,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 /*!
  *   @file       transaural.js
  *   @brief      This class implements the transaural decoder node(s)
- *   @author     Thibaut Carpentier
+ *   @author     Thibaut Carpentier / Ircam CNRS UMR9912
  *   @date       01/2016
  *
  */
@@ -5611,7 +5910,7 @@ var TransauralFeedforwardNode = exports.TransauralFeedforwardNode = function (_T
 
     return TransauralFeedforwardNode;
 }(TransauralNode);
-},{"../core/index.js":2,"./kemar.js":13,"./sumdiff.js":17}],19:[function(require,module,exports){
+},{"../core/index.js":2,"./kemar.js":13,"./sumdiff.js":18}],20:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -5638,7 +5937,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 /*!
  *   @file       virtualspeakers.js
  *   @brief      This class implements the 5.1 to binaural virtual speakers
- *   @author     Thibaut Carpentier
+ *   @author     Thibaut Carpentier / Ircam CNRS UMR9912
  *   @date       01/2016
  *
  */
@@ -5951,13 +6250,13 @@ var VirtualSpeakersNode = function (_AbstractNode) {
 }(_index2.default);
 
 exports.default = VirtualSpeakersNode;
-},{"../core/index.js":2,"binaural":51}],20:[function(require,module,exports){
+},{"../core/index.js":2,"binaural":52}],21:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
 								value: true
 });
-exports.binaural = exports.unittests = exports.utilities = exports.AudioStreamDescription = exports.AudioStreamDescriptionCollection = exports.SmartFader = exports.ObjectSpatialiserAndMixer = exports.NoiseAdaptation = exports.MultichannelSpatialiser = exports.DialogEnhancement = exports.ReceiverMix = exports.StreamSelector = exports.CompressorWithSideChain = exports.MultiCompressorExpanderNode = exports.CompressorExpanderNode = exports.HeadphonesEqualization = exports.CenterEnhancementNode = exports.LRMSNode = exports.SumDiffNode = exports.CascadeNode = undefined;
+exports.binaural = exports.unittests = exports.utilities = exports.AudioStreamDescription = exports.AudioStreamDescriptionCollection = exports.SmartFader = exports.ObjectSpatialiserAndMixer = exports.NoiseAdaptation = exports.MultichannelSpatialiser = exports.DialogEnhancement = exports.ReceiverMix = exports.StreamSelector = exports.RmsMetering = exports.CompressorWithSideChain = exports.MultiCompressorExpanderNode = exports.CompressorExpanderNode = exports.HeadphonesEqualization = exports.CenterEnhancementNode = exports.LRMSNode = exports.SumDiffNode = exports.CascadeNode = undefined;
 
 var _index = require('./dialog-enhancement/index.js');
 
@@ -6013,6 +6312,7 @@ exports.HeadphonesEqualization = _index16.HeadphonesEqualization;
 exports.CompressorExpanderNode = _index16.CompressorExpanderNode;
 exports.MultiCompressorExpanderNode = _index16.MultiCompressorExpanderNode;
 exports.CompressorWithSideChain = _index16.CompressorWithSideChain;
+exports.RmsMetering = _index16.RmsMetering;
 exports.StreamSelector = _index13.default;
 exports.ReceiverMix = _index15.default;
 exports.DialogEnhancement = _index2.default;
@@ -6025,7 +6325,7 @@ exports.AudioStreamDescription = _index11.AudioStreamDescription;
 exports.utilities = _utils2.default;
 exports.unittests = _index18.default;
 exports.binaural = _binaural2.default;
-},{"./core/index.js":2,"./core/utils.js":3,"./dialog-enhancement/index.js":4,"./dsp/index.js":12,"./multichannel-spatialiser/index.js":21,"./noise-adaptation/index.js":23,"./object-spatialiser-and-mixer/index.js":24,"./receiver-mix/index.js":25,"./smart-fader/index.js":26,"./stream-selector/index.js":27,"./testing/index.js":28,"binaural":51}],21:[function(require,module,exports){
+},{"./core/index.js":2,"./core/utils.js":3,"./dialog-enhancement/index.js":4,"./dsp/index.js":12,"./multichannel-spatialiser/index.js":22,"./noise-adaptation/index.js":24,"./object-spatialiser-and-mixer/index.js":25,"./receiver-mix/index.js":26,"./smart-fader/index.js":27,"./stream-selector/index.js":28,"./testing/index.js":29,"binaural":52}],22:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -6066,7 +6366,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 /*!
  *   @file       
  *   @brief      Implements the MultichannelSpatialiser of M4DP
- *   @author     Thibaut Carpentier, Samuel Goldszmidt
+ *   @author     Thibaut Carpentier, Samuel Goldszmidt / Ircam CNRS UMR9912
  *   @date       01/2016
  *
  */
@@ -6362,7 +6662,7 @@ var MultichannelSpatialiser = function (_AbstractNode) {
 }(_index2.default);
 
 exports.default = MultichannelSpatialiser;
-},{"../core/index.js":2,"../core/utils.js":3,"../dsp/headphoneequalization.js":11,"../dsp/transaural.js":18,"../dsp/virtualspeakers.js":19,"../multichannel-spatialiser/routing.js":22}],22:[function(require,module,exports){
+},{"../core/index.js":2,"../core/utils.js":3,"../dsp/headphoneequalization.js":11,"../dsp/transaural.js":19,"../dsp/virtualspeakers.js":20,"../multichannel-spatialiser/routing.js":23}],23:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -6383,7 +6683,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 /*!
  *   @file       index.js
  *   @brief      This class takes the 10 audio streams and produces a 5.1 output stream (discrete routing)
- *   @author     Thibaut Carpentier
+ *   @author     Thibaut Carpentier / Ircam CNRS UMR9912
  *   @date       01/2016
  *
  */
@@ -6557,7 +6857,7 @@ var StreamRouting = function (_AbstractNode) {
 }(_index2.default);
 
 exports.default = StreamRouting;
-},{"../core/index.js":2}],23:[function(require,module,exports){
+},{"../core/index.js":2}],24:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -6630,7 +6930,7 @@ var NoiseAdaptation = function (_AbstractNode) {
 }(_index2.default);
 
 exports.default = NoiseAdaptation;
-},{"../core/index.js":2}],24:[function(require,module,exports){
+},{"../core/index.js":2}],25:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -6657,7 +6957,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 /*!
  *   @file       
  *   @brief      Implements the ObjectSpatialiserAndMixer of M4DP
- *   @author     Thibaut Carpentier, Samuel Goldszmidt
+ *   @author     Thibaut Carpentier, Samuel Goldszmidt / Ircam CNRS UMR9912
  *   @date       01/2016
  *
  */
@@ -7060,7 +7360,7 @@ var ObjectSpatialiserAndMixer = function (_MultichannelSpatiali) {
 }(_index2.default);
 
 exports.default = ObjectSpatialiserAndMixer;
-},{"../core/utils.js":3,"../multichannel-spatialiser/index.js":21}],25:[function(require,module,exports){
+},{"../core/utils.js":3,"../multichannel-spatialiser/index.js":22}],26:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -7101,7 +7401,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
  *				 This module inspects the RMS of the main programme, the RMS of the commentary
  *				 and it applies dynamic compression on the main programme if necessary
  *
- *   @author     Thibaut Carpentier, Samuel Goldszmidt
+ *   @author     Thibaut Carpentier / Ircam CNRS UMR9912, Samuel Goldszmidt
  *   @date       01/2016
  *
  */
@@ -8588,7 +8888,7 @@ var ReceiverMix = function (_AbstractNode) {
 }(_index2.default);
 
 exports.default = ReceiverMix;
-},{"../core/index.js":2,"../core/utils.js":3,"../dsp/analysis.js":5,"../dsp/compressor.js":8}],26:[function(require,module,exports){
+},{"../core/index.js":2,"../core/utils.js":3,"../dsp/analysis.js":5,"../dsp/compressor.js":8}],27:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -8621,7 +8921,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 /*!
  *   @file       index.js
  *   @brief      This class implements the so-called SmartFader module of M4DP
- *   @author     Thibaut Carpentier
+ *   @author     Thibaut Carpentier / Ircam CNRS UMR9912
  *   @date       01/2016
  *
  */
@@ -9387,7 +9687,7 @@ var SmartFader = function (_AbstractNode) {
 }(_index2.default);
 
 exports.default = SmartFader;
-},{"../core/index.js":2,"../core/utils.js":3,"../dsp/compressor.js":8}],27:[function(require,module,exports){
+},{"../core/index.js":2,"../core/utils.js":3,"../dsp/compressor.js":8}],28:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -9418,7 +9718,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 /*!
  *   @file       index.js
  *   @brief      This class mutes/unmutes the incoming streams according to the checkbox selections
- *   @author     Thibaut Carpentier
+ *   @author     Thibaut Carpentier / Ircam CNRS UMR9912
  *   @date       01/2016
  *
  */
@@ -9592,7 +9892,7 @@ var StreamSelector = function (_AbstractNode) {
 }(_index2.default);
 
 exports.default = StreamSelector;
-},{"../core/index.js":2,"../core/utils.js":3,"../dsp/multichannelgain.js":15}],28:[function(require,module,exports){
+},{"../core/index.js":2,"../core/utils.js":3,"../dsp/multichannelgain.js":15}],29:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -9662,14 +9962,14 @@ var unittests = {
 /*!
  *   @file       index.js
  *   @brief      Export test modules
- *   @author     Thibaut Carpentier
+ *   @author     Thibaut Carpentier / Ircam CNRS UMR9912
  *   @date       01/2016
  *
  */
 /************************************************************************************/
 
 exports.default = unittests;
-},{"./testanalysis.js":29,"./testbinaural.js":30,"./testbiquad.js":31,"./testcascade.js":32,"./testcompressorexpander.js":33,"./testmultichannel.js":34,"./testphone.js":35,"./testrouting.js":36,"./testsofa.js":37,"./testsumdiff.js":38,"./testtransaural.js":39}],29:[function(require,module,exports){
+},{"./testanalysis.js":30,"./testbinaural.js":31,"./testbiquad.js":32,"./testcascade.js":33,"./testcompressorexpander.js":34,"./testmultichannel.js":35,"./testphone.js":36,"./testrouting.js":37,"./testsofa.js":38,"./testsumdiff.js":39,"./testtransaural.js":40}],30:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -9767,7 +10067,7 @@ function testAnalysisNode() {
 /*!
  *   @file       testanalyser.js
  *   @brief      Misc test functions for M4DPAudioModules.PhoneNode
- *   @author     Thibaut Carpentier, Jean-Philippe Lambert
+ *   @author     Thibaut Carpentier, Jean-Philippe Lambert / Ircam CNRS UMR9912
  *   @date       04/2016
  *
  */
@@ -9778,7 +10078,7 @@ var analysistests = {
 };
 
 exports.default = analysistests;
-},{"../core/bufferutils.js":1,"../dsp/analysis.js":5,"../dsp/phone.js":16}],30:[function(require,module,exports){
+},{"../core/bufferutils.js":1,"../dsp/analysis.js":5,"../dsp/phone.js":16}],31:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -9802,7 +10102,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 /*!
  *   @file       testbinaural.js
  *   @brief      Misc test function for binaural
- *   @author     Thibaut Carpentier
+ *   @author     Thibaut Carpentier / Ircam CNRS UMR9912
  *   @date       01/2016
  *
  */
@@ -9876,7 +10176,7 @@ var binauraltests = {
 };
 
 exports.default = binauraltests;
-},{"../core/bufferutils.js":1,"./testsofa.js":37}],31:[function(require,module,exports){
+},{"../core/bufferutils.js":1,"./testsofa.js":38}],32:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -9962,7 +10262,7 @@ function testBiquadNode() {
 /*!
  *   @file       testbiquad.js
  *   @brief      Misc test functions for BiquadFilterNode
- *   @author     Thibaut Carpentier
+ *   @author     Thibaut Carpentier / Ircam CNRS UMR9912
  *   @date       01/2016
  *
  */
@@ -9973,7 +10273,7 @@ var biquadtests = {
 };
 
 exports.default = biquadtests;
-},{"../core/bufferutils.js":1}],32:[function(require,module,exports){
+},{"../core/bufferutils.js":1}],33:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -9996,7 +10296,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 /*!
  *   @file       testcascade.js
  *   @brief      Misc test functions for M4DPAudioModules.CascadeNode
- *   @author     Thibaut Carpentier
+ *   @author     Thibaut Carpentier / Ircam CNRS UMR9912
  *   @date       01/2016
  *
  */
@@ -10081,7 +10381,7 @@ var cascadetests = {
 };
 
 exports.default = cascadetests;
-},{"../core/bufferutils.js":1,"../dsp/cascade.js":6}],33:[function(require,module,exports){
+},{"../core/bufferutils.js":1,"../dsp/cascade.js":6}],34:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -10104,7 +10404,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 /*!
  *   @file       testcompressorexpander.js
  *   @brief      Misc test functions for M4DPAudioModules.CompressorExpanderNode
- *   @author     Thibaut Carpentier
+ *   @author     Thibaut Carpentier / Ircam CNRS UMR9912
  *   @date       01/2016
  *
  */
@@ -10169,7 +10469,7 @@ var compressorexpandertests = {
 };
 
 exports.default = compressorexpandertests;
-},{"../core/bufferutils.js":1,"../dsp/compressorexpander.js":9}],34:[function(require,module,exports){
+},{"../core/bufferutils.js":1,"../dsp/compressorexpander.js":9}],35:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -10240,7 +10540,7 @@ function testMultiChannel() {
 /*!
  *   @file       testmultichannel.js
  *   @brief      Misc test functions for 5.1
- *   @author     Thibaut Carpentier
+ *   @author     Thibaut Carpentier / Ircam CNRS UMR9912
  *   @date       01/2016
  *
  */
@@ -10251,7 +10551,7 @@ var multichanneltests = {
 };
 
 exports.default = multichanneltests;
-},{"../core/bufferutils.js":1}],35:[function(require,module,exports){
+},{"../core/bufferutils.js":1}],36:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -10274,7 +10574,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 /*!
  *   @file       testphone.js
  *   @brief      Misc test functions for M4DPAudioModules.PhoneNode
- *   @author     Thibaut Carpentier
+ *   @author     Thibaut Carpentier / Ircam CNRS UMR9912
  *   @date       01/2016
  *
  */
@@ -10347,7 +10647,7 @@ var phonetests = {
 };
 
 exports.default = phonetests;
-},{"../core/bufferutils.js":1,"../dsp/phone.js":16}],36:[function(require,module,exports){
+},{"../core/bufferutils.js":1,"../dsp/phone.js":16}],37:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -10370,7 +10670,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 /*!
  *   @file       testrouting.js
  *   @brief      Misc test functions for 5.1
- *   @author     Thibaut Carpentier
+ *   @author     Thibaut Carpentier / Ircam CNRS UMR9912
  *   @date       01/2016
  *
  */
@@ -10437,7 +10737,7 @@ var routingtests = {
 };
 
 exports.default = routingtests;
-},{"../core/bufferutils.js":1,"../multichannel-spatialiser/routing.js":22}],37:[function(require,module,exports){
+},{"../core/bufferutils.js":1,"../multichannel-spatialiser/routing.js":23}],38:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -10462,7 +10762,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 /*!
  *   @file       testsofa.js
  *   @brief      Misc test functions for SOFA
- *   @author     Thibaut Carpentier
+ *   @author     Thibaut Carpentier / Ircam CNRS UMR9912
  *   @date       01/2016
  *
  */
@@ -10591,7 +10891,7 @@ var sofatests = {
 };
 
 exports.default = sofatests;
-},{"../core/utils.js":3,"binaural":51}],38:[function(require,module,exports){
+},{"../core/utils.js":3,"binaural":52}],39:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -10614,7 +10914,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 /*!
  *   @file       testcascade.js
  *   @brief      Misc test functions for M4DPAudioModules.SumDiffNode
- *   @author     Thibaut Carpentier
+ *   @author     Thibaut Carpentier / Ircam CNRS UMR9912
  *   @date       01/2016
  *
  */
@@ -10677,7 +10977,7 @@ var sumdifftests = {
 };
 
 exports.default = sumdifftests;
-},{"../core/bufferutils.js":1,"../dsp/sumdiff.js":17}],39:[function(require,module,exports){
+},{"../core/bufferutils.js":1,"../dsp/sumdiff.js":18}],40:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -10698,7 +10998,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 /*!
  *   @file       testtransaural.js
  *   @brief      Misc test functions for M4DPAudioModules.TransauralShufflerNode
- *   @author     Thibaut Carpentier
+ *   @author     Thibaut Carpentier / Ircam CNRS UMR9912
  *   @date       01/2016
  *
  */
@@ -10760,7 +11060,7 @@ var transauraltests = {
 };
 
 exports.default = transauraltests;
-},{"../core/bufferutils.js":1,"../dsp/transaural.js":18}],40:[function(require,module,exports){
+},{"../core/bufferutils.js":1,"../dsp/transaural.js":19}],41:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -11478,7 +11778,7 @@ var BinauralPanner = exports.BinauralPanner = function () {
 }();
 
 exports.default = BinauralPanner;
-},{"../geometry/Listener":47,"../geometry/coordinates":48,"../sofa/HrtfSet":53,"./Source":41,"gl-matrix":59}],41:[function(require,module,exports){
+},{"../geometry/Listener":48,"../geometry/coordinates":49,"../sofa/HrtfSet":54,"./Source":42,"gl-matrix":60}],42:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -11753,7 +12053,7 @@ var Source = exports.Source = function () {
 }();
 
 exports.default = Source;
-},{}],42:[function(require,module,exports){
+},{}],43:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -11779,7 +12079,7 @@ exports.default = {
   Source: _Source2.default,
   utilities: _utilities2.default
 };
-},{"./BinauralPanner":40,"./Source":41,"./utilities":43}],43:[function(require,module,exports){
+},{"./BinauralPanner":41,"./Source":42,"./utilities":44}],44:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -11928,7 +12228,7 @@ exports.default = {
   createNoiseBuffer: createNoiseBuffer,
   resampleFloat32Array: resampleFloat32Array
 };
-},{}],44:[function(require,module,exports){
+},{}],45:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -11944,7 +12244,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 exports.default = {
   utilities: _utilities2.default
 };
-},{"./utilities":45}],45:[function(require,module,exports){
+},{"./utilities":46}],46:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -11993,7 +12293,7 @@ exports.default = {
   almostEquals: almostEquals,
   almostEqualsModulo: almostEqualsModulo
 };
-},{}],46:[function(require,module,exports){
+},{}],47:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -12062,7 +12362,7 @@ exports.default = {
   distanceSquared: distanceSquared,
   tree: _kd2.default
 };
-},{"kd.tree":69}],47:[function(require,module,exports){
+},{"kd.tree":70}],48:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -12315,7 +12615,7 @@ var Listener = exports.Listener = function () {
 }();
 
 exports.default = Listener;
-},{"../geometry/coordinates":48,"gl-matrix":59}],48:[function(require,module,exports){
+},{"../geometry/coordinates":49,"gl-matrix":60}],49:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -12852,7 +13152,7 @@ exports.default = {
   systemToGl: systemToGl,
   systemType: systemType
 };
-},{"./degree":49}],49:[function(require,module,exports){
+},{"./degree":50}],50:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -12944,7 +13244,7 @@ exports.default = {
   toRadian: toRadian,
   toRadianFactor: toRadianFactor
 };
-},{}],50:[function(require,module,exports){
+},{}],51:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -12975,7 +13275,7 @@ exports.default = {
   KdTree: _KdTree2.default,
   Listener: _Listener2.default
 };
-},{"./KdTree":46,"./Listener":47,"./coordinates":48,"./degree":49}],51:[function(require,module,exports){
+},{"./KdTree":47,"./Listener":48,"./coordinates":49,"./degree":50}],52:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -13017,7 +13317,7 @@ exports.default = {
   info: _info2.default,
   sofa: _sofa2.default
 };
-},{"./audio":42,"./common":44,"./geometry":50,"./info":52,"./sofa":55}],52:[function(require,module,exports){
+},{"./audio":43,"./common":45,"./geometry":51,"./info":53,"./sofa":56}],53:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -13082,7 +13382,7 @@ exports.default = {
   name: name,
   version: version
 };
-},{"../package.json":70}],53:[function(require,module,exports){
+},{"../package.json":71}],54:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -13972,7 +14272,7 @@ var HrtfSet = exports.HrtfSet = function () {
 }();
 
 exports.default = HrtfSet;
-},{"../audio/utilities":43,"../geometry/KdTree":46,"../geometry/coordinates":48,"../info":52,"./parseDataSet":56,"./parseSofa":57,"gl-matrix":59}],54:[function(require,module,exports){
+},{"../audio/utilities":44,"../geometry/KdTree":47,"../geometry/coordinates":49,"../info":53,"./parseDataSet":57,"./parseSofa":58,"gl-matrix":60}],55:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -14265,7 +14565,7 @@ var ServerDataBase = exports.ServerDataBase = function () {
 }();
 
 exports.default = ServerDataBase;
-},{"./parseDataSet":56,"./parseXml":58}],55:[function(require,module,exports){
+},{"./parseDataSet":57,"./parseXml":59}],56:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -14294,7 +14594,7 @@ exports.default = {
   HrtfSet: _HrtfSet2.default,
   ServerDataBase: _ServerDataBase2.default
 };
-},{"./HrtfSet":53,"./ServerDataBase":54}],56:[function(require,module,exports){
+},{"./HrtfSet":54,"./ServerDataBase":55}],57:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -14443,7 +14743,7 @@ function parseDataSet(input) {
 }
 
 exports.default = parseDataSet;
-},{}],57:[function(require,module,exports){
+},{}],58:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -14703,7 +15003,7 @@ exports.default = {
   parseSofa: parseSofa,
   conformSofaCoordinateSystem: conformSofaCoordinateSystem
 };
-},{}],58:[function(require,module,exports){
+},{}],59:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -14757,7 +15057,7 @@ if (typeof window.DOMParser !== 'undefined') {
 }
 
 exports.default = parseXml;
-},{}],59:[function(require,module,exports){
+},{}],60:[function(require,module,exports){
 /**
  * @fileoverview gl-matrix - High performance matrix and vector operations
  * @author Brandon Jones
@@ -14795,7 +15095,7 @@ exports.quat = require("./gl-matrix/quat.js");
 exports.vec2 = require("./gl-matrix/vec2.js");
 exports.vec3 = require("./gl-matrix/vec3.js");
 exports.vec4 = require("./gl-matrix/vec4.js");
-},{"./gl-matrix/common.js":60,"./gl-matrix/mat2.js":61,"./gl-matrix/mat2d.js":62,"./gl-matrix/mat3.js":63,"./gl-matrix/mat4.js":64,"./gl-matrix/quat.js":65,"./gl-matrix/vec2.js":66,"./gl-matrix/vec3.js":67,"./gl-matrix/vec4.js":68}],60:[function(require,module,exports){
+},{"./gl-matrix/common.js":61,"./gl-matrix/mat2.js":62,"./gl-matrix/mat2d.js":63,"./gl-matrix/mat3.js":64,"./gl-matrix/mat4.js":65,"./gl-matrix/quat.js":66,"./gl-matrix/vec2.js":67,"./gl-matrix/vec3.js":68,"./gl-matrix/vec4.js":69}],61:[function(require,module,exports){
 /* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -14867,7 +15167,7 @@ glMatrix.equals = function(a, b) {
 
 module.exports = glMatrix;
 
-},{}],61:[function(require,module,exports){
+},{}],62:[function(require,module,exports){
 /* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -15305,7 +15605,7 @@ mat2.multiplyScalarAndAdd = function(out, a, b, scale) {
 
 module.exports = mat2;
 
-},{"./common.js":60}],62:[function(require,module,exports){
+},{"./common.js":61}],63:[function(require,module,exports){
 /* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -15776,7 +16076,7 @@ mat2d.equals = function (a, b) {
 
 module.exports = mat2d;
 
-},{"./common.js":60}],63:[function(require,module,exports){
+},{"./common.js":61}],64:[function(require,module,exports){
 /* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -16524,7 +16824,7 @@ mat3.equals = function (a, b) {
 
 module.exports = mat3;
 
-},{"./common.js":60}],64:[function(require,module,exports){
+},{"./common.js":61}],65:[function(require,module,exports){
 /* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -18662,7 +18962,7 @@ mat4.equals = function (a, b) {
 
 module.exports = mat4;
 
-},{"./common.js":60}],65:[function(require,module,exports){
+},{"./common.js":61}],66:[function(require,module,exports){
 /* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -19264,7 +19564,7 @@ quat.equals = vec4.equals;
 
 module.exports = quat;
 
-},{"./common.js":60,"./mat3.js":63,"./vec3.js":67,"./vec4.js":68}],66:[function(require,module,exports){
+},{"./common.js":61,"./mat3.js":64,"./vec3.js":68,"./vec4.js":69}],67:[function(require,module,exports){
 /* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -19853,7 +20153,7 @@ vec2.equals = function (a, b) {
 
 module.exports = vec2;
 
-},{"./common.js":60}],67:[function(require,module,exports){
+},{"./common.js":61}],68:[function(require,module,exports){
 /* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -20632,7 +20932,7 @@ vec3.equals = function (a, b) {
 
 module.exports = vec3;
 
-},{"./common.js":60}],68:[function(require,module,exports){
+},{"./common.js":61}],69:[function(require,module,exports){
 /* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21243,7 +21543,7 @@ vec4.equals = function (a, b) {
 
 module.exports = vec4;
 
-},{"./common.js":60}],69:[function(require,module,exports){
+},{"./common.js":61}],70:[function(require,module,exports){
 /**
  * AUTHOR OF INITIAL JS LIBRARY
  * k-d Tree JavaScript - V 1.0
@@ -21702,7 +22002,7 @@ module.exports = {
   }
 }
 
-},{}],70:[function(require,module,exports){
+},{}],71:[function(require,module,exports){
 module.exports={
   "name": "binaural",
   "exports": "binaural",
@@ -21771,5 +22071,5 @@ module.exports={
   "_from": "binaural@git+https://github.com/Ircam-RnD/binauralFIR#0.3.10"
 }
 
-},{}]},{},[20])(20)
+},{}]},{},[21])(21)
 });

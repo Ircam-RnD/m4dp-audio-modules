@@ -29,7 +29,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
  *   @file       centerenhancement.js
  *   @brief      Enhance the center channel : Start from LR signals, do MS conversion
  *               apply filtering in M, then do MS to LR conversion
- *   @author     Thibaut Carpentier
+ *   @author     Thibaut Carpentier / Ircam CNRS UMR9912
  *   @date       01/2016
  *
  */

@@ -67,7 +67,7 @@ var unittests = {
 /*!
  *   @file       index.js
  *   @brief      Export test modules
- *   @author     Thibaut Carpentier
+ *   @author     Thibaut Carpentier / Ircam CNRS UMR9912
  *   @date       01/2016
  *
  */

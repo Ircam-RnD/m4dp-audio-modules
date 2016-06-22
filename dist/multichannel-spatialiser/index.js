@@ -38,7 +38,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 /*!
  *   @file       
  *   @brief      Implements the MultichannelSpatialiser of M4DP
- *   @author     Thibaut Carpentier, Samuel Goldszmidt
+ *   @author     Thibaut Carpentier, Samuel Goldszmidt / Ircam CNRS UMR9912
  *   @date       01/2016
  *
  */

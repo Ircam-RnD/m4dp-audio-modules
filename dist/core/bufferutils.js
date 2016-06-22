@@ -43,7 +43,7 @@ function writeTextDataToFile(text) {
 /*!
  *   @file       bufferutils.js
  *   @brief      Misc utility functions for AudioBuffer manipulation
- *   @author     Thibaut Carpentier
+ *   @author     Thibaut Carpentier / Ircam CNRS UMR9912
  *   @date       01/2016
  *
  */

@@ -38,7 +38,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
  *				 This module inspects the RMS of the main programme, the RMS of the commentary
  *				 and it applies dynamic compression on the main programme if necessary
  *
- *   @author     Thibaut Carpentier, Samuel Goldszmidt
+ *   @author     Thibaut Carpentier / Ircam CNRS UMR9912, Samuel Goldszmidt
  *   @date       01/2016
  *
  */

@@ -1,7 +1,7 @@
 "use strict";Object.defineProperty(exports,"__esModule",{value:true});exports.getKemar2btFilters=getKemar2btFilters; /************************************************************************************/ /*!
  *   @file       kemar.js
  *   @brief      Kemar hard-coded filters
- *   @author     Thibaut Carpentier
+ *   @author     Thibaut Carpentier / Ircam CNRS UMR9912
  *   @date       01/2016
  *
  */ /************************************************************************************/function getKemar2btSumFilter(samplerate,speakerSpan){ /// kemar binaural to transaural FIR filter (for shuffler), Sum filter

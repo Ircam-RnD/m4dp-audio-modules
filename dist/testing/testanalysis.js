@@ -95,7 +95,7 @@ function testAnalysisNode() {
 /*!
  *   @file       testanalyser.js
  *   @brief      Misc test functions for M4DPAudioModules.PhoneNode
- *   @author     Thibaut Carpentier, Jean-Philippe Lambert
+ *   @author     Thibaut Carpentier, Jean-Philippe Lambert / Ircam CNRS UMR9912
  *   @date       04/2016
  *
  */

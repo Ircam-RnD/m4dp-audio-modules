@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
 								value: true
 });
-exports.binaural = exports.unittests = exports.utilities = exports.AudioStreamDescription = exports.AudioStreamDescriptionCollection = exports.SmartFader = exports.ObjectSpatialiserAndMixer = exports.NoiseAdaptation = exports.MultichannelSpatialiser = exports.DialogEnhancement = exports.ReceiverMix = exports.StreamSelector = exports.CompressorWithSideChain = exports.MultiCompressorExpanderNode = exports.CompressorExpanderNode = exports.HeadphonesEqualization = exports.CenterEnhancementNode = exports.LRMSNode = exports.SumDiffNode = exports.CascadeNode = undefined;
+exports.binaural = exports.unittests = exports.utilities = exports.AudioStreamDescription = exports.AudioStreamDescriptionCollection = exports.SmartFader = exports.ObjectSpatialiserAndMixer = exports.NoiseAdaptation = exports.MultichannelSpatialiser = exports.DialogEnhancement = exports.ReceiverMix = exports.StreamSelector = exports.RmsMetering = exports.CompressorWithSideChain = exports.MultiCompressorExpanderNode = exports.CompressorExpanderNode = exports.HeadphonesEqualization = exports.CenterEnhancementNode = exports.LRMSNode = exports.SumDiffNode = exports.CascadeNode = undefined;
 
 var _index = require('./dialog-enhancement/index.js');
 
@@ -59,6 +59,7 @@ exports.HeadphonesEqualization = _index16.HeadphonesEqualization;
 exports.CompressorExpanderNode = _index16.CompressorExpanderNode;
 exports.MultiCompressorExpanderNode = _index16.MultiCompressorExpanderNode;
 exports.CompressorWithSideChain = _index16.CompressorWithSideChain;
+exports.RmsMetering = _index16.RmsMetering;
 exports.StreamSelector = _index13.default;
 exports.ReceiverMix = _index15.default;
 exports.DialogEnhancement = _index2.default;

@@ -23,7 +23,7 @@ exports.sec2ms = sec2ms;
 /*!
  *   @file       utils.js
  *   @brief      Misc utility functions
- *   @author     Thibaut Carpentier
+ *   @author     Thibaut Carpentier / Ircam CNRS UMR9912
  *   @date       01/2016
  *
  */

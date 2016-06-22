@@ -24,7 +24,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 /*!
  *   @file       compressorsidechain.js
  *   @brief      This class implements a mono compressor/expander, ported from C++ to javascript
- *   @author     Thibaut Carpentier
+ *   @author     Thibaut Carpentier / Ircam CNRS UMR9912
  *   @date       06/2016
  *
  */
@@ -94,6 +94,7 @@ var CompressorWithSideChain = function (_AbstractNode) {
 
         _this._updateParameters();
 
+        /// the script processor part
         {
             var bufferSize = 0;
             /*

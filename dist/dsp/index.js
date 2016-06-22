@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
-exports.CompressorWithSideChain = exports.MultiCompressorExpanderNode = exports.CompressorExpanderNode = exports.MultichannelGainNode = exports.VirtualSpeakersNode = exports.TransauralShufflerNode = exports.TransauralFeedforwardNode = exports.TransauralNode = exports.SumDiffNode = exports.HeadphonesEqualization = exports.AnalysisNode = exports.CascadeNode = undefined;
+exports.RmsMetering = exports.CompressorWithSideChain = exports.MultiCompressorExpanderNode = exports.CompressorExpanderNode = exports.MultichannelGainNode = exports.VirtualSpeakersNode = exports.TransauralShufflerNode = exports.TransauralFeedforwardNode = exports.TransauralNode = exports.SumDiffNode = exports.HeadphonesEqualization = exports.AnalysisNode = exports.CascadeNode = undefined;
 
 var _cascade = require('./cascade.js');
 
@@ -37,7 +37,21 @@ var _compressorsidechain = require('./compressorsidechain.js');
 
 var _compressorsidechain2 = _interopRequireDefault(_compressorsidechain);
 
+var _rmsmetering = require('./rmsmetering.js');
+
+var _rmsmetering2 = _interopRequireDefault(_rmsmetering);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/************************************************************************************/
+/*!
+ *   @file       index.js
+ *   @brief      Exports the dsp modules
+ *   @author     Thibaut Carpentier / Ircam CNRS UMR9912
+ *   @date       01/2016
+ *
+ */
+/************************************************************************************/
 
 exports.CascadeNode = _cascade2.default;
 exports.AnalysisNode = _analysis2.default;
@@ -50,12 +64,5 @@ exports.VirtualSpeakersNode = _virtualspeakers2.default;
 exports.MultichannelGainNode = _multichannelgain2.default;
 exports.CompressorExpanderNode = _compressorexpander.CompressorExpanderNode;
 exports.MultiCompressorExpanderNode = _compressorexpander.MultiCompressorExpanderNode;
-exports.CompressorWithSideChain = _compressorsidechain2.default; /************************************************************************************/
-/*!
- *   @file       index.js
- *   @brief      Exports the dsp modules
- *   @author     Thibaut Carpentier
- *   @date       01/2016
- *
- */
-/************************************************************************************/
+exports.CompressorWithSideChain = _compressorsidechain2.default;
+exports.RmsMetering = _rmsmetering2.default;
