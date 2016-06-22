@@ -4733,9 +4733,9 @@ exports.default = HeadphonesEqualization;
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
-	value: true
+  value: true
 });
-exports.RmsMetering = exports.CompressorWithSideChain = exports.MultiCompressorExpanderNode = exports.CompressorExpanderNode = exports.MultichannelGainNode = exports.VirtualSpeakersNode = exports.TransauralShufflerNode = exports.TransauralFeedforwardNode = exports.TransauralNode = exports.SumDiffNode = exports.HeadphonesEqualization = exports.AnalysisNode = exports.CascadeNode = undefined;
+exports.MultiRMSMetering = exports.RmsMetering = exports.CompressorWithSideChain = exports.MultiCompressorExpanderNode = exports.CompressorExpanderNode = exports.MultichannelGainNode = exports.VirtualSpeakersNode = exports.TransauralShufflerNode = exports.TransauralFeedforwardNode = exports.TransauralNode = exports.SumDiffNode = exports.HeadphonesEqualization = exports.AnalysisNode = exports.CascadeNode = undefined;
 
 var _cascade = require('./cascade.js');
 
@@ -4771,8 +4771,6 @@ var _compressorsidechain2 = _interopRequireDefault(_compressorsidechain);
 
 var _rmsmetering = require('./rmsmetering.js');
 
-var _rmsmetering2 = _interopRequireDefault(_rmsmetering);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /************************************************************************************/
@@ -4797,7 +4795,8 @@ exports.MultichannelGainNode = _multichannelgain2.default;
 exports.CompressorExpanderNode = _compressorexpander.CompressorExpanderNode;
 exports.MultiCompressorExpanderNode = _compressorexpander.MultiCompressorExpanderNode;
 exports.CompressorWithSideChain = _compressorsidechain2.default;
-exports.RmsMetering = _rmsmetering2.default;
+exports.RmsMetering = _rmsmetering.RmsMetering;
+exports.MultiRMSMetering = _rmsmetering.MultiRMSMetering;
 },{"./analysis.js":5,"./cascade.js":6,"./compressorexpander.js":9,"./compressorsidechain.js":10,"./headphoneequalization.js":11,"./multichannelgain.js":15,"./rmsmetering.js":17,"./sumdiff.js":18,"./transaural.js":19,"./virtualspeakers.js":20}],13:[function(require,module,exports){
 "use strict";Object.defineProperty(exports,"__esModule",{value:true});exports.getKemar2btFilters=getKemar2btFilters; /************************************************************************************/ /*!
  *   @file       kemar.js
@@ -5414,6 +5413,19 @@ var RmsMetering = function (_AbstractNode) {
         value: function GetValuedB() {
             return _utils2.default.lin2powdB(this._value + 1e-12);
         }
+
+        /************************************************************************************/
+        /*!
+         *  @brief          Returns the current RMS value, linear
+         *
+         */
+        /************************************************************************************/
+
+    }, {
+        key: 'GetValue',
+        value: function GetValue() {
+            return this._value;
+        }
     }, {
         key: 'SetTimeConstant',
         value: function SetTimeConstant(valueInMilliseconds) {
@@ -5545,6 +5557,49 @@ var MultiRMSMetering = exports.MultiRMSMetering = function (_AbstractNode2) {
             }
 
             return this._meterNodes[channelIndex].GetValuedB();
+        }
+
+        /************************************************************************************/
+        /*!
+         *  @brief          Returns the current RMS value, linear
+         *
+         */
+        /************************************************************************************/
+
+    }, {
+        key: 'GetValue',
+        value: function GetValue(channelIndex) {
+            /// boundary check
+            if (channelIndex < 0 || channelIndex >= this.numChannels) {
+                throw new Error("Invalid channel index");
+            }
+
+            return this._meterNodes[channelIndex].GetValue();
+        }
+
+        /************************************************************************************/
+        /*!
+         *  @brief          Returns the current RMS value, in dB, averaged for all channels
+         *
+         */
+        /************************************************************************************/
+
+    }, {
+        key: 'GetAverageForAllChannels',
+        value: function GetAverageForAllChannels() {
+            var rms = [];
+
+            /// average rms among all channels
+
+            for (var i = 0; i < this.numChannels; i++) {
+                var lin = this.GetValue(i);
+
+                rms.push(lin);
+            }
+
+            var avg = _utils2.default.mean(rms);
+
+            return _utils2.default.lin2powdB(avg + 1e-12);
         }
 
         /************************************************************************************/
@@ -6256,7 +6311,7 @@ exports.default = VirtualSpeakersNode;
 Object.defineProperty(exports, "__esModule", {
 								value: true
 });
-exports.binaural = exports.unittests = exports.utilities = exports.AudioStreamDescription = exports.AudioStreamDescriptionCollection = exports.SmartFader = exports.ObjectSpatialiserAndMixer = exports.NoiseAdaptation = exports.MultichannelSpatialiser = exports.DialogEnhancement = exports.ReceiverMix = exports.StreamSelector = exports.RmsMetering = exports.CompressorWithSideChain = exports.MultiCompressorExpanderNode = exports.CompressorExpanderNode = exports.HeadphonesEqualization = exports.CenterEnhancementNode = exports.LRMSNode = exports.SumDiffNode = exports.CascadeNode = undefined;
+exports.binaural = exports.unittests = exports.utilities = exports.AudioStreamDescription = exports.AudioStreamDescriptionCollection = exports.SmartFader = exports.ObjectSpatialiserAndMixer = exports.NoiseAdaptation = exports.MultichannelSpatialiser = exports.DialogEnhancement = exports.ReceiverMix = exports.StreamSelector = exports.MultiRMSMetering = exports.RmsMetering = exports.CompressorWithSideChain = exports.MultiCompressorExpanderNode = exports.CompressorExpanderNode = exports.HeadphonesEqualization = exports.CenterEnhancementNode = exports.LRMSNode = exports.SumDiffNode = exports.CascadeNode = undefined;
 
 var _index = require('./dialog-enhancement/index.js');
 
@@ -6313,6 +6368,7 @@ exports.CompressorExpanderNode = _index16.CompressorExpanderNode;
 exports.MultiCompressorExpanderNode = _index16.MultiCompressorExpanderNode;
 exports.CompressorWithSideChain = _index16.CompressorWithSideChain;
 exports.RmsMetering = _index16.RmsMetering;
+exports.MultiRMSMetering = _index16.MultiRMSMetering;
 exports.StreamSelector = _index13.default;
 exports.ReceiverMix = _index15.default;
 exports.DialogEnhancement = _index2.default;

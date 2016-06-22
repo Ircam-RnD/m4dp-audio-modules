@@ -123,6 +123,19 @@ var RmsMetering = function (_AbstractNode) {
         value: function GetValuedB() {
             return _utils2.default.lin2powdB(this._value + 1e-12);
         }
+
+        /************************************************************************************/
+        /*!
+         *  @brief          Returns the current RMS value, linear
+         *
+         */
+        /************************************************************************************/
+
+    }, {
+        key: 'GetValue',
+        value: function GetValue() {
+            return this._value;
+        }
     }, {
         key: 'SetTimeConstant',
         value: function SetTimeConstant(valueInMilliseconds) {
@@ -254,6 +267,49 @@ var MultiRMSMetering = exports.MultiRMSMetering = function (_AbstractNode2) {
             }
 
             return this._meterNodes[channelIndex].GetValuedB();
+        }
+
+        /************************************************************************************/
+        /*!
+         *  @brief          Returns the current RMS value, linear
+         *
+         */
+        /************************************************************************************/
+
+    }, {
+        key: 'GetValue',
+        value: function GetValue(channelIndex) {
+            /// boundary check
+            if (channelIndex < 0 || channelIndex >= this.numChannels) {
+                throw new Error("Invalid channel index");
+            }
+
+            return this._meterNodes[channelIndex].GetValue();
+        }
+
+        /************************************************************************************/
+        /*!
+         *  @brief          Returns the current RMS value, in dB, averaged for all channels
+         *
+         */
+        /************************************************************************************/
+
+    }, {
+        key: 'GetAverageForAllChannels',
+        value: function GetAverageForAllChannels() {
+            var rms = [];
+
+            /// average rms among all channels
+
+            for (var i = 0; i < this.numChannels; i++) {
+                var lin = this.GetValue(i);
+
+                rms.push(lin);
+            }
+
+            var avg = _utils2.default.mean(rms);
+
+            return _utils2.default.lin2powdB(avg + 1e-12);
         }
 
         /************************************************************************************/
