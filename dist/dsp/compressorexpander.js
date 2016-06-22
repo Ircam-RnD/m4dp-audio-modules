@@ -110,6 +110,9 @@ var CompressorExpanderNode = function (_AbstractNode) {
 
                 var one_minus_tav = 1. - compressor._tav;
 
+                var CT = compressor._compressorThreshold;
+                var ET = compressor._expanderThreshold;
+
                 for (var i = 0; i < numSamples; i++) {
                     var x = inputData[i];
 
@@ -117,18 +120,13 @@ var CompressorExpanderNode = function (_AbstractNode) {
 
                     var X = compressor._rms < 1e-12 ? -120. : _utils2.default.lin2powdB(compressor._rms);
 
-                    var G = 0.0;
-                    if (X > compressor._compressorThreshold) {
-                        G = compressor._CS * (compressor._compressorThreshold - X);
-                    } else if (X < compressor._expanderThreshold) {
-                        G = compressor._ES * (X - compressor._expanderThreshold);
-                    }
+                    var G = _utils2.default.smin(0.0, CS * (CT - X), ES * (ET - X));
 
                     var f = _utils2.default.dB2lin(G);
 
                     var coeff = f < compressor._g ? compressor._at : compressor._rt;
 
-                    compressor._g = (1.0 - coeff) * compressor._g + coeff * f;
+                    compressor._g = compressor._g + coeff * (f - compressor._g);
 
                     outputData[i] = x * compressor._g * compressor._makeup;
                 }

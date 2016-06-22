@@ -1584,6 +1584,7 @@ var AudioStreamDescription = exports.AudioStreamDescription = function () {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+exports.smin = smin;
 exports.mean = mean;
 exports.clamp = clamp;
 exports.scale = scale;
@@ -1609,6 +1610,17 @@ exports.sec2ms = sec2ms;
  */
 /************************************************************************************/
 
+/************************************************************************************/
+/*!
+ *  @brief          template ternary minimum function
+ *  @return         minimum of a, b and c
+ *
+ */
+/************************************************************************************/
+function smin(x, y, z) {
+    return Math.min(Math.min(x, y), z);
+}
+
 function mean(array) {
     if (array.length === 0) {
         throw new Error("pas bon");
@@ -1623,13 +1635,12 @@ function mean(array) {
     return avg;
 }
 
-/**
- * Clips a value within a given range
- * @type {number} value the value to be clipped
- * @type {number} min the lower bound
- * @type {number} max the upper bound
+/************************************************************************************/
+/*!
+ *  @brief          ensure x is within range [min,max] with saturation (out of place)
  *
  */
+/************************************************************************************/
 function clamp(value, min, max) {
     if (max < min) {
         throw new Error("pas bon");
@@ -1652,10 +1663,15 @@ function scale(value, minIn, maxIn, minOut, maxOut) {
     return minOut + normalized * (maxOut - minOut);
 }
 
-/**
- * linear gain to decibel conversion
+/************************************************************************************/
+/*!
+ *  @brief          linear gain to decibel conversion
+ *  @param[in]      lin : linear value
  *
+ *  @details        y = 20 * log10( x )
+ *	@n				similar to Max/MSP atodb
  */
+/************************************************************************************/
 function lin2dB(value) {
     if (value <= 0) {
         throw new Error("pas bon");
@@ -1680,18 +1696,28 @@ function lin2powdB(value) {
     return 10. * Math.log10(value);
 }
 
-/**
- * linear gain to decibel conversion
+/************************************************************************************/
+/*!
+ *  @brief          "safe" version of lin2dB()
+ *  @param[in]      x : linear value
+ *  @param[in]      eps : safety margin
  *
+ *  @details        y = 20 * log10( x )
+ *	@n				similar to Max/MSP atodb
  */
+/************************************************************************************/
 function lin2dBsafe(value) {
     return 20 * Math.log10(Math.max(value, 1e-9));
 }
 
-/**
- * amplitude decibel to linear gain conversion
+/************************************************************************************/
+/*!
+ *  @brief          amplitude decibel to linear gain conversion
+ *  @param[in]      dB : value in decibels
  *
+ *  @details        y = 10^( x / 20 )
  */
+/************************************************************************************/
 function dB2lin(value) {
     return Math.pow(10, value / 20);
 }
@@ -1725,25 +1751,36 @@ function arrayAlmostEqual(array1, array2) {
     return true;
 }
 
-//==============================================================================
-/**
- * degrees to radians conversion
+/************************************************************************************/
+/*!
+ *  @brief          degrees to radians conversion
+ *  @param[in]      degrees : angle expressed in degrees
+ *
  */
+/************************************************************************************/
 function deg2rad(value) {
     return value * 0.017453292520;
 }
 
-/**
- * radians to degrees conversion
+/************************************************************************************/
+/*!
+ *  @brief          radians to degrees conversion
+ *  @param[in]      radians : angle expressed in radians
+ *
  */
+/************************************************************************************/
 function rad2deg(value) {
     return value * 57.295779513082;
 }
 
-//==============================================================================
-/**
- * modulo (%) binary operator returning positive results
+/************************************************************************************/
+/*!
+ *  @brief          modulo (%) binary operator returning positive results
+ *  @param[in]      x
+ *  @param[in]      modulo
+ *
  */
+/************************************************************************************/
 function modulo(x, modu) {
     var y = x;
     while (y < 0.0) {
@@ -1757,23 +1794,26 @@ function modulo(x, modu) {
     return y;
 }
 
-//==============================================================================
-/**
+/************************************************************************************/
+/*!
  *  @brief          navigationnal to trigonometric conversion
  *
  *  @details        navigationnal is expressed in degrees, clock-wise with 0 deg at (x,y)=(0,1)
  *                  trigonometric is expressed in radians, anticlock-wise with 0 deg at (x,y)=(1,0)
  */
+/************************************************************************************/
 function nav2trig(x) {
     return deg2rad(modulo(270.0 - x, 360.0) - 180.0);
 }
 
-/**
+/************************************************************************************/
+/*!
  *  @brief          trigonometric to navigationnal conversion
  *
  *  @details        navigationnal is expressed in degrees, clock-wise with 0 deg at (x,y)=(0,1)
  *                  trigonometric is expressed in radians, anticlock-wise with 0 deg at (x,y)=(1,0)
  */
+/************************************************************************************/
 function trig2nav(x) {
     return modulo(270.0 - rad2deg(x), 360.0) - 180.0;
 }
@@ -1792,6 +1832,7 @@ function sec2ms(sec) {
 
 //==============================================================================
 var utilities = {
+    smin: smin,
     mean: mean,
     clamp: clamp,
     scale: scale,
@@ -3760,6 +3801,9 @@ var CompressorExpanderNode = function (_AbstractNode) {
 
                 var one_minus_tav = 1. - compressor._tav;
 
+                var CT = compressor._compressorThreshold;
+                var ET = compressor._expanderThreshold;
+
                 for (var i = 0; i < numSamples; i++) {
                     var x = inputData[i];
 
@@ -3767,18 +3811,13 @@ var CompressorExpanderNode = function (_AbstractNode) {
 
                     var X = compressor._rms < 1e-12 ? -120. : _utils2.default.lin2powdB(compressor._rms);
 
-                    var G = 0.0;
-                    if (X > compressor._compressorThreshold) {
-                        G = compressor._CS * (compressor._compressorThreshold - X);
-                    } else if (X < compressor._expanderThreshold) {
-                        G = compressor._ES * (X - compressor._expanderThreshold);
-                    }
+                    var G = _utils2.default.smin(0.0, CS * (CT - X), ES * (ET - X));
 
                     var f = _utils2.default.dB2lin(G);
 
                     var coeff = f < compressor._g ? compressor._at : compressor._rt;
 
-                    compressor._g = (1.0 - coeff) * compressor._g + coeff * f;
+                    compressor._g = compressor._g + coeff * (f - compressor._g);
 
                     outputData[i] = x * compressor._g * compressor._makeup;
                 }
