@@ -250,7 +250,8 @@ var initPlayer = function(program)
     playerPip = new MediaPlayer(context);
     playerPip.startup();
     playerPip.setAutoPlay(false);
-    if( urlPip ){
+    if( urlPip )
+    {
         playerPip.attachView(videoPlayerPipMediaElement);
     }
     playerPip.getDebug().setLogToBrowserConsole(false);
@@ -258,7 +259,8 @@ var initPlayer = function(program)
     var playerAudioFiveDotOne = new MediaPlayer(context);
     playerAudioFiveDotOne.startup();
     playerAudioFiveDotOne.setAutoPlay(false);
-    if( urlAudioFiveDotOne ){
+    if( urlAudioFiveDotOne )
+    {
         playerAudioFiveDotOne.attachView(playerAudioFiveDotOneMediaElement);
     }
     playerAudioFiveDotOne.getDebug().setLogToBrowserConsole(false);
@@ -266,7 +268,8 @@ var initPlayer = function(program)
     var playerAudioDescription = new MediaPlayer(context);
     playerAudioDescription.startup();
     playerAudioDescription.setAutoPlay(false);
-    if( urlAudioDescription ){
+    if( urlAudioDescription )
+    {
         playerAudioDescription.attachView(playerAudioDescriptionMediaElement);
     }
     playerAudioDescription.getDebug().setLogToBrowserConsole(false);
@@ -274,7 +277,8 @@ var initPlayer = function(program)
     var playerDialogue = new MediaPlayer(context);
     playerDialogue.startup();
     playerDialogue.setAutoPlay(false);
-    if( urlDialogue ){
+    if( urlDialogue )
+    {
         playerDialogue.attachView(playerDialogueMediaElement);
     }
     playerDialogue.getDebug().setLogToBrowserConsole(false);
@@ -284,16 +288,20 @@ var initPlayer = function(program)
     //dumpObject( playerMain );
 
     videoPlayerMainMediaElement.controller           = controller;
-    if( urlPip ){
+    if( urlPip )
+    {
         videoPlayerPipMediaElement.controller            = controller;
     }
-    if( urlAudioFiveDotOne ){
+    if( urlAudioFiveDotOne )
+    {
         playerAudioFiveDotOneMediaElement.controller     = controller;
     }
-    if( urlAudioDescription ){
+    if( urlAudioDescription )
+    {
         playerAudioDescriptionMediaElement.controller    = controller;
     }
-    if( urlDialogue ){
+    if( urlDialogue )
+    {
         playerDialogueMediaElement.controller            = controller;
     }
 
@@ -348,13 +356,16 @@ var initPlayer = function(program)
     var diData = JSON.parse(JSON.stringify(program.dataDI));
 
     /// Workaround when all the streams are not in the EBU Core
-    if( typeof( program.dataEA.type ) === "undefined" ){
+    if( typeof( program.dataEA.type ) === "undefined" )
+    {
         eaData.type = "MultiWithLFE";
     }
-    if( typeof( program.dataAD.type ) === "undefined" ){
+    if( typeof( program.dataAD.type ) === "undefined" )
+    {
         adData.type = "Mono";
     }
-    if( typeof( program.dataDI.type ) === "undefined" ){
+    if( typeof( program.dataDI.type ) === "undefined" )
+    {
         diData.type = "Mono";
     }
 
