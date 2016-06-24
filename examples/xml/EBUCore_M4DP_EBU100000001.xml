@@ -1,0 +1,399 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ebucore:ebuCoreMain xmlns:ebucore="urn:ebu:metadata-schema:ebuCore_2015" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <ebucore:coreMetadata>
+        <ebucore:part partName="EditorialMetadata">
+            <ebucore:title typeLabel="ProgramTitle">
+                <dc:title xsi:type="ebucore:elementType" xml:lang="fr">Météo</dc:title>
+            </ebucore:title>
+            <ebucore:description typeLabel="Synopsis">
+                <dc:description xsi:type="ebucore:elementType" xml:lang="fr">Bulletin météo précédant le journal de 20h00 de David PUJADAS…</dc:description>
+            </ebucore:description>
+            <ebucore:publisher>
+                <ebucore:organisationDetails>
+                    <ebucore:organisationName>France 2</ebucore:organisationName>
+                </ebucore:organisationDetails>
+                <ebucore:role typeLabel="Broadcaster / diffusion linéaire"/>
+            </ebucore:publisher>
+            <ebucore:contributor>
+                <ebucore:organisationDetails>
+                    <ebucore:organisationName>Multimédia France Productions</ebucore:organisationName>
+                </ebucore:organisationDetails>
+                <ebucore:role typeLabel="Supplier / fournisseur"/>
+            </ebucore:contributor>
+            <ebucore:contributor>
+                <ebucore:organisationDetails>
+                    <ebucore:organisationName>Service météo de France Télévisions</ebucore:organisationName>
+                </ebucore:organisationDetails>
+                <ebucore:role typeLabel="Production Company"/>
+            </ebucore:contributor>
+            <ebucore:contributor>
+                <ebucore:organisationDetails>
+                    <ebucore:organisationName>LangueTurquoise</ebucore:organisationName>
+                </ebucore:organisationDetails>
+                <ebucore:role typeLabel="SL producer"/>
+            </ebucore:contributor>
+            <ebucore:contributor>
+                <ebucore:contactDetails typeLabel="ST interpreter">
+                    <ebucore:givenName>Aliza</ebucore:givenName>
+                    <ebucore:familyName>M&apos;SIKA</ebucore:familyName>
+                    <ebucore:salutation>Mme</ebucore:salutation>
+                </ebucore:contactDetails>
+                <ebucore:role typeLabel="SL interpreter"/>
+            </ebucore:contributor>
+            <ebucore:contributor>
+                <ebucore:organisationDetails>
+                    <ebucore:organisationName>Multimédia France Productions</ebucore:organisationName>
+                </ebucore:organisationDetails>
+                <ebucore:role typeLabel="ST producer"/>
+            </ebucore:contributor>
+            <ebucore:contributor>
+                <ebucore:contactDetails typeLabel="ST author">
+                    <ebucore:givenName>Rémy</ebucore:givenName>
+                    <ebucore:familyName>DAL MOLIN</ebucore:familyName>
+                    <ebucore:salutation>M</ebucore:salutation>
+                </ebucore:contactDetails>
+                <ebucore:role typeLabel="ST author"/>
+            </ebucore:contributor>
+            <ebucore:contributor>
+                <ebucore:contactDetails typeLabel="Presenter0">
+                    <ebucore:givenName>Philippe</ebucore:givenName>
+                    <ebucore:familyName>VERDIER</ebucore:familyName>
+                    <ebucore:salutation>M</ebucore:salutation>
+                    <ebucore:birthDate>1968-05-23+01:00</ebucore:birthDate>
+                </ebucore:contactDetails>
+                <ebucore:role typeLabel="Presenter0"/>
+            </ebucore:contributor>
+            <ebucore:date>
+                <ebucore:copyrighted startYear="2015"/>
+            </ebucore:date>
+            <ebucore:date>
+                <ebucore:alternative startDate="2015-02-15+01:00" startTime="20:35:00" typeLabel="DateDiffusion"/>
+            </ebucore:date>
+            <ebucore:type>
+                <ebucore:genre typeLabel="UNI" typeDefinition="ProgramType"/>
+                <ebucore:genre typeLink="info" typeLabel="Informations et actualités" typeDefinition="ProgramGenre"/>
+            </ebucore:type>
+            <ebucore:identifier typeLabel="FTV_UID">
+                <dc:identifier xsi:type="ebucore:elementType">EBU100000001</dc:identifier>
+            </ebucore:identifier>
+            <ebucore:identifier typeLabel="Plurimedia_ID">
+                <dc:identifier xsi:type="ebucore:elementType">100000001</dc:identifier>
+            </ebucore:identifier>
+            <ebucore:rating>
+                <ebucore:ratingValue>Tous publics</ebucore:ratingValue>
+                <ebucore:ratingProvider>
+                    <ebucore:organisationDetails>
+                        <ebucore:organisationName>CSA</ebucore:organisationName>
+                    </ebucore:organisationDetails>
+                </ebucore:ratingProvider>
+            </ebucore:rating>
+        </ebucore:part>
+        <ebucore:part partName="Links">
+            <ebucore:format formatName="MainThumbnail">
+                <ebucore:containerFormat>
+                    <ebucore:containerEncoding formatLabel="PNG"/>
+                </ebucore:containerFormat>
+                <ebucore:fileName>EBU100000004.png</ebucore:fileName>
+                <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Meteo/100000001/Thumbnail_PGM/EBU100000001.png</ebucore:locator>
+            </ebucore:format>
+            <ebucore:format formatName="Main">
+                <ebucore:audioFormat audioFormatId="1" audioFormatName="PVF" audioPresenceFlag="true">
+                    <ebucore:audioTrack trackId="5" trackLanguage="FRA"/>
+                    <ebucore:channels>2</ebucore:channels>
+                    <ebucore:technicalAttributeString typeLabel="type">Stereo</ebucore:technicalAttributeString>
+                    <ebucore:technicalAttributeString typeLabel="ChannelPositions">Front: L R</ebucore:technicalAttributeString>
+                    <ebucore:technicalAttributeString typeLabel="ChannelLayout">L R</ebucore:technicalAttributeString>
+                    <ebucore:technicalAttributeBoolean typeLabel="dialog">true</ebucore:technicalAttributeBoolean>
+                    <ebucore:technicalAttributeBoolean typeLabel="ambiance">true</ebucore:technicalAttributeBoolean>
+                    <ebucore:technicalAttributeBoolean typeLabel="commentary">false</ebucore:technicalAttributeBoolean>
+                    <ebucore:technicalAttributeFloat typeLabel="loudness">-22.8</ebucore:technicalAttributeFloat>
+                    <ebucore:technicalAttributeFloat typeLabel="maxTruePeak">-3.2</ebucore:technicalAttributeFloat>
+                </ebucore:audioFormat>
+                <ebucore:containerFormat>
+                    <ebucore:containerEncoding formatLabel="MPEG-DASH"/>
+                </ebucore:containerFormat>
+                <ebucore:dataFormat>
+                    <ebucore:subtitlingFormat subtitlingFormatName="TTML" trackId="6" language="FRA" subtitlingPresenceFlag="true"/>
+                </ebucore:dataFormat>
+                <ebucore:fileName>manifest.mpd</ebucore:fileName>
+                <ebucore:locator>http://videos-pmd.francetv.fr/innovation/media4D/Meteo/EBU100000001/manifest.mpd</ebucore:locator>
+            </ebucore:format>
+            <ebucore:format formatName="SL">
+                <ebucore:containerFormat>
+                    <ebucore:containerEncoding formatLabel="MPEG-DASH"/>
+                </ebucore:containerFormat>
+                <ebucore:dataFormat>
+                    <ebucore:subtitlingFormat language="FRA" subtitlingPresenceFlag="false"/>
+                </ebucore:dataFormat>
+                <ebucore:fileName>manifest-lsf1.mpd</ebucore:fileName>
+                <ebucore:locator>ttp://videos-pmd.francetv.fr/innovation/media4D/Meteo/EBU100000001/manifest-lsf1.mpd</ebucore:locator>
+            </ebucore:format>
+            <ebucore:format formatName="EA1">
+                <ebucore:audioFormat audioFormatId="2" audioFormatName="PVF" audioPresenceFlag="false">
+                    <ebucore:audioTrack trackId="0" trackLanguage="FRA"/>
+                    <ebucore:channels>6</ebucore:channels>
+                    <ebucore:technicalAttributeString typeLabel="type">MultiWithLFE</ebucore:technicalAttributeString>
+                    <ebucore:technicalAttributeString typeLabel="ChannelPositions">Front: L R / Front: L C R, Side: L R, LFE / Front: L C R, Side: L R, LFE</ebucore:technicalAttributeString>
+                    <ebucore:technicalAttributeString typeLabel="ChannelLayout">C L R Ls Rs LFE</ebucore:technicalAttributeString>
+                    <ebucore:technicalAttributeBoolean typeLabel="dialog">true</ebucore:technicalAttributeBoolean>
+                    <ebucore:technicalAttributeBoolean typeLabel="ambiance">true</ebucore:technicalAttributeBoolean>
+                    <ebucore:technicalAttributeBoolean typeLabel="commentary">false</ebucore:technicalAttributeBoolean>
+                    <ebucore:technicalAttributeFloat typeLabel="loudness">-23.0</ebucore:technicalAttributeFloat>
+                    <ebucore:technicalAttributeFloat typeLabel="maxTruePeak">-3.0</ebucore:technicalAttributeFloat>
+                </ebucore:audioFormat>
+                <ebucore:containerFormat>
+                    <ebucore:containerEncoding formatLabel="MPEG-DASH"/>
+                </ebucore:containerFormat>
+                <ebucore:fileName>manifest-ea1.mpd</ebucore:fileName>
+                <ebucore:locator>http://videos-pmd.francetv.fr/innovation/Meteo/EBU100000001/manifest-ea1.mpd</ebucore:locator>
+            </ebucore:format>
+            <ebucore:format formatName="AD">
+                <ebucore:audioFormat audioFormatId="3" audioFormatName="PAD" audioPresenceFlag="false">
+                    <ebucore:audioTrack trackId="0" trackLanguage="FRA"/>
+                    <ebucore:channels>1</ebucore:channels>
+                    <ebucore:technicalAttributeString typeLabel="type">Mono</ebucore:technicalAttributeString>
+                    <ebucore:technicalAttributeString typeLabel="ChannelPositions">Front: C</ebucore:technicalAttributeString>
+                    <ebucore:technicalAttributeString typeLabel="ChannelLayout">C</ebucore:technicalAttributeString>
+                    <ebucore:technicalAttributeBoolean typeLabel="dialog">false</ebucore:technicalAttributeBoolean>
+                    <ebucore:technicalAttributeBoolean typeLabel="ambiance">false</ebucore:technicalAttributeBoolean>
+                    <ebucore:technicalAttributeBoolean typeLabel="commentary">true</ebucore:technicalAttributeBoolean>
+                    <ebucore:technicalAttributeFloat typeLabel="loudness">-23.0</ebucore:technicalAttributeFloat>
+                    <ebucore:technicalAttributeFloat typeLabel="maxTruePeak">-3.0</ebucore:technicalAttributeFloat>
+                </ebucore:audioFormat>
+                <ebucore:containerFormat>
+                    <ebucore:containerEncoding formatLabel="MPEG-DASH"/>
+                </ebucore:containerFormat>
+                <ebucore:fileName>manifest-ad.mpd</ebucore:fileName>
+                <ebucore:locator>http://videos-pmd.francetv.fr/innovation/Meteo/EBU100000001/manifest-ad.mpd</ebucore:locator>
+            </ebucore:format>
+            <ebucore:format formatName="EA2">
+                <ebucore:audioFormat audioFormatId="4" audioFormatName="PVM" audioPresenceFlag="false">
+                    <ebucore:audioTrack trackId="0" trackLanguage="ENG"/>
+                    <ebucore:channels>2</ebucore:channels>
+                    <ebucore:technicalAttributeString typeLabel="type">Stereo</ebucore:technicalAttributeString>
+                    <ebucore:technicalAttributeString typeLabel="ChannelPositions">Front: L R</ebucore:technicalAttributeString>
+                    <ebucore:technicalAttributeString typeLabel="ChannelLayout">L R</ebucore:technicalAttributeString>
+                    <ebucore:technicalAttributeBoolean typeLabel="dialog">true</ebucore:technicalAttributeBoolean>
+                    <ebucore:technicalAttributeBoolean typeLabel="ambiance">true</ebucore:technicalAttributeBoolean>
+                    <ebucore:technicalAttributeBoolean typeLabel="commentary">false</ebucore:technicalAttributeBoolean>
+                    <ebucore:technicalAttributeFloat typeLabel="loudness">-23.0</ebucore:technicalAttributeFloat>
+                    <ebucore:technicalAttributeFloat typeLabel="maxTruePeak">-3.0</ebucore:technicalAttributeFloat>
+                </ebucore:audioFormat>
+                <ebucore:containerFormat>
+                    <ebucore:containerEncoding formatLabel="MPEG-DASH"/>
+                </ebucore:containerFormat>
+                <ebucore:fileName>manifest-ea2.mpd</ebucore:fileName>
+                <ebucore:locator>http://videos-pmd.francetv.fr/innovation/Meteo/EBU100000001/manifest-ea2.mpd</ebucore:locator>
+            </ebucore:format>
+            <ebucore:format formatName="DI">
+                <ebucore:audioFormat audioFormatId="5" audioFormatName="PDI" audioPresenceFlag="false">
+                    <ebucore:audioTrack trackId="0" trackLanguage="FRA"/>
+                    <ebucore:channels>1</ebucore:channels>
+                    <ebucore:technicalAttributeString typeLabel="type">Mono</ebucore:technicalAttributeString>
+                    <ebucore:technicalAttributeString typeLabel="ChannelPositions">Front: C</ebucore:technicalAttributeString>
+                    <ebucore:technicalAttributeString typeLabel="ChannelLayout">C</ebucore:technicalAttributeString>
+                    <ebucore:technicalAttributeBoolean typeLabel="dialog">true</ebucore:technicalAttributeBoolean>
+                    <ebucore:technicalAttributeBoolean typeLabel="ambiance">false</ebucore:technicalAttributeBoolean>
+                    <ebucore:technicalAttributeBoolean typeLabel="commentary">false</ebucore:technicalAttributeBoolean>
+                    <ebucore:technicalAttributeFloat typeLabel="loudness">-23.0</ebucore:technicalAttributeFloat>
+                    <ebucore:technicalAttributeFloat typeLabel="maxTruePeak">-3.0</ebucore:technicalAttributeFloat>
+                </ebucore:audioFormat>
+                <ebucore:containerFormat>
+                    <ebucore:containerEncoding formatLabel="MPEG-DASH"/>
+                </ebucore:containerFormat>
+                <ebucore:fileName>manifest-di.mpd</ebucore:fileName>
+                <ebucore:locator>http://videos-pmd.francetv.fr/innovation/Meteo/EBU100000001/manifest-di.mpd</ebucore:locator>
+            </ebucore:format>
+            <ebucore:format formatName="EA3">
+                <ebucore:audioFormat audioFormatId="6" audioFormatName="PVI" audioPresenceFlag="false">
+                    <ebucore:audioTrack trackId="0" trackLanguage="UND"/>
+                    <ebucore:channels>6</ebucore:channels>
+                    <ebucore:technicalAttributeString typeLabel="type">MultiWithLFE</ebucore:technicalAttributeString>
+                    <ebucore:technicalAttributeString typeLabel="ChannelPositions">Front: L R / Front: L C R, Side: L R, LFE / Front: L C R, Side: L R, LFE</ebucore:technicalAttributeString>
+                    <ebucore:technicalAttributeString typeLabel="ChannelLayout">C L R Ls Rs LFE</ebucore:technicalAttributeString>
+                    <ebucore:technicalAttributeBoolean typeLabel="dialog">false</ebucore:technicalAttributeBoolean>
+                    <ebucore:technicalAttributeBoolean typeLabel="ambiance">true</ebucore:technicalAttributeBoolean>
+                    <ebucore:technicalAttributeBoolean typeLabel="commentary">false</ebucore:technicalAttributeBoolean>
+                    <ebucore:technicalAttributeFloat typeLabel="loudness">-23.0</ebucore:technicalAttributeFloat>
+                    <ebucore:technicalAttributeFloat typeLabel="maxTruePeak">-3.0</ebucore:technicalAttributeFloat>
+                </ebucore:audioFormat>
+                <ebucore:containerFormat>
+                    <ebucore:containerEncoding formatLabel="MPEG-DASH"/>
+                </ebucore:containerFormat>
+                <ebucore:fileName>manifest-ea3.mpd</ebucore:fileName>
+                <ebucore:locator>http://videos-pmd.francetv.fr/innovation/Meteo/EBU100000001/manifest-ea3.mpd</ebucore:locator>
+            </ebucore:format>
+            <ebucore:format formatName="EA4">
+                <ebucore:audioFormat audioFormatId="7" audioFormatName="PMS" audioPresenceFlag="false">
+                    <ebucore:audioTrack trackId="0" trackLanguage="UND"/>
+                    <ebucore:channels>6</ebucore:channels>
+                    <ebucore:technicalAttributeString typeLabel="type">MultiWithLFE</ebucore:technicalAttributeString>
+                    <ebucore:technicalAttributeString typeLabel="ChannelPositions">Front: L R / Front: L C R, Side: L R, LFE / Front: L C R, Side: L R, LFE</ebucore:technicalAttributeString>
+                    <ebucore:technicalAttributeString typeLabel="ChannelLayout">C L R Ls Rs LFE</ebucore:technicalAttributeString>
+                    <ebucore:technicalAttributeBoolean typeLabel="dialog">false</ebucore:technicalAttributeBoolean>
+                    <ebucore:technicalAttributeBoolean typeLabel="ambiance">true</ebucore:technicalAttributeBoolean>
+                    <ebucore:technicalAttributeBoolean typeLabel="commentary">false</ebucore:technicalAttributeBoolean>
+                    <ebucore:technicalAttributeFloat typeLabel="loudness">-23.0</ebucore:technicalAttributeFloat>
+                    <ebucore:technicalAttributeFloat typeLabel="maxTruePeak">-3.0</ebucore:technicalAttributeFloat>
+                </ebucore:audioFormat>
+                <ebucore:containerFormat>
+                    <ebucore:containerEncoding formatLabel="MPEG-DASH"/>
+                </ebucore:containerFormat>
+                <ebucore:fileName>manifest-ea4.mpd</ebucore:fileName>
+                <ebucore:locator>http://videos-pmd.francetv.fr/innovation/Meteo/EBU100000001/manifest-ea4.mpd</ebucore:locator>
+            </ebucore:format>
+        </ebucore:part>
+        <ebucore:part partName="TechnicalMetadata">
+            <ebucore:part partName="Essence">
+                <ebucore:format formatName="EssenceTechnicalMetadata">
+                    <ebucore:videoFormat videoFormatName="AVC">
+                        <ebucore:width unit="pixel">1920</ebucore:width>
+                        <ebucore:height unit="pixel">1080</ebucore:height>
+                        <ebucore:frameRate>25</ebucore:frameRate>
+                        <ebucore:aspectRatio typeLabel="ImageFormat">
+                            <ebucore:factorNumerator>16</ebucore:factorNumerator>
+                            <ebucore:factorDenominator>9</ebucore:factorDenominator>
+                        </ebucore:aspectRatio>
+                        <ebucore:videoEncoding typeLabel="Dash 264"/>
+                        <ebucore:codec>
+                            <ebucore:codecIdentifier>
+                                <dc:identifier>avc1</dc:identifier>
+                            </ebucore:codecIdentifier>
+                        </ebucore:codec>
+                        <ebucore:bitRateMode>constant</ebucore:bitRateMode>
+                        <ebucore:scanningFormat>progressive</ebucore:scanningFormat>
+                        <ebucore:videoTrack trackId="3"/>
+                        <ebucore:technicalAttributeString typeLabel="VideoDefinition">HD</ebucore:technicalAttributeString>
+                        <ebucore:technicalAttributeString typeLabel="ColorSpace">YUV</ebucore:technicalAttributeString>
+                        <ebucore:technicalAttributeString typeLabel="ChromaSubsampling">4:2:0</ebucore:technicalAttributeString>
+                        <ebucore:technicalAttributeInteger typeLabel="BitDepth" unit="bit">8</ebucore:technicalAttributeInteger>
+                        <ebucore:technicalAttributeBoolean typeLabel="CABAC">true</ebucore:technicalAttributeBoolean>
+                        <ebucore:technicalAttributeBoolean typeLabel="MBAFF">false</ebucore:technicalAttributeBoolean>
+                    </ebucore:videoFormat>
+                    <ebucore:containerFormat containerFormatName="MPEG-4">
+                        <ebucore:containerEncoding formatLabel="MPEG-4"/>
+                        <ebucore:codec>
+                            <ebucore:codecIdentifier>
+                                <dc:identifier>avc1</dc:identifier>
+                            </ebucore:codecIdentifier>
+                        </ebucore:codec>
+                        <ebucore:technicalAttributeString typeLabel="FormatProfile">JVT</ebucore:technicalAttributeString>
+                    </ebucore:containerFormat>
+                </ebucore:format>
+                <ebucore:partStartTime>
+                    <ebucore:timecode>00:00:00:00000</ebucore:timecode>
+                </ebucore:partStartTime>
+                <ebucore:partDuration>
+                    <ebucore:timecode>00:01:52:00</ebucore:timecode>
+                </ebucore:partDuration>
+            </ebucore:part>
+        </ebucore:part>
+        <ebucore:part partName="ContextualMetadata">
+            <ebucore:part partName="Sc_000000">
+                <ebucore:format formatName="SceneThumbnail">
+                    <ebucore:containerFormat>
+                        <ebucore:containerEncoding formatLabel="JPG"/>
+                    </ebucore:containerFormat>
+                    <ebucore:fileName>EBU100000001-Sc_000000.jpg</ebucore:fileName>
+                    <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Meteo/100000001/Thumbnails_Sc_/EBU100000001-Sc_000000.jpg</ebucore:locator>
+                </ebucore:format>
+                <ebucore:partStartTime>
+                    <ebucore:timecode>00:00:00:00000</ebucore:timecode>
+                </ebucore:partStartTime>
+                <ebucore:partDuration>
+                    <ebucore:timecode>00:01:51:22</ebucore:timecode>
+                </ebucore:partDuration>
+                <ebucore:part partName="Sh_000000">
+                    <ebucore:partStartTime>
+                        <ebucore:timecode>00:00:00:00000</ebucore:timecode>
+                    </ebucore:partStartTime>
+                    <ebucore:partDuration>
+                        <ebucore:timecode>00:00:05:06</ebucore:timecode>
+                    </ebucore:partDuration>
+                    <ebucore:format formatName="ShotThumbnail">
+                        <ebucore:containerFormat>
+                            <ebucore:containerEncoding formatLabel="JPG"/>
+                        </ebucore:containerFormat>
+                        <ebucore:fileName>EBU100000001-Sc_000000_Sh000000.jpg</ebucore:fileName>
+                        <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Meteo/100000001/Thumbnails_Sh_/EBU100000001-Sc_000000_Sh000000.jpg</ebucore:locator>
+                    </ebucore:format>
+                </ebucore:part>
+                <ebucore:part partName="Sh_000001">
+                    <ebucore:partStartTime>
+                        <ebucore:timecode>00:00:05:28000</ebucore:timecode>
+                    </ebucore:partStartTime>
+                    <ebucore:partDuration>
+                        <ebucore:timecode>00:00:13:17</ebucore:timecode>
+                    </ebucore:partDuration>
+                    <ebucore:format formatName="ShotThumbnail">
+                        <ebucore:containerFormat>
+                            <ebucore:containerEncoding formatLabel="JPG"/>
+                        </ebucore:containerFormat>
+                        <ebucore:fileName>EBU100000001-Sc_000000_Sh000001.jpg</ebucore:fileName>
+                        <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Meteo/100000001/Thumbnails_Sh_/EBU100000001-Sc_000000_Sh000001.jpg</ebucore:locator>
+                    </ebucore:format>
+                </ebucore:part>
+                <ebucore:part partName="Sh_000002">
+                    <ebucore:partStartTime>
+                        <ebucore:timecode>00:00:19:00000</ebucore:timecode>
+                    </ebucore:partStartTime>
+                    <ebucore:partDuration>
+                        <ebucore:timecode>00:00:14:06</ebucore:timecode>
+                    </ebucore:partDuration>
+                    <ebucore:format formatName="ShotThumbnail">
+                        <ebucore:containerFormat>
+                            <ebucore:containerEncoding formatLabel="JPG"/>
+                        </ebucore:containerFormat>
+                        <ebucore:fileName>EBU100000001-Sc_000000_Sh000002.jpg</ebucore:fileName>
+                        <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Meteo/100000001/Thumbnails_Sh_/EBU100000001-Sc_000000_Sh000002.jpg</ebucore:locator>
+                    </ebucore:format>
+                </ebucore:part>
+                <ebucore:part partName="Sh_000003">
+                    <ebucore:partStartTime>
+                        <ebucore:timecode>00:00:33:28000</ebucore:timecode>
+                    </ebucore:partStartTime>
+                    <ebucore:partDuration>
+                        <ebucore:timecode>00:00:32:03</ebucore:timecode>
+                    </ebucore:partDuration>
+                    <ebucore:format formatName="ShotThumbnail">
+                        <ebucore:containerFormat>
+                            <ebucore:containerEncoding formatLabel="JPG"/>
+                        </ebucore:containerFormat>
+                        <ebucore:fileName>EBU100000001-Sc_000000_Sh000003.jpg</ebucore:fileName>
+                        <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Meteo/100000001/Thumbnails_Sh_/EBU100000001-Sc_000000_Sh000003.jpg</ebucore:locator>
+                    </ebucore:format>
+                </ebucore:part>
+                <ebucore:part partName="Sh_000004">
+                    <ebucore:partStartTime>
+                        <ebucore:timecode>00:01:05:44000</ebucore:timecode>
+                    </ebucore:partStartTime>
+                    <ebucore:partDuration>
+                        <ebucore:timecode>00:00:17:04</ebucore:timecode>
+                    </ebucore:partDuration>
+                    <ebucore:format formatName="ShotThumbnail">
+                        <ebucore:containerFormat>
+                            <ebucore:containerEncoding formatLabel="JPG"/>
+                        </ebucore:containerFormat>
+                        <ebucore:fileName>EBU100000001-Sc_000000_Sh000004.jpg</ebucore:fileName>
+                        <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Meteo/100000001/Thumbnails_Sh_/EBU100000001-Sc_000000_Sh000004.jpg</ebucore:locator>
+                    </ebucore:format>
+                </ebucore:part>
+                <ebucore:part partName="Sh_000005">
+                    <ebucore:partStartTime>
+                        <ebucore:timecode>00:01:22:64000</ebucore:timecode>
+                    </ebucore:partStartTime>
+                    <ebucore:partDuration>
+                        <ebucore:timecode>00:00:29:06</ebucore:timecode>
+                    </ebucore:partDuration>
+                    <ebucore:format formatName="ShotThumbnail">
+                        <ebucore:containerFormat>
+                            <ebucore:containerEncoding formatLabel="JPG"/>
+                        </ebucore:containerFormat>
+                        <ebucore:fileName>EBU100000001-Sc_000000_Sh000005.jpg</ebucore:fileName>
+                        <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Meteo/100000001/Thumbnails_Sh_/EBU100000001-Sc_000000_Sh000005.jpg</ebucore:locator>
+                    </ebucore:format>
+                </ebucore:part>
+            </ebucore:part>
+        </ebucore:part>
+    </ebucore:coreMetadata>
+</ebucore:ebuCoreMain>

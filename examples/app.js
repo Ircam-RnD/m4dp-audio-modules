@@ -72,6 +72,8 @@ var getElementFromXML = function(item, ns, prefix, attr){
 };
 
 $(function () {
+  
+    /*
     //var ebucoreUrl = querySt("ebucore") || "xml/EBUcore_M4DP_LMDJ.xml", program;
     //var ebucoreUrl = querySt("ebucore") || "xml/EBUCore_M4DP_ALEXHUGO.xml", program;
     //var ebucoreUrl = querySt("ebucore") || "xml/EBUCore_M4DP_JT_20h00.xml", program;
@@ -79,9 +81,35 @@ $(function () {
     //var ebucoreUrl = querySt("ebucore") || "xml/EBUCore_M4DP_TCHOUPI.xml", program;
     //var ebucoreUrl = querySt("ebucore") || "xml/EBUCore_M4DP_RUGBY_AVC.xml", program;
     //var ebucoreUrl = querySt("ebucore") || "xml/EBUCore_M4DP_RUGBY_HEVC.xml", program;
-    var ebucoreUrl = querySt("ebucore") || "xml/EBUCore_M4DP_CSOJ_AVC.xml", program;
+    //var ebucoreUrl = querySt("ebucore") || "xml/EBUCore_M4DP_CSOJ_AVC.xml", program;
     //var ebucoreUrl = querySt("ebucore") || "xml/EBUCore_M4DP_CSOJ_HEVC.xml", program;
-    
+     */
+  
+  
+    /// Le monde de Jamy
+    var ebucoreUrl = querySt("ebucore") || "xml/EBUCore_M4DP_EBU100000000.xml", program;
+  
+    /// Meteo
+    //var ebucoreUrl = querySt("ebucore") || "xml/EBUCore_M4DP_EBU100000001.xml", program;
+  
+    /// Journal de 20h
+    //var ebucoreUrl = querySt("ebucore") || "xml/EBUCore_M4DP_EBU100000002.xml", program;
+  
+    /// Tchoupi
+    //var ebucoreUrl = querySt("ebucore") || "xml/EBUCore_M4DP_EBU100000003.xml", program;
+  
+    /// Alex Hugo
+    //var ebucoreUrl = querySt("ebucore") || "xml/EBUCore_M4DP_EBU100000004.xml", program;
+  
+    /// Rugby
+    //var ebucoreUrl = querySt("ebucore") || "xml/EBUCore_M4DP_EBU100000005.xml", program;
+  
+    /// Ce soir ou jamais
+    //var ebucoreUrl = querySt("ebucore") || "xml/EBUCore_M4DP_EBU100000006.xml", program;
+  
+    /// Ange gardien de l'Atlantique
+    //var ebucoreUrl = querySt("ebucore") || "xml/EBUCore_M4DP_EBU100000007.xml", program;
+  
     if(ebucoreUrl){
         $.ajax({
             url : ebucoreUrl,
@@ -389,7 +417,7 @@ var initPlayer = function(program)
     streamSelector              = new M4DPAudioModules.StreamSelector( audioContext, asdc );
     smartFader                  = new M4DPAudioModules.SmartFader( audioContext, asdc );
     dialogEnhancement           = new M4DPAudioModules.DialogEnhancement( audioContext, asdc );
-    receiverMix                 = new M4DPAudioModules.ReceiverMix( audioContext, asdc );
+    receiverMix                 = new M4DPAudioModules.OldReceiverMix( audioContext, asdc );
     //noiseAdaptation = new M4DPAudioModules.NoiseAdaptation(audioContext);
     multichannelSpatialiser     = new M4DPAudioModules.MultichannelSpatialiser( audioContext, asdc, 'binaural' );
     objectSpatialiserAndMixer   = new M4DPAudioModules.ObjectSpatialiserAndMixer( audioContext, asdc, 'binaural' );
@@ -487,10 +515,12 @@ var initPlayer = function(program)
     setInterval(function(){
         var isCompressed = smartFader.dynamicCompressionState;
 
-        if( isCompressed === true){
+        if( isCompressed === true)
+        {
             document.getElementById('label-smart-fader-compression').style.color = "rgba(255, 0, 0, 0.7)";
         }
-        else{
+        else
+        {
             document.getElementById('label-smart-fader-compression').style.color = "rgba(255, 255, 255, 0.7)";
         }
 
@@ -503,10 +533,12 @@ var initPlayer = function(program)
         var receiverMixCompression = receiverMix.dynamicCompressionState;
 
         document.getElementById('label-receiver-mix-compression').textContent = "Compression";
-        if( receiverMixCompression === true){
+        if( receiverMixCompression === true)
+        {
             document.getElementById('label-receiver-mix-compression').style.color = "rgba(255, 0, 0, 0.7)";
         }
-        else{        
+        else
+        {
             document.getElementById('label-receiver-mix-compression').style.color = "rgba(255, 255, 255, 0.7)";
         }     
 
@@ -956,46 +988,51 @@ function onCheckVideo() {
     updateActiveStreams();
 }
 
-function onCheckExAmbience() {
-    //console.debug("######### onCheckExAmbience: "+checkboxExAmbience.checked);
-    //onCheckEx();
-    if (checkboxExAmbience.checked ){    
+function onCheckExAmbience()
+{
+    if( checkboxExAmbience.checked )
+    {
         extendedAmbienceASD.active = true;
-    } else {
+    }
+    else
+    {
         extendedAmbienceASD.active = false;
     }
     updateActiveStreams();
 }
 
-function onCheckExComments() {
-    //console.debug("######### onCheckExComments: "+checkboxExComments.checked);
-    //onCheckEx();
-    if (checkboxExComments.checked ){    
+function onCheckExComments()
+{
+    if( checkboxExComments.checked )
+    {
         extendedCommentsASD.active = true;
-    } else {
+    }
+    else
+    {
         extendedCommentsASD.active = false;
     }
     updateActiveStreams();
 }
 
-function onCheckExDialogs() {
-    //console.debug("######### onCheckExDialogs: "+checkboxExDialogs.checked);
-    //onCheckEx();
-    if (checkboxExDialogs.checked ){    
+function onCheckExDialogs()
+{
+    if( checkboxExDialogs.checked )
+    {
         extendedDialogsASD.active = true;
-    } else {
+    }
+    else
+    {
         extendedDialogsASD.active = false;
     }
     updateActiveStreams();
 }
 
-function onCheckEqualization() {
-    //console.debug("######### onCheckEqualization: "+checkboxHeadphonesEqualization.checked);
-    
+function onCheckEqualization()
+{
     multichannelSpatialiser.eqPreset = "eq1";
     objectSpatialiserAndMixer.eqPreset = "eq1";
 
-    if (checkboxHeadphonesEqualization.checked)
+    if( checkboxHeadphonesEqualization.checked )
     {
         multichannelSpatialiser.bypassHeadphoneEqualization( false );
         objectSpatialiserAndMixer.bypassHeadphoneEqualization( false );
@@ -1007,16 +1044,19 @@ function onCheckEqualization() {
     }
 }
 
-function onCheckLSF() {
-    console.debug("######### onCheckLSF: "+checkboxLSF.checked);
-    if (checkboxLSF.checked && urlPip) {
+function onCheckLSF()
+{
+    if( checkboxLSF.checked && urlPip )
+    {
         controller.currentTime = videoPlayerMainMediaElement.currentTime;
         videoPlayerPipMediaElement.controller = controller;
         playerPip.startup();
         playerPip.setAutoPlay(false);
         playerPip.attachView(videoPlayerPipMediaElement);
         playerPip.attachSource(urlPip);
-    } else {
+    }
+    else
+    {
         videoPlayerPipMediaElement.controller = null;
         playerPip.reset();
     }
@@ -1110,14 +1150,17 @@ sliderDialogEnhancementMode1.addEventListener('input', function(){
 
     var mode = dialogEnhancement.mode;
 
-    if( mode === 1 ){
+    if( mode === 1 )
+    {
         document.getElementById('label-dialog-enhancement-mode1').textContent = Math.round(value).toString() + ' % (ambiance | dialog)';
     }
-    else if( mode === 2 ){
+    else if( mode === 2 )
+    {
         var scaled = M4DPAudioModules.utilities.scale( value, 0, 100, -6, 6 );
         document.getElementById('label-dialog-enhancement-mode1').textContent = Math.round(scaled).toFixed(1) + ' dB';   
     }
-    else if( mode === 3 ){
+    else if( mode === 3 )
+    {
         var scaled = M4DPAudioModules.utilities.scale( value, 0, 100, 0, 6 );
         document.getElementById('label-dialog-enhancement-mode1').textContent = Math.round(scaled).toFixed(1) + ' dB';   
     }

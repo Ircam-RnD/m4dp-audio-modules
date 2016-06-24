@@ -1,0 +1,1456 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ebucore:ebuCoreMain xmlns:ebucore="urn:ebu:metadata-schema:ebuCore_2015" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <ebucore:coreMetadata>
+        <ebucore:part partName="EditorialMetadata">
+            <ebucore:title typeLabel="ProgramTitle">
+                <dc:title xsi:type="ebucore:elementType" xml:lang="fr">Journal de 20h00</dc:title>
+            </ebucore:title>
+            <ebucore:description typeLabel="Synopsis">
+                <dc:description xsi:type="ebucore:elementType" xml:lang="fr">Au cœur de l&apos;actualité, le journal de 20h00 de France 2 présenté par David PUJADAS…</dc:description>
+            </ebucore:description>
+            <ebucore:publisher>
+                <ebucore:organisationDetails>
+                    <ebucore:organisationName>France 2</ebucore:organisationName>
+                </ebucore:organisationDetails>
+                <ebucore:role typeLabel="Broadcaster / diffusion linéaire"/>
+            </ebucore:publisher>
+            <ebucore:contributor>
+                <ebucore:organisationDetails>
+                    <ebucore:organisationName>Multimédia France Productions</ebucore:organisationName>
+                </ebucore:organisationDetails>
+                <ebucore:role typeLabel="Supplier / fournisseur"/>
+            </ebucore:contributor>
+            <ebucore:contributor>
+                <ebucore:contactDetails typeLabel="Director">
+                    <ebucore:givenName>Daniela</ebucore:givenName>
+                    <ebucore:familyName>SUTEU</ebucore:familyName>
+                </ebucore:contactDetails>
+                <ebucore:role typeLabel="Director"/>
+            </ebucore:contributor>
+            <ebucore:contributor>
+                <ebucore:organisationDetails>
+                    <ebucore:organisationName>Rédaction de France Télévisions</ebucore:organisationName>
+                </ebucore:organisationDetails>
+                <ebucore:role typeLabel="Production Company"/>
+            </ebucore:contributor>
+            <ebucore:contributor>
+                <ebucore:organisationDetails>
+                    <ebucore:organisationName>LangueTurquoise</ebucore:organisationName>
+                </ebucore:organisationDetails>
+                <ebucore:role typeLabel="SL producer"/>
+            </ebucore:contributor>
+            <ebucore:contributor>
+                <ebucore:contactDetails typeLabel="ST interpreter">
+                    <ebucore:givenName>Aliza</ebucore:givenName>
+                    <ebucore:familyName>M&apos;SIKA</ebucore:familyName>
+                    <ebucore:salutation>Mme</ebucore:salutation>
+                </ebucore:contactDetails>
+                <ebucore:role typeLabel="SL interpreter"/>
+            </ebucore:contributor>
+            <ebucore:contributor>
+                <ebucore:organisationDetails>
+                    <ebucore:organisationName>Multimédia France Productions</ebucore:organisationName>
+                </ebucore:organisationDetails>
+                <ebucore:role typeLabel="ST producer"/>
+            </ebucore:contributor>
+            <ebucore:contributor>
+                <ebucore:contactDetails typeLabel="ST author">
+                    <ebucore:givenName>Rémy</ebucore:givenName>
+                    <ebucore:familyName>DAL MOLIN</ebucore:familyName>
+                    <ebucore:salutation>M</ebucore:salutation>
+                </ebucore:contactDetails>
+                <ebucore:role typeLabel="ST author"/>
+            </ebucore:contributor>
+            <ebucore:contributor>
+                <ebucore:contactDetails typeLabel="Presenter0">
+                    <ebucore:givenName>David</ebucore:givenName>
+                    <ebucore:familyName>PUJADAS</ebucore:familyName>
+                    <ebucore:salutation>M</ebucore:salutation>
+                    <ebucore:birthDate>1964-12-02+01:00</ebucore:birthDate>
+                </ebucore:contactDetails>
+                <ebucore:role typeLabel="Presenter0"/>
+            </ebucore:contributor>
+            <ebucore:date>
+                <ebucore:copyrighted startYear="2015"/>
+            </ebucore:date>
+            <ebucore:date>
+                <ebucore:alternative startDate="2015-09-02+01:00" startTime="19:57:00" typeLabel="DateDiffusion"/>
+            </ebucore:date>
+            <ebucore:type>
+                <ebucore:genre typeLabel="UNI" typeDefinition="ProgramType"/>
+                <ebucore:genre typeLink="info" typeLabel="Informations et actualités" typeDefinition="ProgramGenre"/>
+            </ebucore:type>
+            <ebucore:identifier typeLabel="FTV_UID">
+                <dc:identifier xsi:type="ebucore:elementType">EBU100000002</dc:identifier>
+            </ebucore:identifier>
+            <ebucore:identifier typeLabel="Plurimedia_ID">
+                <dc:identifier xsi:type="ebucore:elementType">100000002</dc:identifier>
+            </ebucore:identifier>
+            <ebucore:rating>
+                <ebucore:ratingValue>Tous publics</ebucore:ratingValue>
+                <ebucore:ratingProvider>
+                    <ebucore:organisationDetails>
+                        <ebucore:organisationName>CSA</ebucore:organisationName>
+                    </ebucore:organisationDetails>
+                </ebucore:ratingProvider>
+            </ebucore:rating>
+        </ebucore:part>
+        <ebucore:part partName="Links">
+            <ebucore:format formatName="MainThumbnail">
+                <ebucore:containerFormat>
+                    <ebucore:containerEncoding formatLabel="PNG"/>
+                </ebucore:containerFormat>
+                <ebucore:fileName>EBU100000004.png</ebucore:fileName>
+                <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Journal_de_20h00/100000002/Thumbnail_PGM/EBU100000002.png</ebucore:locator>
+            </ebucore:format>
+            <ebucore:format formatName="Main">
+                <ebucore:audioFormat audioFormatId="1" audioFormatName="PVF" audioPresenceFlag="true">
+                    <ebucore:audioTrack trackId="5" trackLanguage="FRA"/>
+                    <ebucore:channels>2</ebucore:channels>
+                    <ebucore:technicalAttributeString typeLabel="type">Stereo</ebucore:technicalAttributeString>
+                    <ebucore:technicalAttributeString typeLabel="ChannelPositions">Front: L R</ebucore:technicalAttributeString>
+                    <ebucore:technicalAttributeString typeLabel="ChannelLayout">L R</ebucore:technicalAttributeString>
+                    <ebucore:technicalAttributeBoolean typeLabel="dialog">true</ebucore:technicalAttributeBoolean>
+                    <ebucore:technicalAttributeBoolean typeLabel="ambiance">true</ebucore:technicalAttributeBoolean>
+                    <ebucore:technicalAttributeBoolean typeLabel="commentary">false</ebucore:technicalAttributeBoolean>
+                    <ebucore:technicalAttributeFloat typeLabel="loudness">-23.2</ebucore:technicalAttributeFloat>
+                    <ebucore:technicalAttributeFloat typeLabel="maxTruePeak">-4.4</ebucore:technicalAttributeFloat>
+                </ebucore:audioFormat>
+                <ebucore:containerFormat>
+                    <ebucore:containerEncoding formatLabel="MPEG-DASH"/>
+                </ebucore:containerFormat>
+                <ebucore:dataFormat>
+                    <ebucore:subtitlingFormat subtitlingFormatName="TTML" trackId="6" language="FRA" subtitlingPresenceFlag="true"/>
+                </ebucore:dataFormat>
+                <ebucore:fileName>manifest.mpd</ebucore:fileName>
+                <ebucore:locator>http://videos-pmd.francetv.fr/innovation/media4D/Journal_de_20h00/EBU100000002/manifest.mpd</ebucore:locator>
+            </ebucore:format>
+            <ebucore:format formatName="SL">
+                <ebucore:containerFormat>
+                    <ebucore:containerEncoding formatLabel="MPEG-DASH"/>
+                </ebucore:containerFormat>
+                <ebucore:dataFormat>
+                    <ebucore:subtitlingFormat language="FRA" subtitlingPresenceFlag="false"/>
+                </ebucore:dataFormat>
+                <ebucore:fileName>manifest-lsf.mpd</ebucore:fileName>
+                <ebucore:locator>http://videos-pmd.francetv.fr/innovation/media4D/Journal_de_20h00/EBU100000002/manifest-lsf1.mpd</ebucore:locator>
+            </ebucore:format>
+            <ebucore:format formatName="EA1">
+                <ebucore:audioFormat audioFormatId="2" audioFormatName="PVF" audioPresenceFlag="false">
+                    <ebucore:audioTrack trackId="0" trackLanguage="FRA"/>
+                    <ebucore:channels>6</ebucore:channels>
+                    <ebucore:technicalAttributeString typeLabel="type">MultiWithLFE</ebucore:technicalAttributeString>
+                    <ebucore:technicalAttributeString typeLabel="ChannelPositions">Front: L R / Front: L C R, Side: L R, LFE / Front: L C R, Side: L R, LFE</ebucore:technicalAttributeString>
+                    <ebucore:technicalAttributeString typeLabel="ChannelLayout">C L R Ls Rs LFE</ebucore:technicalAttributeString>
+                    <ebucore:technicalAttributeBoolean typeLabel="dialog">true</ebucore:technicalAttributeBoolean>
+                    <ebucore:technicalAttributeBoolean typeLabel="ambiance">true</ebucore:technicalAttributeBoolean>
+                    <ebucore:technicalAttributeBoolean typeLabel="commentary">false</ebucore:technicalAttributeBoolean>
+                    <ebucore:technicalAttributeFloat typeLabel="loudness">-23.0</ebucore:technicalAttributeFloat>
+                    <ebucore:technicalAttributeFloat typeLabel="maxTruePeak">-3.0</ebucore:technicalAttributeFloat>
+                </ebucore:audioFormat>
+                <ebucore:containerFormat>
+                    <ebucore:containerEncoding formatLabel="MPEG-DASH"/>
+                </ebucore:containerFormat>
+                <ebucore:fileName>manifest-ea1.mpd</ebucore:fileName>
+                <ebucore:locator>http://videos-pmd.francetv.fr/innovation/media4D/Journal_de_20h00/EBU100000002/manifest-ea1.mpd</ebucore:locator>
+            </ebucore:format>
+            <ebucore:format formatName="AD">
+                <ebucore:audioFormat audioFormatId="3" audioFormatName="PAD" audioPresenceFlag="false">
+                    <ebucore:audioTrack trackId="0" trackLanguage="FRA"/>
+                    <ebucore:channels>1</ebucore:channels>
+                    <ebucore:technicalAttributeString typeLabel="type">Mono</ebucore:technicalAttributeString>
+                    <ebucore:technicalAttributeString typeLabel="ChannelPositions">Front: C</ebucore:technicalAttributeString>
+                    <ebucore:technicalAttributeString typeLabel="ChannelLayout">C</ebucore:technicalAttributeString>
+                    <ebucore:technicalAttributeBoolean typeLabel="dialog">false</ebucore:technicalAttributeBoolean>
+                    <ebucore:technicalAttributeBoolean typeLabel="ambiance">false</ebucore:technicalAttributeBoolean>
+                    <ebucore:technicalAttributeBoolean typeLabel="commentary">true</ebucore:technicalAttributeBoolean>
+                    <ebucore:technicalAttributeFloat typeLabel="loudness">-23.0</ebucore:technicalAttributeFloat>
+                    <ebucore:technicalAttributeFloat typeLabel="maxTruePeak">-3.0</ebucore:technicalAttributeFloat>
+                </ebucore:audioFormat>
+                <ebucore:containerFormat>
+                    <ebucore:containerEncoding formatLabel="MPEG-DASH"/>
+                </ebucore:containerFormat>
+                <ebucore:fileName>manifest-ad.mpd</ebucore:fileName>
+                <ebucore:locator>http://videos-pmd.francetv.fr/innovation/media4D/Journal_de_20h00/EBU100000002/manifest-ad.mpd</ebucore:locator>
+            </ebucore:format>
+            <ebucore:format formatName="EA2">
+                <ebucore:audioFormat audioFormatId="4" audioFormatName="PVM" audioPresenceFlag="false">
+                    <ebucore:audioTrack trackId="0" trackLanguage="ENG"/>
+                    <ebucore:channels>2</ebucore:channels>
+                    <ebucore:technicalAttributeString typeLabel="type">Stereo</ebucore:technicalAttributeString>
+                    <ebucore:technicalAttributeString typeLabel="ChannelPositions">Front: L R</ebucore:technicalAttributeString>
+                    <ebucore:technicalAttributeString typeLabel="ChannelLayout">L R</ebucore:technicalAttributeString>
+                    <ebucore:technicalAttributeBoolean typeLabel="dialog">true</ebucore:technicalAttributeBoolean>
+                    <ebucore:technicalAttributeBoolean typeLabel="ambiance">true</ebucore:technicalAttributeBoolean>
+                    <ebucore:technicalAttributeBoolean typeLabel="commentary">false</ebucore:technicalAttributeBoolean>
+                    <ebucore:technicalAttributeFloat typeLabel="loudness">-23.0</ebucore:technicalAttributeFloat>
+                    <ebucore:technicalAttributeFloat typeLabel="maxTruePeak">-3.0</ebucore:technicalAttributeFloat>
+                </ebucore:audioFormat>
+                <ebucore:containerFormat>
+                    <ebucore:containerEncoding formatLabel="MPEG-DASH"/>
+                </ebucore:containerFormat>
+                <ebucore:fileName>manifest-ea2.mpd</ebucore:fileName>
+                <ebucore:locator>http://videos-pmd.francetv.fr/innovation/media4D/Journal_de_20h00/EBU100000002/manifest-ea2.mpd</ebucore:locator>
+            </ebucore:format>
+            <ebucore:format formatName="DI">
+                <ebucore:audioFormat audioFormatId="5" audioFormatName="PDI" audioPresenceFlag="false">
+                    <ebucore:audioTrack trackId="0" trackLanguage="FRA"/>
+                    <ebucore:channels>1</ebucore:channels>
+                    <ebucore:technicalAttributeString typeLabel="type">Mono</ebucore:technicalAttributeString>
+                    <ebucore:technicalAttributeString typeLabel="ChannelPositions">Front: C</ebucore:technicalAttributeString>
+                    <ebucore:technicalAttributeString typeLabel="ChannelLayout">C</ebucore:technicalAttributeString>
+                    <ebucore:technicalAttributeBoolean typeLabel="dialog">true</ebucore:technicalAttributeBoolean>
+                    <ebucore:technicalAttributeBoolean typeLabel="ambiance">false</ebucore:technicalAttributeBoolean>
+                    <ebucore:technicalAttributeBoolean typeLabel="commentary">false</ebucore:technicalAttributeBoolean>
+                    <ebucore:technicalAttributeFloat typeLabel="loudness">-23.0</ebucore:technicalAttributeFloat>
+                    <ebucore:technicalAttributeFloat typeLabel="maxTruePeak">-3.0</ebucore:technicalAttributeFloat>
+                </ebucore:audioFormat>
+                <ebucore:containerFormat>
+                    <ebucore:containerEncoding formatLabel="MPEG-DASH"/>
+                </ebucore:containerFormat>
+                <ebucore:fileName>manifest-di.mpd</ebucore:fileName>
+                <ebucore:locator>http://videos-pmd.francetv.fr/innovation/media4D/Journal_de_20h00/EBU100000002/manifest-di.mpd</ebucore:locator>
+            </ebucore:format>
+            <ebucore:format formatName="EA3">
+                <ebucore:audioFormat audioFormatId="6" audioFormatName="PVI" audioPresenceFlag="false">
+                    <ebucore:audioTrack trackId="0" trackLanguage="UND"/>
+                    <ebucore:channels>6</ebucore:channels>
+                    <ebucore:technicalAttributeString typeLabel="type">MultiWithLFE</ebucore:technicalAttributeString>
+                    <ebucore:technicalAttributeString typeLabel="ChannelPositions">Front: L R / Front: L C R, Side: L R, LFE / Front: L C R, Side: L R, LFE</ebucore:technicalAttributeString>
+                    <ebucore:technicalAttributeString typeLabel="ChannelLayout">C L R Ls Rs LFE</ebucore:technicalAttributeString>
+                    <ebucore:technicalAttributeBoolean typeLabel="dialog">false</ebucore:technicalAttributeBoolean>
+                    <ebucore:technicalAttributeBoolean typeLabel="ambiance">true</ebucore:technicalAttributeBoolean>
+                    <ebucore:technicalAttributeBoolean typeLabel="commentary">false</ebucore:technicalAttributeBoolean>
+                    <ebucore:technicalAttributeFloat typeLabel="loudness">-23.0</ebucore:technicalAttributeFloat>
+                    <ebucore:technicalAttributeFloat typeLabel="maxTruePeak">-3.0</ebucore:technicalAttributeFloat>
+                </ebucore:audioFormat>
+                <ebucore:containerFormat>
+                    <ebucore:containerEncoding formatLabel="MPEG-DASH"/>
+                </ebucore:containerFormat>
+                <ebucore:fileName>manifest-ea3.mpd</ebucore:fileName>
+                <ebucore:locator>http://videos-pmd.francetv.fr/innovation/media4D/Journal_de_20h00/EBU100000002/manifest-ea3.mpd</ebucore:locator>
+            </ebucore:format>
+            <ebucore:format formatName="EA4">
+                <ebucore:audioFormat audioFormatId="7" audioFormatName="PMS" audioPresenceFlag="false">
+                    <ebucore:audioTrack trackId="0" trackLanguage="UND"/>
+                    <ebucore:channels>6</ebucore:channels>
+                    <ebucore:technicalAttributeString typeLabel="type">MultiWithLFE</ebucore:technicalAttributeString>
+                    <ebucore:technicalAttributeString typeLabel="ChannelPositions">Front: L R / Front: L C R, Side: L R, LFE / Front: L C R, Side: L R, LFE</ebucore:technicalAttributeString>
+                    <ebucore:technicalAttributeString typeLabel="ChannelLayout">C L R Ls Rs LFE</ebucore:technicalAttributeString>
+                    <ebucore:technicalAttributeBoolean typeLabel="dialog">false</ebucore:technicalAttributeBoolean>
+                    <ebucore:technicalAttributeBoolean typeLabel="ambiance">true</ebucore:technicalAttributeBoolean>
+                    <ebucore:technicalAttributeBoolean typeLabel="commentary">false</ebucore:technicalAttributeBoolean>
+                    <ebucore:technicalAttributeFloat typeLabel="loudness">-23.0</ebucore:technicalAttributeFloat>
+                    <ebucore:technicalAttributeFloat typeLabel="maxTruePeak">-3.0</ebucore:technicalAttributeFloat>
+                </ebucore:audioFormat>
+                <ebucore:containerFormat>
+                    <ebucore:containerEncoding formatLabel="MPEG-DASH"/>
+                </ebucore:containerFormat>
+                <ebucore:fileName>manifest-ea4.mpd</ebucore:fileName>
+                <ebucore:locator>http://videos-pmd.francetv.fr/innovation/media4D/Journal_de_20h00/EBU100000002/manifest-ea4.mpd</ebucore:locator>
+            </ebucore:format>
+        </ebucore:part>
+        <ebucore:part partName="TechnicalMetadata">
+            <ebucore:part partName="Essence">
+                <ebucore:format formatName="EssenceTechnicalMetadata">
+                    <ebucore:videoFormat videoFormatName="AVC">
+                        <ebucore:width unit="pixel">1920</ebucore:width>
+                        <ebucore:height unit="pixel">1080</ebucore:height>
+                        <ebucore:frameRate>25</ebucore:frameRate>
+                        <ebucore:aspectRatio typeLabel="ImageFormat">
+                            <ebucore:factorNumerator>16</ebucore:factorNumerator>
+                            <ebucore:factorDenominator>9</ebucore:factorDenominator>
+                        </ebucore:aspectRatio>
+                        <ebucore:videoEncoding typeLabel="Dash 264"/>
+                        <ebucore:codec>
+                            <ebucore:codecIdentifier>
+                                <dc:identifier>avc1</dc:identifier>
+                            </ebucore:codecIdentifier>
+                        </ebucore:codec>
+                        <ebucore:bitRateMode>constant</ebucore:bitRateMode>
+                        <ebucore:scanningFormat>progressive</ebucore:scanningFormat>
+                        <ebucore:videoTrack trackId="3"/>
+                        <ebucore:technicalAttributeString typeLabel="VideoDefinition">HD</ebucore:technicalAttributeString>
+                        <ebucore:technicalAttributeString typeLabel="ColorSpace">YUV</ebucore:technicalAttributeString>
+                        <ebucore:technicalAttributeString typeLabel="ChromaSubsampling">4:2:0</ebucore:technicalAttributeString>
+                        <ebucore:technicalAttributeInteger typeLabel="BitDepth" unit="bit">8</ebucore:technicalAttributeInteger>
+                        <ebucore:technicalAttributeBoolean typeLabel="CABAC">true</ebucore:technicalAttributeBoolean>
+                        <ebucore:technicalAttributeBoolean typeLabel="MBAFF">false</ebucore:technicalAttributeBoolean>
+                    </ebucore:videoFormat>
+                    <ebucore:containerFormat containerFormatName="MPEG-4">
+                        <ebucore:containerEncoding formatLabel="MPEG-4"/>
+                        <ebucore:codec>
+                            <ebucore:codecIdentifier>
+                                <dc:identifier>avc1</dc:identifier>
+                            </ebucore:codecIdentifier>
+                        </ebucore:codec>
+                        <ebucore:technicalAttributeString typeLabel="FormatProfile">JVT</ebucore:technicalAttributeString>
+                    </ebucore:containerFormat>
+                </ebucore:format>
+                <ebucore:partStartTime>
+                    <ebucore:timecode>00:00:00:00000</ebucore:timecode>
+                </ebucore:partStartTime>
+                <ebucore:partDuration>
+                    <ebucore:timecode>00:05:25:14</ebucore:timecode>
+                </ebucore:partDuration>
+            </ebucore:part>
+        </ebucore:part>
+        <ebucore:part partName="ContextualMetadata">
+            <ebucore:part partName="Sc_000000">
+                <ebucore:format formatName="SceneThumbnail">
+                    <ebucore:containerFormat>
+                        <ebucore:containerEncoding formatLabel="JPG"/>
+                    </ebucore:containerFormat>
+                    <ebucore:fileName>EBU100000002-Sc_000000.jpg</ebucore:fileName>
+                    <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Journal_de_20h00/100000002/Thumbnails_Sc_/EBU100000002-Sc_000000.jpg</ebucore:locator>
+                </ebucore:format>
+                <ebucore:partStartTime>
+                    <ebucore:timecode>00:00:00:00000</ebucore:timecode>
+                </ebucore:partStartTime>
+                <ebucore:partDuration>
+                    <ebucore:timecode>00:01:35:09</ebucore:timecode>
+                </ebucore:partDuration>
+                <ebucore:part partName="Sh_000000">
+                    <ebucore:partStartTime>
+                        <ebucore:timecode>00:00:00:00000</ebucore:timecode>
+                    </ebucore:partStartTime>
+                    <ebucore:partDuration>
+                        <ebucore:timecode>00:00:08:17</ebucore:timecode>
+                    </ebucore:partDuration>
+                    <ebucore:format formatName="ShotThumbnail">
+                        <ebucore:containerFormat>
+                            <ebucore:containerEncoding formatLabel="JPG"/>
+                        </ebucore:containerFormat>
+                        <ebucore:fileName>EBU100000002-Sc_000000_Sh000000.jpg</ebucore:fileName>
+                        <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Journal_de_20h00/100000002/Thumbnails_Sh_/EBU100000002-Sc_000000_Sh000000.jpg</ebucore:locator>
+                    </ebucore:format>
+                </ebucore:part>
+                <ebucore:part partName="Sh_000001">
+                    <ebucore:partStartTime>
+                        <ebucore:timecode>00:00:08:72000</ebucore:timecode>
+                    </ebucore:partStartTime>
+                    <ebucore:partDuration>
+                        <ebucore:timecode>00:00:02:18</ebucore:timecode>
+                    </ebucore:partDuration>
+                    <ebucore:format formatName="ShotThumbnail">
+                        <ebucore:containerFormat>
+                            <ebucore:containerEncoding formatLabel="JPG"/>
+                        </ebucore:containerFormat>
+                        <ebucore:fileName>EBU100000002-Sc_000000_Sh000001.jpg</ebucore:fileName>
+                        <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Journal_de_20h00/100000002/Thumbnails_Sh_/EBU100000002-Sc_000000_Sh000001.jpg</ebucore:locator>
+                    </ebucore:format>
+                </ebucore:part>
+                <ebucore:part partName="Sh_000002">
+                    <ebucore:partStartTime>
+                        <ebucore:timecode>00:00:11:48000</ebucore:timecode>
+                    </ebucore:partStartTime>
+                    <ebucore:partDuration>
+                        <ebucore:timecode>00:00:02:11</ebucore:timecode>
+                    </ebucore:partDuration>
+                    <ebucore:format formatName="ShotThumbnail">
+                        <ebucore:containerFormat>
+                            <ebucore:containerEncoding formatLabel="JPG"/>
+                        </ebucore:containerFormat>
+                        <ebucore:fileName>EBU100000002-Sc_000000_Sh000002.jpg</ebucore:fileName>
+                        <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Journal_de_20h00/100000002/Thumbnails_Sh_/EBU100000002-Sc_000000_Sh000002.jpg</ebucore:locator>
+                    </ebucore:format>
+                </ebucore:part>
+                <ebucore:part partName="Sh_000003">
+                    <ebucore:partStartTime>
+                        <ebucore:timecode>00:00:13:96000</ebucore:timecode>
+                    </ebucore:partStartTime>
+                    <ebucore:partDuration>
+                        <ebucore:timecode>00:00:02:22</ebucore:timecode>
+                    </ebucore:partDuration>
+                    <ebucore:format formatName="ShotThumbnail">
+                        <ebucore:containerFormat>
+                            <ebucore:containerEncoding formatLabel="JPG"/>
+                        </ebucore:containerFormat>
+                        <ebucore:fileName>EBU100000002-Sc_000000_Sh000003.jpg</ebucore:fileName>
+                        <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Journal_de_20h00/100000002/Thumbnails_Sh_/EBU100000002-Sc_000000_Sh000003.jpg</ebucore:locator>
+                    </ebucore:format>
+                </ebucore:part>
+                <ebucore:part partName="Sh_000004">
+                    <ebucore:partStartTime>
+                        <ebucore:timecode>00:00:16:88000</ebucore:timecode>
+                    </ebucore:partStartTime>
+                    <ebucore:partDuration>
+                        <ebucore:timecode>00:00:01:04</ebucore:timecode>
+                    </ebucore:partDuration>
+                    <ebucore:format formatName="ShotThumbnail">
+                        <ebucore:containerFormat>
+                            <ebucore:containerEncoding formatLabel="JPG"/>
+                        </ebucore:containerFormat>
+                        <ebucore:fileName>EBU100000002-Sc_000000_Sh000004.jpg</ebucore:fileName>
+                        <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Journal_de_20h00/100000002/Thumbnails_Sh_/EBU100000002-Sc_000000_Sh000004.jpg</ebucore:locator>
+                    </ebucore:format>
+                </ebucore:part>
+                <ebucore:part partName="Sh_000005">
+                    <ebucore:partStartTime>
+                        <ebucore:timecode>00:00:18:08000</ebucore:timecode>
+                    </ebucore:partStartTime>
+                    <ebucore:partDuration>
+                        <ebucore:timecode>00:00:02:05</ebucore:timecode>
+                    </ebucore:partDuration>
+                    <ebucore:format formatName="ShotThumbnail">
+                        <ebucore:containerFormat>
+                            <ebucore:containerEncoding formatLabel="JPG"/>
+                        </ebucore:containerFormat>
+                        <ebucore:fileName>EBU100000002-Sc_000000_Sh000005.jpg</ebucore:fileName>
+                        <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Journal_de_20h00/100000002/Thumbnails_Sh_/EBU100000002-Sc_000000_Sh000005.jpg</ebucore:locator>
+                    </ebucore:format>
+                </ebucore:part>
+                <ebucore:part partName="Sh_000006">
+                    <ebucore:partStartTime>
+                        <ebucore:timecode>00:00:20:32000</ebucore:timecode>
+                    </ebucore:partStartTime>
+                    <ebucore:partDuration>
+                        <ebucore:timecode>00:00:01:10</ebucore:timecode>
+                    </ebucore:partDuration>
+                    <ebucore:format formatName="ShotThumbnail">
+                        <ebucore:containerFormat>
+                            <ebucore:containerEncoding formatLabel="JPG"/>
+                        </ebucore:containerFormat>
+                        <ebucore:fileName>EBU100000002-Sc_000000_Sh000006.jpg</ebucore:fileName>
+                        <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Journal_de_20h00/100000002/Thumbnails_Sh_/EBU100000002-Sc_000000_Sh000006.jpg</ebucore:locator>
+                    </ebucore:format>
+                </ebucore:part>
+                <ebucore:part partName="Sh_000007">
+                    <ebucore:partStartTime>
+                        <ebucore:timecode>00:00:21:76000</ebucore:timecode>
+                    </ebucore:partStartTime>
+                    <ebucore:partDuration>
+                        <ebucore:timecode>00:00:01:22</ebucore:timecode>
+                    </ebucore:partDuration>
+                    <ebucore:format formatName="ShotThumbnail">
+                        <ebucore:containerFormat>
+                            <ebucore:containerEncoding formatLabel="JPG"/>
+                        </ebucore:containerFormat>
+                        <ebucore:fileName>EBU100000002-Sc_000000_Sh000007.jpg</ebucore:fileName>
+                        <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Journal_de_20h00/100000002/Thumbnails_Sh_/EBU100000002-Sc_000000_Sh000007.jpg</ebucore:locator>
+                    </ebucore:format>
+                </ebucore:part>
+                <ebucore:part partName="Sh_000008">
+                    <ebucore:partStartTime>
+                        <ebucore:timecode>00:00:23:68000</ebucore:timecode>
+                    </ebucore:partStartTime>
+                    <ebucore:partDuration>
+                        <ebucore:timecode>00:00:03:06</ebucore:timecode>
+                    </ebucore:partDuration>
+                    <ebucore:format formatName="ShotThumbnail">
+                        <ebucore:containerFormat>
+                            <ebucore:containerEncoding formatLabel="JPG"/>
+                        </ebucore:containerFormat>
+                        <ebucore:fileName>EBU100000002-Sc_000000_Sh000008.jpg</ebucore:fileName>
+                        <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Journal_de_20h00/100000002/Thumbnails_Sh_/EBU100000002-Sc_000000_Sh000008.jpg</ebucore:locator>
+                    </ebucore:format>
+                </ebucore:part>
+                <ebucore:part partName="Sh_000009">
+                    <ebucore:partStartTime>
+                        <ebucore:timecode>00:00:26:96000</ebucore:timecode>
+                    </ebucore:partStartTime>
+                    <ebucore:partDuration>
+                        <ebucore:timecode>00:00:03:16</ebucore:timecode>
+                    </ebucore:partDuration>
+                    <ebucore:format formatName="ShotThumbnail">
+                        <ebucore:containerFormat>
+                            <ebucore:containerEncoding formatLabel="JPG"/>
+                        </ebucore:containerFormat>
+                        <ebucore:fileName>EBU100000002-Sc_000000_Sh000009.jpg</ebucore:fileName>
+                        <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Journal_de_20h00/100000002/Thumbnails_Sh_/EBU100000002-Sc_000000_Sh000009.jpg</ebucore:locator>
+                    </ebucore:format>
+                </ebucore:part>
+                <ebucore:part partName="Sh_000010">
+                    <ebucore:partStartTime>
+                        <ebucore:timecode>00:00:30:64000</ebucore:timecode>
+                    </ebucore:partStartTime>
+                    <ebucore:partDuration>
+                        <ebucore:timecode>00:00:02:11</ebucore:timecode>
+                    </ebucore:partDuration>
+                    <ebucore:format formatName="ShotThumbnail">
+                        <ebucore:containerFormat>
+                            <ebucore:containerEncoding formatLabel="JPG"/>
+                        </ebucore:containerFormat>
+                        <ebucore:fileName>EBU100000002-Sc_000000_Sh000010.jpg</ebucore:fileName>
+                        <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Journal_de_20h00/100000002/Thumbnails_Sh_/EBU100000002-Sc_000000_Sh000010.jpg</ebucore:locator>
+                    </ebucore:format>
+                </ebucore:part>
+                <ebucore:part partName="Sh_000011">
+                    <ebucore:partStartTime>
+                        <ebucore:timecode>00:00:33:12000</ebucore:timecode>
+                    </ebucore:partStartTime>
+                    <ebucore:partDuration>
+                        <ebucore:timecode>00:00:02:04</ebucore:timecode>
+                    </ebucore:partDuration>
+                    <ebucore:format formatName="ShotThumbnail">
+                        <ebucore:containerFormat>
+                            <ebucore:containerEncoding formatLabel="JPG"/>
+                        </ebucore:containerFormat>
+                        <ebucore:fileName>EBU100000002-Sc_000000_Sh000011.jpg</ebucore:fileName>
+                        <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Journal_de_20h00/100000002/Thumbnails_Sh_/EBU100000002-Sc_000000_Sh000011.jpg</ebucore:locator>
+                    </ebucore:format>
+                </ebucore:part>
+                <ebucore:part partName="Sh_000012">
+                    <ebucore:partStartTime>
+                        <ebucore:timecode>00:00:35:32000</ebucore:timecode>
+                    </ebucore:partStartTime>
+                    <ebucore:partDuration>
+                        <ebucore:timecode>00:00:01:21</ebucore:timecode>
+                    </ebucore:partDuration>
+                    <ebucore:format formatName="ShotThumbnail">
+                        <ebucore:containerFormat>
+                            <ebucore:containerEncoding formatLabel="JPG"/>
+                        </ebucore:containerFormat>
+                        <ebucore:fileName>EBU100000002-Sc_000000_Sh000012.jpg</ebucore:fileName>
+                        <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Journal_de_20h00/100000002/Thumbnails_Sh_/EBU100000002-Sc_000000_Sh000012.jpg</ebucore:locator>
+                    </ebucore:format>
+                </ebucore:part>
+                <ebucore:part partName="Sh_000013">
+                    <ebucore:partStartTime>
+                        <ebucore:timecode>00:00:37:20000</ebucore:timecode>
+                    </ebucore:partStartTime>
+                    <ebucore:partDuration>
+                        <ebucore:timecode>00:00:02:07</ebucore:timecode>
+                    </ebucore:partDuration>
+                    <ebucore:format formatName="ShotThumbnail">
+                        <ebucore:containerFormat>
+                            <ebucore:containerEncoding formatLabel="JPG"/>
+                        </ebucore:containerFormat>
+                        <ebucore:fileName>EBU100000002-Sc_000000_Sh000013.jpg</ebucore:fileName>
+                        <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Journal_de_20h00/100000002/Thumbnails_Sh_/EBU100000002-Sc_000000_Sh000013.jpg</ebucore:locator>
+                    </ebucore:format>
+                </ebucore:part>
+                <ebucore:part partName="Sh_000014">
+                    <ebucore:partStartTime>
+                        <ebucore:timecode>00:00:39:52000</ebucore:timecode>
+                    </ebucore:partStartTime>
+                    <ebucore:partDuration>
+                        <ebucore:timecode>00:00:02:18</ebucore:timecode>
+                    </ebucore:partDuration>
+                    <ebucore:format formatName="ShotThumbnail">
+                        <ebucore:containerFormat>
+                            <ebucore:containerEncoding formatLabel="JPG"/>
+                        </ebucore:containerFormat>
+                        <ebucore:fileName>EBU100000002-Sc_000000_Sh000014.jpg</ebucore:fileName>
+                        <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Journal_de_20h00/100000002/Thumbnails_Sh_/EBU100000002-Sc_000000_Sh000014.jpg</ebucore:locator>
+                    </ebucore:format>
+                </ebucore:part>
+                <ebucore:part partName="Sh_000015">
+                    <ebucore:partStartTime>
+                        <ebucore:timecode>00:00:42:28000</ebucore:timecode>
+                    </ebucore:partStartTime>
+                    <ebucore:partDuration>
+                        <ebucore:timecode>00:00:01:05</ebucore:timecode>
+                    </ebucore:partDuration>
+                    <ebucore:format formatName="ShotThumbnail">
+                        <ebucore:containerFormat>
+                            <ebucore:containerEncoding formatLabel="JPG"/>
+                        </ebucore:containerFormat>
+                        <ebucore:fileName>EBU100000002-Sc_000000_Sh000015.jpg</ebucore:fileName>
+                        <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Journal_de_20h00/100000002/Thumbnails_Sh_/EBU100000002-Sc_000000_Sh000015.jpg</ebucore:locator>
+                    </ebucore:format>
+                </ebucore:part>
+                <ebucore:part partName="Sh_000016">
+                    <ebucore:partStartTime>
+                        <ebucore:timecode>00:00:43:52000</ebucore:timecode>
+                    </ebucore:partStartTime>
+                    <ebucore:partDuration>
+                        <ebucore:timecode>00:00:01:05</ebucore:timecode>
+                    </ebucore:partDuration>
+                    <ebucore:format formatName="ShotThumbnail">
+                        <ebucore:containerFormat>
+                            <ebucore:containerEncoding formatLabel="JPG"/>
+                        </ebucore:containerFormat>
+                        <ebucore:fileName>EBU100000002-Sc_000000_Sh000016.jpg</ebucore:fileName>
+                        <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Journal_de_20h00/100000002/Thumbnails_Sh_/EBU100000002-Sc_000000_Sh000016.jpg</ebucore:locator>
+                    </ebucore:format>
+                </ebucore:part>
+                <ebucore:part partName="Sh_000017">
+                    <ebucore:partStartTime>
+                        <ebucore:timecode>00:00:44:76000</ebucore:timecode>
+                    </ebucore:partStartTime>
+                    <ebucore:partDuration>
+                        <ebucore:timecode>00:00:01:19</ebucore:timecode>
+                    </ebucore:partDuration>
+                    <ebucore:format formatName="ShotThumbnail">
+                        <ebucore:containerFormat>
+                            <ebucore:containerEncoding formatLabel="JPG"/>
+                        </ebucore:containerFormat>
+                        <ebucore:fileName>EBU100000002-Sc_000000_Sh000017.jpg</ebucore:fileName>
+                        <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Journal_de_20h00/100000002/Thumbnails_Sh_/EBU100000002-Sc_000000_Sh000017.jpg</ebucore:locator>
+                    </ebucore:format>
+                </ebucore:part>
+                <ebucore:part partName="Sh_000018">
+                    <ebucore:partStartTime>
+                        <ebucore:timecode>00:00:46:56000</ebucore:timecode>
+                    </ebucore:partStartTime>
+                    <ebucore:partDuration>
+                        <ebucore:timecode>00:00:02:08</ebucore:timecode>
+                    </ebucore:partDuration>
+                    <ebucore:format formatName="ShotThumbnail">
+                        <ebucore:containerFormat>
+                            <ebucore:containerEncoding formatLabel="JPG"/>
+                        </ebucore:containerFormat>
+                        <ebucore:fileName>EBU100000002-Sc_000000_Sh000018.jpg</ebucore:fileName>
+                        <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Journal_de_20h00/100000002/Thumbnails_Sh_/EBU100000002-Sc_000000_Sh000018.jpg</ebucore:locator>
+                    </ebucore:format>
+                </ebucore:part>
+                <ebucore:part partName="Sh_000019">
+                    <ebucore:partStartTime>
+                        <ebucore:timecode>00:00:48:92000</ebucore:timecode>
+                    </ebucore:partStartTime>
+                    <ebucore:partDuration>
+                        <ebucore:timecode>00:00:02:12</ebucore:timecode>
+                    </ebucore:partDuration>
+                    <ebucore:format formatName="ShotThumbnail">
+                        <ebucore:containerFormat>
+                            <ebucore:containerEncoding formatLabel="JPG"/>
+                        </ebucore:containerFormat>
+                        <ebucore:fileName>EBU100000002-Sc_000000_Sh000019.jpg</ebucore:fileName>
+                        <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Journal_de_20h00/100000002/Thumbnails_Sh_/EBU100000002-Sc_000000_Sh000019.jpg</ebucore:locator>
+                    </ebucore:format>
+                </ebucore:part>
+                <ebucore:part partName="Sh_000020">
+                    <ebucore:partStartTime>
+                        <ebucore:timecode>00:00:51:44000</ebucore:timecode>
+                    </ebucore:partStartTime>
+                    <ebucore:partDuration>
+                        <ebucore:timecode>00:00:02:23</ebucore:timecode>
+                    </ebucore:partDuration>
+                    <ebucore:format formatName="ShotThumbnail">
+                        <ebucore:containerFormat>
+                            <ebucore:containerEncoding formatLabel="JPG"/>
+                        </ebucore:containerFormat>
+                        <ebucore:fileName>EBU100000002-Sc_000000_Sh000020.jpg</ebucore:fileName>
+                        <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Journal_de_20h00/100000002/Thumbnails_Sh_/EBU100000002-Sc_000000_Sh000020.jpg</ebucore:locator>
+                    </ebucore:format>
+                </ebucore:part>
+                <ebucore:part partName="Sh_000021">
+                    <ebucore:partStartTime>
+                        <ebucore:timecode>00:00:54:40000</ebucore:timecode>
+                    </ebucore:partStartTime>
+                    <ebucore:partDuration>
+                        <ebucore:timecode>00:00:02:05</ebucore:timecode>
+                    </ebucore:partDuration>
+                    <ebucore:format formatName="ShotThumbnail">
+                        <ebucore:containerFormat>
+                            <ebucore:containerEncoding formatLabel="JPG"/>
+                        </ebucore:containerFormat>
+                        <ebucore:fileName>EBU100000002-Sc_000000_Sh000021.jpg</ebucore:fileName>
+                        <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Journal_de_20h00/100000002/Thumbnails_Sh_/EBU100000002-Sc_000000_Sh000021.jpg</ebucore:locator>
+                    </ebucore:format>
+                </ebucore:part>
+                <ebucore:part partName="Sh_000022">
+                    <ebucore:partStartTime>
+                        <ebucore:timecode>00:00:56:64000</ebucore:timecode>
+                    </ebucore:partStartTime>
+                    <ebucore:partDuration>
+                        <ebucore:timecode>00:00:01:21</ebucore:timecode>
+                    </ebucore:partDuration>
+                    <ebucore:format formatName="ShotThumbnail">
+                        <ebucore:containerFormat>
+                            <ebucore:containerEncoding formatLabel="JPG"/>
+                        </ebucore:containerFormat>
+                        <ebucore:fileName>EBU100000002-Sc_000000_Sh000022.jpg</ebucore:fileName>
+                        <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Journal_de_20h00/100000002/Thumbnails_Sh_/EBU100000002-Sc_000000_Sh000022.jpg</ebucore:locator>
+                    </ebucore:format>
+                </ebucore:part>
+                <ebucore:part partName="Sh_000023">
+                    <ebucore:partStartTime>
+                        <ebucore:timecode>00:00:58:52000</ebucore:timecode>
+                    </ebucore:partStartTime>
+                    <ebucore:partDuration>
+                        <ebucore:timecode>00:00:01:07</ebucore:timecode>
+                    </ebucore:partDuration>
+                    <ebucore:format formatName="ShotThumbnail">
+                        <ebucore:containerFormat>
+                            <ebucore:containerEncoding formatLabel="JPG"/>
+                        </ebucore:containerFormat>
+                        <ebucore:fileName>EBU100000002-Sc_000000_Sh000023.jpg</ebucore:fileName>
+                        <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Journal_de_20h00/100000002/Thumbnails_Sh_/EBU100000002-Sc_000000_Sh000023.jpg</ebucore:locator>
+                    </ebucore:format>
+                </ebucore:part>
+                <ebucore:part partName="Sh_000024">
+                    <ebucore:partStartTime>
+                        <ebucore:timecode>00:00:59:84000</ebucore:timecode>
+                    </ebucore:partStartTime>
+                    <ebucore:partDuration>
+                        <ebucore:timecode>00:00:01:14</ebucore:timecode>
+                    </ebucore:partDuration>
+                    <ebucore:format formatName="ShotThumbnail">
+                        <ebucore:containerFormat>
+                            <ebucore:containerEncoding formatLabel="JPG"/>
+                        </ebucore:containerFormat>
+                        <ebucore:fileName>EBU100000002-Sc_000000_Sh000024.jpg</ebucore:fileName>
+                        <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Journal_de_20h00/100000002/Thumbnails_Sh_/EBU100000002-Sc_000000_Sh000024.jpg</ebucore:locator>
+                    </ebucore:format>
+                </ebucore:part>
+                <ebucore:part partName="Sh_000025">
+                    <ebucore:partStartTime>
+                        <ebucore:timecode>00:01:01:44000</ebucore:timecode>
+                    </ebucore:partStartTime>
+                    <ebucore:partDuration>
+                        <ebucore:timecode>00:00:01:16</ebucore:timecode>
+                    </ebucore:partDuration>
+                    <ebucore:format formatName="ShotThumbnail">
+                        <ebucore:containerFormat>
+                            <ebucore:containerEncoding formatLabel="JPG"/>
+                        </ebucore:containerFormat>
+                        <ebucore:fileName>EBU100000002-Sc_000000_Sh000025.jpg</ebucore:fileName>
+                        <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Journal_de_20h00/100000002/Thumbnails_Sh_/EBU100000002-Sc_000000_Sh000025.jpg</ebucore:locator>
+                    </ebucore:format>
+                </ebucore:part>
+                <ebucore:part partName="Sh_000026">
+                    <ebucore:partStartTime>
+                        <ebucore:timecode>00:01:03:12000</ebucore:timecode>
+                    </ebucore:partStartTime>
+                    <ebucore:partDuration>
+                        <ebucore:timecode>00:00:03:05</ebucore:timecode>
+                    </ebucore:partDuration>
+                    <ebucore:format formatName="ShotThumbnail">
+                        <ebucore:containerFormat>
+                            <ebucore:containerEncoding formatLabel="JPG"/>
+                        </ebucore:containerFormat>
+                        <ebucore:fileName>EBU100000002-Sc_000000_Sh000026.jpg</ebucore:fileName>
+                        <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Journal_de_20h00/100000002/Thumbnails_Sh_/EBU100000002-Sc_000000_Sh000026.jpg</ebucore:locator>
+                    </ebucore:format>
+                </ebucore:part>
+                <ebucore:part partName="Sh_000027">
+                    <ebucore:partStartTime>
+                        <ebucore:timecode>00:01:06:36000</ebucore:timecode>
+                    </ebucore:partStartTime>
+                    <ebucore:partDuration>
+                        <ebucore:timecode>00:00:03:14</ebucore:timecode>
+                    </ebucore:partDuration>
+                    <ebucore:format formatName="ShotThumbnail">
+                        <ebucore:containerFormat>
+                            <ebucore:containerEncoding formatLabel="JPG"/>
+                        </ebucore:containerFormat>
+                        <ebucore:fileName>EBU100000002-Sc_000000_Sh000027.jpg</ebucore:fileName>
+                        <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Journal_de_20h00/100000002/Thumbnails_Sh_/EBU100000002-Sc_000000_Sh000027.jpg</ebucore:locator>
+                    </ebucore:format>
+                </ebucore:part>
+                <ebucore:part partName="Sh_000028">
+                    <ebucore:partStartTime>
+                        <ebucore:timecode>00:01:09:96000</ebucore:timecode>
+                    </ebucore:partStartTime>
+                    <ebucore:partDuration>
+                        <ebucore:timecode>00:00:02:07</ebucore:timecode>
+                    </ebucore:partDuration>
+                    <ebucore:format formatName="ShotThumbnail">
+                        <ebucore:containerFormat>
+                            <ebucore:containerEncoding formatLabel="JPG"/>
+                        </ebucore:containerFormat>
+                        <ebucore:fileName>EBU100000002-Sc_000000_Sh000028.jpg</ebucore:fileName>
+                        <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Journal_de_20h00/100000002/Thumbnails_Sh_/EBU100000002-Sc_000000_Sh000028.jpg</ebucore:locator>
+                    </ebucore:format>
+                </ebucore:part>
+                <ebucore:part partName="Sh_000029">
+                    <ebucore:partStartTime>
+                        <ebucore:timecode>00:01:12:28000</ebucore:timecode>
+                    </ebucore:partStartTime>
+                    <ebucore:partDuration>
+                        <ebucore:timecode>00:00:04:01</ebucore:timecode>
+                    </ebucore:partDuration>
+                    <ebucore:format formatName="ShotThumbnail">
+                        <ebucore:containerFormat>
+                            <ebucore:containerEncoding formatLabel="JPG"/>
+                        </ebucore:containerFormat>
+                        <ebucore:fileName>EBU100000002-Sc_000000_Sh000029.jpg</ebucore:fileName>
+                        <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Journal_de_20h00/100000002/Thumbnails_Sh_/EBU100000002-Sc_000000_Sh000029.jpg</ebucore:locator>
+                    </ebucore:format>
+                </ebucore:part>
+                <ebucore:part partName="Sh_000030">
+                    <ebucore:partStartTime>
+                        <ebucore:timecode>00:01:16:36000</ebucore:timecode>
+                    </ebucore:partStartTime>
+                    <ebucore:partDuration>
+                        <ebucore:timecode>00:00:02:05</ebucore:timecode>
+                    </ebucore:partDuration>
+                    <ebucore:format formatName="ShotThumbnail">
+                        <ebucore:containerFormat>
+                            <ebucore:containerEncoding formatLabel="JPG"/>
+                        </ebucore:containerFormat>
+                        <ebucore:fileName>EBU100000002-Sc_000000_Sh000030.jpg</ebucore:fileName>
+                        <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Journal_de_20h00/100000002/Thumbnails_Sh_/EBU100000002-Sc_000000_Sh000030.jpg</ebucore:locator>
+                    </ebucore:format>
+                </ebucore:part>
+                <ebucore:part partName="Sh_000031">
+                    <ebucore:partStartTime>
+                        <ebucore:timecode>00:01:18:60000</ebucore:timecode>
+                    </ebucore:partStartTime>
+                    <ebucore:partDuration>
+                        <ebucore:timecode>00:00:09:14</ebucore:timecode>
+                    </ebucore:partDuration>
+                    <ebucore:format formatName="ShotThumbnail">
+                        <ebucore:containerFormat>
+                            <ebucore:containerEncoding formatLabel="JPG"/>
+                        </ebucore:containerFormat>
+                        <ebucore:fileName>EBU100000002-Sc_000000_Sh000031.jpg</ebucore:fileName>
+                        <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Journal_de_20h00/100000002/Thumbnails_Sh_/EBU100000002-Sc_000000_Sh000031.jpg</ebucore:locator>
+                    </ebucore:format>
+                </ebucore:part>
+                <ebucore:part partName="Sh_000032">
+                    <ebucore:partStartTime>
+                        <ebucore:timecode>00:01:28:20000</ebucore:timecode>
+                    </ebucore:partStartTime>
+                    <ebucore:partDuration>
+                        <ebucore:timecode>00:00:07:04</ebucore:timecode>
+                    </ebucore:partDuration>
+                    <ebucore:format formatName="ShotThumbnail">
+                        <ebucore:containerFormat>
+                            <ebucore:containerEncoding formatLabel="JPG"/>
+                        </ebucore:containerFormat>
+                        <ebucore:fileName>EBU100000002-Sc_000000_Sh000032.jpg</ebucore:fileName>
+                        <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Journal_de_20h00/100000002/Thumbnails_Sh_/EBU100000002-Sc_000000_Sh000032.jpg</ebucore:locator>
+                    </ebucore:format>
+                </ebucore:part>
+            </ebucore:part>
+            <ebucore:part partName="Sc_000001">
+                <ebucore:format formatName="SceneThumbnail">
+                    <ebucore:containerFormat>
+                        <ebucore:containerEncoding formatLabel="JPG"/>
+                    </ebucore:containerFormat>
+                    <ebucore:fileName>EBU100000002-Sc_000001.jpg</ebucore:fileName>
+                    <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Journal_de_20h00/100000002/Thumbnails_Sc_/EBU100000002-Sc_000001.jpg</ebucore:locator>
+                </ebucore:format>
+                <ebucore:partStartTime>
+                    <ebucore:timecode>00:01:35:40000</ebucore:timecode>
+                </ebucore:partStartTime>
+                <ebucore:partDuration>
+                    <ebucore:timecode>00:00:56:19</ebucore:timecode>
+                </ebucore:partDuration>
+                <ebucore:part partName="Sh_000000">
+                    <ebucore:partStartTime>
+                        <ebucore:timecode>00:01:35:40000</ebucore:timecode>
+                    </ebucore:partStartTime>
+                    <ebucore:partDuration>
+                        <ebucore:timecode>00:00:02:18</ebucore:timecode>
+                    </ebucore:partDuration>
+                    <ebucore:format formatName="ShotThumbnail">
+                        <ebucore:containerFormat>
+                            <ebucore:containerEncoding formatLabel="JPG"/>
+                        </ebucore:containerFormat>
+                        <ebucore:fileName>EBU100000002-Sc_000001_Sh000000.jpg</ebucore:fileName>
+                        <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Journal_de_20h00/100000002/Thumbnails_Sh_/EBU100000002-Sc_000001_Sh000000.jpg</ebucore:locator>
+                    </ebucore:format>
+                </ebucore:part>
+                <ebucore:part partName="Sh_000001">
+                    <ebucore:partStartTime>
+                        <ebucore:timecode>00:01:38:16000</ebucore:timecode>
+                    </ebucore:partStartTime>
+                    <ebucore:partDuration>
+                        <ebucore:timecode>00:00:02:14</ebucore:timecode>
+                    </ebucore:partDuration>
+                    <ebucore:format formatName="ShotThumbnail">
+                        <ebucore:containerFormat>
+                            <ebucore:containerEncoding formatLabel="JPG"/>
+                        </ebucore:containerFormat>
+                        <ebucore:fileName>EBU100000002-Sc_000001_Sh000001.jpg</ebucore:fileName>
+                        <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Journal_de_20h00/100000002/Thumbnails_Sh_/EBU100000002-Sc_000001_Sh000001.jpg</ebucore:locator>
+                    </ebucore:format>
+                </ebucore:part>
+                <ebucore:part partName="Sh_000002">
+                    <ebucore:partStartTime>
+                        <ebucore:timecode>00:01:40:76000</ebucore:timecode>
+                    </ebucore:partStartTime>
+                    <ebucore:partDuration>
+                        <ebucore:timecode>00:00:02:02</ebucore:timecode>
+                    </ebucore:partDuration>
+                    <ebucore:format formatName="ShotThumbnail">
+                        <ebucore:containerFormat>
+                            <ebucore:containerEncoding formatLabel="JPG"/>
+                        </ebucore:containerFormat>
+                        <ebucore:fileName>EBU100000002-Sc_000001_Sh000002.jpg</ebucore:fileName>
+                        <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Journal_de_20h00/100000002/Thumbnails_Sh_/EBU100000002-Sc_000001_Sh000002.jpg</ebucore:locator>
+                    </ebucore:format>
+                </ebucore:part>
+                <ebucore:part partName="Sh_000003">
+                    <ebucore:partStartTime>
+                        <ebucore:timecode>00:01:42:88000</ebucore:timecode>
+                    </ebucore:partStartTime>
+                    <ebucore:partDuration>
+                        <ebucore:timecode>00:00:14:08</ebucore:timecode>
+                    </ebucore:partDuration>
+                    <ebucore:format formatName="ShotThumbnail">
+                        <ebucore:containerFormat>
+                            <ebucore:containerEncoding formatLabel="JPG"/>
+                        </ebucore:containerFormat>
+                        <ebucore:fileName>EBU100000002-Sc_000001_Sh000003.jpg</ebucore:fileName>
+                        <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Journal_de_20h00/100000002/Thumbnails_Sh_/EBU100000002-Sc_000001_Sh000003.jpg</ebucore:locator>
+                    </ebucore:format>
+                </ebucore:part>
+                <ebucore:part partName="Sh_000004">
+                    <ebucore:partStartTime>
+                        <ebucore:timecode>00:01:57:24000</ebucore:timecode>
+                    </ebucore:partStartTime>
+                    <ebucore:partDuration>
+                        <ebucore:timecode>00:00:06:04</ebucore:timecode>
+                    </ebucore:partDuration>
+                    <ebucore:format formatName="ShotThumbnail">
+                        <ebucore:containerFormat>
+                            <ebucore:containerEncoding formatLabel="JPG"/>
+                        </ebucore:containerFormat>
+                        <ebucore:fileName>EBU100000002-Sc_000001_Sh000004.jpg</ebucore:fileName>
+                        <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Journal_de_20h00/100000002/Thumbnails_Sh_/EBU100000002-Sc_000001_Sh000004.jpg</ebucore:locator>
+                    </ebucore:format>
+                </ebucore:part>
+                <ebucore:part partName="Sh_000005">
+                    <ebucore:partStartTime>
+                        <ebucore:timecode>00:02:03:44000</ebucore:timecode>
+                    </ebucore:partStartTime>
+                    <ebucore:partDuration>
+                        <ebucore:timecode>00:00:05:21</ebucore:timecode>
+                    </ebucore:partDuration>
+                    <ebucore:format formatName="ShotThumbnail">
+                        <ebucore:containerFormat>
+                            <ebucore:containerEncoding formatLabel="JPG"/>
+                        </ebucore:containerFormat>
+                        <ebucore:fileName>EBU100000002-Sc_000001_Sh000005.jpg</ebucore:fileName>
+                        <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Journal_de_20h00/100000002/Thumbnails_Sh_/EBU100000002-Sc_000001_Sh000005.jpg</ebucore:locator>
+                    </ebucore:format>
+                </ebucore:part>
+                <ebucore:part partName="Sh_000006">
+                    <ebucore:partStartTime>
+                        <ebucore:timecode>00:02:09:32000</ebucore:timecode>
+                    </ebucore:partStartTime>
+                    <ebucore:partDuration>
+                        <ebucore:timecode>00:00:03:03</ebucore:timecode>
+                    </ebucore:partDuration>
+                    <ebucore:format formatName="ShotThumbnail">
+                        <ebucore:containerFormat>
+                            <ebucore:containerEncoding formatLabel="JPG"/>
+                        </ebucore:containerFormat>
+                        <ebucore:fileName>EBU100000002-Sc_000001_Sh000006.jpg</ebucore:fileName>
+                        <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Journal_de_20h00/100000002/Thumbnails_Sh_/EBU100000002-Sc_000001_Sh000006.jpg</ebucore:locator>
+                    </ebucore:format>
+                </ebucore:part>
+                <ebucore:part partName="Sh_000007">
+                    <ebucore:partStartTime>
+                        <ebucore:timecode>00:02:12:48000</ebucore:timecode>
+                    </ebucore:partStartTime>
+                    <ebucore:partDuration>
+                        <ebucore:timecode>00:00:02:06</ebucore:timecode>
+                    </ebucore:partDuration>
+                    <ebucore:format formatName="ShotThumbnail">
+                        <ebucore:containerFormat>
+                            <ebucore:containerEncoding formatLabel="JPG"/>
+                        </ebucore:containerFormat>
+                        <ebucore:fileName>EBU100000002-Sc_000001_Sh000007.jpg</ebucore:fileName>
+                        <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Journal_de_20h00/100000002/Thumbnails_Sh_/EBU100000002-Sc_000001_Sh000007.jpg</ebucore:locator>
+                    </ebucore:format>
+                </ebucore:part>
+                <ebucore:part partName="Sh_000008">
+                    <ebucore:partStartTime>
+                        <ebucore:timecode>00:02:14:76000</ebucore:timecode>
+                    </ebucore:partStartTime>
+                    <ebucore:partDuration>
+                        <ebucore:timecode>00:00:13:08</ebucore:timecode>
+                    </ebucore:partDuration>
+                    <ebucore:format formatName="ShotThumbnail">
+                        <ebucore:containerFormat>
+                            <ebucore:containerEncoding formatLabel="JPG"/>
+                        </ebucore:containerFormat>
+                        <ebucore:fileName>EBU100000002-Sc_000001_Sh000008.jpg</ebucore:fileName>
+                        <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Journal_de_20h00/100000002/Thumbnails_Sh_/EBU100000002-Sc_000001_Sh000008.jpg</ebucore:locator>
+                    </ebucore:format>
+                </ebucore:part>
+                <ebucore:part partName="Sh_000009">
+                    <ebucore:partStartTime>
+                        <ebucore:timecode>00:02:28:12000</ebucore:timecode>
+                    </ebucore:partStartTime>
+                    <ebucore:partDuration>
+                        <ebucore:timecode>00:00:04:01</ebucore:timecode>
+                    </ebucore:partDuration>
+                    <ebucore:format formatName="ShotThumbnail">
+                        <ebucore:containerFormat>
+                            <ebucore:containerEncoding formatLabel="JPG"/>
+                        </ebucore:containerFormat>
+                        <ebucore:fileName>EBU100000002-Sc_000001_Sh000009.jpg</ebucore:fileName>
+                        <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Journal_de_20h00/100000002/Thumbnails_Sh_/EBU100000002-Sc_000001_Sh000009.jpg</ebucore:locator>
+                    </ebucore:format>
+                </ebucore:part>
+            </ebucore:part>
+            <ebucore:part partName="Sc_000002">
+                <ebucore:format formatName="SceneThumbnail">
+                    <ebucore:containerFormat>
+                        <ebucore:containerEncoding formatLabel="JPG"/>
+                    </ebucore:containerFormat>
+                    <ebucore:fileName>EBU100000002-Sc_000002.jpg</ebucore:fileName>
+                    <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Journal_de_20h00/100000002/Thumbnails_Sc_/EBU100000002-Sc_000002.jpg</ebucore:locator>
+                </ebucore:format>
+                <ebucore:partStartTime>
+                    <ebucore:timecode>00:02:32:20000</ebucore:timecode>
+                </ebucore:partStartTime>
+                <ebucore:partDuration>
+                    <ebucore:timecode>00:01:34:00</ebucore:timecode>
+                </ebucore:partDuration>
+                <ebucore:part partName="Sh_000000">
+                    <ebucore:partStartTime>
+                        <ebucore:timecode>00:02:32:20000</ebucore:timecode>
+                    </ebucore:partStartTime>
+                    <ebucore:partDuration>
+                        <ebucore:timecode>00:00:02:24</ebucore:timecode>
+                    </ebucore:partDuration>
+                    <ebucore:format formatName="ShotThumbnail">
+                        <ebucore:containerFormat>
+                            <ebucore:containerEncoding formatLabel="JPG"/>
+                        </ebucore:containerFormat>
+                        <ebucore:fileName>EBU100000002-Sc_000002_Sh000000.jpg</ebucore:fileName>
+                        <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Journal_de_20h00/100000002/Thumbnails_Sh_/EBU100000002-Sc_000002_Sh000000.jpg</ebucore:locator>
+                    </ebucore:format>
+                </ebucore:part>
+                <ebucore:part partName="Sh_000001">
+                    <ebucore:partStartTime>
+                        <ebucore:timecode>00:02:35:20000</ebucore:timecode>
+                    </ebucore:partStartTime>
+                    <ebucore:partDuration>
+                        <ebucore:timecode>00:00:02:12</ebucore:timecode>
+                    </ebucore:partDuration>
+                    <ebucore:format formatName="ShotThumbnail">
+                        <ebucore:containerFormat>
+                            <ebucore:containerEncoding formatLabel="JPG"/>
+                        </ebucore:containerFormat>
+                        <ebucore:fileName>EBU100000002-Sc_000002_Sh000001.jpg</ebucore:fileName>
+                        <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Journal_de_20h00/100000002/Thumbnails_Sh_/EBU100000002-Sc_000002_Sh000001.jpg</ebucore:locator>
+                    </ebucore:format>
+                </ebucore:part>
+                <ebucore:part partName="Sh_000002">
+                    <ebucore:partStartTime>
+                        <ebucore:timecode>00:02:37:72000</ebucore:timecode>
+                    </ebucore:partStartTime>
+                    <ebucore:partDuration>
+                        <ebucore:timecode>00:00:07:09</ebucore:timecode>
+                    </ebucore:partDuration>
+                    <ebucore:format formatName="ShotThumbnail">
+                        <ebucore:containerFormat>
+                            <ebucore:containerEncoding formatLabel="JPG"/>
+                        </ebucore:containerFormat>
+                        <ebucore:fileName>EBU100000002-Sc_000002_Sh000002.jpg</ebucore:fileName>
+                        <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Journal_de_20h00/100000002/Thumbnails_Sh_/EBU100000002-Sc_000002_Sh000002.jpg</ebucore:locator>
+                    </ebucore:format>
+                </ebucore:part>
+                <ebucore:part partName="Sh_000003">
+                    <ebucore:partStartTime>
+                        <ebucore:timecode>00:02:45:12000</ebucore:timecode>
+                    </ebucore:partStartTime>
+                    <ebucore:partDuration>
+                        <ebucore:timecode>00:00:06:00</ebucore:timecode>
+                    </ebucore:partDuration>
+                    <ebucore:format formatName="ShotThumbnail">
+                        <ebucore:containerFormat>
+                            <ebucore:containerEncoding formatLabel="JPG"/>
+                        </ebucore:containerFormat>
+                        <ebucore:fileName>EBU100000002-Sc_000002_Sh000003.jpg</ebucore:fileName>
+                        <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Journal_de_20h00/100000002/Thumbnails_Sh_/EBU100000002-Sc_000002_Sh000003.jpg</ebucore:locator>
+                    </ebucore:format>
+                </ebucore:part>
+                <ebucore:part partName="Sh_000004">
+                    <ebucore:partStartTime>
+                        <ebucore:timecode>00:02:51:16000</ebucore:timecode>
+                    </ebucore:partStartTime>
+                    <ebucore:partDuration>
+                        <ebucore:timecode>00:00:03:00</ebucore:timecode>
+                    </ebucore:partDuration>
+                    <ebucore:format formatName="ShotThumbnail">
+                        <ebucore:containerFormat>
+                            <ebucore:containerEncoding formatLabel="JPG"/>
+                        </ebucore:containerFormat>
+                        <ebucore:fileName>EBU100000002-Sc_000002_Sh000004.jpg</ebucore:fileName>
+                        <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Journal_de_20h00/100000002/Thumbnails_Sh_/EBU100000002-Sc_000002_Sh000004.jpg</ebucore:locator>
+                    </ebucore:format>
+                </ebucore:part>
+                <ebucore:part partName="Sh_000005">
+                    <ebucore:partStartTime>
+                        <ebucore:timecode>00:02:54:20000</ebucore:timecode>
+                    </ebucore:partStartTime>
+                    <ebucore:partDuration>
+                        <ebucore:timecode>00:00:02:15</ebucore:timecode>
+                    </ebucore:partDuration>
+                    <ebucore:format formatName="ShotThumbnail">
+                        <ebucore:containerFormat>
+                            <ebucore:containerEncoding formatLabel="JPG"/>
+                        </ebucore:containerFormat>
+                        <ebucore:fileName>EBU100000002-Sc_000002_Sh000005.jpg</ebucore:fileName>
+                        <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Journal_de_20h00/100000002/Thumbnails_Sh_/EBU100000002-Sc_000002_Sh000005.jpg</ebucore:locator>
+                    </ebucore:format>
+                </ebucore:part>
+                <ebucore:part partName="Sh_000006">
+                    <ebucore:partStartTime>
+                        <ebucore:timecode>00:02:56:84000</ebucore:timecode>
+                    </ebucore:partStartTime>
+                    <ebucore:partDuration>
+                        <ebucore:timecode>00:00:02:16</ebucore:timecode>
+                    </ebucore:partDuration>
+                    <ebucore:format formatName="ShotThumbnail">
+                        <ebucore:containerFormat>
+                            <ebucore:containerEncoding formatLabel="JPG"/>
+                        </ebucore:containerFormat>
+                        <ebucore:fileName>EBU100000002-Sc_000002_Sh000006.jpg</ebucore:fileName>
+                        <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Journal_de_20h00/100000002/Thumbnails_Sh_/EBU100000002-Sc_000002_Sh000006.jpg</ebucore:locator>
+                    </ebucore:format>
+                </ebucore:part>
+                <ebucore:part partName="Sh_000007">
+                    <ebucore:partStartTime>
+                        <ebucore:timecode>00:02:59:52000</ebucore:timecode>
+                    </ebucore:partStartTime>
+                    <ebucore:partDuration>
+                        <ebucore:timecode>00:00:01:05</ebucore:timecode>
+                    </ebucore:partDuration>
+                    <ebucore:format formatName="ShotThumbnail">
+                        <ebucore:containerFormat>
+                            <ebucore:containerEncoding formatLabel="JPG"/>
+                        </ebucore:containerFormat>
+                        <ebucore:fileName>EBU100000002-Sc_000002_Sh000007.jpg</ebucore:fileName>
+                        <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Journal_de_20h00/100000002/Thumbnails_Sh_/EBU100000002-Sc_000002_Sh000007.jpg</ebucore:locator>
+                    </ebucore:format>
+                </ebucore:part>
+                <ebucore:part partName="Sh_000008">
+                    <ebucore:partStartTime>
+                        <ebucore:timecode>00:03:00:76000</ebucore:timecode>
+                    </ebucore:partStartTime>
+                    <ebucore:partDuration>
+                        <ebucore:timecode>00:00:02:22</ebucore:timecode>
+                    </ebucore:partDuration>
+                    <ebucore:format formatName="ShotThumbnail">
+                        <ebucore:containerFormat>
+                            <ebucore:containerEncoding formatLabel="JPG"/>
+                        </ebucore:containerFormat>
+                        <ebucore:fileName>EBU100000002-Sc_000002_Sh000008.jpg</ebucore:fileName>
+                        <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Journal_de_20h00/100000002/Thumbnails_Sh_/EBU100000002-Sc_000002_Sh000008.jpg</ebucore:locator>
+                    </ebucore:format>
+                </ebucore:part>
+                <ebucore:part partName="Sh_000009">
+                    <ebucore:partStartTime>
+                        <ebucore:timecode>00:03:03:68000</ebucore:timecode>
+                    </ebucore:partStartTime>
+                    <ebucore:partDuration>
+                        <ebucore:timecode>00:00:07:22</ebucore:timecode>
+                    </ebucore:partDuration>
+                    <ebucore:format formatName="ShotThumbnail">
+                        <ebucore:containerFormat>
+                            <ebucore:containerEncoding formatLabel="JPG"/>
+                        </ebucore:containerFormat>
+                        <ebucore:fileName>EBU100000002-Sc_000002_Sh000009.jpg</ebucore:fileName>
+                        <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Journal_de_20h00/100000002/Thumbnails_Sh_/EBU100000002-Sc_000002_Sh000009.jpg</ebucore:locator>
+                    </ebucore:format>
+                </ebucore:part>
+                <ebucore:part partName="Sh_000010">
+                    <ebucore:partStartTime>
+                        <ebucore:timecode>00:03:11:60000</ebucore:timecode>
+                    </ebucore:partStartTime>
+                    <ebucore:partDuration>
+                        <ebucore:timecode>00:00:10:01</ebucore:timecode>
+                    </ebucore:partDuration>
+                    <ebucore:format formatName="ShotThumbnail">
+                        <ebucore:containerFormat>
+                            <ebucore:containerEncoding formatLabel="JPG"/>
+                        </ebucore:containerFormat>
+                        <ebucore:fileName>EBU100000002-Sc_000002_Sh000010.jpg</ebucore:fileName>
+                        <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Journal_de_20h00/100000002/Thumbnails_Sh_/EBU100000002-Sc_000002_Sh000010.jpg</ebucore:locator>
+                    </ebucore:format>
+                </ebucore:part>
+                <ebucore:part partName="Sh_000011">
+                    <ebucore:partStartTime>
+                        <ebucore:timecode>00:03:21:68000</ebucore:timecode>
+                    </ebucore:partStartTime>
+                    <ebucore:partDuration>
+                        <ebucore:timecode>00:00:01:22</ebucore:timecode>
+                    </ebucore:partDuration>
+                    <ebucore:format formatName="ShotThumbnail">
+                        <ebucore:containerFormat>
+                            <ebucore:containerEncoding formatLabel="JPG"/>
+                        </ebucore:containerFormat>
+                        <ebucore:fileName>EBU100000002-Sc_000002_Sh000011.jpg</ebucore:fileName>
+                        <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Journal_de_20h00/100000002/Thumbnails_Sh_/EBU100000002-Sc_000002_Sh000011.jpg</ebucore:locator>
+                    </ebucore:format>
+                </ebucore:part>
+                <ebucore:part partName="Sh_000012">
+                    <ebucore:partStartTime>
+                        <ebucore:timecode>00:03:23:60000</ebucore:timecode>
+                    </ebucore:partStartTime>
+                    <ebucore:partDuration>
+                        <ebucore:timecode>00:00:09:09</ebucore:timecode>
+                    </ebucore:partDuration>
+                    <ebucore:format formatName="ShotThumbnail">
+                        <ebucore:containerFormat>
+                            <ebucore:containerEncoding formatLabel="JPG"/>
+                        </ebucore:containerFormat>
+                        <ebucore:fileName>EBU100000002-Sc_000002_Sh000012.jpg</ebucore:fileName>
+                        <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Journal_de_20h00/100000002/Thumbnails_Sh_/EBU100000002-Sc_000002_Sh000012.jpg</ebucore:locator>
+                    </ebucore:format>
+                </ebucore:part>
+                <ebucore:part partName="Sh_000013">
+                    <ebucore:partStartTime>
+                        <ebucore:timecode>00:03:33:00000</ebucore:timecode>
+                    </ebucore:partStartTime>
+                    <ebucore:partDuration>
+                        <ebucore:timecode>00:00:23:18</ebucore:timecode>
+                    </ebucore:partDuration>
+                    <ebucore:format formatName="ShotThumbnail">
+                        <ebucore:containerFormat>
+                            <ebucore:containerEncoding formatLabel="JPG"/>
+                        </ebucore:containerFormat>
+                        <ebucore:fileName>EBU100000002-Sc_000002_Sh000013.jpg</ebucore:fileName>
+                        <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Journal_de_20h00/100000002/Thumbnails_Sh_/EBU100000002-Sc_000002_Sh000013.jpg</ebucore:locator>
+                    </ebucore:format>
+                </ebucore:part>
+                <ebucore:part partName="Sh_000014">
+                    <ebucore:partStartTime>
+                        <ebucore:timecode>00:03:56:76000</ebucore:timecode>
+                    </ebucore:partStartTime>
+                    <ebucore:partDuration>
+                        <ebucore:timecode>00:00:01:08</ebucore:timecode>
+                    </ebucore:partDuration>
+                    <ebucore:format formatName="ShotThumbnail">
+                        <ebucore:containerFormat>
+                            <ebucore:containerEncoding formatLabel="JPG"/>
+                        </ebucore:containerFormat>
+                        <ebucore:fileName>EBU100000002-Sc_000002_Sh000014.jpg</ebucore:fileName>
+                        <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Journal_de_20h00/100000002/Thumbnails_Sh_/EBU100000002-Sc_000002_Sh000014.jpg</ebucore:locator>
+                    </ebucore:format>
+                </ebucore:part>
+                <ebucore:part partName="Sh_000015">
+                    <ebucore:partStartTime>
+                        <ebucore:timecode>00:03:58:12000</ebucore:timecode>
+                    </ebucore:partStartTime>
+                    <ebucore:partDuration>
+                        <ebucore:timecode>00:00:02:04</ebucore:timecode>
+                    </ebucore:partDuration>
+                    <ebucore:format formatName="ShotThumbnail">
+                        <ebucore:containerFormat>
+                            <ebucore:containerEncoding formatLabel="JPG"/>
+                        </ebucore:containerFormat>
+                        <ebucore:fileName>EBU100000002-Sc_000002_Sh000015.jpg</ebucore:fileName>
+                        <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Journal_de_20h00/100000002/Thumbnails_Sh_/EBU100000002-Sc_000002_Sh000015.jpg</ebucore:locator>
+                    </ebucore:format>
+                </ebucore:part>
+                <ebucore:part partName="Sh_000016">
+                    <ebucore:partStartTime>
+                        <ebucore:timecode>00:04:00:32000</ebucore:timecode>
+                    </ebucore:partStartTime>
+                    <ebucore:partDuration>
+                        <ebucore:timecode>00:00:04:15</ebucore:timecode>
+                    </ebucore:partDuration>
+                    <ebucore:format formatName="ShotThumbnail">
+                        <ebucore:containerFormat>
+                            <ebucore:containerEncoding formatLabel="JPG"/>
+                        </ebucore:containerFormat>
+                        <ebucore:fileName>EBU100000002-Sc_000002_Sh000016.jpg</ebucore:fileName>
+                        <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Journal_de_20h00/100000002/Thumbnails_Sh_/EBU100000002-Sc_000002_Sh000016.jpg</ebucore:locator>
+                    </ebucore:format>
+                </ebucore:part>
+                <ebucore:part partName="Sh_000017">
+                    <ebucore:partStartTime>
+                        <ebucore:timecode>00:04:04:96000</ebucore:timecode>
+                    </ebucore:partStartTime>
+                    <ebucore:partDuration>
+                        <ebucore:timecode>00:00:01:06</ebucore:timecode>
+                    </ebucore:partDuration>
+                    <ebucore:format formatName="ShotThumbnail">
+                        <ebucore:containerFormat>
+                            <ebucore:containerEncoding formatLabel="JPG"/>
+                        </ebucore:containerFormat>
+                        <ebucore:fileName>EBU100000002-Sc_000002_Sh000017.jpg</ebucore:fileName>
+                        <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Journal_de_20h00/100000002/Thumbnails_Sh_/EBU100000002-Sc_000002_Sh000017.jpg</ebucore:locator>
+                    </ebucore:format>
+                </ebucore:part>
+            </ebucore:part>
+            <ebucore:part partName="Sc_000003">
+                <ebucore:format formatName="SceneThumbnail">
+                    <ebucore:containerFormat>
+                        <ebucore:containerEncoding formatLabel="JPG"/>
+                    </ebucore:containerFormat>
+                    <ebucore:fileName>EBU100000002-Sc_000003.jpg</ebucore:fileName>
+                    <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Journal_de_20h00/100000002/Thumbnails_Sc_/EBU100000002-Sc_000003.jpg</ebucore:locator>
+                </ebucore:format>
+                <ebucore:partStartTime>
+                    <ebucore:timecode>00:04:06:24000</ebucore:timecode>
+                </ebucore:partStartTime>
+                <ebucore:partDuration>
+                    <ebucore:timecode>00:01:19:05</ebucore:timecode>
+                </ebucore:partDuration>
+                <ebucore:part partName="Sh_000000">
+                    <ebucore:partStartTime>
+                        <ebucore:timecode>00:04:06:24000</ebucore:timecode>
+                    </ebucore:partStartTime>
+                    <ebucore:partDuration>
+                        <ebucore:timecode>00:00:01:24</ebucore:timecode>
+                    </ebucore:partDuration>
+                    <ebucore:format formatName="ShotThumbnail">
+                        <ebucore:containerFormat>
+                            <ebucore:containerEncoding formatLabel="JPG"/>
+                        </ebucore:containerFormat>
+                        <ebucore:fileName>EBU100000002-Sc_000003_Sh000000.jpg</ebucore:fileName>
+                        <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Journal_de_20h00/100000002/Thumbnails_Sh_/EBU100000002-Sc_000003_Sh000000.jpg</ebucore:locator>
+                    </ebucore:format>
+                </ebucore:part>
+                <ebucore:part partName="Sh_000001">
+                    <ebucore:partStartTime>
+                        <ebucore:timecode>00:04:08:24000</ebucore:timecode>
+                    </ebucore:partStartTime>
+                    <ebucore:partDuration>
+                        <ebucore:timecode>00:00:07:03</ebucore:timecode>
+                    </ebucore:partDuration>
+                    <ebucore:format formatName="ShotThumbnail">
+                        <ebucore:containerFormat>
+                            <ebucore:containerEncoding formatLabel="JPG"/>
+                        </ebucore:containerFormat>
+                        <ebucore:fileName>EBU100000002-Sc_000003_Sh000001.jpg</ebucore:fileName>
+                        <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Journal_de_20h00/100000002/Thumbnails_Sh_/EBU100000002-Sc_000003_Sh000001.jpg</ebucore:locator>
+                    </ebucore:format>
+                </ebucore:part>
+                <ebucore:part partName="Sh_000002">
+                    <ebucore:partStartTime>
+                        <ebucore:timecode>00:04:15:40000</ebucore:timecode>
+                    </ebucore:partStartTime>
+                    <ebucore:partDuration>
+                        <ebucore:timecode>00:00:01:08</ebucore:timecode>
+                    </ebucore:partDuration>
+                    <ebucore:format formatName="ShotThumbnail">
+                        <ebucore:containerFormat>
+                            <ebucore:containerEncoding formatLabel="JPG"/>
+                        </ebucore:containerFormat>
+                        <ebucore:fileName>EBU100000002-Sc_000003_Sh000002.jpg</ebucore:fileName>
+                        <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Journal_de_20h00/100000002/Thumbnails_Sh_/EBU100000002-Sc_000003_Sh000002.jpg</ebucore:locator>
+                    </ebucore:format>
+                </ebucore:part>
+                <ebucore:part partName="Sh_000003">
+                    <ebucore:partStartTime>
+                        <ebucore:timecode>00:04:16:76000</ebucore:timecode>
+                    </ebucore:partStartTime>
+                    <ebucore:partDuration>
+                        <ebucore:timecode>00:00:12:12</ebucore:timecode>
+                    </ebucore:partDuration>
+                    <ebucore:format formatName="ShotThumbnail">
+                        <ebucore:containerFormat>
+                            <ebucore:containerEncoding formatLabel="JPG"/>
+                        </ebucore:containerFormat>
+                        <ebucore:fileName>EBU100000002-Sc_000003_Sh000003.jpg</ebucore:fileName>
+                        <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Journal_de_20h00/100000002/Thumbnails_Sh_/EBU100000002-Sc_000003_Sh000003.jpg</ebucore:locator>
+                    </ebucore:format>
+                </ebucore:part>
+                <ebucore:part partName="Sh_000004">
+                    <ebucore:partStartTime>
+                        <ebucore:timecode>00:04:29:28000</ebucore:timecode>
+                    </ebucore:partStartTime>
+                    <ebucore:partDuration>
+                        <ebucore:timecode>00:00:01:05</ebucore:timecode>
+                    </ebucore:partDuration>
+                    <ebucore:format formatName="ShotThumbnail">
+                        <ebucore:containerFormat>
+                            <ebucore:containerEncoding formatLabel="JPG"/>
+                        </ebucore:containerFormat>
+                        <ebucore:fileName>EBU100000002-Sc_000003_Sh000004.jpg</ebucore:fileName>
+                        <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Journal_de_20h00/100000002/Thumbnails_Sh_/EBU100000002-Sc_000003_Sh000004.jpg</ebucore:locator>
+                    </ebucore:format>
+                </ebucore:part>
+                <ebucore:part partName="Sh_000005">
+                    <ebucore:partStartTime>
+                        <ebucore:timecode>00:04:30:52000</ebucore:timecode>
+                    </ebucore:partStartTime>
+                    <ebucore:partDuration>
+                        <ebucore:timecode>00:00:09:02</ebucore:timecode>
+                    </ebucore:partDuration>
+                    <ebucore:format formatName="ShotThumbnail">
+                        <ebucore:containerFormat>
+                            <ebucore:containerEncoding formatLabel="JPG"/>
+                        </ebucore:containerFormat>
+                        <ebucore:fileName>EBU100000002-Sc_000003_Sh000005.jpg</ebucore:fileName>
+                        <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Journal_de_20h00/100000002/Thumbnails_Sh_/EBU100000002-Sc_000003_Sh000005.jpg</ebucore:locator>
+                    </ebucore:format>
+                </ebucore:part>
+                <ebucore:part partName="Sh_000006">
+                    <ebucore:partStartTime>
+                        <ebucore:timecode>00:04:39:64000</ebucore:timecode>
+                    </ebucore:partStartTime>
+                    <ebucore:partDuration>
+                        <ebucore:timecode>00:00:01:24</ebucore:timecode>
+                    </ebucore:partDuration>
+                    <ebucore:format formatName="ShotThumbnail">
+                        <ebucore:containerFormat>
+                            <ebucore:containerEncoding formatLabel="JPG"/>
+                        </ebucore:containerFormat>
+                        <ebucore:fileName>EBU100000002-Sc_000003_Sh000006.jpg</ebucore:fileName>
+                        <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Journal_de_20h00/100000002/Thumbnails_Sh_/EBU100000002-Sc_000003_Sh000006.jpg</ebucore:locator>
+                    </ebucore:format>
+                </ebucore:part>
+                <ebucore:part partName="Sh_000007">
+                    <ebucore:partStartTime>
+                        <ebucore:timecode>00:04:41:64000</ebucore:timecode>
+                    </ebucore:partStartTime>
+                    <ebucore:partDuration>
+                        <ebucore:timecode>00:00:02:06</ebucore:timecode>
+                    </ebucore:partDuration>
+                    <ebucore:format formatName="ShotThumbnail">
+                        <ebucore:containerFormat>
+                            <ebucore:containerEncoding formatLabel="JPG"/>
+                        </ebucore:containerFormat>
+                        <ebucore:fileName>EBU100000002-Sc_000003_Sh000007.jpg</ebucore:fileName>
+                        <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Journal_de_20h00/100000002/Thumbnails_Sh_/EBU100000002-Sc_000003_Sh000007.jpg</ebucore:locator>
+                    </ebucore:format>
+                </ebucore:part>
+                <ebucore:part partName="Sh_000008">
+                    <ebucore:partStartTime>
+                        <ebucore:timecode>00:04:43:92000</ebucore:timecode>
+                    </ebucore:partStartTime>
+                    <ebucore:partDuration>
+                        <ebucore:timecode>00:00:02:04</ebucore:timecode>
+                    </ebucore:partDuration>
+                    <ebucore:format formatName="ShotThumbnail">
+                        <ebucore:containerFormat>
+                            <ebucore:containerEncoding formatLabel="JPG"/>
+                        </ebucore:containerFormat>
+                        <ebucore:fileName>EBU100000002-Sc_000003_Sh000008.jpg</ebucore:fileName>
+                        <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Journal_de_20h00/100000002/Thumbnails_Sh_/EBU100000002-Sc_000003_Sh000008.jpg</ebucore:locator>
+                    </ebucore:format>
+                </ebucore:part>
+                <ebucore:part partName="Sh_000009">
+                    <ebucore:partStartTime>
+                        <ebucore:timecode>00:04:46:12000</ebucore:timecode>
+                    </ebucore:partStartTime>
+                    <ebucore:partDuration>
+                        <ebucore:timecode>00:00:03:08</ebucore:timecode>
+                    </ebucore:partDuration>
+                    <ebucore:format formatName="ShotThumbnail">
+                        <ebucore:containerFormat>
+                            <ebucore:containerEncoding formatLabel="JPG"/>
+                        </ebucore:containerFormat>
+                        <ebucore:fileName>EBU100000002-Sc_000003_Sh000009.jpg</ebucore:fileName>
+                        <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Journal_de_20h00/100000002/Thumbnails_Sh_/EBU100000002-Sc_000003_Sh000009.jpg</ebucore:locator>
+                    </ebucore:format>
+                </ebucore:part>
+                <ebucore:part partName="Sh_000010">
+                    <ebucore:partStartTime>
+                        <ebucore:timecode>00:04:49:48000</ebucore:timecode>
+                    </ebucore:partStartTime>
+                    <ebucore:partDuration>
+                        <ebucore:timecode>00:00:14:11</ebucore:timecode>
+                    </ebucore:partDuration>
+                    <ebucore:format formatName="ShotThumbnail">
+                        <ebucore:containerFormat>
+                            <ebucore:containerEncoding formatLabel="JPG"/>
+                        </ebucore:containerFormat>
+                        <ebucore:fileName>EBU100000002-Sc_000003_Sh000010.jpg</ebucore:fileName>
+                        <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Journal_de_20h00/100000002/Thumbnails_Sh_/EBU100000002-Sc_000003_Sh000010.jpg</ebucore:locator>
+                    </ebucore:format>
+                </ebucore:part>
+                <ebucore:part partName="Sh_000011">
+                    <ebucore:partStartTime>
+                        <ebucore:timecode>00:05:03:96000</ebucore:timecode>
+                    </ebucore:partStartTime>
+                    <ebucore:partDuration>
+                        <ebucore:timecode>00:00:21:12</ebucore:timecode>
+                    </ebucore:partDuration>
+                    <ebucore:format formatName="ShotThumbnail">
+                        <ebucore:containerFormat>
+                            <ebucore:containerEncoding formatLabel="JPG"/>
+                        </ebucore:containerFormat>
+                        <ebucore:fileName>EBU100000002-Sc_000003_Sh000011.jpg</ebucore:fileName>
+                        <ebucore:locator>ftp://m4dp:m4dpass@194.51.35.43/Media4Dplayer/Journal_de_20h00/100000002/Thumbnails_Sh_/EBU100000002-Sc_000003_Sh000011.jpg</ebucore:locator>
+                    </ebucore:format>
+                </ebucore:part>
+            </ebucore:part>
+        </ebucore:part>
+    </ebucore:coreMetadata>
+</ebucore:ebuCoreMain>

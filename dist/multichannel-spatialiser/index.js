@@ -134,21 +134,18 @@ var MultichannelSpatialiser = function (_AbstractNode) {
             this._disconnectEverything();
 
             if (this.isInBinauralMode() === true) {
-
                 /// binaural + headphone EQ + gain offset
                 this._input.connect(this._virtualSpeakers._input);
                 this._virtualSpeakers.connect(this._headphonesEqualizationNode._input);
                 this._headphonesEqualizationNode.connect(this._gainNode);
                 this._gainNode.connect(this._output);
             } else if (this.isInTransauralMode() === true) {
-
                 /// binaural + transaural + gain offset
                 this._input.connect(this._virtualSpeakers._input);
                 this._virtualSpeakers.connect(this._transauralNode._input);
                 this._transauralNode.connect(this._gainNode);
                 this._gainNode.connect(this._output);
             } else if (this.isInMultichannelMode() === true) {
-
                 /// discrete routing in the multichannel mode
                 this._input.connect(this._discreteRouting._input);
                 this._discreteRouting.connect(this._gainNode);
@@ -166,7 +163,6 @@ var MultichannelSpatialiser = function (_AbstractNode) {
     }, {
         key: '_disconnectEverything',
         value: function _disconnectEverything() {
-
             this._input.disconnect();
             this._virtualSpeakers.disconnect();
             this._headphonesEqualizationNode.disconnect();
@@ -257,7 +253,6 @@ var MultichannelSpatialiser = function (_AbstractNode) {
         set: function set(value) {
 
             if (value === 'binaural' || value === 'transaural' || value === 'multichannel') {
-
                 console.log("MultichannelSpatialiser switching to mode " + value);
 
                 this._outputType = value;
