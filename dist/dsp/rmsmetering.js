@@ -65,6 +65,7 @@ var RmsMetering = function (_AbstractNode) {
         _this._a = 0.0;
         _this._b = 0.0;
         _this._mem = 0.0;
+        _this._scriptNode = undefined;
 
         _this.SetTimeConstant(_this._tau);
 
@@ -82,6 +83,8 @@ var RmsMetering = function (_AbstractNode) {
             _this._scriptNode = audioContext.createScriptProcessor(bufferSize, numberOfInputChannels, numberOfOutputChannels);
 
             var metering = _this;
+
+            _this._input.connect(_this._scriptNode);
 
             _this._scriptNode.onaudioprocess = function (audioProcessingEvent) {
                 var inputBuffer = audioProcessingEvent.inputBuffer;
@@ -106,7 +109,6 @@ var RmsMetering = function (_AbstractNode) {
             };
         }
 
-        _this._input.connect(_this._scriptNode);
         return _this;
     }
 

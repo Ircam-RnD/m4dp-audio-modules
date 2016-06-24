@@ -3738,6 +3738,7 @@ var CompressorExpanderNode = function (_AbstractNode) {
     /************************************************************************************/
     /*!
      *  @brief          Class constructor
+     *  @param[in]      audioContext
      *
      */
     /************************************************************************************/
@@ -5355,6 +5356,7 @@ var RmsMetering = function (_AbstractNode) {
         _this._a = 0.0;
         _this._b = 0.0;
         _this._mem = 0.0;
+        _this._scriptNode = undefined;
 
         _this.SetTimeConstant(_this._tau);
 
@@ -5372,6 +5374,8 @@ var RmsMetering = function (_AbstractNode) {
             _this._scriptNode = audioContext.createScriptProcessor(bufferSize, numberOfInputChannels, numberOfOutputChannels);
 
             var metering = _this;
+
+            _this._input.connect(_this._scriptNode);
 
             _this._scriptNode.onaudioprocess = function (audioProcessingEvent) {
                 var inputBuffer = audioProcessingEvent.inputBuffer;
@@ -5396,7 +5400,6 @@ var RmsMetering = function (_AbstractNode) {
             };
         }
 
-        _this._input.connect(_this._scriptNode);
         return _this;
     }
 
@@ -7473,6 +7476,10 @@ var _utils = require('../core/utils.js');
 
 var _utils2 = _interopRequireDefault(_utils);
 
+var _rmsmetering = require('../dsp/rmsmetering.js');
+
+var _rmsmetering2 = _interopRequireDefault(_rmsmetering);
+
 var _compressor = require('../dsp/compressor.js');
 
 var _compressor2 = _interopRequireDefault(_compressor);
@@ -7497,14 +7504,24 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
  */
 /************************************************************************************/
 
+/************************************************************************************/
+/*!
+ *  @class          NewReceiverMix
+ *  @brief
+ *
+ */
+/************************************************************************************/
+
 var NewReceiverMix = function (_AbstractNode) {
     _inherits(NewReceiverMix, _AbstractNode);
 
-    //==============================================================================
-    /**
-     * @param {AudioContext} audioContext - audioContext instance.
-     * @param {AudioStreamDescriptionCollection} audioStreamDescriptionCollection - audioStreamDescriptionCollection.
+    /************************************************************************************/
+    /*!
+     *  @brief          Class constructor
+     *  @param[in]      audioContext
+     *
      */
+    /************************************************************************************/
 
     function NewReceiverMix(audioContext) {
         var audioStreamDescriptionCollection = arguments.length <= 1 || arguments[1] === undefined ? undefined : arguments[1];
@@ -7526,11 +7543,8 @@ var NewReceiverMix = function (_AbstractNode) {
         /// first of all, check if there is a commentary stream.
         /// if not, the Receiver-Mix has nothing to do (just bypass)
 
-        /// create an analyzer node for computing the RMS of the main programme
-        _this._analysisNodeMain = new _analysis2.default(audioContext);
-
         /// create a mono analyzer node for computing the RMS of the commentary
-        _this._analysisNodeCommentary = new _analysis2.default(audioContext);
+        _this._analysisNodeCommentary = new _rmsmetering2.default(audioContext);
 
         /// several mono analyzers for analyzing the main program
         _this._analysisNodeProgram = [];
@@ -7627,7 +7641,6 @@ var NewReceiverMix = function (_AbstractNode) {
         //==============================================================================
         /**
          * Returns the number of channels in the "main" programme.
-         * The
          */
         value: function getNumberOfChannelsInTheProgramme() {
 
@@ -8217,7 +8230,7 @@ var NewReceiverMix = function (_AbstractNode) {
         value: function getRmsForCommentary() {
 
             if (this._hasExtendedCommentaryToAnalyze() === true) {
-                return _utils2.default.lin2dBsafe(this._analysisNodeCommentary.getRMS());
+                return _utils2.default.lin2dBsafe(this._analysisNodeCommentary.GetValuedB());
             } else {
                 return -200;
             }
@@ -8387,7 +8400,7 @@ var NewReceiverMix = function (_AbstractNode) {
                 /// average rms among all channels
 
                 for (var i = 0; i < this._analysisNodeProgram.length; i++) {
-                    var lin = this._analysisNodeProgram[i].getRMS();
+                    var lin = this._analysisNodeProgram[i].GetValue();
 
                     rms.push(lin);
                 }
@@ -8561,7 +8574,7 @@ var NewReceiverMix = function (_AbstractNode) {
 
                 /// create N (mono) analyzers
                 for (var _i = 0; _i < numChannelsForProgramStream; _i++) {
-                    var newAnalyzer = new _analysis2.default(this._audioContext);
+                    var newAnalyzer = new _rmsmetering2.default(this._audioContext);
                     this._analysisNodeProgram.push(newAnalyzer);
                 }
 
@@ -8764,7 +8777,6 @@ var NewReceiverMix = function (_AbstractNode) {
     }, {
         key: 'dynamicCompressionState',
         get: function get() {
-            //return this._dynamicCompressorNode.dynamicCompressionState && this._shouldCompress;
             return this._shouldCompress;
         }
     }], [{
@@ -8978,7 +8990,7 @@ var NewReceiverMix = function (_AbstractNode) {
 }(_index2.default);
 
 exports.default = NewReceiverMix;
-},{"../core/index.js":2,"../core/utils.js":3,"../dsp/analysis.js":5,"../dsp/compressor.js":8}],28:[function(require,module,exports){
+},{"../core/index.js":2,"../core/utils.js":3,"../dsp/analysis.js":5,"../dsp/compressor.js":8,"../dsp/rmsmetering.js":17}],28:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -9053,9 +9065,6 @@ var OldReceiverMix = function (_AbstractNode) {
 
         /// first of all, check if there is a commentary stream.
         /// if not, the Receiver-Mix has nothing to do (just bypass)
-
-        /// create an analyzer node for computing the RMS of the main programme
-        _this._analysisNodeMain = new _analysis2.default(audioContext);
 
         /// create a mono analyzer node for computing the RMS of the commentary
         _this._analysisNodeCommentary = new _analysis2.default(audioContext);

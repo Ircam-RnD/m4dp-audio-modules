@@ -73,9 +73,6 @@ var OldReceiverMix = function (_AbstractNode) {
         /// first of all, check if there is a commentary stream.
         /// if not, the Receiver-Mix has nothing to do (just bypass)
 
-        /// create an analyzer node for computing the RMS of the main programme
-        _this._analysisNodeMain = new _analysis2.default(audioContext);
-
         /// create a mono analyzer node for computing the RMS of the commentary
         _this._analysisNodeCommentary = new _analysis2.default(audioContext);
 
