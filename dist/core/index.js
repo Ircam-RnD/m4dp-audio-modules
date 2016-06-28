@@ -709,7 +709,6 @@ var AudioStreamDescriptionCollection = exports.AudioStreamDescriptionCollection 
                     var stream = _step14.value;
 
                     if ((stream.type === 'MultiWithoutLFE' || stream.type === 'MultiWithLFE') && stream.active === true) {
-
                         // && stream.dialog === true
                         return true;
                     }

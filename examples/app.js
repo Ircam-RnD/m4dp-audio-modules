@@ -426,7 +426,7 @@ var initPlayer = function(program)
     config = ModulesConfiguration.kMultichannelSpatialiser;
 
     streamSelector              = new M4DPAudioModules.StreamSelector( audioContext, asdc );
-    smartFader                  = new M4DPAudioModules.SmartFader( audioContext, asdc );
+    smartFader                  = new M4DPAudioModules.NewSmartFader( audioContext, asdc );
     dialogEnhancement           = new M4DPAudioModules.DialogEnhancement( audioContext, asdc );
     receiverMix                 = new M4DPAudioModules.OldReceiverMix( audioContext, asdc );
     //noiseAdaptation = new M4DPAudioModules.NoiseAdaptation(audioContext);
@@ -434,7 +434,7 @@ var initPlayer = function(program)
     objectSpatialiserAndMixer   = new M4DPAudioModules.ObjectSpatialiserAndMixer( audioContext, asdc, 'binaural' );
 
     compressorExpander          = new M4DPAudioModules.CompressorWithSideChain( audioContext, 10 );
-
+    
     //==============================================================================    
     {
         ///@bug : the channelSplitterMain MUST be connected to the AudioContext,
@@ -526,7 +526,7 @@ var initPlayer = function(program)
     setInterval(function(){
         var isCompressed = smartFader.dynamicCompressionState;
 
-        if( isCompressed === true)
+        if( isCompressed === true )
         {
             document.getElementById('label-smart-fader-compression').style.color = "rgba(255, 0, 0, 0.7)";
         }
@@ -656,6 +656,7 @@ function updateWAAConnections()
     /// apply the multichannel spatialiser
     processor.connect( audioContext.destination );
 
+    
     /*
     processor.connect( compressorExpander._input );
     

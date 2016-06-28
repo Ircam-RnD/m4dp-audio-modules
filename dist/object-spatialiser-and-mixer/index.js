@@ -181,11 +181,9 @@ var ObjectSpatialiserAndMixer = function (_MultichannelSpatiali) {
     }, {
         key: '_updateCommentaryPosition',
         value: function _updateCommentaryPosition() {
-
             var channelIndex = this._getChannelIndexForExtendedCommentary();
 
             if (channelIndex >= 0) {
-
                 /// convert to SOFA spherical coordinate
                 var sofaAzim = -1. * this._CommentaryAzimuth;
                 var sofaElev = this._CommentaryElevation;
@@ -219,7 +217,6 @@ var ObjectSpatialiserAndMixer = function (_MultichannelSpatiali) {
     }, {
         key: '_getChannelIndexForExtendedCommentary',
         value: function _getChannelIndexForExtendedCommentary() {
-
             /// retrieves the AudioStreamDescriptionCollection
             /// (mainAudio, extendedAmbience, extendedComments and extendedDialogs)
             var asdc = this._audioStreamDescriptionCollection;
@@ -264,7 +261,6 @@ var ObjectSpatialiserAndMixer = function (_MultichannelSpatiali) {
     }, {
         key: 'setDialogAzimuthFromGui',
         value: function setDialogAzimuthFromGui(theSlider) {
-
             /// the value of the fader
             var valueFader = parseFloat(theSlider.value);
 
@@ -347,7 +343,6 @@ var ObjectSpatialiserAndMixer = function (_MultichannelSpatiali) {
     }, {
         key: '_updateDialogPosition',
         value: function _updateDialogPosition() {
-
             var channelIndex = this._getChannelIndexForExtendedDialog();
 
             if (channelIndex >= 0) {
@@ -411,7 +406,6 @@ var ObjectSpatialiserAndMixer = function (_MultichannelSpatiali) {
     }], [{
         key: 'distanceToDrop',
         value: function distanceToDrop(value) {
-
             var clampDist = _utils2.default.clamp(value, 0.5, 10.0);
             var refDist = 1.0;
 

@@ -963,7 +963,6 @@ var AudioStreamDescriptionCollection = exports.AudioStreamDescriptionCollection 
                     var stream = _step14.value;
 
                     if ((stream.type === 'MultiWithoutLFE' || stream.type === 'MultiWithLFE') && stream.active === true) {
-
                         // && stream.dialog === true
                         return true;
                     }
@@ -3243,7 +3242,7 @@ var CenterEnhancementNode = function (_AbstractNode) {
 }(_index2.default);
 
 exports.default = CenterEnhancementNode;
-},{"../core/index.js":2,"./lrms.js":14,"./phone.js":16}],8:[function(require,module,exports){
+},{"../core/index.js":2,"./lrms.js":14,"./phone.js":17}],8:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -4681,7 +4680,6 @@ var HeadphonesEqualization = function (_CascadeNode) {
                 _set(Object.getPrototypeOf(HeadphonesEqualization.prototype), 'numCascades', 0, this);
                 _get(Object.getPrototypeOf(HeadphonesEqualization.prototype), 'resetAllBiquads', this).call(this);
             } else if (presetName === 'eq1') {
-
                 /// whatever settings... waiting for FTV to communicate their specifications
 
                 _set(Object.getPrototypeOf(HeadphonesEqualization.prototype), 'numCascades', 3, this);
@@ -4736,7 +4734,7 @@ exports.default = HeadphonesEqualization;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.MultiRMSMetering = exports.RmsMetering = exports.CompressorWithSideChain = exports.MultiCompressorExpanderNode = exports.CompressorExpanderNode = exports.MultichannelGainNode = exports.VirtualSpeakersNode = exports.TransauralShufflerNode = exports.TransauralFeedforwardNode = exports.TransauralNode = exports.SumDiffNode = exports.HeadphonesEqualization = exports.AnalysisNode = exports.CascadeNode = undefined;
+exports.PeakLimiterNode = exports.MultiRMSMetering = exports.RmsMetering = exports.CompressorWithSideChain = exports.MultiCompressorExpanderNode = exports.CompressorExpanderNode = exports.MultichannelGainNode = exports.VirtualSpeakersNode = exports.TransauralShufflerNode = exports.TransauralFeedforwardNode = exports.TransauralNode = exports.SumDiffNode = exports.HeadphonesEqualization = exports.AnalysisNode = exports.CascadeNode = undefined;
 
 var _cascade = require('./cascade.js');
 
@@ -4772,17 +4770,11 @@ var _compressorsidechain2 = _interopRequireDefault(_compressorsidechain);
 
 var _rmsmetering = require('./rmsmetering.js');
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var _peaklimiter = require('./peaklimiter.js');
 
-/************************************************************************************/
-/*!
- *   @file       index.js
- *   @brief      Exports the dsp modules
- *   @author     Thibaut Carpentier / Ircam CNRS UMR9912
- *   @date       01/2016
- *
- */
-/************************************************************************************/
+var _peaklimiter2 = _interopRequireDefault(_peaklimiter);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.CascadeNode = _cascade2.default;
 exports.AnalysisNode = _analysis2.default;
@@ -4798,7 +4790,16 @@ exports.MultiCompressorExpanderNode = _compressorexpander.MultiCompressorExpande
 exports.CompressorWithSideChain = _compressorsidechain2.default;
 exports.RmsMetering = _rmsmetering.RmsMetering;
 exports.MultiRMSMetering = _rmsmetering.MultiRMSMetering;
-},{"./analysis.js":5,"./cascade.js":6,"./compressorexpander.js":9,"./compressorsidechain.js":10,"./headphoneequalization.js":11,"./multichannelgain.js":15,"./rmsmetering.js":17,"./sumdiff.js":18,"./transaural.js":19,"./virtualspeakers.js":20}],13:[function(require,module,exports){
+exports.PeakLimiterNode = _peaklimiter2.default; /************************************************************************************/
+/*!
+ *   @file       index.js
+ *   @brief      Exports the dsp modules
+ *   @author     Thibaut Carpentier / Ircam CNRS UMR9912
+ *   @date       01/2016
+ *
+ */
+/************************************************************************************/
+},{"./analysis.js":5,"./cascade.js":6,"./compressorexpander.js":9,"./compressorsidechain.js":10,"./headphoneequalization.js":11,"./multichannelgain.js":15,"./peaklimiter.js":16,"./rmsmetering.js":18,"./sumdiff.js":19,"./transaural.js":20,"./virtualspeakers.js":21}],13:[function(require,module,exports){
 "use strict";Object.defineProperty(exports,"__esModule",{value:true});exports.getKemar2btFilters=getKemar2btFilters; /************************************************************************************/ /*!
  *   @file       kemar.js
  *   @brief      Kemar hard-coded filters
@@ -4895,7 +4896,7 @@ var LRMSNode = function (_AbstractNode) {
 }(_index2.default);
 
 exports.default = LRMSNode;
-},{"../core/index.js":2,"./sumdiff.js":18}],15:[function(require,module,exports){
+},{"../core/index.js":2,"./sumdiff.js":19}],15:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -5121,6 +5122,527 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _index = require('../core/index.js');
+
+var _index2 = _interopRequireDefault(_index);
+
+var _utils = require('../core/utils.js');
+
+var _utils2 = _interopRequireDefault(_utils);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /************************************************************************************/
+/*!
+ *   @file       peaklimiter.js
+ *   @brief      This class implements a peak limiter
+ *   @author     Marc Emerit, adapted by Thibaut Carpentier / Ircam CNRS UMR9912
+ *   @date       01/2016
+ *
+ */
+/************************************************************************************/
+
+var PeakLimiterNode = function (_AbstractNode) {
+    _inherits(PeakLimiterNode, _AbstractNode);
+
+    /************************************************************************************/
+    /*!
+     *  @brief          Class constructor
+     *  @param[in]      audioContext
+     *
+     */
+    /************************************************************************************/
+
+    function PeakLimiterNode(audioContext, numChannels) {
+        _classCallCheck(this, PeakLimiterNode);
+
+        /// sanity checks
+        if (numChannels <= 0) {
+            throw new Error("Pas bon");
+        }
+
+        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(PeakLimiterNode).call(this, audioContext));
+
+        _this.maxBufferIndex = 0;
+        _this.delayBufferIndex = 0;
+        _this.maxBufferSlowIndex = 0;
+        _this.maxBufferSectiontionIndex = 0;
+        _this.maxBufferSectiontionControl = 0;
+
+        _this.attackMs = 0;
+        _this.maxAttackMs = 0;
+        _this.attackConst = 0;
+        _this.releaseConst = 0;
+        _this.threshold = 0;
+        _this.channels = 0;
+        _this.maxChannels = 0;
+        _this.sampleRate = 0;
+        _this.maxSampleRate = 0;
+
+        _this.cor = 1.0;
+        _this.smoothState = 1.0;
+        _this.minGain = 1.0;
+
+        _this.maxBuffer = null;
+        _this.delayBuffer = null;
+        _this.maxBufferSlow = null;
+
+        /// additions:
+
+        _this.maxSampleRate = 192000;
+
+        _this.sampleRate = _utils2.default.clamp(audioContext.sampleRate, 22050, 192000);
+
+        _this.init(5, 80, _utils2.default.dB2lin(-25), numChannels, 192000);
+
+        _this.setSampleRate(_this.sampleRate);
+
+        _this.reset();
+
+        _this.setNChannels(numChannels);
+
+        /// the script processor part
+        {
+            var bufferSize = 0;
+            /*
+             The buffer size in units of sample-frames. If specified, the bufferSize must be one of the following values:
+             256, 512, 1024, 2048, 4096, 8192, 16384. If it's not passed in, or if the value is 0,
+             then the implementation will choose the best buffer size for the given environment,
+             which will be a constant power of 2 throughout the lifetime of the node.
+             */
+            var numberOfInputChannels = numChannels;
+            var numberOfOutputChannels = numChannels;
+            _this._scriptNode = audioContext.createScriptProcessor(bufferSize, numberOfInputChannels, numberOfOutputChannels);
+
+            var processor = _this;
+
+            _this._scriptNode.onaudioprocess = function (audioProcessingEvent) {
+                var inputBuffer = audioProcessingEvent.inputBuffer;
+                var outputBuffer = audioProcessingEvent.outputBuffer;
+
+                var numChannels = outputBuffer.numberOfChannels;
+
+                if (inputBuffer.numberOfChannels != numChannels) {
+                    throw new Error("Pas bon");
+                }
+                if (numChannels != processor.channels) {
+                    throw new Error("Pas bon");
+                }
+
+                for (var j = 0; j < numChannels; j++) {
+                    processor.input[j] = inputBuffer.getChannelData(j);
+                    processor.output[j] = outputBuffer.getChannelData(j);
+                }
+
+                var numSamples = inputBuffer.length;
+
+                var tmp, gain;
+                var maximum, sectionMaximum;
+
+                for (var i = 0; i < numSamples; i++) {
+
+                    /* get maximum absolute sample value of all channels */
+                    tmp = processor.threshold;
+                    for (var _j = 0; _j < processor.channels; _j++) {
+                        tmp = Math.max(tmp, Math.abs(processor.input[_j][i]));
+                    }
+
+                    /* running maximum over attack+1 samples */
+                    processor.maxBuffer[processor.maxBufferIndex] = tmp;
+
+                    /* search section of maxBuffer */
+                    sectionMaximum = processor.maxBuffer[processor.maxBufferSectiontionIndex];
+                    for (var _j2 = 1; _j2 < processor.secLen; _j2++) {
+                        if (processor.maxBuffer[processor.maxBufferSectiontionIndex + _j2] > sectionMaximum) {
+                            sectionMaximum = processor.maxBuffer[processor.maxBufferSectiontionIndex + _j2];
+                        }
+                    }
+
+                    /* find maximum of slow (downsampled) max Bufferfer */
+                    maximum = sectionMaximum;
+                    for (var _j3 = 0; _j3 < processor.nMaxBufferSection; _j3++) {
+                        if (processor.maxBufferSlow[_j3] > maximum) {
+                            maximum = processor.maxBufferSlow[_j3];
+                        }
+                    }
+
+                    processor.maxBufferIndex++;
+                    processor.maxBufferSectiontionControl++;
+
+                    /* if maxBuffer section is finished, or end of maxBuffer is reached,*/
+                    /*   store the maximum of this section and open up a new one */
+                    if (processor.maxBufferSectiontionControl >= processor.secLen || processor.maxBufferIndex >= processor.attack + 1) {
+                        processor.maxBufferSectiontionControl = 0;
+
+                        processor.maxBufferSlow[processor.maxBufferSlowIndex] = sectionMaximum;
+                        processor.maxBufferSlowIndex++;
+                        if (processor.maxBufferSlowIndex >= processor.nMaxBufferSection) {
+                            processor.maxBufferSlowIndex = 0;
+                        }
+                        processor.maxBufferSlow[processor.maxBufferSlowIndex] = 0.0; /* zero out the value representing the new section */
+
+                        processor.maxBufferSectiontionIndex += processor.secLen;
+                    }
+
+                    if (processor.maxBufferIndex >= processor.attack + 1) {
+                        processor.maxBufferIndex = 0;
+                        processor.maxBufferSectiontionIndex = 0;
+                    }
+
+                    /* calc gain */
+                    if (maximum > processor.threshold) {
+                        gain = processor.threshold / maximum;
+                    } else {
+                        gain = 1;
+                    }
+
+                    /* gain smoothing */
+                    /* first order IIR filter with attack correction to avoid overshoots */
+
+                    /* correct the 'aiming' value of the exponential attack to avoid the remaining overshoot */
+                    if (gain < processor.smoothState) {
+                        processor.cor = Math.min(processor.cor, (gain - 0.1 * processor.smoothState) * 1.11111111);
+                    } else {
+                        processor.cor = gain;
+                    }
+
+                    /* smoothing filter */
+                    if (processor.cor < processor.smoothState) {
+                        processor.smoothState = processor.attackConst * (processor.smoothState - processor.cor) + processor.cor; /* attack */
+                        processor.smoothState = Math.max(processor.smoothState, gain); /* avoid overshooting target */
+                    } else {
+                            processor.smoothState = processor.releaseConst * (processor.smoothState - processor.cor) + processor.cor; /* release */
+                        }
+
+                    gain = processor.smoothState;
+
+                    /* lookahead delay, apply gain */
+                    for (var _j4 = 0; _j4 < processor.channels; _j4++) {
+                        tmp = processor.delayBuffer[processor.delayBufferIndex * processor.channels + _j4];
+                        processor.delayBuffer[processor.delayBufferIndex * processor.channels + _j4] = processor.input[_j4][i];
+
+                        tmp *= gain;
+                        if (tmp > processor.threshold) {
+                            tmp = processor.threshold;
+                        }
+                        if (tmp < -processor.threshold) {
+                            tmp = -processor.threshold;
+                        }
+
+                        processor.output[_j4][i] = tmp;
+                    }
+
+                    processor.delayBufferIndex++;
+                    if (processor.delayBufferIndex >= processor.attack) {
+                        processor.delayBufferIndex = 0;
+                    }
+
+                    /* save minimum gain factor */
+                    //if( gain < processor.minGain )
+                    {
+                        processor.minGain = gain;
+                    }
+                }
+            };
+        }
+
+        _this._input.connect(_this._scriptNode);
+        _this._scriptNode.connect(_this._output);
+
+        return _this;
+    }
+
+    /************************************************************************************/
+    /*!
+     *  @brief          init(maxAttackMsIn, releaseMsIn, thresholdIn, maxChannelsIn, maxSampleRateIn) : Must be called to initialized the class
+     *  @param          maxAttackMsIn : maximum value for the attack time. It is the time to reach to correct attenutation to avoid clipping.
+     *                  this parameter defines the amount of memory used by the class. It is a float or integer value
+     *  @param          releaseMsIn : defines the time to release the gain. It is the time for the gain to go 
+     *                  back to its nominal value after an attenaution to avoid clipping
+     *                  It is a float or integer value
+     *  @param          thresholdIn : maximum value fro absolutie value. It is a float value
+     *  @param          maxChannelsIn : maximum value of the number of channel that can be used. Number of channels value can be changed after class creation
+     *                  but the value must be lower than maxChannelsIn. The gain between channels are inked.
+     *  @param          maxSampleRateIn : maximum value of the sample rate that can be used. Sample rate value can be changed after class creation
+     *                  but the value must be lower than maxSampleRateIn.
+     *
+     */
+    /************************************************************************************/
+
+
+    _createClass(PeakLimiterNode, [{
+        key: 'init',
+        value: function init(maxAttackMsIn, releaseMsIn, thresholdIn, maxChannelsIn, maxSampleRateIn) {
+
+            this.attack = Math.floor(maxAttackMsIn * maxSampleRateIn / 1000);
+            if (this.attack < 1) {
+                /* attack time is too short */
+                this.attack = 1;
+            }
+
+            /* length of maxBuffer sections */
+            this.secLen = Math.floor(Math.sqrt(this.attack + 1));
+            /* sqrt(attack+1) leads to the minimum
+             of the number of maximum operators:
+             nMaxOp = secLen + (attack+1)/secLen */
+
+            /* alloc limiter struct */
+
+            this.nMaxBufferSection = Math.floor((this.attack + 1) / this.secLen);
+            if (this.nMaxBufferSection * this.secLen < this.attack + 1) {
+                this.nMaxBufferSection++; /* create a full section for the last samples */
+            }
+
+            /* alloc maximum and delay Bufferfers */
+            this.maxBuffer = new Float32Array(this.nMaxBufferSection * this.secLen);
+            this.delayBuffer = new Float32Array(this.attack * maxChannelsIn);
+            this.maxBufferSlow = new Float32Array(this.nMaxBufferSection);
+
+            this.input = new Array(maxChannelsIn);
+            this.output = new Array(maxChannelsIn);
+            for (var j = 0; j < maxChannelsIn; j++) {
+                this.input[j] = null;
+                this.output[j] = null;
+            }
+
+            if (typeof this.maxBuffer == 'undefined' || typeof this.delayBuffer == 'undefined' || typeof this.maxBufferSlow == 'undefined') {
+                this.destroy();
+                return;
+            }
+            this.reset();
+
+            /* init parameters & states */
+            this.maxBufferIndex = 0;
+            this.delayBufferIndex = 0;
+            this.maxBufferSlowIndex = 0;
+            this.maxBufferSectiontionIndex = 0;
+            this.maxBufferSectiontionControl = 0;
+
+            this.attackMs = maxAttackMsIn;
+            this.maxAttackMs = maxAttackMsIn;
+            this.attackConst = Math.pow(0.1, 1.0 / (this.attack + 1));
+            this.releaseConst = Math.pow(0.1, 1.0 / (releaseMsIn * maxSampleRateIn / 1000 + 1));
+            this.threshold = thresholdIn;
+            this.channels = maxChannelsIn;
+            this.maxChannels = maxChannelsIn;
+            this.sampleRate = maxSampleRateIn;
+            this.maxSampleRate = maxSampleRateIn;
+
+            this.cor = 1.0;
+            this.smoothState = 1.0;
+            this.minGain = 1.0;
+        }
+
+        /************************************************************************************/
+        /*!
+         *  @brief          release the memory allocated by the object. Memory is allocated when init fucntion is called
+         *
+         */
+        /************************************************************************************/
+
+    }, {
+        key: 'destroy',
+        value: function destroy() {
+            delete this.maxBuffer;
+            delete this.delayBuffer;
+            delete this.maxBufferSlow;
+        }
+
+        /************************************************************************************/
+        /*!
+         *  @brief          get delay in samples
+         *
+         */
+        /************************************************************************************/
+
+    }, {
+        key: 'getDelay',
+        value: function getDelay() {
+            return this.attack;
+        }
+
+        /************************************************************************************/
+        /*!
+         *  @brief          get attack in msec
+         *
+         */
+        /************************************************************************************/
+
+    }, {
+        key: 'getAttack',
+        value: function getAttack() {
+            return this.attackMs;
+        }
+    }, {
+        key: 'getSampleRate',
+        value: function getSampleRate() {
+            return this.sampleRate;
+        }
+    }, {
+        key: 'getRelease',
+        value: function getRelease() {
+            return this.releaseMs;
+        }
+
+        /************************************************************************************/
+        /*!
+         *  @brief          get maximum gain reduction of last processed block
+         *
+         */
+        /************************************************************************************/
+
+    }, {
+        key: 'getMaxGainReduction',
+        value: function getMaxGainReduction() {
+            return -20 * Math.log(this.minGain) / Math.LN10;
+        }
+    }, {
+        key: 'setNChannels',
+        value: function setNChannels(nChannelsIn) {
+            if (nChannelsIn == this.maxChannels) return true;
+            if (nChannelsIn > this.maxChannels) return false;
+
+            this.channels = nChannelsIn;
+            this.reset();
+
+            return true;
+        }
+    }, {
+        key: 'setInput',
+        value: function setInput(nChannelsInNum, input) {
+            if (nChannelsInNum >= this.channels) {
+                return false;
+            }
+
+            return true;
+        }
+    }, {
+        key: 'setOutput',
+        value: function setOutput(nChannelsOutNum, output) {
+            if (nChannelsOutNum >= this.channels) {
+                return false;
+            }
+
+            return true;
+        }
+    }, {
+        key: 'setSampleRate',
+        value: function setSampleRate(sampleRateIn) {
+
+            if (sampleRateIn == this.maxSampleRate) return true;
+            if (sampleRateIn > this.maxSampleRate) return false;
+
+            /* update attack/release constants */
+            this.attack = Math.floor(this.attackMs * sampleRateIn / 1000);
+
+            if (this.attack < 1) /* attack time is too short */
+                this.attack = 1;
+
+            /* length of maxBuffer sections */
+            this.secLen = Math.floor(Math.sqrt(this.attack + 1));
+
+            this.nMaxBufferSection = Math.floor((this.attack + 1) / this.secLen);
+            if (this.nMaxBufferSection * this.secLen < this.attack + 1) this.nMaxBufferSection++;
+            this.attackConst = Math.pow(0.1, 1.0 / (this.attack + 1));
+            this.releaseConst = Math.pow(0.1, 1.0 / (this.releaseMs * sampleRateIn / 1000 + 1));
+            this.sampleRate = sampleRateIn;
+
+            /*reset */
+            this.reset();
+
+            return true;
+        }
+    }, {
+        key: 'setAttack',
+        value: function setAttack(attackMsIn) {
+
+            if (attackMsIn == this.attackMs) return true;
+            if (attackMsIn > this.maxAttackMs) return false;
+
+            /* calculate attack time in samples */
+            this.attack = Math.floor(attackMsIn * this.sampleRate / 1000);
+
+            if (this.attack < 1) /* attack time is too short */
+                this.attack = 1;
+
+            /* length of maxBuffer sections */
+            this.secLen = Math.floor(Math.sqrt(this.attack + 1));
+
+            this.nMaxBufferSection = Math.floor((this.attack + 1) / this.secLen);
+            if (this.nMaxBufferSection * this.secLen < this.attack + 1) this.nMaxBufferSection++;
+            this.attackConst = Math.pow(0.1, 1.0 / (this.attack + 1));
+            this.attackMs = attackMsIn;
+
+            /* reset */
+            this.reset();
+
+            return true;
+        }
+    }, {
+        key: 'setRelease',
+        value: function setRelease(releaseMsIn) {
+            if (releaseMsIn == this.releaseMs) return true;
+            this.releaseConst = Math.pow(0.1, 1.0 / (releaseMsIn * this.sampleRate / 1000 + 1));
+            this.releaseMs = releaseMsIn;
+
+            return true;
+        }
+    }, {
+        key: 'setThreshold',
+        value: function setThreshold(thresholdIn) {
+            this.threshold = thresholdIn;
+
+            return true;
+        }
+    }, {
+        key: 'getThreshold',
+        value: function getThreshold() {
+            return this.threshold;
+        }
+    }, {
+        key: 'reset',
+        value: function reset() {
+
+            this.maxBufferIndex = 0;
+            this.delayBufferIndex = 0;
+            this.maxBufferSlowIndex = 0;
+            this.maxBufferSectiontionIndex = 0;
+            this.maxBufferSectiontionControl = 0;
+            this.cor = 1.0;
+            this.smoothState = 1.0;
+            this.minGain = 1.0;
+
+            for (var i = 0; i < this.attack + 1; i++) {
+                this.maxBuffer[i] = 0;
+            }
+            for (var i = 0; i < this.attack * this.channels; i++) {
+                this.delayBuffer[i] = 0;
+            }
+            for (var i = 0; i < this.nMaxBufferSection; i++) {
+                this.maxBufferSlow[i] = 0;
+            }
+
+            return true;
+        }
+    }]);
+
+    return PeakLimiterNode;
+}(_index2.default);
+
+exports.default = PeakLimiterNode;
+},{"../core/index.js":2,"../core/utils.js":3}],17:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
 var _set = function set(object, property, value, receiver) { var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent !== null) { set(parent, property, value, receiver); } } else if ("value" in desc && desc.writable) { desc.value = value; } else { var setter = desc.set; if (setter !== undefined) { setter.call(receiver, value); } } return value; }; /************************************************************************************/
@@ -5288,7 +5810,7 @@ var PhoneNode = function (_CascadeNode) {
 }(_cascade2.default);
 
 exports.default = PhoneNode;
-},{"../core/index.js":2,"../dsp/cascade.js":6}],17:[function(require,module,exports){
+},{"../core/index.js":2,"../dsp/cascade.js":6}],18:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -5636,7 +6158,7 @@ var MultiRMSMetering = exports.MultiRMSMetering = function (_AbstractNode2) {
 
     return MultiRMSMetering;
 }(_index2.default);
-},{"../core/index.js":2,"../core/utils.js":3}],18:[function(require,module,exports){
+},{"../core/index.js":2,"../core/utils.js":3}],19:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -5712,7 +6234,7 @@ var SumDiffNode = function (_AbstractNode) {
 }(_index2.default);
 
 exports.default = SumDiffNode;
-},{"../core/index.js":2}],19:[function(require,module,exports){
+},{"../core/index.js":2}],20:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -5968,7 +6490,7 @@ var TransauralFeedforwardNode = exports.TransauralFeedforwardNode = function (_T
 
     return TransauralFeedforwardNode;
 }(TransauralNode);
-},{"../core/index.js":2,"./kemar.js":13,"./sumdiff.js":18}],20:[function(require,module,exports){
+},{"../core/index.js":2,"./kemar.js":13,"./sumdiff.js":19}],21:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -6308,13 +6830,13 @@ var VirtualSpeakersNode = function (_AbstractNode) {
 }(_index2.default);
 
 exports.default = VirtualSpeakersNode;
-},{"../core/index.js":2,"binaural":54}],21:[function(require,module,exports){
+},{"../core/index.js":2,"binaural":57}],22:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
       value: true
 });
-exports.binaural = exports.unittests = exports.utilities = exports.AudioStreamDescription = exports.AudioStreamDescriptionCollection = exports.SmartFader = exports.ObjectSpatialiserAndMixer = exports.NoiseAdaptation = exports.MultichannelSpatialiser = exports.DialogEnhancement = exports.NewReceiverMix = exports.OldReceiverMix = exports.StreamSelector = exports.MultiRMSMetering = exports.RmsMetering = exports.CompressorWithSideChain = exports.MultiCompressorExpanderNode = exports.CompressorExpanderNode = exports.HeadphonesEqualization = exports.CenterEnhancementNode = exports.LRMSNode = exports.SumDiffNode = exports.CascadeNode = undefined;
+exports.binaural = exports.unittests = exports.utilities = exports.AudioStreamDescription = exports.AudioStreamDescriptionCollection = exports.NewSmartFader = exports.OldSmartFader = exports.ObjectSpatialiserAndMixer = exports.NoiseAdaptation = exports.MultichannelSpatialiser = exports.DialogEnhancement = exports.NewReceiverMix = exports.OldReceiverMix = exports.StreamSelector = exports.PeakLimiterNode = exports.MultiRMSMetering = exports.RmsMetering = exports.CompressorWithSideChain = exports.MultiCompressorExpanderNode = exports.CompressorExpanderNode = exports.HeadphonesEqualization = exports.CenterEnhancementNode = exports.LRMSNode = exports.SumDiffNode = exports.CascadeNode = undefined;
 
 var _index = require('./dialog-enhancement/index.js');
 
@@ -6334,25 +6856,23 @@ var _index8 = _interopRequireDefault(_index7);
 
 var _index9 = require('./smart-fader/index.js');
 
-var _index10 = _interopRequireDefault(_index9);
+var _index10 = require('./core/index.js');
 
-var _index11 = require('./core/index.js');
+var _index11 = require('./stream-selector/index.js');
 
-var _index12 = require('./stream-selector/index.js');
+var _index12 = _interopRequireDefault(_index11);
 
-var _index13 = _interopRequireDefault(_index12);
+var _index13 = require('./receiver-mix/index.js');
 
-var _index14 = require('./receiver-mix/index.js');
-
-var _index15 = require('./dsp/index.js');
+var _index14 = require('./dsp/index.js');
 
 var _utils = require('./core/utils.js');
 
 var _utils2 = _interopRequireDefault(_utils);
 
-var _index16 = require('./testing/index.js');
+var _index15 = require('./testing/index.js');
 
-var _index17 = _interopRequireDefault(_index16);
+var _index16 = _interopRequireDefault(_index15);
 
 var _binaural = require('binaural');
 
@@ -6370,30 +6890,32 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  */
 /************************************************************************************/
 
-exports.CascadeNode = _index15.CascadeNode;
-exports.SumDiffNode = _index15.SumDiffNode;
-exports.LRMSNode = _index15.LRMSNode;
-exports.CenterEnhancementNode = _index15.CenterEnhancementNode;
-exports.HeadphonesEqualization = _index15.HeadphonesEqualization;
-exports.CompressorExpanderNode = _index15.CompressorExpanderNode;
-exports.MultiCompressorExpanderNode = _index15.MultiCompressorExpanderNode;
-exports.CompressorWithSideChain = _index15.CompressorWithSideChain;
-exports.RmsMetering = _index15.RmsMetering;
-exports.MultiRMSMetering = _index15.MultiRMSMetering;
-exports.StreamSelector = _index13.default;
-exports.OldReceiverMix = _index14.OldReceiverMix;
-exports.NewReceiverMix = _index14.NewReceiverMix;
+exports.CascadeNode = _index14.CascadeNode;
+exports.SumDiffNode = _index14.SumDiffNode;
+exports.LRMSNode = _index14.LRMSNode;
+exports.CenterEnhancementNode = _index14.CenterEnhancementNode;
+exports.HeadphonesEqualization = _index14.HeadphonesEqualization;
+exports.CompressorExpanderNode = _index14.CompressorExpanderNode;
+exports.MultiCompressorExpanderNode = _index14.MultiCompressorExpanderNode;
+exports.CompressorWithSideChain = _index14.CompressorWithSideChain;
+exports.RmsMetering = _index14.RmsMetering;
+exports.MultiRMSMetering = _index14.MultiRMSMetering;
+exports.PeakLimiterNode = _index14.PeakLimiterNode;
+exports.StreamSelector = _index12.default;
+exports.OldReceiverMix = _index13.OldReceiverMix;
+exports.NewReceiverMix = _index13.NewReceiverMix;
 exports.DialogEnhancement = _index2.default;
 exports.MultichannelSpatialiser = _index4.default;
 exports.NoiseAdaptation = _index6.default;
 exports.ObjectSpatialiserAndMixer = _index8.default;
-exports.SmartFader = _index10.default;
-exports.AudioStreamDescriptionCollection = _index11.AudioStreamDescriptionCollection;
-exports.AudioStreamDescription = _index11.AudioStreamDescription;
+exports.OldSmartFader = _index9.OldSmartFader;
+exports.NewSmartFader = _index9.NewSmartFader;
+exports.AudioStreamDescriptionCollection = _index10.AudioStreamDescriptionCollection;
+exports.AudioStreamDescription = _index10.AudioStreamDescription;
 exports.utilities = _utils2.default;
-exports.unittests = _index17.default;
+exports.unittests = _index16.default;
 exports.binaural = _binaural2.default;
-},{"./core/index.js":2,"./core/utils.js":3,"./dialog-enhancement/index.js":4,"./dsp/index.js":12,"./multichannel-spatialiser/index.js":22,"./noise-adaptation/index.js":24,"./object-spatialiser-and-mixer/index.js":25,"./receiver-mix/index.js":26,"./smart-fader/index.js":29,"./stream-selector/index.js":30,"./testing/index.js":31,"binaural":54}],22:[function(require,module,exports){
+},{"./core/index.js":2,"./core/utils.js":3,"./dialog-enhancement/index.js":4,"./dsp/index.js":12,"./multichannel-spatialiser/index.js":23,"./noise-adaptation/index.js":25,"./object-spatialiser-and-mixer/index.js":26,"./receiver-mix/index.js":27,"./smart-fader/index.js":30,"./stream-selector/index.js":33,"./testing/index.js":34,"binaural":57}],23:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -6725,7 +7247,7 @@ var MultichannelSpatialiser = function (_AbstractNode) {
 }(_index2.default);
 
 exports.default = MultichannelSpatialiser;
-},{"../core/index.js":2,"../core/utils.js":3,"../dsp/headphoneequalization.js":11,"../dsp/transaural.js":19,"../dsp/virtualspeakers.js":20,"../multichannel-spatialiser/routing.js":23}],23:[function(require,module,exports){
+},{"../core/index.js":2,"../core/utils.js":3,"../dsp/headphoneequalization.js":11,"../dsp/transaural.js":20,"../dsp/virtualspeakers.js":21,"../multichannel-spatialiser/routing.js":24}],24:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -6920,7 +7442,7 @@ var StreamRouting = function (_AbstractNode) {
 }(_index2.default);
 
 exports.default = StreamRouting;
-},{"../core/index.js":2}],24:[function(require,module,exports){
+},{"../core/index.js":2}],25:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -6993,7 +7515,7 @@ var NoiseAdaptation = function (_AbstractNode) {
 }(_index2.default);
 
 exports.default = NoiseAdaptation;
-},{"../core/index.js":2}],25:[function(require,module,exports){
+},{"../core/index.js":2}],26:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -7177,11 +7699,9 @@ var ObjectSpatialiserAndMixer = function (_MultichannelSpatiali) {
     }, {
         key: '_updateCommentaryPosition',
         value: function _updateCommentaryPosition() {
-
             var channelIndex = this._getChannelIndexForExtendedCommentary();
 
             if (channelIndex >= 0) {
-
                 /// convert to SOFA spherical coordinate
                 var sofaAzim = -1. * this._CommentaryAzimuth;
                 var sofaElev = this._CommentaryElevation;
@@ -7215,7 +7735,6 @@ var ObjectSpatialiserAndMixer = function (_MultichannelSpatiali) {
     }, {
         key: '_getChannelIndexForExtendedCommentary',
         value: function _getChannelIndexForExtendedCommentary() {
-
             /// retrieves the AudioStreamDescriptionCollection
             /// (mainAudio, extendedAmbience, extendedComments and extendedDialogs)
             var asdc = this._audioStreamDescriptionCollection;
@@ -7260,7 +7779,6 @@ var ObjectSpatialiserAndMixer = function (_MultichannelSpatiali) {
     }, {
         key: 'setDialogAzimuthFromGui',
         value: function setDialogAzimuthFromGui(theSlider) {
-
             /// the value of the fader
             var valueFader = parseFloat(theSlider.value);
 
@@ -7343,7 +7861,6 @@ var ObjectSpatialiserAndMixer = function (_MultichannelSpatiali) {
     }, {
         key: '_updateDialogPosition',
         value: function _updateDialogPosition() {
-
             var channelIndex = this._getChannelIndexForExtendedDialog();
 
             if (channelIndex >= 0) {
@@ -7407,7 +7924,6 @@ var ObjectSpatialiserAndMixer = function (_MultichannelSpatiali) {
     }], [{
         key: 'distanceToDrop',
         value: function distanceToDrop(value) {
-
             var clampDist = _utils2.default.clamp(value, 0.5, 10.0);
             var refDist = 1.0;
 
@@ -7423,7 +7939,7 @@ var ObjectSpatialiserAndMixer = function (_MultichannelSpatiali) {
 }(_index2.default);
 
 exports.default = ObjectSpatialiserAndMixer;
-},{"../core/utils.js":3,"../multichannel-spatialiser/index.js":22}],26:[function(require,module,exports){
+},{"../core/utils.js":3,"../multichannel-spatialiser/index.js":23}],27:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -7453,7 +7969,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 exports.OldReceiverMix = _oldreceivermix2.default;
 exports.NewReceiverMix = _newreceivermix2.default;
-},{"./newreceivermix.js":27,"./oldreceivermix.js":28}],27:[function(require,module,exports){
+},{"./newreceivermix.js":28,"./oldreceivermix.js":29}],28:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -8990,7 +9506,7 @@ var NewReceiverMix = function (_AbstractNode) {
 }(_index2.default);
 
 exports.default = NewReceiverMix;
-},{"../core/index.js":2,"../core/utils.js":3,"../dsp/analysis.js":5,"../dsp/compressor.js":8,"../dsp/rmsmetering.js":17}],28:[function(require,module,exports){
+},{"../core/index.js":2,"../core/utils.js":3,"../dsp/analysis.js":5,"../dsp/compressor.js":8,"../dsp/rmsmetering.js":18}],29:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -10515,7 +11031,37 @@ var OldReceiverMix = function (_AbstractNode) {
 }(_index2.default);
 
 exports.default = OldReceiverMix;
-},{"../core/index.js":2,"../core/utils.js":3,"../dsp/analysis.js":5,"../dsp/compressor.js":8}],29:[function(require,module,exports){
+},{"../core/index.js":2,"../core/utils.js":3,"../dsp/analysis.js":5,"../dsp/compressor.js":8}],30:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.NewSmartFader = exports.OldSmartFader = undefined;
+
+var _oldsmartfader = require('./oldsmartfader.js');
+
+var _oldsmartfader2 = _interopRequireDefault(_oldsmartfader);
+
+var _newsmartfader = require('./newsmartfader.js');
+
+var _newsmartfader2 = _interopRequireDefault(_newsmartfader);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/************************************************************************************/
+/*!
+ *   @file       index.js
+ *   @brief      Exports the SmartFader modules
+ *   @author     Thibaut Carpentier / Ircam CNRS UMR9912
+ *   @date       01/2016
+ *
+ */
+/************************************************************************************/
+
+exports.OldSmartFader = _oldsmartfader2.default;
+exports.NewSmartFader = _newsmartfader2.default;
+},{"./newsmartfader.js":31,"./oldsmartfader.js":32}],31:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -10538,6 +11084,10 @@ var _compressor = require('../dsp/compressor.js');
 
 var _compressor2 = _interopRequireDefault(_compressor);
 
+var _peaklimiter = require('../dsp/peaklimiter.js');
+
+var _peaklimiter2 = _interopRequireDefault(_peaklimiter);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -10546,7 +11096,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /************************************************************************************/
 /*!
- *   @file       index.js
+ *   @file       newsmartfader.js
  *   @brief      This class implements the so-called SmartFader module of M4DP
  *   @author     Thibaut Carpentier / Ircam CNRS UMR9912
  *   @date       01/2016
@@ -10555,28 +11105,36 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 /************************************************************************************/
 
 
-var SmartFader = function (_AbstractNode) {
-    _inherits(SmartFader, _AbstractNode);
+/************************************************************************************/
+/*!
+ *  @class          NewSmartFader
+ *  @brief          This class implements the so-called SmartFader module of M4DP
+ *  @ingroup        dsp
+ *
+ */
+/************************************************************************************/
 
-    //==============================================================================
-    /**
-     * @param {AudioContext} audioContext - audioContext instance.
-     * @param {AudioStreamDescriptionCollection} audioStreamDescriptionCollection - audioStreamDescriptionCollection
-     * @param {number} dB - dB value for the SmartFader.
+var NewSmartFader = function (_AbstractNode) {
+    _inherits(NewSmartFader, _AbstractNode);
+
+    /************************************************************************************/
+    /*!
+     *  @brief          Class constructor
+     *
      */
+    /************************************************************************************/
 
-    function SmartFader(audioContext) {
+    function NewSmartFader(audioContext) {
         var audioStreamDescriptionCollection = arguments.length <= 1 || arguments[1] === undefined ? undefined : arguments[1];
-        var dB = arguments.length <= 2 || arguments[2] === undefined ? 0.0 : arguments[2];
 
-        _classCallCheck(this, SmartFader);
+        _classCallCheck(this, NewSmartFader);
 
-        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(SmartFader).call(this, audioContext, audioStreamDescriptionCollection));
+        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(NewSmartFader).call(this, audioContext, audioStreamDescriptionCollection));
 
-        _this._dB = undefined;
-        _this._compressionRatio = SmartFader.defaultCompressionRatio;
-        _this._attackTime = SmartFader.defaultAttackTime;
-        _this._releaseTime = SmartFader.defaultReleaseTime;
+        _this._dB = 0.0;
+        //this._compressionRatio = NewSmartFader.defaultCompressionRatio;
+        _this._attackTime = NewSmartFader.defaultAttackTime;
+        _this._releaseTime = NewSmartFader.defaultReleaseTime;
         _this._isBypass = false;
 
         /// the total number of incoming channels, including all the streams
@@ -10585,27 +11143,26 @@ var SmartFader = function (_AbstractNode) {
 
         ///@n the gain and dynamic compression are applied similarly to all channels
         _this._gainNode = audioContext.createGain();
-        _this._dynamicCompressorNode = new _compressor2.default(audioContext, totalNumberOfChannels_);
+        _this._peakLimiterNode = new _peaklimiter2.default(audioContext, totalNumberOfChannels_);
 
         /// connect the audio nodes
         _this._updateAudioGraph();
 
         /// initialization
-        {
-            _this.dB = dB;
-            _this._updateCompressorSettings();
-        }
+        _this._updateCompressorSettings();
+
         return _this;
     }
 
-    //==============================================================================
-    /**
-     * Enable or bypass the processor
-     * @type {boolean}
+    /************************************************************************************/
+    /*!
+     *  @brief          Enable or bypass the processor
+     *
      */
+    /************************************************************************************/
 
 
-    _createClass(SmartFader, [{
+    _createClass(NewSmartFader, [{
         key: 'setdBFromGui',
 
 
@@ -10616,7 +11173,6 @@ var SmartFader = function (_AbstractNode) {
          * return the actual value of the compression ratio
          */
         value: function setdBFromGui(theSlider) {
-
             /// the value of the fader
             var valueFader = parseFloat(theSlider.value);
 
@@ -10626,10 +11182,10 @@ var SmartFader = function (_AbstractNode) {
 
             // get the actual bounds for this parameter
 
-            var _SmartFader$dBRange = _slicedToArray(SmartFader.dBRange, 2);
+            var _NewSmartFader$dBRang = _slicedToArray(NewSmartFader.dBRange, 2);
 
-            var minValue = _SmartFader$dBRange[0];
-            var maxValue = _SmartFader$dBRange[1];
+            var minValue = _NewSmartFader$dBRang[0];
+            var maxValue = _NewSmartFader$dBRang[1];
 
             /// scale from GUI to DSP
 
@@ -10648,17 +11204,16 @@ var SmartFader = function (_AbstractNode) {
     }, {
         key: 'getdBForGui',
         value: function getdBForGui(theSlider) {
-
             // get the bounds of the fader (GUI)
             var minFader = parseFloat(theSlider.min);
             var maxFader = parseFloat(theSlider.max);
 
             // get the actual bounds for this parameter
 
-            var _SmartFader$dBRange2 = _slicedToArray(SmartFader.dBRange, 2);
+            var _NewSmartFader$dBRang2 = _slicedToArray(NewSmartFader.dBRange, 2);
 
-            var minValue = _SmartFader$dBRange2[0];
-            var maxValue = _SmartFader$dBRange2[1];
+            var minValue = _NewSmartFader$dBRang2[0];
+            var maxValue = _NewSmartFader$dBRang2[1];
 
 
             var actualValue = this.dB;
@@ -10703,7 +11258,6 @@ var SmartFader = function (_AbstractNode) {
          * return the actual value of the compression ratio
          */
         value: function setCompressionRatioFromGui(theSlider) {
-
             /// the value of the fader
             var valueFader = parseFloat(theSlider.value);
 
@@ -10713,10 +11267,10 @@ var SmartFader = function (_AbstractNode) {
 
             // get the actual bounds for this parameter
 
-            var _SmartFader$compressi = _slicedToArray(SmartFader.compressionRatioRange, 2);
+            var _NewSmartFader$compre = _slicedToArray(NewSmartFader.compressionRatioRange, 2);
 
-            var minValue = _SmartFader$compressi[0];
-            var maxValue = _SmartFader$compressi[1];
+            var minValue = _NewSmartFader$compre[0];
+            var maxValue = _NewSmartFader$compre[1];
 
             /// scale from GUI to DSP
 
@@ -10735,17 +11289,16 @@ var SmartFader = function (_AbstractNode) {
     }, {
         key: 'getCompressionRatioForGui',
         value: function getCompressionRatioForGui(theSlider) {
-
             // get the bounds of the fader (GUI)
             var minFader = parseFloat(theSlider.min);
             var maxFader = parseFloat(theSlider.max);
 
             // get the actual bounds for this parameter
 
-            var _SmartFader$compressi2 = _slicedToArray(SmartFader.compressionRatioRange, 2);
+            var _NewSmartFader$compre2 = _slicedToArray(NewSmartFader.compressionRatioRange, 2);
 
-            var minValue = _SmartFader$compressi2[0];
-            var maxValue = _SmartFader$compressi2[1];
+            var minValue = _NewSmartFader$compre2[0];
+            var maxValue = _NewSmartFader$compre2[1];
 
 
             var actualValue = this.compressionRatio;
@@ -10773,7 +11326,6 @@ var SmartFader = function (_AbstractNode) {
          * return the actual value of the attack time (in msec)
          */
         value: function setAttackTimeFromGui(theSlider) {
-
             /// the value of the fader
             var valueFader = parseFloat(theSlider.value);
 
@@ -10783,10 +11335,10 @@ var SmartFader = function (_AbstractNode) {
 
             // get the actual bounds for this parameter
 
-            var _SmartFader$attackTim = _slicedToArray(SmartFader.attackTimeRange, 2);
+            var _NewSmartFader$attack = _slicedToArray(NewSmartFader.attackTimeRange, 2);
 
-            var minValue = _SmartFader$attackTim[0];
-            var maxValue = _SmartFader$attackTim[1];
+            var minValue = _NewSmartFader$attack[0];
+            var maxValue = _NewSmartFader$attack[1];
 
             /// scale from GUI to DSP
 
@@ -10805,17 +11357,16 @@ var SmartFader = function (_AbstractNode) {
     }, {
         key: 'getAttackTimeForGui',
         value: function getAttackTimeForGui(theSlider) {
-
             // get the bounds of the fader (GUI)
             var minFader = parseFloat(theSlider.min);
             var maxFader = parseFloat(theSlider.max);
 
             // get the actual bounds for this parameter
 
-            var _SmartFader$attackTim2 = _slicedToArray(SmartFader.attackTimeRange, 2);
+            var _NewSmartFader$attack2 = _slicedToArray(NewSmartFader.attackTimeRange, 2);
 
-            var minValue = _SmartFader$attackTim2[0];
-            var maxValue = _SmartFader$attackTim2[1];
+            var minValue = _NewSmartFader$attack2[0];
+            var maxValue = _NewSmartFader$attack2[1];
 
 
             var actualValue = this.attackTime;
@@ -10843,7 +11394,6 @@ var SmartFader = function (_AbstractNode) {
          * return the actual value of the release time (in msec)
          */
         value: function setReleaseTimeFromGui(theSlider) {
-
             /// the value of the fader
             var valueFader = parseFloat(theSlider.value);
 
@@ -10853,10 +11403,10 @@ var SmartFader = function (_AbstractNode) {
 
             // get the actual bounds for this parameter
 
-            var _SmartFader$releaseTi = _slicedToArray(SmartFader.releaseTimeRange, 2);
+            var _NewSmartFader$releas = _slicedToArray(NewSmartFader.releaseTimeRange, 2);
 
-            var minValue = _SmartFader$releaseTi[0];
-            var maxValue = _SmartFader$releaseTi[1];
+            var minValue = _NewSmartFader$releas[0];
+            var maxValue = _NewSmartFader$releas[1];
 
             /// scale from GUI to DSP
 
@@ -10875,17 +11425,16 @@ var SmartFader = function (_AbstractNode) {
     }, {
         key: 'getReleaseTimeForGui',
         value: function getReleaseTimeForGui(theSlider) {
-
             // get the bounds of the fader (GUI)
             var minFader = parseFloat(theSlider.min);
             var maxFader = parseFloat(theSlider.max);
 
             // get the actual bounds for this parameter
 
-            var _SmartFader$releaseTi2 = _slicedToArray(SmartFader.releaseTimeRange, 2);
+            var _NewSmartFader$releas2 = _slicedToArray(NewSmartFader.releaseTimeRange, 2);
 
-            var minValue = _SmartFader$releaseTi2[0];
-            var maxValue = _SmartFader$releaseTi2[1];
+            var minValue = _NewSmartFader$releas2[0];
+            var maxValue = _NewSmartFader$releas2[1];
 
 
             var actualValue = this.releaseTime;
@@ -10921,11 +11470,11 @@ var SmartFader = function (_AbstractNode) {
             var activeStream = asd[0];
 
             /**
-            Le reglage du volume doit se comporter de la facon suivante :
-            - attenuation classique du volume sonore entre le niveau nominal (gain = 0) et en deca
-            - augmentation classique du volume sonore entre le niveau nominal et le niveau max (niveau max = niveau nominal + I MaxTruePeak I)
-            - limiteur/compresseur multicanal au dela du niveau max
-            */
+             Le reglage du volume doit se comporter de la facon suivante :
+             - attenuation classique du volume sonore entre le niveau nominal (gain = 0) et en deca
+             - augmentation classique du volume sonore entre le niveau nominal et le niveau max (niveau max = niveau nominal + I MaxTruePeak I)
+             - limiteur/compresseur multicanal au dela du niveau max
+             */
 
             /// retrieves the MaxTruePeak (ITU­R BS.1770­3) of the active AudioStreamDescription
             /// (expressed in dBTP)
@@ -10942,18 +11491,832 @@ var SmartFader = function (_AbstractNode) {
             var threshold = nominal + Math.abs(maxTruePeak);
 
             /**
-            Matthieu :
-            Dans mon papier sur le sujet j'avais défini les ordres de grandeur d'une matrice pour expliciter
-            la progression de la compression en fonction du niveau d'entrée. 
-            Ça donne un ratio de 2:1 sur les premiers 6 dB de dépassement puis 3:1 au delà. 
-            Est-ce plus simple pour vous d'user de cette matrice ou d'appeler un compresseur multicanal 
-            et lui passer des paramètres classiques ?
+             Matthieu :
+             Dans mon papier sur le sujet j'avais défini les ordres de grandeur d'une matrice pour expliciter
+             la progression de la compression en fonction du niveau d'entrée.
+             Ça donne un ratio de 2:1 sur les premiers 6 dB de dépassement puis 3:1 au delà.
+             Est-ce plus simple pour vous d'user de cette matrice ou d'appeler un compresseur multicanal
+             et lui passer des paramètres classiques ?
+             
              On aurait alors :
-            Threshold à -18 dBFS
-            Ratio à 2:1
-            Attack à 20 ms
-            Release à 200 ms
-            */
+             Threshold à -18 dBFS
+             Ratio à 2:1
+             Attack à 20 ms
+             Release à 200 ms
+             */
+
+            /// representing the decibel value above which the compression will start taking effect
+            this._peakLimiterNode.setThreshold(_utils2.default.dB2lin(threshold));
+
+            /// representing the amount of time, in seconds, required to reduce the gain by 10 dB
+            var attackInSeconds = _utils2.default.ms2sec(this._attackTime);
+            this._peakLimiterNode.setAttack(attackInSeconds);
+
+            /// representing the amount of time, in seconds, required to increase the gain by 10 dB
+            var releaseInSeconds = _utils2.default.ms2sec(this._releaseTime);
+            this._peakLimiterNode.setRelease(releaseInSeconds);
+
+            /*
+            /// representing the decibel value above which the compression will start taking effect
+            this._peakLimiterNode.setThreshold( threshold );
+            
+            /// representing the amount of change, in dB, needed in the input for a 1 dB change in the output
+            this._peakLimiterNode.setRatio( this._compressionRatio );
+            
+            /// representing the amount of time, in seconds, required to reduce the gain by 10 dB
+            const attackInSeconds = utilities.ms2sec( this._attackTime );
+            this._peakLimiterNode.setAttack( attackInSeconds );
+            
+            /// representing the amount of time, in seconds, required to increase the gain by 10 dB
+            const releaseInSeconds = utilities.ms2sec( this._releaseTime );
+            this._peakLimiterNode.setRelease( releaseInSeconds );
+             */
+        }
+    }, {
+        key: '_update',
+        value: function _update() {
+            //console.log( "_update" );
+
+            /// the current fader value, in dB
+            var fader = this._dB;
+
+            if (typeof fader === "undefined" || isNaN(fader) === true) {
+                /// this can happen during the construction...
+                return;
+            }
+
+            var lin = _utils2.default.dB2lin(fader);
+
+            this._gainNode.gain.value = lin;
+        }
+
+        //==============================================================================
+        /**
+         * Updates the connections of the audio graph
+         */
+
+    }, {
+        key: '_updateAudioGraph',
+        value: function _updateAudioGraph() {
+
+            /// first of all, disconnect everything
+            this._input.disconnect();
+            this._gainNode.disconnect();
+            this._peakLimiterNode.disconnect();
+
+            if (this.bypass === true) {
+                this._input.connect(this._output);
+            } else {
+                this._input.connect(this._gainNode);
+                this._gainNode.connect(this._peakLimiterNode._input);
+                this._peakLimiterNode.connect(this._output);
+            }
+        }
+    }, {
+        key: 'bypass',
+        set: function set(value) {
+            if (value !== this._isBypass) {
+                this._isBypass = value;
+                this._updateAudioGraph();
+            }
+        }
+
+        /************************************************************************************/
+        /*!
+         *  @brief          Returns true if the processor is bypassed
+         *
+         */
+        /************************************************************************************/
+        ,
+        get: function get() {
+            return this._isBypass;
+        }
+
+        //==============================================================================
+        /**
+         * Set the dB value
+         * @type {number}
+         */
+
+    }, {
+        key: 'dB',
+        set: function set(value) {
+            /// clamp the incoming value
+            this._dB = NewSmartFader.clampdB(value);
+
+            /// update the DSP processor
+            this._update();
+        }
+
+        /**
+         * Get the dB value
+         * @type {number}
+         */
+        ,
+        get: function get() {
+            return this._dB;
+        }
+
+        /**
+         * Clips a value within the proper dB range
+         * @type {number} value the value to be clipped
+         */
+
+    }, {
+        key: 'dynamicCompressionState',
+        get: function get() {
+            /// representing the amount of gain reduction currently applied by the compressor to the signal.
+
+            /**
+             Intended for metering purposes, it returns a value in dB, or 0 (no gain reduction) if no signal is fed
+             into the DynamicsCompressorNode. The range of this value is between -20 and 0 (in dB).
+             */
+
+            //return this._peakLimiterNode.dynamicCompressionState;
+
+            var reduction = this._peakLimiterNode.getMaxGainReduction();
+
+            return reduction > 0.5;
+        }
+    }, {
+        key: 'compressionRatio',
+        set: function set(value) {
+            var _NewSmartFader$compre3 = _slicedToArray(NewSmartFader.compressionRatioRange, 2);
+
+            var minValue = _NewSmartFader$compre3[0];
+            var maxValue = _NewSmartFader$compre3[1];
+
+            //this._compressionRatio = utilities.clamp( value, minValue, maxValue );
+
+            this._updateCompressorSettings();
+        }
+
+        /**
+         * Returns the compression ratio
+         */
+        ,
+        get: function get() {
+            //return this._compressionRatio;
+            return 1.0; /// irrelevant
+        }
+
+        /**
+         * Get the compression ratio range
+         * @type {array}
+         */
+
+    }, {
+        key: 'attackTime',
+        set: function set(value) {
+            var _NewSmartFader$attack3 = _slicedToArray(NewSmartFader.attackTimeRange, 2);
+
+            var minValue = _NewSmartFader$attack3[0];
+            var maxValue = _NewSmartFader$attack3[1];
+
+
+            this._attackTime = _utils2.default.clamp(value, minValue, maxValue);
+
+            this._updateCompressorSettings();
+        }
+
+        /**
+         * Returns the attack time (in msec)
+         */
+        ,
+        get: function get() {
+            return this._attackTime;
+        }
+
+        /**
+         * Get the attack time range (in msec)
+         * @type {array}
+         */
+
+    }, {
+        key: 'releaseTime',
+        set: function set(value) {
+            var _NewSmartFader$releas3 = _slicedToArray(NewSmartFader.releaseTimeRange, 2);
+
+            var minValue = _NewSmartFader$releas3[0];
+            var maxValue = _NewSmartFader$releas3[1];
+
+
+            this._releaseTime = _utils2.default.clamp(value, minValue, maxValue);
+
+            this._updateCompressorSettings();
+        }
+
+        /**
+         * Returns the release time (in msec)
+         */
+        ,
+        get: function get() {
+            return this._releaseTime;
+        }
+
+        /**
+         * Get the release time range (in msec)
+         * @type {array}
+         */
+
+    }], [{
+        key: 'clampdB',
+        value: function clampdB(value) {
+            var _NewSmartFader$dBRang3 = _slicedToArray(NewSmartFader.dBRange, 2);
+
+            var minValue = _NewSmartFader$dBRang3[0];
+            var maxValue = _NewSmartFader$dBRang3[1];
+
+
+            return _utils2.default.clamp(value, minValue, maxValue);
+        }
+
+        //==============================================================================
+        /**
+         * Get the dB range
+         * @type {array}
+         * @details +8 dB suffisent, pour passer du -23 au -15 LUFS (iTunes), c'est l'idée.
+         */
+
+    }, {
+        key: 'dBRange',
+        get: function get() {
+            return [-60, 8];
+        }
+    }, {
+        key: 'mindBRange',
+        get: function get() {
+            var _NewSmartFader$dBRang4 = _slicedToArray(NewSmartFader.dBRange, 2);
+
+            var minValue = _NewSmartFader$dBRang4[0];
+            var maxValue = _NewSmartFader$dBRang4[1];
+
+            return minValue;
+        }
+    }, {
+        key: 'maxdBRange',
+        get: function get() {
+            var _NewSmartFader$dBRang5 = _slicedToArray(NewSmartFader.dBRange, 2);
+
+            var minValue = _NewSmartFader$dBRang5[0];
+            var maxValue = _NewSmartFader$dBRang5[1];
+
+            return maxValue;
+        }
+
+        /**
+         * Returns the default value (in dB)
+         * @type {number}
+         */
+
+    }, {
+        key: 'dBDefault',
+        get: function get() {
+            return 0;
+        }
+    }, {
+        key: 'compressionRatioRange',
+        get: function get() {
+            return [NewSmartFader.minCompressionRatioRange, NewSmartFader.maxCompressionRatioRange];
+        }
+    }, {
+        key: 'minCompressionRatioRange',
+        get: function get() {
+            return _compressor2.default.minRatio;
+        }
+    }, {
+        key: 'maxCompressionRatioRange',
+        get: function get() {
+            return _compressor2.default.maxRatio;
+        }
+
+        /**
+         * Returns the default compression ratio
+         * @type {number}
+         */
+
+    }, {
+        key: 'defaultCompressionRatio',
+        get: function get() {
+            return 1;
+        }
+    }, {
+        key: 'attackTimeRange',
+        get: function get() {
+            return [NewSmartFader.minAttackTimeRange, NewSmartFader.maxAttackTimeRange];
+        }
+
+        /**
+         * Returns the minimum attack time (in msec)
+         */
+
+    }, {
+        key: 'minAttackTimeRange',
+        get: function get() {
+            return _utils2.default.sec2ms(_compressor2.default.minAttack);
+        }
+
+        /**
+         * Returns the maximum attack time (in msec)
+         */
+
+    }, {
+        key: 'maxAttackTimeRange',
+        get: function get() {
+            return _utils2.default.sec2ms(_compressor2.default.maxAttack);
+        }
+
+        /**
+         * Returns the default attack time (in msec)
+         * @type {number}
+         */
+
+    }, {
+        key: 'defaultAttackTime',
+        get: function get() {
+            return 20;
+        }
+    }, {
+        key: 'releaseTimeRange',
+        get: function get() {
+            return [NewSmartFader.minReleaseTimeRange, NewSmartFader.maxReleaseTimeRange];
+        }
+
+        /**
+         * Returns the minimum release time (in msec)
+         */
+
+    }, {
+        key: 'minReleaseTimeRange',
+        get: function get() {
+            return _utils2.default.sec2ms(_compressor2.default.minRelease);
+        }
+
+        /**
+         * Returns the maximum release time (in msec)
+         */
+
+    }, {
+        key: 'maxReleaseTimeRange',
+        get: function get() {
+            return _utils2.default.sec2ms(_compressor2.default.maxRelease);
+        }
+
+        /**
+         * Returns the default release time (in msec)
+         * @type {number}
+         */
+
+    }, {
+        key: 'defaultReleaseTime',
+        get: function get() {
+            return 200;
+        }
+    }]);
+
+    return NewSmartFader;
+}(_index2.default);
+
+exports.default = NewSmartFader;
+},{"../core/index.js":2,"../core/utils.js":3,"../dsp/compressor.js":8,"../dsp/peaklimiter.js":16}],32:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _index = require('../core/index.js');
+
+var _index2 = _interopRequireDefault(_index);
+
+var _utils = require('../core/utils.js');
+
+var _utils2 = _interopRequireDefault(_utils);
+
+var _compressor = require('../dsp/compressor.js');
+
+var _compressor2 = _interopRequireDefault(_compressor);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /************************************************************************************/
+/*!
+ *   @file       oldsmartfader.js
+ *   @brief      This class implements the so-called SmartFader module of M4DP
+ *   @author     Thibaut Carpentier / Ircam CNRS UMR9912
+ *   @date       01/2016
+ *
+ */
+/************************************************************************************/
+
+
+/************************************************************************************/
+/*!
+ *  @class          OldSmartFader
+ *  @brief          This class implements the so-called SmartFader module of M4DP
+ *  @ingroup        dsp
+ *
+ */
+/************************************************************************************/
+
+var OldSmartFader = function (_AbstractNode) {
+    _inherits(OldSmartFader, _AbstractNode);
+
+    /************************************************************************************/
+    /*!
+     *  @brief          Class constructor
+     *
+     */
+    /************************************************************************************/
+
+    function OldSmartFader(audioContext) {
+        var audioStreamDescriptionCollection = arguments.length <= 1 || arguments[1] === undefined ? undefined : arguments[1];
+
+        _classCallCheck(this, OldSmartFader);
+
+        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(OldSmartFader).call(this, audioContext, audioStreamDescriptionCollection));
+
+        _this._dB = 0.0;
+        _this._compressionRatio = OldSmartFader.defaultCompressionRatio;
+        _this._attackTime = OldSmartFader.defaultAttackTime;
+        _this._releaseTime = OldSmartFader.defaultReleaseTime;
+        _this._isBypass = false;
+
+        /// the total number of incoming channels, including all the streams
+        /// (mainAudio, extendedAmbience, extendedComments and extendedDialogs)
+        var totalNumberOfChannels_ = _this._audioStreamDescriptionCollection.totalNumberOfChannels;
+
+        ///@n the gain and dynamic compression are applied similarly to all channels
+        _this._gainNode = audioContext.createGain();
+        _this._dynamicCompressorNode = new _compressor2.default(audioContext, totalNumberOfChannels_);
+
+        /// connect the audio nodes
+        _this._updateAudioGraph();
+
+        /// initialization
+        _this._updateCompressorSettings();
+
+        return _this;
+    }
+
+    /************************************************************************************/
+    /*!
+     *  @brief          Enable or bypass the processor
+     *
+     */
+    /************************************************************************************/
+
+
+    _createClass(OldSmartFader, [{
+        key: 'setdBFromGui',
+
+
+        //==============================================================================
+        /**
+         * Sets the compression ratio, according to a slider in the GUI
+         * theSlider : the slider
+         * return the actual value of the compression ratio
+         */
+        value: function setdBFromGui(theSlider) {
+            /// the value of the fader
+            var valueFader = parseFloat(theSlider.value);
+
+            // get the bounds of the fader (GUI)
+            var minFader = parseFloat(theSlider.min);
+            var maxFader = parseFloat(theSlider.max);
+
+            // get the actual bounds for this parameter
+
+            var _OldSmartFader$dBRang = _slicedToArray(OldSmartFader.dBRange, 2);
+
+            var minValue = _OldSmartFader$dBRang[0];
+            var maxValue = _OldSmartFader$dBRang[1];
+
+            /// scale from GUI to DSP
+
+            var value = M4DPAudioModules.utilities.scale(valueFader, minFader, maxFader, minValue, maxValue);
+
+            this.dB = value;
+
+            return value;
+        }
+
+        /**
+         * Returns the current value of compression ratio, already scaled for the GUI
+         * theSlider : the slider
+         */
+
+    }, {
+        key: 'getdBForGui',
+        value: function getdBForGui(theSlider) {
+            // get the bounds of the fader (GUI)
+            var minFader = parseFloat(theSlider.min);
+            var maxFader = parseFloat(theSlider.max);
+
+            // get the actual bounds for this parameter
+
+            var _OldSmartFader$dBRang2 = _slicedToArray(OldSmartFader.dBRange, 2);
+
+            var minValue = _OldSmartFader$dBRang2[0];
+            var maxValue = _OldSmartFader$dBRang2[1];
+
+
+            var actualValue = this.dB;
+
+            /// scale from DSP to GUI
+            var value = M4DPAudioModules.utilities.scale(actualValue, minValue, maxValue, minFader, maxFader);
+
+            return value;
+        }
+
+        //==============================================================================
+        /**
+         * Returns the dynamic compression state
+         * @type {boolean}
+         */
+
+    }, {
+        key: 'activeStreamsChanged',
+
+
+        /**
+         * Notification when the active stream(s) changes
+         */
+        value: function activeStreamsChanged() {
+            this._updateCompressorSettings();
+        }
+
+        //==============================================================================
+        /**
+         * Sets the compression ratio
+         * representing the amount of change, in dB, needed in the input for a 1 dB change in the output
+         */
+
+    }, {
+        key: 'setCompressionRatioFromGui',
+
+
+        //==============================================================================
+        /**
+         * Sets the compression ratio, according to a slider in the GUI
+         * theSlider : the slider
+         * return the actual value of the compression ratio
+         */
+        value: function setCompressionRatioFromGui(theSlider) {
+            /// the value of the fader
+            var valueFader = parseFloat(theSlider.value);
+
+            // get the bounds of the fader (GUI)
+            var minFader = parseFloat(theSlider.min);
+            var maxFader = parseFloat(theSlider.max);
+
+            // get the actual bounds for this parameter
+
+            var _OldSmartFader$compre = _slicedToArray(OldSmartFader.compressionRatioRange, 2);
+
+            var minValue = _OldSmartFader$compre[0];
+            var maxValue = _OldSmartFader$compre[1];
+
+            /// scale from GUI to DSP
+
+            var value = M4DPAudioModules.utilities.scale(valueFader, minFader, maxFader, minValue, maxValue);
+
+            this.compressionRatio = value;
+
+            return value;
+        }
+
+        /**
+         * Returns the current value of compression ratio, already scaled for the GUI
+         * theSlider : the slider
+         */
+
+    }, {
+        key: 'getCompressionRatioForGui',
+        value: function getCompressionRatioForGui(theSlider) {
+            // get the bounds of the fader (GUI)
+            var minFader = parseFloat(theSlider.min);
+            var maxFader = parseFloat(theSlider.max);
+
+            // get the actual bounds for this parameter
+
+            var _OldSmartFader$compre2 = _slicedToArray(OldSmartFader.compressionRatioRange, 2);
+
+            var minValue = _OldSmartFader$compre2[0];
+            var maxValue = _OldSmartFader$compre2[1];
+
+
+            var actualValue = this.compressionRatio;
+
+            /// scale from DSP to GUI
+            var value = M4DPAudioModules.utilities.scale(actualValue, minValue, maxValue, minFader, maxFader);
+
+            return value;
+        }
+
+        //==============================================================================
+        /**
+         * Sets the attack time (in msec)
+         * representing the amount of time, in seconds, required to reduce the gain by 10 dB
+         */
+
+    }, {
+        key: 'setAttackTimeFromGui',
+
+
+        //==============================================================================
+        /**
+         * Sets the attack time, according to a slider in the GUI
+         * theSlider : the slider
+         * return the actual value of the attack time (in msec)
+         */
+        value: function setAttackTimeFromGui(theSlider) {
+            /// the value of the fader
+            var valueFader = parseFloat(theSlider.value);
+
+            // get the bounds of the fader (GUI)
+            var minFader = parseFloat(theSlider.min);
+            var maxFader = parseFloat(theSlider.max);
+
+            // get the actual bounds for this parameter
+
+            var _OldSmartFader$attack = _slicedToArray(OldSmartFader.attackTimeRange, 2);
+
+            var minValue = _OldSmartFader$attack[0];
+            var maxValue = _OldSmartFader$attack[1];
+
+            /// scale from GUI to DSP
+
+            var value = M4DPAudioModules.utilities.scale(valueFader, minFader, maxFader, minValue, maxValue);
+
+            this.attackTime = value;
+
+            return value;
+        }
+
+        /**
+         * Returns the current value of attack time, already scaled for the GUI
+         * theSlider : the slider
+         */
+
+    }, {
+        key: 'getAttackTimeForGui',
+        value: function getAttackTimeForGui(theSlider) {
+            // get the bounds of the fader (GUI)
+            var minFader = parseFloat(theSlider.min);
+            var maxFader = parseFloat(theSlider.max);
+
+            // get the actual bounds for this parameter
+
+            var _OldSmartFader$attack2 = _slicedToArray(OldSmartFader.attackTimeRange, 2);
+
+            var minValue = _OldSmartFader$attack2[0];
+            var maxValue = _OldSmartFader$attack2[1];
+
+
+            var actualValue = this.attackTime;
+
+            /// scale from DSP to GUI
+            var value = M4DPAudioModules.utilities.scale(actualValue, minValue, maxValue, minFader, maxFader);
+
+            return value;
+        }
+
+        //==============================================================================
+        /**
+         * Sets the release time (in msec)
+         * representing the amount of time, in seconds, required to increase the gain by 10 dB
+         */
+
+    }, {
+        key: 'setReleaseTimeFromGui',
+
+
+        //==============================================================================
+        /**
+         * Sets the release time, according to a slider in the GUI
+         * theSlider : the slider
+         * return the actual value of the release time (in msec)
+         */
+        value: function setReleaseTimeFromGui(theSlider) {
+            /// the value of the fader
+            var valueFader = parseFloat(theSlider.value);
+
+            // get the bounds of the fader (GUI)
+            var minFader = parseFloat(theSlider.min);
+            var maxFader = parseFloat(theSlider.max);
+
+            // get the actual bounds for this parameter
+
+            var _OldSmartFader$releas = _slicedToArray(OldSmartFader.releaseTimeRange, 2);
+
+            var minValue = _OldSmartFader$releas[0];
+            var maxValue = _OldSmartFader$releas[1];
+
+            /// scale from GUI to DSP
+
+            var value = M4DPAudioModules.utilities.scale(valueFader, minFader, maxFader, minValue, maxValue);
+
+            this.releaseTime = value;
+
+            return value;
+        }
+
+        /**
+         * Returns the current value of release time, already scaled for the GUI
+         * theSlider : the slider
+         */
+
+    }, {
+        key: 'getReleaseTimeForGui',
+        value: function getReleaseTimeForGui(theSlider) {
+            // get the bounds of the fader (GUI)
+            var minFader = parseFloat(theSlider.min);
+            var maxFader = parseFloat(theSlider.max);
+
+            // get the actual bounds for this parameter
+
+            var _OldSmartFader$releas2 = _slicedToArray(OldSmartFader.releaseTimeRange, 2);
+
+            var minValue = _OldSmartFader$releas2[0];
+            var maxValue = _OldSmartFader$releas2[1];
+
+
+            var actualValue = this.releaseTime;
+
+            /// scale from DSP to GUI
+            var value = M4DPAudioModules.utilities.scale(actualValue, minValue, maxValue, minFader, maxFader);
+
+            return value;
+        }
+    }, {
+        key: '_updateCompressorSettings',
+        value: function _updateCompressorSettings() {
+
+            /// retrieves the AudioStreamDescriptionCollection
+            var asdc = this._audioStreamDescriptionCollection;
+
+            if (asdc.hasActiveStream === false) {
+                //console.log( "no active streams !!");
+                return;
+            }
+
+            ///@todo : que faire si plusieurs streams sont actifs ??
+
+            /// retrieves the active AudioStreamDescription(s)
+            var asd = asdc.actives;
+
+            /// sanity check
+            if (asd.length <= 0) {
+                throw new Error("Y'a un bug qq part...");
+            }
+
+            /// use the first active stream (???)
+            var activeStream = asd[0];
+
+            /**
+             Le reglage du volume doit se comporter de la facon suivante :
+             - attenuation classique du volume sonore entre le niveau nominal (gain = 0) et en deca
+             - augmentation classique du volume sonore entre le niveau nominal et le niveau max (niveau max = niveau nominal + I MaxTruePeak I)
+             - limiteur/compresseur multicanal au dela du niveau max
+             */
+
+            /// retrieves the MaxTruePeak (ITU­R BS.1770­3) of the active AudioStreamDescription
+            /// (expressed in dBTP)
+            var maxTruePeak = activeStream.maxTruePeak;
+
+            /// integrated loudness (in LUFS)
+            var nominal = activeStream.loudness;
+
+            /// sanity check
+            if (nominal >= 0.0) {
+                throw new Error("Ca parait pas bon...");
+            }
+
+            var threshold = nominal + Math.abs(maxTruePeak);
+
+            /**
+             Matthieu :
+             Dans mon papier sur le sujet j'avais défini les ordres de grandeur d'une matrice pour expliciter
+             la progression de la compression en fonction du niveau d'entrée.
+             Ça donne un ratio de 2:1 sur les premiers 6 dB de dépassement puis 3:1 au delà.
+             Est-ce plus simple pour vous d'user de cette matrice ou d'appeler un compresseur multicanal
+             et lui passer des paramètres classiques ?
+             
+             On aurait alors :
+             Threshold à -18 dBFS
+             Ratio à 2:1
+             Attack à 20 ms
+             Release à 200 ms
+             */
 
             /// representing the decibel value above which the compression will start taking effect
             this._dynamicCompressorNode.setThreshold(threshold);
@@ -10972,7 +12335,6 @@ var SmartFader = function (_AbstractNode) {
     }, {
         key: '_update',
         value: function _update() {
-
             //console.log( "_update" );
 
             /// the current fader value, in dB
@@ -11005,7 +12367,6 @@ var SmartFader = function (_AbstractNode) {
             if (this.bypass === true) {
                 this._input.connect(this._output);
             } else {
-
                 this._input.connect(this._gainNode);
                 this._gainNode.connect(this._dynamicCompressorNode._input);
                 this._dynamicCompressorNode.connect(this._output);
@@ -11014,16 +12375,18 @@ var SmartFader = function (_AbstractNode) {
     }, {
         key: 'bypass',
         set: function set(value) {
-
             if (value !== this._isBypass) {
                 this._isBypass = value;
                 this._updateAudioGraph();
             }
         }
 
-        /**
-         * Returns true if the processor is bypassed
+        /************************************************************************************/
+        /*!
+         *  @brief          Returns true if the processor is bypassed
+         *
          */
+        /************************************************************************************/
         ,
         get: function get() {
             return this._isBypass;
@@ -11038,9 +12401,8 @@ var SmartFader = function (_AbstractNode) {
     }, {
         key: 'dB',
         set: function set(value) {
-
             /// clamp the incoming value
-            this._dB = SmartFader.clampdB(value);
+            this._dB = OldSmartFader.clampdB(value);
 
             /// update the DSP processor
             this._update();
@@ -11063,23 +12425,22 @@ var SmartFader = function (_AbstractNode) {
     }, {
         key: 'dynamicCompressionState',
         get: function get() {
-
             /// representing the amount of gain reduction currently applied by the compressor to the signal.
 
             /**
-            Intended for metering purposes, it returns a value in dB, or 0 (no gain reduction) if no signal is fed
-            into the DynamicsCompressorNode. The range of this value is between -20 and 0 (in dB).
-            */
+             Intended for metering purposes, it returns a value in dB, or 0 (no gain reduction) if no signal is fed
+             into the DynamicsCompressorNode. The range of this value is between -20 and 0 (in dB).
+             */
 
             return this._dynamicCompressorNode.dynamicCompressionState;
         }
     }, {
         key: 'compressionRatio',
         set: function set(value) {
-            var _SmartFader$compressi3 = _slicedToArray(SmartFader.compressionRatioRange, 2);
+            var _OldSmartFader$compre3 = _slicedToArray(OldSmartFader.compressionRatioRange, 2);
 
-            var minValue = _SmartFader$compressi3[0];
-            var maxValue = _SmartFader$compressi3[1];
+            var minValue = _OldSmartFader$compre3[0];
+            var maxValue = _OldSmartFader$compre3[1];
 
 
             this._compressionRatio = _utils2.default.clamp(value, minValue, maxValue);
@@ -11088,7 +12449,7 @@ var SmartFader = function (_AbstractNode) {
         }
 
         /**
-         * Returns the compression ratio     
+         * Returns the compression ratio
          */
         ,
         get: function get() {
@@ -11097,16 +12458,16 @@ var SmartFader = function (_AbstractNode) {
 
         /**
          * Get the compression ratio range
-         * @type {array}     
+         * @type {array}
          */
 
     }, {
         key: 'attackTime',
         set: function set(value) {
-            var _SmartFader$attackTim3 = _slicedToArray(SmartFader.attackTimeRange, 2);
+            var _OldSmartFader$attack3 = _slicedToArray(OldSmartFader.attackTimeRange, 2);
 
-            var minValue = _SmartFader$attackTim3[0];
-            var maxValue = _SmartFader$attackTim3[1];
+            var minValue = _OldSmartFader$attack3[0];
+            var maxValue = _OldSmartFader$attack3[1];
 
 
             this._attackTime = _utils2.default.clamp(value, minValue, maxValue);
@@ -11115,7 +12476,7 @@ var SmartFader = function (_AbstractNode) {
         }
 
         /**
-         * Returns the attack time (in msec)  
+         * Returns the attack time (in msec)
          */
         ,
         get: function get() {
@@ -11124,16 +12485,16 @@ var SmartFader = function (_AbstractNode) {
 
         /**
          * Get the attack time range (in msec)
-         * @type {array}     
+         * @type {array}
          */
 
     }, {
         key: 'releaseTime',
         set: function set(value) {
-            var _SmartFader$releaseTi3 = _slicedToArray(SmartFader.releaseTimeRange, 2);
+            var _OldSmartFader$releas3 = _slicedToArray(OldSmartFader.releaseTimeRange, 2);
 
-            var minValue = _SmartFader$releaseTi3[0];
-            var maxValue = _SmartFader$releaseTi3[1];
+            var minValue = _OldSmartFader$releas3[0];
+            var maxValue = _OldSmartFader$releas3[1];
 
 
             this._releaseTime = _utils2.default.clamp(value, minValue, maxValue);
@@ -11142,7 +12503,7 @@ var SmartFader = function (_AbstractNode) {
         }
 
         /**
-         * Returns the release time (in msec)  
+         * Returns the release time (in msec)
          */
         ,
         get: function get() {
@@ -11151,16 +12512,16 @@ var SmartFader = function (_AbstractNode) {
 
         /**
          * Get the release time range (in msec)
-         * @type {array}     
+         * @type {array}
          */
 
     }], [{
         key: 'clampdB',
         value: function clampdB(value) {
-            var _SmartFader$dBRange3 = _slicedToArray(SmartFader.dBRange, 2);
+            var _OldSmartFader$dBRang3 = _slicedToArray(OldSmartFader.dBRange, 2);
 
-            var minValue = _SmartFader$dBRange3[0];
-            var maxValue = _SmartFader$dBRange3[1];
+            var minValue = _OldSmartFader$dBRang3[0];
+            var maxValue = _OldSmartFader$dBRang3[1];
 
 
             return _utils2.default.clamp(value, minValue, maxValue);
@@ -11181,20 +12542,20 @@ var SmartFader = function (_AbstractNode) {
     }, {
         key: 'mindBRange',
         get: function get() {
-            var _SmartFader$dBRange4 = _slicedToArray(SmartFader.dBRange, 2);
+            var _OldSmartFader$dBRang4 = _slicedToArray(OldSmartFader.dBRange, 2);
 
-            var minValue = _SmartFader$dBRange4[0];
-            var maxValue = _SmartFader$dBRange4[1];
+            var minValue = _OldSmartFader$dBRang4[0];
+            var maxValue = _OldSmartFader$dBRang4[1];
 
             return minValue;
         }
     }, {
         key: 'maxdBRange',
         get: function get() {
-            var _SmartFader$dBRange5 = _slicedToArray(SmartFader.dBRange, 2);
+            var _OldSmartFader$dBRang5 = _slicedToArray(OldSmartFader.dBRange, 2);
 
-            var minValue = _SmartFader$dBRange5[0];
-            var maxValue = _SmartFader$dBRange5[1];
+            var minValue = _OldSmartFader$dBRang5[0];
+            var maxValue = _OldSmartFader$dBRang5[1];
 
             return maxValue;
         }
@@ -11212,7 +12573,7 @@ var SmartFader = function (_AbstractNode) {
     }, {
         key: 'compressionRatioRange',
         get: function get() {
-            return [SmartFader.minCompressionRatioRange, SmartFader.maxCompressionRatioRange];
+            return [OldSmartFader.minCompressionRatioRange, OldSmartFader.maxCompressionRatioRange];
         }
     }, {
         key: 'minCompressionRatioRange',
@@ -11238,11 +12599,11 @@ var SmartFader = function (_AbstractNode) {
     }, {
         key: 'attackTimeRange',
         get: function get() {
-            return [SmartFader.minAttackTimeRange, SmartFader.maxAttackTimeRange];
+            return [OldSmartFader.minAttackTimeRange, OldSmartFader.maxAttackTimeRange];
         }
 
         /**
-         * Returns the minimum attack time (in msec)  
+         * Returns the minimum attack time (in msec)
          */
 
     }, {
@@ -11252,13 +12613,12 @@ var SmartFader = function (_AbstractNode) {
         }
 
         /**
-         * Returns the maximum attack time (in msec)  
+         * Returns the maximum attack time (in msec)
          */
 
     }, {
         key: 'maxAttackTimeRange',
         get: function get() {
-
             return _utils2.default.sec2ms(_compressor2.default.maxAttack);
         }
 
@@ -11275,11 +12635,11 @@ var SmartFader = function (_AbstractNode) {
     }, {
         key: 'releaseTimeRange',
         get: function get() {
-            return [SmartFader.minReleaseTimeRange, SmartFader.maxReleaseTimeRange];
+            return [OldSmartFader.minReleaseTimeRange, OldSmartFader.maxReleaseTimeRange];
         }
 
         /**
-         * Returns the minimum release time (in msec)  
+         * Returns the minimum release time (in msec)
          */
 
     }, {
@@ -11289,7 +12649,7 @@ var SmartFader = function (_AbstractNode) {
         }
 
         /**
-         * Returns the maximum release time (in msec)  
+         * Returns the maximum release time (in msec)
          */
 
     }, {
@@ -11310,11 +12670,11 @@ var SmartFader = function (_AbstractNode) {
         }
     }]);
 
-    return SmartFader;
+    return OldSmartFader;
 }(_index2.default);
 
-exports.default = SmartFader;
-},{"../core/index.js":2,"../core/utils.js":3,"../dsp/compressor.js":8}],30:[function(require,module,exports){
+exports.default = OldSmartFader;
+},{"../core/index.js":2,"../core/utils.js":3,"../dsp/compressor.js":8}],33:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -11444,7 +12804,6 @@ var StreamSelector = function (_AbstractNode) {
                 for (var _iterator = asdc[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
                     var stream = _step.value;
 
-
                     var isActive = stream.active;
 
                     /// linear gain value
@@ -11458,7 +12817,6 @@ var StreamSelector = function (_AbstractNode) {
                     var numChannelsForThisStream = stream.numChannels;
 
                     for (var i = 0; i < numChannelsForThisStream; i++) {
-
                         if (channelIndex >= this._gainsNode.getNumChannels()) {
                             throw new Error("Y'a un bug qq part...");
                         }
@@ -11492,7 +12850,6 @@ var StreamSelector = function (_AbstractNode) {
     }, {
         key: '_updateAudioGraph',
         value: function _updateAudioGraph() {
-
             /// first of all, disconnect everything
             this._input.disconnect();
             this._gainsNode.disconnect();
@@ -11519,7 +12876,7 @@ var StreamSelector = function (_AbstractNode) {
 }(_index2.default);
 
 exports.default = StreamSelector;
-},{"../core/index.js":2,"../core/utils.js":3,"../dsp/multichannelgain.js":15}],31:[function(require,module,exports){
+},{"../core/index.js":2,"../core/utils.js":3,"../dsp/multichannelgain.js":15}],34:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -11596,7 +12953,7 @@ var unittests = {
 /************************************************************************************/
 
 exports.default = unittests;
-},{"./testanalysis.js":32,"./testbinaural.js":33,"./testbiquad.js":34,"./testcascade.js":35,"./testcompressorexpander.js":36,"./testmultichannel.js":37,"./testphone.js":38,"./testrouting.js":39,"./testsofa.js":40,"./testsumdiff.js":41,"./testtransaural.js":42}],32:[function(require,module,exports){
+},{"./testanalysis.js":35,"./testbinaural.js":36,"./testbiquad.js":37,"./testcascade.js":38,"./testcompressorexpander.js":39,"./testmultichannel.js":40,"./testphone.js":41,"./testrouting.js":42,"./testsofa.js":43,"./testsumdiff.js":44,"./testtransaural.js":45}],35:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -11705,7 +13062,7 @@ var analysistests = {
 };
 
 exports.default = analysistests;
-},{"../core/bufferutils.js":1,"../dsp/analysis.js":5,"../dsp/phone.js":16}],33:[function(require,module,exports){
+},{"../core/bufferutils.js":1,"../dsp/analysis.js":5,"../dsp/phone.js":17}],36:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -11803,7 +13160,7 @@ var binauraltests = {
 };
 
 exports.default = binauraltests;
-},{"../core/bufferutils.js":1,"./testsofa.js":40}],34:[function(require,module,exports){
+},{"../core/bufferutils.js":1,"./testsofa.js":43}],37:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -11900,7 +13257,7 @@ var biquadtests = {
 };
 
 exports.default = biquadtests;
-},{"../core/bufferutils.js":1}],35:[function(require,module,exports){
+},{"../core/bufferutils.js":1}],38:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -12008,7 +13365,7 @@ var cascadetests = {
 };
 
 exports.default = cascadetests;
-},{"../core/bufferutils.js":1,"../dsp/cascade.js":6}],36:[function(require,module,exports){
+},{"../core/bufferutils.js":1,"../dsp/cascade.js":6}],39:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -12096,7 +13453,7 @@ var compressorexpandertests = {
 };
 
 exports.default = compressorexpandertests;
-},{"../core/bufferutils.js":1,"../dsp/compressorexpander.js":9}],37:[function(require,module,exports){
+},{"../core/bufferutils.js":1,"../dsp/compressorexpander.js":9}],40:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -12178,7 +13535,7 @@ var multichanneltests = {
 };
 
 exports.default = multichanneltests;
-},{"../core/bufferutils.js":1}],38:[function(require,module,exports){
+},{"../core/bufferutils.js":1}],41:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -12274,7 +13631,7 @@ var phonetests = {
 };
 
 exports.default = phonetests;
-},{"../core/bufferutils.js":1,"../dsp/phone.js":16}],39:[function(require,module,exports){
+},{"../core/bufferutils.js":1,"../dsp/phone.js":17}],42:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -12364,7 +13721,7 @@ var routingtests = {
 };
 
 exports.default = routingtests;
-},{"../core/bufferutils.js":1,"../multichannel-spatialiser/routing.js":23}],40:[function(require,module,exports){
+},{"../core/bufferutils.js":1,"../multichannel-spatialiser/routing.js":24}],43:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -12417,7 +13774,6 @@ function getRightTestBuffer() {
  * @param {int} subjectNumber
  */
 function getDatabaseFromSubjectId(subjectNumber) {
-
 	if (1002 <= subjectNumber && subjectNumber <= 1059) {
 		return "LISTEN";
 	} else if (1062 <= subjectNumber && subjectNumber <= 1089) {
@@ -12518,7 +13874,7 @@ var sofatests = {
 };
 
 exports.default = sofatests;
-},{"../core/utils.js":3,"binaural":54}],41:[function(require,module,exports){
+},{"../core/utils.js":3,"binaural":57}],44:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -12604,7 +13960,7 @@ var sumdifftests = {
 };
 
 exports.default = sumdifftests;
-},{"../core/bufferutils.js":1,"../dsp/sumdiff.js":18}],42:[function(require,module,exports){
+},{"../core/bufferutils.js":1,"../dsp/sumdiff.js":19}],45:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -12687,7 +14043,7 @@ var transauraltests = {
 };
 
 exports.default = transauraltests;
-},{"../core/bufferutils.js":1,"../dsp/transaural.js":19}],43:[function(require,module,exports){
+},{"../core/bufferutils.js":1,"../dsp/transaural.js":20}],46:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -13405,7 +14761,7 @@ var BinauralPanner = exports.BinauralPanner = function () {
 }();
 
 exports.default = BinauralPanner;
-},{"../geometry/Listener":50,"../geometry/coordinates":51,"../sofa/HrtfSet":56,"./Source":44,"gl-matrix":62}],44:[function(require,module,exports){
+},{"../geometry/Listener":53,"../geometry/coordinates":54,"../sofa/HrtfSet":59,"./Source":47,"gl-matrix":65}],47:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -13680,7 +15036,7 @@ var Source = exports.Source = function () {
 }();
 
 exports.default = Source;
-},{}],45:[function(require,module,exports){
+},{}],48:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -13706,7 +15062,7 @@ exports.default = {
   Source: _Source2.default,
   utilities: _utilities2.default
 };
-},{"./BinauralPanner":43,"./Source":44,"./utilities":46}],46:[function(require,module,exports){
+},{"./BinauralPanner":46,"./Source":47,"./utilities":49}],49:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -13855,7 +15211,7 @@ exports.default = {
   createNoiseBuffer: createNoiseBuffer,
   resampleFloat32Array: resampleFloat32Array
 };
-},{}],47:[function(require,module,exports){
+},{}],50:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -13871,7 +15227,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 exports.default = {
   utilities: _utilities2.default
 };
-},{"./utilities":48}],48:[function(require,module,exports){
+},{"./utilities":51}],51:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -13920,7 +15276,7 @@ exports.default = {
   almostEquals: almostEquals,
   almostEqualsModulo: almostEqualsModulo
 };
-},{}],49:[function(require,module,exports){
+},{}],52:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -13989,7 +15345,7 @@ exports.default = {
   distanceSquared: distanceSquared,
   tree: _kd2.default
 };
-},{"kd.tree":72}],50:[function(require,module,exports){
+},{"kd.tree":75}],53:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -14242,7 +15598,7 @@ var Listener = exports.Listener = function () {
 }();
 
 exports.default = Listener;
-},{"../geometry/coordinates":51,"gl-matrix":62}],51:[function(require,module,exports){
+},{"../geometry/coordinates":54,"gl-matrix":65}],54:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -14779,7 +16135,7 @@ exports.default = {
   systemToGl: systemToGl,
   systemType: systemType
 };
-},{"./degree":52}],52:[function(require,module,exports){
+},{"./degree":55}],55:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -14871,7 +16227,7 @@ exports.default = {
   toRadian: toRadian,
   toRadianFactor: toRadianFactor
 };
-},{}],53:[function(require,module,exports){
+},{}],56:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -14902,7 +16258,7 @@ exports.default = {
   KdTree: _KdTree2.default,
   Listener: _Listener2.default
 };
-},{"./KdTree":49,"./Listener":50,"./coordinates":51,"./degree":52}],54:[function(require,module,exports){
+},{"./KdTree":52,"./Listener":53,"./coordinates":54,"./degree":55}],57:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -14944,7 +16300,7 @@ exports.default = {
   info: _info2.default,
   sofa: _sofa2.default
 };
-},{"./audio":45,"./common":47,"./geometry":53,"./info":55,"./sofa":58}],55:[function(require,module,exports){
+},{"./audio":48,"./common":50,"./geometry":56,"./info":58,"./sofa":61}],58:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -15009,7 +16365,7 @@ exports.default = {
   name: name,
   version: version
 };
-},{"../package.json":73}],56:[function(require,module,exports){
+},{"../package.json":76}],59:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -15899,7 +17255,7 @@ var HrtfSet = exports.HrtfSet = function () {
 }();
 
 exports.default = HrtfSet;
-},{"../audio/utilities":46,"../geometry/KdTree":49,"../geometry/coordinates":51,"../info":55,"./parseDataSet":59,"./parseSofa":60,"gl-matrix":62}],57:[function(require,module,exports){
+},{"../audio/utilities":49,"../geometry/KdTree":52,"../geometry/coordinates":54,"../info":58,"./parseDataSet":62,"./parseSofa":63,"gl-matrix":65}],60:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -16192,7 +17548,7 @@ var ServerDataBase = exports.ServerDataBase = function () {
 }();
 
 exports.default = ServerDataBase;
-},{"./parseDataSet":59,"./parseXml":61}],58:[function(require,module,exports){
+},{"./parseDataSet":62,"./parseXml":64}],61:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -16221,7 +17577,7 @@ exports.default = {
   HrtfSet: _HrtfSet2.default,
   ServerDataBase: _ServerDataBase2.default
 };
-},{"./HrtfSet":56,"./ServerDataBase":57}],59:[function(require,module,exports){
+},{"./HrtfSet":59,"./ServerDataBase":60}],62:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -16370,7 +17726,7 @@ function parseDataSet(input) {
 }
 
 exports.default = parseDataSet;
-},{}],60:[function(require,module,exports){
+},{}],63:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -16630,7 +17986,7 @@ exports.default = {
   parseSofa: parseSofa,
   conformSofaCoordinateSystem: conformSofaCoordinateSystem
 };
-},{}],61:[function(require,module,exports){
+},{}],64:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -16684,7 +18040,7 @@ if (typeof window.DOMParser !== 'undefined') {
 }
 
 exports.default = parseXml;
-},{}],62:[function(require,module,exports){
+},{}],65:[function(require,module,exports){
 /**
  * @fileoverview gl-matrix - High performance matrix and vector operations
  * @author Brandon Jones
@@ -16722,7 +18078,7 @@ exports.quat = require("./gl-matrix/quat.js");
 exports.vec2 = require("./gl-matrix/vec2.js");
 exports.vec3 = require("./gl-matrix/vec3.js");
 exports.vec4 = require("./gl-matrix/vec4.js");
-},{"./gl-matrix/common.js":63,"./gl-matrix/mat2.js":64,"./gl-matrix/mat2d.js":65,"./gl-matrix/mat3.js":66,"./gl-matrix/mat4.js":67,"./gl-matrix/quat.js":68,"./gl-matrix/vec2.js":69,"./gl-matrix/vec3.js":70,"./gl-matrix/vec4.js":71}],63:[function(require,module,exports){
+},{"./gl-matrix/common.js":66,"./gl-matrix/mat2.js":67,"./gl-matrix/mat2d.js":68,"./gl-matrix/mat3.js":69,"./gl-matrix/mat4.js":70,"./gl-matrix/quat.js":71,"./gl-matrix/vec2.js":72,"./gl-matrix/vec3.js":73,"./gl-matrix/vec4.js":74}],66:[function(require,module,exports){
 /* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -16794,7 +18150,7 @@ glMatrix.equals = function(a, b) {
 
 module.exports = glMatrix;
 
-},{}],64:[function(require,module,exports){
+},{}],67:[function(require,module,exports){
 /* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -17232,7 +18588,7 @@ mat2.multiplyScalarAndAdd = function(out, a, b, scale) {
 
 module.exports = mat2;
 
-},{"./common.js":63}],65:[function(require,module,exports){
+},{"./common.js":66}],68:[function(require,module,exports){
 /* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -17703,7 +19059,7 @@ mat2d.equals = function (a, b) {
 
 module.exports = mat2d;
 
-},{"./common.js":63}],66:[function(require,module,exports){
+},{"./common.js":66}],69:[function(require,module,exports){
 /* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -18451,7 +19807,7 @@ mat3.equals = function (a, b) {
 
 module.exports = mat3;
 
-},{"./common.js":63}],67:[function(require,module,exports){
+},{"./common.js":66}],70:[function(require,module,exports){
 /* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -20589,7 +21945,7 @@ mat4.equals = function (a, b) {
 
 module.exports = mat4;
 
-},{"./common.js":63}],68:[function(require,module,exports){
+},{"./common.js":66}],71:[function(require,module,exports){
 /* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21191,7 +22547,7 @@ quat.equals = vec4.equals;
 
 module.exports = quat;
 
-},{"./common.js":63,"./mat3.js":66,"./vec3.js":70,"./vec4.js":71}],69:[function(require,module,exports){
+},{"./common.js":66,"./mat3.js":69,"./vec3.js":73,"./vec4.js":74}],72:[function(require,module,exports){
 /* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21780,7 +23136,7 @@ vec2.equals = function (a, b) {
 
 module.exports = vec2;
 
-},{"./common.js":63}],70:[function(require,module,exports){
+},{"./common.js":66}],73:[function(require,module,exports){
 /* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22559,7 +23915,7 @@ vec3.equals = function (a, b) {
 
 module.exports = vec3;
 
-},{"./common.js":63}],71:[function(require,module,exports){
+},{"./common.js":66}],74:[function(require,module,exports){
 /* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23170,7 +24526,7 @@ vec4.equals = function (a, b) {
 
 module.exports = vec4;
 
-},{"./common.js":63}],72:[function(require,module,exports){
+},{"./common.js":66}],75:[function(require,module,exports){
 /**
  * AUTHOR OF INITIAL JS LIBRARY
  * k-d Tree JavaScript - V 1.0
@@ -23629,7 +24985,7 @@ module.exports = {
   }
 }
 
-},{}],73:[function(require,module,exports){
+},{}],76:[function(require,module,exports){
 module.exports={
   "name": "binaural",
   "exports": "binaural",
@@ -23698,5 +25054,5 @@ module.exports={
   "_from": "binaural@git+https://github.com/Ircam-RnD/binauralFIR#0.3.10"
 }
 
-},{}]},{},[21])(21)
+},{}]},{},[22])(22)
 });

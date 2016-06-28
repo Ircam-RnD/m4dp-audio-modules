@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.MultiRMSMetering = exports.RmsMetering = exports.CompressorWithSideChain = exports.MultiCompressorExpanderNode = exports.CompressorExpanderNode = exports.MultichannelGainNode = exports.VirtualSpeakersNode = exports.TransauralShufflerNode = exports.TransauralFeedforwardNode = exports.TransauralNode = exports.SumDiffNode = exports.HeadphonesEqualization = exports.AnalysisNode = exports.CascadeNode = undefined;
+exports.PeakLimiterNode = exports.MultiRMSMetering = exports.RmsMetering = exports.CompressorWithSideChain = exports.MultiCompressorExpanderNode = exports.CompressorExpanderNode = exports.MultichannelGainNode = exports.VirtualSpeakersNode = exports.TransauralShufflerNode = exports.TransauralFeedforwardNode = exports.TransauralNode = exports.SumDiffNode = exports.HeadphonesEqualization = exports.AnalysisNode = exports.CascadeNode = undefined;
 
 var _cascade = require('./cascade.js');
 
@@ -39,17 +39,11 @@ var _compressorsidechain2 = _interopRequireDefault(_compressorsidechain);
 
 var _rmsmetering = require('./rmsmetering.js');
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var _peaklimiter = require('./peaklimiter.js');
 
-/************************************************************************************/
-/*!
- *   @file       index.js
- *   @brief      Exports the dsp modules
- *   @author     Thibaut Carpentier / Ircam CNRS UMR9912
- *   @date       01/2016
- *
- */
-/************************************************************************************/
+var _peaklimiter2 = _interopRequireDefault(_peaklimiter);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.CascadeNode = _cascade2.default;
 exports.AnalysisNode = _analysis2.default;
@@ -65,3 +59,12 @@ exports.MultiCompressorExpanderNode = _compressorexpander.MultiCompressorExpande
 exports.CompressorWithSideChain = _compressorsidechain2.default;
 exports.RmsMetering = _rmsmetering.RmsMetering;
 exports.MultiRMSMetering = _rmsmetering.MultiRMSMetering;
+exports.PeakLimiterNode = _peaklimiter2.default; /************************************************************************************/
+/*!
+ *   @file       index.js
+ *   @brief      Exports the dsp modules
+ *   @author     Thibaut Carpentier / Ircam CNRS UMR9912
+ *   @date       01/2016
+ *
+ */
+/************************************************************************************/

@@ -75,7 +75,6 @@ var HeadphonesEqualization = function (_CascadeNode) {
                 _set(Object.getPrototypeOf(HeadphonesEqualization.prototype), 'numCascades', 0, this);
                 _get(Object.getPrototypeOf(HeadphonesEqualization.prototype), 'resetAllBiquads', this).call(this);
             } else if (presetName === 'eq1') {
-
                 /// whatever settings... waiting for FTV to communicate their specifications
 
                 _set(Object.getPrototypeOf(HeadphonesEqualization.prototype), 'numCascades', 3, this);

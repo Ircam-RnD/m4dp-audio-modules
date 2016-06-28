@@ -50,7 +50,6 @@ function getRightTestBuffer() {
  * @param {int} subjectNumber
  */
 function getDatabaseFromSubjectId(subjectNumber) {
-
 	if (1002 <= subjectNumber && subjectNumber <= 1059) {
 		return "LISTEN";
 	} else if (1062 <= subjectNumber && subjectNumber <= 1089) {

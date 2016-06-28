@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
       value: true
 });
-exports.binaural = exports.unittests = exports.utilities = exports.AudioStreamDescription = exports.AudioStreamDescriptionCollection = exports.SmartFader = exports.ObjectSpatialiserAndMixer = exports.NoiseAdaptation = exports.MultichannelSpatialiser = exports.DialogEnhancement = exports.NewReceiverMix = exports.OldReceiverMix = exports.StreamSelector = exports.MultiRMSMetering = exports.RmsMetering = exports.CompressorWithSideChain = exports.MultiCompressorExpanderNode = exports.CompressorExpanderNode = exports.HeadphonesEqualization = exports.CenterEnhancementNode = exports.LRMSNode = exports.SumDiffNode = exports.CascadeNode = undefined;
+exports.binaural = exports.unittests = exports.utilities = exports.AudioStreamDescription = exports.AudioStreamDescriptionCollection = exports.NewSmartFader = exports.OldSmartFader = exports.ObjectSpatialiserAndMixer = exports.NoiseAdaptation = exports.MultichannelSpatialiser = exports.DialogEnhancement = exports.NewReceiverMix = exports.OldReceiverMix = exports.StreamSelector = exports.PeakLimiterNode = exports.MultiRMSMetering = exports.RmsMetering = exports.CompressorWithSideChain = exports.MultiCompressorExpanderNode = exports.CompressorExpanderNode = exports.HeadphonesEqualization = exports.CenterEnhancementNode = exports.LRMSNode = exports.SumDiffNode = exports.CascadeNode = undefined;
 
 var _index = require('./dialog-enhancement/index.js');
 
@@ -23,25 +23,23 @@ var _index8 = _interopRequireDefault(_index7);
 
 var _index9 = require('./smart-fader/index.js');
 
-var _index10 = _interopRequireDefault(_index9);
+var _index10 = require('./core/index.js');
 
-var _index11 = require('./core/index.js');
+var _index11 = require('./stream-selector/index.js');
 
-var _index12 = require('./stream-selector/index.js');
+var _index12 = _interopRequireDefault(_index11);
 
-var _index13 = _interopRequireDefault(_index12);
+var _index13 = require('./receiver-mix/index.js');
 
-var _index14 = require('./receiver-mix/index.js');
-
-var _index15 = require('./dsp/index.js');
+var _index14 = require('./dsp/index.js');
 
 var _utils = require('./core/utils.js');
 
 var _utils2 = _interopRequireDefault(_utils);
 
-var _index16 = require('./testing/index.js');
+var _index15 = require('./testing/index.js');
 
-var _index17 = _interopRequireDefault(_index16);
+var _index16 = _interopRequireDefault(_index15);
 
 var _binaural = require('binaural');
 
@@ -59,26 +57,28 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  */
 /************************************************************************************/
 
-exports.CascadeNode = _index15.CascadeNode;
-exports.SumDiffNode = _index15.SumDiffNode;
-exports.LRMSNode = _index15.LRMSNode;
-exports.CenterEnhancementNode = _index15.CenterEnhancementNode;
-exports.HeadphonesEqualization = _index15.HeadphonesEqualization;
-exports.CompressorExpanderNode = _index15.CompressorExpanderNode;
-exports.MultiCompressorExpanderNode = _index15.MultiCompressorExpanderNode;
-exports.CompressorWithSideChain = _index15.CompressorWithSideChain;
-exports.RmsMetering = _index15.RmsMetering;
-exports.MultiRMSMetering = _index15.MultiRMSMetering;
-exports.StreamSelector = _index13.default;
-exports.OldReceiverMix = _index14.OldReceiverMix;
-exports.NewReceiverMix = _index14.NewReceiverMix;
+exports.CascadeNode = _index14.CascadeNode;
+exports.SumDiffNode = _index14.SumDiffNode;
+exports.LRMSNode = _index14.LRMSNode;
+exports.CenterEnhancementNode = _index14.CenterEnhancementNode;
+exports.HeadphonesEqualization = _index14.HeadphonesEqualization;
+exports.CompressorExpanderNode = _index14.CompressorExpanderNode;
+exports.MultiCompressorExpanderNode = _index14.MultiCompressorExpanderNode;
+exports.CompressorWithSideChain = _index14.CompressorWithSideChain;
+exports.RmsMetering = _index14.RmsMetering;
+exports.MultiRMSMetering = _index14.MultiRMSMetering;
+exports.PeakLimiterNode = _index14.PeakLimiterNode;
+exports.StreamSelector = _index12.default;
+exports.OldReceiverMix = _index13.OldReceiverMix;
+exports.NewReceiverMix = _index13.NewReceiverMix;
 exports.DialogEnhancement = _index2.default;
 exports.MultichannelSpatialiser = _index4.default;
 exports.NoiseAdaptation = _index6.default;
 exports.ObjectSpatialiserAndMixer = _index8.default;
-exports.SmartFader = _index10.default;
-exports.AudioStreamDescriptionCollection = _index11.AudioStreamDescriptionCollection;
-exports.AudioStreamDescription = _index11.AudioStreamDescription;
+exports.OldSmartFader = _index9.OldSmartFader;
+exports.NewSmartFader = _index9.NewSmartFader;
+exports.AudioStreamDescriptionCollection = _index10.AudioStreamDescriptionCollection;
+exports.AudioStreamDescription = _index10.AudioStreamDescription;
 exports.utilities = _utils2.default;
-exports.unittests = _index17.default;
+exports.unittests = _index16.default;
 exports.binaural = _binaural2.default;

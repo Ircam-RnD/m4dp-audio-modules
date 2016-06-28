@@ -127,7 +127,6 @@ var StreamSelector = function (_AbstractNode) {
                 for (var _iterator = asdc[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
                     var stream = _step.value;
 
-
                     var isActive = stream.active;
 
                     /// linear gain value
@@ -141,7 +140,6 @@ var StreamSelector = function (_AbstractNode) {
                     var numChannelsForThisStream = stream.numChannels;
 
                     for (var i = 0; i < numChannelsForThisStream; i++) {
-
                         if (channelIndex >= this._gainsNode.getNumChannels()) {
                             throw new Error("Y'a un bug qq part...");
                         }
@@ -175,7 +173,6 @@ var StreamSelector = function (_AbstractNode) {
     }, {
         key: '_updateAudioGraph',
         value: function _updateAudioGraph() {
-
             /// first of all, disconnect everything
             this._input.disconnect();
             this._gainsNode.disconnect();
