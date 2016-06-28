@@ -114,6 +114,8 @@ var CompressorExpanderNode = function (_AbstractNode) {
 
                 var CT = compressor._compressorThreshold;
                 var ET = compressor._expanderThreshold;
+                var CS = compressor._CS;
+                var ES = compressor._ES;
 
                 for (var i = 0; i < numSamples; i++) {
                     var x = inputData[i];

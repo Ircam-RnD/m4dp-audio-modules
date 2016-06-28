@@ -24,6 +24,10 @@ var _peaklimiter = require('../dsp/peaklimiter.js');
 
 var _peaklimiter2 = _interopRequireDefault(_peaklimiter);
 
+var _compressorexpander = require('../dsp/compressorexpander.js');
+
+var _compressorexpander2 = _interopRequireDefault(_compressorexpander);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -79,6 +83,7 @@ var NewSmartFader = function (_AbstractNode) {
 
         ///@n the gain and dynamic compression are applied similarly to all channels
         _this._gainNode = audioContext.createGain();
+        //this._peakLimiterNode = new MultiCompressorExpanderNode( audioContext, totalNumberOfChannels_ );
         _this._peakLimiterNode = new _peaklimiter2.default(audioContext, totalNumberOfChannels_);
 
         /// connect the audio nodes
@@ -445,27 +450,22 @@ var NewSmartFader = function (_AbstractNode) {
             this._peakLimiterNode.setThreshold(_utils2.default.dB2lin(threshold));
 
             /// representing the amount of time, in seconds, required to reduce the gain by 10 dB
-            var attackInSeconds = _utils2.default.ms2sec(this._attackTime);
-            this._peakLimiterNode.setAttack(attackInSeconds);
+            this._peakLimiterNode.setAttack(this._attackTime);
 
             /// representing the amount of time, in seconds, required to increase the gain by 10 dB
-            var releaseInSeconds = _utils2.default.ms2sec(this._releaseTime);
-            this._peakLimiterNode.setRelease(releaseInSeconds);
+            this._peakLimiterNode.setRelease(this._releaseTime);
 
             /*
             /// representing the decibel value above which the compression will start taking effect
-            this._peakLimiterNode.setThreshold( threshold );
+            this._peakLimiterNode.setCompressorThreshold( threshold );
             
-            /// representing the amount of change, in dB, needed in the input for a 1 dB change in the output
-            this._peakLimiterNode.setRatio( this._compressionRatio );
+            this._peakLimiterNode.setCompressorRatio( 5 );
             
             /// representing the amount of time, in seconds, required to reduce the gain by 10 dB
-            const attackInSeconds = utilities.ms2sec( this._attackTime );
-            this._peakLimiterNode.setAttack( attackInSeconds );
+            this._peakLimiterNode.setAttack( this._attackTime );
             
             /// representing the amount of time, in seconds, required to increase the gain by 10 dB
-            const releaseInSeconds = utilities.ms2sec( this._releaseTime );
-            this._peakLimiterNode.setRelease( releaseInSeconds );
+            this._peakLimiterNode.setRelease( this._releaseTime );
              */
         }
     }, {
