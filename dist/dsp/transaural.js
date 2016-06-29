@@ -180,10 +180,12 @@ var TransauralShufflerNode = exports.TransauralShufflerNode = function (_Transau
         return _this2;
     }
 
-    //==============================================================================
-    /**
-     * Updates the connections of the audio graph
+    /************************************************************************************/
+    /*!
+     *  @brief          Updates the connections of the audio graph
+     *
      */
+    /************************************************************************************/
 
 
     _createClass(TransauralShufflerNode, [{

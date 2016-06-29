@@ -120,10 +120,12 @@ var MultichannelSpatialiser = function (_AbstractNode) {
         /// nothing to do, for the moment
 
 
-        //==============================================================================
-        /**
-         * Updates the connections of the audio graph
+        /************************************************************************************/
+        /*!
+         *  @brief          Updates the connections of the audio graph
+         *
          */
+        /************************************************************************************/
 
     }, {
         key: '_updateAudioGraph',

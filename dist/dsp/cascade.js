@@ -238,10 +238,12 @@ var CascadeNode = function (_AbstractNode) {
         key: "_updateAudioGraph",
 
 
-        //==============================================================================
-        /**
-         * Updates the connections of the audio graph
+        /************************************************************************************/
+        /*!
+         *  @brief          Updates the connections of the audio graph
+         *
          */
+        /************************************************************************************/
         value: function _updateAudioGraph() {
             var numCascades_ = this.numCascades;
 

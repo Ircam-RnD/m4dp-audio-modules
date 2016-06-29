@@ -153,10 +153,12 @@ var MultichannelGainNode = function (_AbstractNode) {
             return this._gainNodes[channelIndex].gain.value;
         }
 
-        //==============================================================================
-        /**
-         * Updates the connections of the audio graph
+        /************************************************************************************/
+        /*!
+         *  @brief          Updates the connections of the audio graph
+         *
          */
+        /************************************************************************************/
 
     }, {
         key: '_updateAudioGraph',

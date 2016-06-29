@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.PeakLimiterNode = exports.MultiRMSMetering = exports.RmsMetering = exports.CompressorWithSideChain = exports.MultiCompressorExpanderNode = exports.CompressorExpanderNode = exports.MultichannelGainNode = exports.VirtualSpeakersNode = exports.TransauralShufflerNode = exports.TransauralFeedforwardNode = exports.TransauralNode = exports.SumDiffNode = exports.HeadphonesEqualization = exports.AnalysisNode = exports.CascadeNode = undefined;
+exports.PeakLimiterNode = exports.MultiRMSMetering = exports.RmsMetering = exports.CompressorWithSideChain = exports.MultiCompressorExpanderNode = exports.CompressorExpanderNode = exports.CompressorWithDryWet = exports.MultichannelGainNode = exports.VirtualSpeakersNode = exports.TransauralShufflerNode = exports.TransauralFeedforwardNode = exports.TransauralNode = exports.SumDiffNode = exports.HeadphonesEqualization = exports.AnalysisNode = exports.CascadeNode = undefined;
 
 var _cascade = require('./cascade.js');
 
@@ -43,7 +43,21 @@ var _peaklimiter = require('./peaklimiter.js');
 
 var _peaklimiter2 = _interopRequireDefault(_peaklimiter);
 
+var _compressorwithdrywet = require('./compressorwithdrywet.js');
+
+var _compressorwithdrywet2 = _interopRequireDefault(_compressorwithdrywet);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/************************************************************************************/
+/*!
+ *   @file       index.js
+ *   @brief      Exports the dsp modules
+ *   @author     Thibaut Carpentier / Ircam CNRS UMR9912
+ *   @date       01/2016
+ *
+ */
+/************************************************************************************/
 
 exports.CascadeNode = _cascade2.default;
 exports.AnalysisNode = _analysis2.default;
@@ -54,17 +68,10 @@ exports.TransauralFeedforwardNode = _transaural.TransauralFeedforwardNode;
 exports.TransauralShufflerNode = _transaural.TransauralShufflerNode;
 exports.VirtualSpeakersNode = _virtualspeakers2.default;
 exports.MultichannelGainNode = _multichannelgain2.default;
+exports.CompressorWithDryWet = _compressorwithdrywet2.default;
 exports.CompressorExpanderNode = _compressorexpander.CompressorExpanderNode;
 exports.MultiCompressorExpanderNode = _compressorexpander.MultiCompressorExpanderNode;
 exports.CompressorWithSideChain = _compressorsidechain2.default;
 exports.RmsMetering = _rmsmetering.RmsMetering;
 exports.MultiRMSMetering = _rmsmetering.MultiRMSMetering;
-exports.PeakLimiterNode = _peaklimiter2.default; /************************************************************************************/
-/*!
- *   @file       index.js
- *   @brief      Exports the dsp modules
- *   @author     Thibaut Carpentier / Ircam CNRS UMR9912
- *   @date       01/2016
- *
- */
-/************************************************************************************/
+exports.PeakLimiterNode = _peaklimiter2.default;

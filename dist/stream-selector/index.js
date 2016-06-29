@@ -165,10 +165,12 @@ var StreamSelector = function (_AbstractNode) {
             }
         }
 
-        //==============================================================================
-        /**
-         * Updates the connections of the audio graph
+        /************************************************************************************/
+        /*!
+         *  @brief          Updates the connections of the audio graph
+         *
          */
+        /************************************************************************************/
 
     }, {
         key: '_updateAudioGraph',

@@ -12,21 +12,19 @@ var _index = require('../core/index.js');
 
 var _index2 = _interopRequireDefault(_index);
 
-var _analysis = require('../dsp/analysis.js');
-
-var _analysis2 = _interopRequireDefault(_analysis);
-
 var _utils = require('../core/utils.js');
 
 var _utils2 = _interopRequireDefault(_utils);
 
-var _rmsmetering = require('../dsp/rmsmetering.js');
-
-var _rmsmetering2 = _interopRequireDefault(_rmsmetering);
+var _index3 = require('../dsp/index.js');
 
 var _compressor = require('../dsp/compressor.js');
 
 var _compressor2 = _interopRequireDefault(_compressor);
+
+var _compressorwithdrywet = require('../dsp/compressorwithdrywet.js');
+
+var _compressorwithdrywet2 = _interopRequireDefault(_compressorwithdrywet);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -39,10 +37,10 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
  *   @file       newreceivermix.js
  *   @brief      Implements the Receiver-Mix : the so-called Receiver-Mix
  *				 corresponds to the 2nd part of the “OBJECT SPATIALISER AND MIXER”
- *				 This module inspects the RMS of the main programme, the RMS of the commentary
- *				 and it applies dynamic compression on the main programme if necessary
+ *				 This module inspects the RMS of the main program, the RMS of the commentary
+ *				 and it applies dynamic compression on the main program if necessary
  *
- *   @author     Thibaut Carpentier / Ircam CNRS UMR9912, Samuel Goldszmidt
+ *   @author     Thibaut Carpentier / Ircam CNRS UMR9912
  *   @date       01/2016
  *
  */
@@ -75,10 +73,8 @@ var NewReceiverMix = function (_AbstractNode) {
         var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(NewReceiverMix).call(this, audioContext, audioStreamDescriptionCollection));
 
         _this._isBypass = false;
-        _this._shouldCompress = false;
-        _this._rmsRefreshInterval = 100; /// interval (in msec for refreshing the RMS measurement)
+        _this._rmsRefreshInterval = 50; /// interval (in msec for refreshing the RMS measurement)
         _this._durationHold = 0; /// how long (in msec) the compressor has been on hold
-        _this._minimumHoldTime = 1500; /// hold time in msec) for the compressor
 
         if (typeof audioStreamDescriptionCollection === "undefined") {
             throw new Error("the audioStreamDescriptionCollection must be defined !");
@@ -86,12 +82,6 @@ var NewReceiverMix = function (_AbstractNode) {
 
         /// first of all, check if there is a commentary stream.
         /// if not, the Receiver-Mix has nothing to do (just bypass)
-
-        /// create a mono analyzer node for computing the RMS of the commentary
-        _this._analysisNodeCommentary = new _rmsmetering2.default(audioContext);
-
-        /// several mono analyzers for analyzing the main program
-        _this._analysisNodeProgram = [];
 
         /// this is the N value in the .pdf :
         /// when the RMS of the commentary is > N (expressed in dB), the programme P must be analyzed
@@ -102,10 +92,7 @@ var NewReceiverMix = function (_AbstractNode) {
         _this._thresholdForProgramme = NewReceiverMix.defaultForProgrammeThreshold;
 
         /// the actual number of channels will be later overriden
-        _this._dynamicCompressorNode = new _compressor2.default(audioContext, 1);
-        _this._dynamicCompressorNode.setRatio(NewReceiverMix.defaultCompressionRatio);
-        _this._dynamicCompressorNode.setAttack(_utils2.default.ms2sec(NewReceiverMix.defaultAttackTime));
-        _this._dynamicCompressorNode.setRelease(_utils2.default.ms2sec(NewReceiverMix.defaultReleaseTime));
+        _this._compressors = [];
 
         /// the total number of incoming channels, including all the streams
         /// (mainAudio, extendedAmbience, extendedComments and extendedDialogs)
@@ -116,6 +103,11 @@ var NewReceiverMix = function (_AbstractNode) {
         if (totalNumberOfChannels_ != 10) {
             console.log("warning : total number of channels = " + totalNumberOfChannels_);
         }
+
+        /// measure the RMS for each of the input channels
+        _this._rmsMeteringNode = new _index3.MultiRMSMetering(audioContext, totalNumberOfChannels_);
+
+        _this._rmsMeteringNode.SetTimeConstant(50);
 
         /// main splitter node, at the entrance of the NewReceiverMix
         _this._splitterNode = audioContext.createChannelSplitter(totalNumberOfChannels_);
@@ -134,12 +126,6 @@ var NewReceiverMix = function (_AbstractNode) {
         }
 
         _this._updateAudioGraph();
-
-        /*
-         window.setInterval( () => {
-         this._updateCompressor();
-         }, 100);
-         */
 
         _this._updateCompressor();
         return _this;
@@ -351,430 +337,19 @@ var NewReceiverMix = function (_AbstractNode) {
          */
 
     }, {
-        key: 'setCompressorThreshold',
+        key: 'getRmsForCommentary',
 
-
-        //==============================================================================
-        value: function setCompressorThreshold(value) {
-            this._dynamicCompressorNode.setThreshold(value);
-        }
-    }, {
-        key: 'getCompressorThreshold',
-        value: function getCompressorThreshold() {
-            return this._dynamicCompressorNode.getThreshold();
-        }
-
-        /**
-         * Get the compression threshold range
-         * @type {array}
-         */
-
-    }, {
-        key: 'setCompressorRatio',
-        value: function setCompressorRatio(value) {
-            this._dynamicCompressorNode.setRatio(value);
-        }
-    }, {
-        key: 'getCompressorRatio',
-        value: function getCompressorRatio() {
-            return this._dynamicCompressorNode.getRatio();
-        }
-    }, {
-        key: 'setCompressorAttack',
-        value: function setCompressorAttack(valueInMilliseconds) {
-            var value = _utils2.default.ms2sec(valueInMilliseconds);
-
-            //console.log("compressor attack = " + value.toString() + ' sec');
-
-            this._dynamicCompressorNode.setAttack(value);
-        }
-    }, {
-        key: 'getCompressorAttack',
-        value: function getCompressorAttack() {
-            return _utils2.default.sec2ms(this._dynamicCompressorNode.getAttack());
-        }
-    }, {
-        key: 'setCompressorRelease',
-        value: function setCompressorRelease(valueInMilliseconds) {
-
-            var value = _utils2.default.ms2sec(valueInMilliseconds);
-
-            //console.log("compressor release = " + value.toString() + ' sec');
-
-            this._dynamicCompressorNode.setRelease(value);
-        }
-    }, {
-        key: 'getCompressorRelease',
-        value: function getCompressorRelease() {
-            return _utils2.default.sec2ms(this._dynamicCompressorNode.getRelease());
-        }
-
-        //==============================================================================
-        /**
-         * Sets the release time, according to a slider in the GUI
-         * theSlider : the slider
-         * return the actual value of the release time (in msec)
-         */
-
-    }, {
-        key: 'setCompressorThresholdFromGui',
-        value: function setCompressorThresholdFromGui(theSlider) {
-
-            /// the value of the fader
-            var valueFader = parseFloat(theSlider.value);
-
-            // get the bounds of the fader (GUI)
-            var minFader = parseFloat(theSlider.min);
-            var maxFader = parseFloat(theSlider.max);
-
-            // get the actual bounds for this parameter
-
-            var _NewReceiverMix$compr = _slicedToArray(NewReceiverMix.compressionThresholdRange, 2);
-
-            var minValue = _NewReceiverMix$compr[0];
-            var maxValue = _NewReceiverMix$compr[1];
-
-            /// scale from GUI to DSP
-
-            var value = M4DPAudioModules.utilities.scale(valueFader, minFader, maxFader, minValue, maxValue);
-
-            this.setCompressorThreshold(value);
-
-            return value;
-        }
-
-        /**
-         * Returns the current value of release time, already scaled for the GUI
-         * theSlider : the slider
-         */
-
-    }, {
-        key: 'getCompressorThresholdForGui',
-        value: function getCompressorThresholdForGui(theSlider) {
-            // get the bounds of the fader (GUI)
-            var minFader = parseFloat(theSlider.min);
-            var maxFader = parseFloat(theSlider.max);
-
-            // get the actual bounds for this parameter
-
-            var _NewReceiverMix$compr2 = _slicedToArray(NewReceiverMix.compressionThresholdRange, 2);
-
-            var minValue = _NewReceiverMix$compr2[0];
-            var maxValue = _NewReceiverMix$compr2[1];
-
-
-            var actualValue = this.getCompressorThreshold();
-
-            /// scale from DSP to GUI
-            var value = M4DPAudioModules.utilities.scale(actualValue, minValue, maxValue, minFader, maxFader);
-
-            return value;
-        }
-
-        //==============================================================================
-        /**
-         * Sets the release time, according to a slider in the GUI
-         * theSlider : the slider
-         * return the actual value of the release time (in msec)
-         */
-
-    }, {
-        key: 'setReleaseTimeFromGui',
-        value: function setReleaseTimeFromGui(theSlider) {
-            /// the value of the fader
-            var valueFader = parseFloat(theSlider.value);
-
-            // get the bounds of the fader (GUI)
-            var minFader = parseFloat(theSlider.min);
-            var maxFader = parseFloat(theSlider.max);
-
-            // get the actual bounds for this parameter
-
-            var _NewReceiverMix$relea = _slicedToArray(NewReceiverMix.releaseTimeRange, 2);
-
-            var minValue = _NewReceiverMix$relea[0];
-            var maxValue = _NewReceiverMix$relea[1];
-
-            /// scale from GUI to DSP
-
-            var value = M4DPAudioModules.utilities.scale(valueFader, minFader, maxFader, minValue, maxValue);
-
-            this.setCompressorRelease(value);
-
-            return value;
-        }
-
-        /**
-         * Returns the current value of release time, already scaled for the GUI
-         * theSlider : the slider
-         */
-
-    }, {
-        key: 'getReleaseTimeForGui',
-        value: function getReleaseTimeForGui(theSlider) {
-            // get the bounds of the fader (GUI)
-            var minFader = parseFloat(theSlider.min);
-            var maxFader = parseFloat(theSlider.max);
-
-            // get the actual bounds for this parameter
-
-            var _NewReceiverMix$relea2 = _slicedToArray(NewReceiverMix.releaseTimeRange, 2);
-
-            var minValue = _NewReceiverMix$relea2[0];
-            var maxValue = _NewReceiverMix$relea2[1];
-
-
-            var actualValue = this.getCompressorRelease();
-
-            /// scale from DSP to GUI
-            var value = M4DPAudioModules.utilities.scale(actualValue, minValue, maxValue, minFader, maxFader);
-
-            return value;
-        }
-
-        //==============================================================================
-        /**
-         * Sets the refresh interval for RMS measurement (in msec)
-         * theSlider : the slider
-         * return the actual value of the refresh interval (in msec)
-         */
-
-    }, {
-        key: 'setRefreshRmsTimeFromGui',
-        value: function setRefreshRmsTimeFromGui(theSlider) {
-            /// the value of the fader
-            var valueFader = parseFloat(theSlider.value);
-
-            // get the bounds of the fader (GUI)
-            var minFader = parseFloat(theSlider.min);
-            var maxFader = parseFloat(theSlider.max);
-
-            // get the actual bounds for this parameter
-            var minValue = 20;
-            var maxValue = 500;
-
-            /// scale from GUI to DSP
-
-            var value = M4DPAudioModules.utilities.scale(valueFader, minFader, maxFader, minValue, maxValue);
-
-            this._rmsRefreshInterval = value;
-
-            return value;
-        }
-
-        /**
-         * Returns the refresh interval for RMS measurement (in msec)
-         * theSlider : the slider
-         */
-
-    }, {
-        key: 'getRefreshRmsTimeForGui',
-        value: function getRefreshRmsTimeForGui(theSlider) {
-            // get the bounds of the fader (GUI)
-            var minFader = parseFloat(theSlider.min);
-            var maxFader = parseFloat(theSlider.max);
-
-            // get the actual bounds for this parameter
-            var minValue = 20;
-            var maxValue = 500;
-
-
-            var actualValue = this._rmsRefreshInterval;
-
-            /// scale from DSP to GUI
-            var value = M4DPAudioModules.utilities.scale(actualValue, minValue, maxValue, minFader, maxFader);
-
-            return value;
-        }
-
-        //==============================================================================
-        /**
-         * Sets the attack time, according to a slider in the GUI
-         * theSlider : the slider
-         * return the actual value of the attack time (in msec)
-         */
-
-    }, {
-        key: 'setAttackTimeFromGui',
-        value: function setAttackTimeFromGui(theSlider) {
-            /// the value of the fader
-            var valueFader = parseFloat(theSlider.value);
-
-            // get the bounds of the fader (GUI)
-            var minFader = parseFloat(theSlider.min);
-            var maxFader = parseFloat(theSlider.max);
-
-            // get the actual bounds for this parameter
-
-            var _NewReceiverMix$attac = _slicedToArray(NewReceiverMix.attackTimeRange, 2);
-
-            var minValue = _NewReceiverMix$attac[0];
-            var maxValue = _NewReceiverMix$attac[1];
-
-            /// scale from GUI to DSP
-
-            var value = M4DPAudioModules.utilities.scale(valueFader, minFader, maxFader, minValue, maxValue);
-
-            this.setCompressorAttack(value);
-
-            return value;
-        }
-
-        /**
-         * Returns the current value of attack time, already scaled for the GUI
-         * theSlider : the slider
-         */
-
-    }, {
-        key: 'getAttackTimeForGui',
-        value: function getAttackTimeForGui(theSlider) {
-            // get the bounds of the fader (GUI)
-            var minFader = parseFloat(theSlider.min);
-            var maxFader = parseFloat(theSlider.max);
-
-            // get the actual bounds for this parameter
-
-            var _NewReceiverMix$attac2 = _slicedToArray(NewReceiverMix.attackTimeRange, 2);
-
-            var minValue = _NewReceiverMix$attac2[0];
-            var maxValue = _NewReceiverMix$attac2[1];
-
-
-            var actualValue = this.getCompressorAttack();
-
-            /// scale from DSP to GUI
-            var value = M4DPAudioModules.utilities.scale(actualValue, minValue, maxValue, minFader, maxFader);
-
-            return value;
-        }
-
-        //==============================================================================
-        /**
-         * Sets the compression ratio, according to a slider in the GUI
-         * theSlider : the slider
-         * return the actual value of the compression ratio
-         */
-
-    }, {
-        key: 'setCompressionRatioFromGui',
-        value: function setCompressionRatioFromGui(theSlider) {
-            /// the value of the fader
-            var valueFader = parseFloat(theSlider.value);
-
-            // get the bounds of the fader (GUI)
-            var minFader = parseFloat(theSlider.min);
-            var maxFader = parseFloat(theSlider.max);
-
-            // get the actual bounds for this parameter
-
-            var _NewReceiverMix$compr3 = _slicedToArray(NewReceiverMix.compressionRatioRange, 2);
-
-            var minValue = _NewReceiverMix$compr3[0];
-            var maxValue = _NewReceiverMix$compr3[1];
-
-            /// scale from GUI to DSP
-
-            var value = M4DPAudioModules.utilities.scale(valueFader, minFader, maxFader, minValue, maxValue);
-
-            this.setCompressorRatio(value);
-
-            return value;
-        }
-
-        /**
-         * Returns the current value of compression ratio, already scaled for the GUI
-         * theSlider : the slider
-         */
-
-    }, {
-        key: 'getCompressionRatioForGui',
-        value: function getCompressionRatioForGui(theSlider) {
-            // get the bounds of the fader (GUI)
-            var minFader = parseFloat(theSlider.min);
-            var maxFader = parseFloat(theSlider.max);
-
-            // get the actual bounds for this parameter
-
-            var _NewReceiverMix$compr4 = _slicedToArray(NewReceiverMix.compressionRatioRange, 2);
-
-            var minValue = _NewReceiverMix$compr4[0];
-            var maxValue = _NewReceiverMix$compr4[1];
-
-
-            var actualValue = this.getCompressorRatio();
-
-            /// scale from DSP to GUI
-            var value = M4DPAudioModules.utilities.scale(actualValue, minValue, maxValue, minFader, maxFader);
-
-            return value;
-        }
-
-        //==============================================================================
-        /**
-         * Sets the minimum hold time (in msec)
-         * theSlider : the slider
-         * return the actual value of the hold time
-         */
-
-    }, {
-        key: 'setMinimumHoldTimeFromGui',
-        value: function setMinimumHoldTimeFromGui(theSlider) {
-            /// the value of the fader
-            var valueFader = parseFloat(theSlider.value);
-
-            // get the bounds of the fader (GUI)
-            var minFader = parseFloat(theSlider.min);
-            var maxFader = parseFloat(theSlider.max);
-
-            // get the actual bounds for this parameter
-            var minValue = 1000;
-            var maxValue = 5000;
-
-            /// scale from GUI to DSP
-
-            var value = M4DPAudioModules.utilities.scale(valueFader, minFader, maxFader, minValue, maxValue);
-
-            this._minimumHoldTime = value;
-
-            return value;
-        }
-
-        /**
-         * Returns the minimum hold time (in msec)
-         * theSlider : the slider
-         */
-
-    }, {
-        key: 'getMinimumHoldTimeForGui',
-        value: function getMinimumHoldTimeForGui(theSlider) {
-            // get the bounds of the fader (GUI)
-            var minFader = parseFloat(theSlider.min);
-            var maxFader = parseFloat(theSlider.max);
-
-            // get the actual bounds for this parameter
-            var minValue = 1000;
-            var maxValue = 5000;
-
-
-            var actualValue = this._minimumHoldTime;
-
-            /// scale from DSP to GUI
-            var value = M4DPAudioModules.utilities.scale(actualValue, minValue, maxValue, minFader, maxFader);
-
-            return value;
-        }
 
         //==============================================================================
         /**
          * Returns the RMS value for the commentary, in dB
          */
-
-    }, {
-        key: 'getRmsForCommentary',
         value: function getRmsForCommentary() {
 
             if (this._hasExtendedCommentaryToAnalyze() === true) {
-                return _utils2.default.lin2dBsafe(this._analysisNodeCommentary.GetValuedB());
+                var indexForExtendedCommentary = this._getChannelIndexForExtendedCommentary();
+
+                return this._rmsMeteringNode.GetValuedB(indexForExtendedCommentary);
             } else {
                 return -200;
             }
@@ -938,20 +513,25 @@ var NewReceiverMix = function (_AbstractNode) {
     }, {
         key: 'getRmsForProgram',
         value: function getRmsForProgram() {
+
             if (this._hasProgramToAnalyze() === true) {
+                var indicesForProgram = this._getChannelsIndicesForProgram();
+
                 var rms = [];
 
-                /// average rms among all channels
+                /// average rms among all channels of the program (except for LFE)
 
-                for (var i = 0; i < this._analysisNodeProgram.length; i++) {
-                    var lin = this._analysisNodeProgram[i].GetValue();
+                for (var i = 0; i < indicesForProgram.length; i++) {
+                    var index = indicesForProgram[i];
+
+                    var lin = this._rmsMeteringNode.GetValue(index);
 
                     rms.push(lin);
                 }
 
                 var avg = _utils2.default.mean(rms);
 
-                return _utils2.default.lin2dBsafe(avg);
+                return _utils2.default.lin2powdB(avg + 1e-12);
             } else {
                 return -200;
             }
@@ -986,10 +566,12 @@ var NewReceiverMix = function (_AbstractNode) {
             }
         }
 
-        //==============================================================================
-        /**
-         * returns true if the program is being compressed
+        /************************************************************************************/
+        /*!
+         *  @brief          Returns true if some compression is currently applied
+         *
          */
+        /************************************************************************************/
 
     }, {
         key: '_updateCompressor',
@@ -1007,31 +589,61 @@ var NewReceiverMix = function (_AbstractNode) {
                 _this2._updateCompressor();
             }, this._rmsRefreshInterval);
 
+            if (this.bypass === true) {
+                /// increment the counter
+                this._durationHold += this._rmsRefreshInterval;
+
+                /// nothing else to do
+                return;
+            }
+
+            var isCompressing = this.dynamicCompressionState;
+
             /// in msec
             /// once the compression gets activated,
-            /// we will hold it for at least 1500 msec
-            /// i.e. for 1500 msec, we suspend the RMS comparison,
-            /// and the compression remains with a dry/wet of 100%
-            var minimumHoldTime = this._minimumHoldTime;
+            /// the compression remains with a dry/wet of 100%
+            var uptime = 325; /// msec
+            var downtime = 750;
 
-            ///@todo : the hold time could also appear in the GUI
+            var holdtime = 0;
 
-            if (this.bypass === false && this._shouldCompress === true && this._durationHold <= minimumHoldTime) {
-                /// hold the compressor for at least 1000 msec
+            if (isCompressing === true) {
+                holdtime = downtime;
+            } else {
+                holdtime = uptime;
+            }
 
+            if (this._durationHold < holdtime) {
                 /// increment the counter
                 this._durationHold += this._rmsRefreshInterval;
 
                 return;
+            } else {
+                var isCriteriaMet = this._isCompressionCriteriaMet();
+
+                if (isCriteriaMet === true) {
+                    this._setDryWet(100, 250);
+                } else {
+                    this._setDryWet(0, 1500);
+                }
+
+                /// reset the counter
+                this._durationHold = 0;
             }
+        }
 
-            /// the hold period is over; now, really compare the RMS,
-            /// to activate or not the compression
+        /************************************************************************************/
+        /*!
+         *  @brief          Returns true if the compression criteria is met
+         *
+         */
+        /************************************************************************************/
 
-            this._shouldCompress = false;
-
+    }, {
+        key: '_isCompressionCriteriaMet',
+        value: function _isCompressionCriteriaMet() {
             if (this.bypass === true) {
-                this._shouldCompress = false;
+                return false;
             } else {
                 if (this._hasExtendedCommentaryToAnalyze() === true) {
                     var C = this.getRmsForCommentary();
@@ -1041,198 +653,137 @@ var NewReceiverMix = function (_AbstractNode) {
                     var X = this.thresholdForProgramme;
 
                     if (C > N && P > X) {
-                        this._shouldCompress = true;
+                        return true;
                     }
                 } else {
-                    this._shouldCompress = false;
+                    return false;
                 }
             }
-
-            if (this._shouldCompress === true) {
-                //ratio = this._compressionRatio;
-                //this._dynamicCompressorNode.bypass = false;
-                this._dynamicCompressorNode.drywet = 100;
-
-                /// increment the counter
-                this._durationHold += this._rmsRefreshInterval;
+        }
+    }, {
+        key: '_setDryWet',
+        value: function _setDryWet(ratio, rampTimeInMilliseconds) {
+            for (var i = 0; i < this._compressors.length; i++) {
+                this._compressors[i].setDryWet(ratio, rampTimeInMilliseconds);
+            }
+        }
+    }, {
+        key: '_getDryWet',
+        value: function _getDryWet() {
+            if (this._compressors.length > 0) {
+                return this._compressors[0].getDryWet();
             } else {
-                //ratio = 1.0;
-                //this._dynamicCompressorNode.bypass = true;
-                this._dynamicCompressorNode.drywet = 0;
-
-                /// increment the counter
-                this._durationHold = 0;
+                return 0.0;
             }
         }
 
-        //==============================================================================
-        /**
-         * Updates the connections of the audio graph
+        /************************************************************************************/
+        /*!
+         *  @brief          removes all the nodes from the current audio graph
+         *
          */
+        /************************************************************************************/
+
+    }, {
+        key: '_disconnectEveryNodes',
+        value: function _disconnectEveryNodes() {
+            this._input.disconnect();
+            this._splitterNode.disconnect();
+            this._mergerNode.disconnect();
+
+            for (var i = 0; i < this._compressors.length; i++) {
+                this._compressors[i].disconnect();
+            }
+
+            /// note that the RMS metering remains always connected
+            this._input.connect(this._rmsMeteringNode._input);
+        }
+
+        /************************************************************************************/
+        /*!
+         *  @brief          Updates the connections of the audio graph
+         *
+         */
+        /************************************************************************************/
 
     }, {
         key: '_updateAudioGraph',
         value: function _updateAudioGraph() {
 
             /// first of all, disconnect everything
-            this._input.disconnect();
-            this._splitterNode.disconnect();
-            this._analysisNodeCommentary.disconnect();
-            this._mergerNode.disconnect();
-            this._dynamicCompressorNode.disconnect();
+            this._disconnectEveryNodes();
 
-            if (typeof this._splitterAfterCompressor !== "undefined") {
-                this._splitterAfterCompressor.disconnect();
-            }
-            if (typeof this._mergerBeforeCompressor !== "undefined") {
-                this._mergerBeforeCompressor.disconnect();
+            /// the bypass case
+            if (this.bypass === true || this._hasProgramToAnalyze() === false || this._hasExtendedCommentaryToAnalyze() === false) {
+                this._input.connect(this._output);
+
+                return;
             }
 
-            for (var i = 0; i < this._analysisNodeProgram.length; i++) {
-                this._analysisNodeProgram[i].disconnect();
+            var totalNumberOfChannels_ = this.getTotalNumberOfChannels();
+
+            var numChannelsForProgramStream = this._getNumChannelsForProgramStream();
+
+            /// create the compressors
+            {
+                /// delete all existing compressors (if any)
+                this._compressors = [];
+
+                for (var i = 0; i < numChannelsForProgramStream; i++) {
+                    var newCompressor = new _compressorwithdrywet2.default(this._audioContext);
+
+                    this._compressors.push(newCompressor);
+                }
             }
 
-            var indexForExtendedCommentary = this._getChannelIndexForExtendedCommentary();
+            /// configure the compressors
+            {
+                for (var _i = 0; _i < this._compressors.length; _i++) {
+                    this._compressors[_i].setAttack(5);
+                    this._compressors[_i].setRelease(80);
+                    this._compressors[_i].setCompressorRatio(2);
+                    this._compressors[_i].setCompressorThreshold(-28);
+
+                    this._compressors[_i].setExpanderRatio(1);
+                    this._compressors[_i].setMakeUpGain(0);
+                }
+            }
 
             /// split the input streams into N independent channels
             this._input.connect(this._splitterNode);
 
-            /// connect the analyzer for the commentary
-            if (this._hasExtendedCommentaryToAnalyze() === true) {
-                this._splitterNode.connect(this._analysisNodeCommentary._input, indexForExtendedCommentary, 0);
-            }
-
             var indicesForProgram = this._getChannelsIndicesForProgram();
 
-            /// connect the analyzers for the program
-            if (this._hasProgramToAnalyze() === true) {
-                var numChannelsForProgramStream = this._getNumChannelsForProgramStream();
+            /// sanity check
+            if (indicesForProgram.length !== numChannelsForProgramStream) {
+                throw new Error("Ca parait pas bon...");
+            }
 
-                /// sanity check
-                if (indicesForProgram.length !== numChannelsForProgramStream) {
-                    throw new Error("Ca parait pas bon...");
-                }
+            var compressorIndex = 0;
 
-                /// delete the previous analyzers
-                this._analysisNodeProgram = [];
+            for (var _i2 = 0; _i2 < totalNumberOfChannels_; _i2++) {
+                /// is this a channel that goes into the compressor ?
 
-                /// create N (mono) analyzers
-                for (var _i = 0; _i < numChannelsForProgramStream; _i++) {
-                    var newAnalyzer = new _rmsmetering2.default(this._audioContext);
-                    this._analysisNodeProgram.push(newAnalyzer);
-                }
+                var shouldGoToCompressor = indicesForProgram.includes(_i2);
 
-                /// connect the (mono) analyzers to the channel splitter
-                for (var _i2 = 0; _i2 < numChannelsForProgramStream; _i2++) {
-                    var splitterOutputIndex = indicesForProgram[_i2];
+                if (shouldGoToCompressor === true) {
+                    this._splitterNode.connect(this._compressors[compressorIndex]._input, _i2, 0);
 
-                    this._splitterNode.connect(this._analysisNodeProgram[_i2]._input, splitterOutputIndex, 0);
-                }
+                    this._compressors[compressorIndex]._output.connect(this._mergerNode, 0, _i2);
 
-                /// re-build the compressor if needed
-                if (this._dynamicCompressorNode.getNumChannels() !== numChannelsForProgramStream) {
-
-                    /// preserve the old state
-                    var ratio = this._dynamicCompressorNode.getRatio();
-                    var attack = this._dynamicCompressorNode.getAttack();
-                    var release = this._dynamicCompressorNode.getRelease();
-                    var threshold = this._dynamicCompressorNode.getThreshold();
-
-                    /// destroy the compressor
-                    this._dynamicCompressorNode = "undefined";
-
-                    var audioContext = this._audioContext;
-
-                    /// create a new one
-                    this._dynamicCompressorNode = new _compressor2.default(audioContext, numChannelsForProgramStream);
-
-                    /// restore the settings
-                    this._dynamicCompressorNode.setRatio(ratio);
-                    this._dynamicCompressorNode.setAttack(attack);
-                    this._dynamicCompressorNode.setRelease(release);
-                    this._dynamicCompressorNode.setThreshold(threshold);
-
-                    /// delete these nodes
-                    this._splitterAfterCompressor = "undefined";
-                    this._mergerBeforeCompressor = "undefined";
-
-                    /// a channel splitter at the output of the compressor
-                    this._splitterAfterCompressor = audioContext.createChannelSplitter(numChannelsForProgramStream);
-
-                    this._mergerBeforeCompressor = audioContext.createChannelMerger(numChannelsForProgramStream);
+                    compressorIndex++;
+                } else {
+                    /// not going to the compressor
+                    this._splitterNode.connect(this._mergerNode, _i2, _i2);
                 }
             }
 
-            if (this.bypass === true || this._hasProgramToAnalyze() === false) {
-                this._input.connect(this._output);
-            } else {
-
-                /// sanity checks
-                var _numChannelsForProgramStream = this._getNumChannelsForProgramStream();
-
-                if (_numChannelsForProgramStream <= 0) {
-                    throw new Error("pas bon !");
-                }
-
-                if (typeof this._dynamicCompressorNode === "undefined") {
-                    throw new Error("pas bon !");
-                }
-
-                if (typeof this._splitterAfterCompressor === "undefined") {
-                    throw new Error("pas bon !");
-                }
-
-                if (typeof this._mergerBeforeCompressor === "undefined") {
-                    throw new Error("pas bon !");
-                }
-
-                if (this._dynamicCompressorNode.getNumChannels() !== _numChannelsForProgramStream) {
-                    throw new Error("pas bon !");
-                }
-
-                if (this._splitterAfterCompressor.numberOfInputs != 1 || this._splitterAfterCompressor.numberOfOutputs != _numChannelsForProgramStream) {
-                    throw new Error("pas bon !");
-                }
-
-                if (this._mergerBeforeCompressor.numberOfInputs != _numChannelsForProgramStream || this._mergerBeforeCompressor.numberOfOutputs != 1) {
-                    throw new Error("pas bon !");
-                }
-
-                if (indicesForProgram.length !== _numChannelsForProgramStream) {
-                    throw new Error("pas bon !");
-                }
-
-                var totalNumberOfChannels_ = this.getTotalNumberOfChannels();
-
-                this._mergerBeforeCompressor.connect(this._dynamicCompressorNode._input);
-                this._dynamicCompressorNode.connect(this._splitterAfterCompressor);
-
-                var compressorIndex = 0;
-
-                for (var _i3 = 0; _i3 < totalNumberOfChannels_; _i3++) {
-                    /// is this a channel that goes into the compressor ?
-
-                    var shouldGoToCompressor = indicesForProgram.includes(_i3);
-
-                    if (shouldGoToCompressor === true) {
-                        this._splitterNode.connect(this._mergerBeforeCompressor, _i3, compressorIndex);
-
-                        this._splitterAfterCompressor.connect(this._mergerNode, compressorIndex, _i3);
-
-                        compressorIndex++;
-                    } else {
-                        /// not going to the compressor
-                        this._splitterNode.connect(this._mergerNode, _i3, _i3);
-                    }
-                }
-
-                /// sanity check
-                if (compressorIndex !== _numChannelsForProgramStream) {
-                    throw new Error("pas bon !");
-                }
-
-                this._mergerNode.connect(this._output);
+            /// sanity check
+            if (compressorIndex !== numChannelsForProgramStream) {
+                throw new Error("pas bon !");
             }
+
+            this._mergerNode.connect(this._output);
         }
     }, {
         key: 'bypass',
@@ -1307,21 +858,9 @@ var NewReceiverMix = function (_AbstractNode) {
             return this._thresholdForProgramme;
         }
     }, {
-        key: 'shouldCompressProgram',
-        get: function get() {
-            return this._shouldCompress;
-        }
-
-        //==============================================================================
-        /**
-         * Returns the dynamic compression state
-         * @type {boolean}
-         */
-
-    }, {
         key: 'dynamicCompressionState',
         get: function get() {
-            return this._shouldCompress;
+            return this._getDryWet() > 1.0;
         }
     }], [{
         key: 'rangeForCommentaryThreshold',
@@ -1363,7 +902,7 @@ var NewReceiverMix = function (_AbstractNode) {
          * @type {number}
          */
         get: function get() {
-            return -30;
+            return -40;
         }
     }, {
         key: 'rangeForProgrammeThreshold',
@@ -1383,150 +922,7 @@ var NewReceiverMix = function (_AbstractNode) {
     }, {
         key: 'defaultForProgrammeThreshold',
         get: function get() {
-            return -35;
-        }
-    }, {
-        key: 'compressionThresholdRange',
-        get: function get() {
-            return [NewReceiverMix.minCompressionThresholdRange, NewReceiverMix.maxCompressionThresholdRange];
-        }
-    }, {
-        key: 'minCompressionThresholdRange',
-        get: function get() {
-            return _compressor2.default.minThreshold;
-        }
-    }, {
-        key: 'maxCompressionThresholdRange',
-        get: function get() {
-            return _compressor2.default.maxThreshold;
-        }
-
-        /**
-         * Returns the default threshold ratio
-         * @type {number}
-         */
-
-    }, {
-        key: 'defaultCompressionThreshold',
-        get: function get() {
-            return _compressor2.default.defaultThreshold;
-        }
-
-        /**
-         * Get the compression ratio range
-         * @type {array}
-         */
-
-    }, {
-        key: 'compressionRatioRange',
-        get: function get() {
-            return [NewReceiverMix.minCompressionRatioRange, NewReceiverMix.maxCompressionRatioRange];
-        }
-    }, {
-        key: 'minCompressionRatioRange',
-        get: function get() {
-            return _compressor2.default.minRatio;
-        }
-    }, {
-        key: 'maxCompressionRatioRange',
-        get: function get() {
-            return _compressor2.default.maxRatio;
-        }
-
-        /**
-         * Returns the default compression ratio
-         * @type {number}
-         */
-
-    }, {
-        key: 'defaultCompressionRatio',
-        get: function get() {
-            return 5;
-        }
-
-        /**
-         * Get the attack time range (in msec)
-         * @type {array}
-         */
-
-    }, {
-        key: 'attackTimeRange',
-        get: function get() {
-            return [NewReceiverMix.minAttackTimeRange, NewReceiverMix.maxAttackTimeRange];
-        }
-
-        /**
-         * Returns the minimum attack time (in msec)
-         */
-
-    }, {
-        key: 'minAttackTimeRange',
-        get: function get() {
-            return _utils2.default.sec2ms(_compressor2.default.minAttack);
-        }
-
-        /**
-         * Returns the maximum attack time (in msec)
-         */
-
-    }, {
-        key: 'maxAttackTimeRange',
-        get: function get() {
-
-            return _utils2.default.sec2ms(_compressor2.default.maxAttack);
-        }
-
-        /**
-         * Returns the default attack time (in msec)
-         * @type {number}
-         */
-
-    }, {
-        key: 'defaultAttackTime',
-        get: function get() {
-            return 5;
-        }
-
-        /**
-         * Get the release time range (in msec)
-         * @type {array}
-         */
-
-    }, {
-        key: 'releaseTimeRange',
-        get: function get() {
-            return [NewReceiverMix.minReleaseTimeRange, NewReceiverMix.maxReleaseTimeRange];
-        }
-
-        /**
-         * Returns the minimum release time (in msec)
-         */
-
-    }, {
-        key: 'minReleaseTimeRange',
-        get: function get() {
-            return _utils2.default.sec2ms(_compressor2.default.minRelease);
-        }
-
-        /**
-         * Returns the maximum release time (in msec)
-         */
-
-    }, {
-        key: 'maxReleaseTimeRange',
-        get: function get() {
-            return _utils2.default.sec2ms(_compressor2.default.maxRelease);
-        }
-
-        /**
-         * Returns the default release time (in msec)
-         * @type {number}
-         */
-
-    }, {
-        key: 'defaultReleaseTime',
-        get: function get() {
-            return 20;
+            return -45;
         }
     }]);
 

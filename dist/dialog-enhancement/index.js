@@ -541,10 +541,12 @@ var DialogEnhancementProcessorMode2 = function (_AbstractNode3) {
             }
         }
 
-        //==============================================================================
-        /**
-         * Updates the connections of the audio graph
+        /************************************************************************************/
+        /*!
+         *  @brief          Updates the connections of the audio graph
+         *
          */
+        /************************************************************************************/
 
     }, {
         key: '_updateAudioGraph',

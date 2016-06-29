@@ -146,14 +146,66 @@ var CompressorExpanderNode = function (_AbstractNode) {
         return _this;
     }
 
-    //==============================================================================
-    /**
-     * @brief Set attack time
+    /************************************************************************************/
+    /*!
+     *  @brief          Returns the attack time in msec
      *
      */
+    /************************************************************************************/
 
 
     _createClass(CompressorExpanderNode, [{
+        key: 'getAttack',
+        value: function getAttack() {
+            return this._attack;
+        }
+
+        /************************************************************************************/
+        /*!
+         *  @brief          Returns the release time in msec
+         *
+         */
+        /************************************************************************************/
+
+    }, {
+        key: 'getRelease',
+        value: function getRelease() {
+            return this._release;
+        }
+
+        /************************************************************************************/
+        /*!
+         *  @brief          Returns the compressor threshold, in dB
+         *
+         */
+        /************************************************************************************/
+
+    }, {
+        key: 'getCompressorThreshold',
+        value: function getCompressorThreshold() {
+            return this._compressorThreshold;
+        }
+
+        /************************************************************************************/
+        /*!
+         *  @brief          Returns the compressor ratio
+         *
+         */
+        /************************************************************************************/
+
+    }, {
+        key: 'getCompressorRatio',
+        value: function getCompressorRatio() {
+            return this._compressorRatio;
+        }
+
+        //==============================================================================
+        /**
+         * @brief Set attack time
+         *
+         */
+
+    }, {
         key: 'setAttack',
         value: function setAttack(valueInMsec) {
             var MinAttack = 0.1; /// msec
@@ -226,7 +278,7 @@ var CompressorExpanderNode = function (_AbstractNode) {
             var MinMakeUpGain = -40; /// dB
             var MaxMakeUpGain = 40;
 
-            this._makeupIndB = _utils2.default.clamp(value, MinMakeUpGain, MaxMakeUpGain);
+            this._makeupIndB = _utils2.default.clamp(valueIndB, MinMakeUpGain, MaxMakeUpGain);
 
             this._updateParameters();
         }
@@ -365,6 +417,9 @@ var MultiCompressorExpanderNode = exports.MultiCompressorExpanderNode = function
         value: function getNumChannels() {
             return this._compressorNodes.length;
         }
+
+        //==============================================================================
+
     }, {
         key: 'setAttack',
         value: function setAttack(valueInMsec) {
@@ -375,9 +430,6 @@ var MultiCompressorExpanderNode = exports.MultiCompressorExpanderNode = function
 
             this._updateParameters();
         }
-
-        //==============================================================================
-
     }, {
         key: 'setRelease',
         value: function setRelease(valueInMsec) {

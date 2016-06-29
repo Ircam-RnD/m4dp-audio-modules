@@ -79,12 +79,12 @@ var RmsMetering = function (_AbstractNode) {
              which will be a constant power of 2 throughout the lifetime of the node.
              */
             var numberOfInputChannels = 1;
-            var numberOfOutputChannels = 0;
+            var numberOfOutputChannels = 1; ///< as a matter of fact, the script processor
+            /// has no outlet, but this seems to be buggy in the WAA.
+            /// so let's declare 1 outlet
             _this._scriptNode = audioContext.createScriptProcessor(bufferSize, numberOfInputChannels, numberOfOutputChannels);
 
             var metering = _this;
-
-            _this._input.connect(_this._scriptNode);
 
             _this._scriptNode.onaudioprocess = function (audioProcessingEvent) {
                 var inputBuffer = audioProcessingEvent.inputBuffer;
@@ -95,7 +95,9 @@ var RmsMetering = function (_AbstractNode) {
 
                 var numSamples = inputBuffer.length;
 
-                var tmp = 0.0;
+                var tmp = metering._value;
+
+                var inputData = inputBuffer.getChannelData(0);
 
                 for (var i = 0; i < numSamples; i++) {
                     var input = inputData[i];
@@ -109,6 +111,10 @@ var RmsMetering = function (_AbstractNode) {
             };
         }
 
+        _this._input.connect(_this._scriptNode);
+
+        /// workaround so that the script processor node get triggered (and not garbage collected)
+        _this._scriptNode.connect(audioContext.destination, 0, 0);
         return _this;
     }
 
@@ -219,14 +225,20 @@ var MultiRMSMetering = exports.MultiRMSMetering = function (_AbstractNode2) {
             throw new Error("Pas bon");
         }
 
-        /// create N compressorNodes
+        /// create N RmsMetering nodes
         for (var i = 0; i < numChannels; i++) {
-            var newCompressorNode = new RmsMetering(audioContext);
-            _this2._meterNodes.push(newCompressorNode);
+            var newRmsNode = new RmsMetering(audioContext);
+            _this2._meterNodes.push(newRmsNode);
         }
 
         /// create the audio graph
-        _this2._updateAudioGraph();
+        /// split the input streams into N independent channels
+        _this2._input.connect(_this2._splitterNode);
+
+        /// connect a compressorNode to each channel
+        for (var _i = 0; _i < numChannels; _i++) {
+            _this2._splitterNode.connect(_this2._meterNodes[_i]._input, _i, 0);
+        }
         return _this2;
     }
 
@@ -312,34 +324,6 @@ var MultiRMSMetering = exports.MultiRMSMetering = function (_AbstractNode2) {
             var avg = _utils2.default.mean(rms);
 
             return _utils2.default.lin2powdB(avg + 1e-12);
-        }
-
-        /************************************************************************************/
-        /*!
-         *  @brief          Updates the connections of the audio graph
-         *
-         */
-        /************************************************************************************/
-
-    }, {
-        key: '_updateAudioGraph',
-        value: function _updateAudioGraph() {
-            var numChannels = this.getNumChannels();
-
-            /// first of all, disconnect everything
-            this._input.disconnect();
-            this._splitterNode.disconnect();
-            for (var i = 0; i < numChannels; i++) {
-                this._meterNodes[i].disconnect();
-            }
-
-            /// split the input streams into N independent channels
-            this._input.connect(this._splitterNode);
-
-            /// connect a compressorNode to each channel
-            for (var _i = 0; _i < numChannels; _i++) {
-                this._splitterNode.connect(this._meterNodes[_i]._input, _i);
-            }
         }
     }]);
 

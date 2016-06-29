@@ -469,10 +469,12 @@ var OldSmartFader = function (_AbstractNode) {
             this._gainNode.gain.value = lin;
         }
 
-        //==============================================================================
-        /**
-         * Updates the connections of the audio graph
+        /************************************************************************************/
+        /*!
+         *  @brief          Updates the connections of the audio graph
+         *
          */
+        /************************************************************************************/
 
     }, {
         key: '_updateAudioGraph',

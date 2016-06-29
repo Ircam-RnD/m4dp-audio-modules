@@ -2394,10 +2394,12 @@ var DialogEnhancementProcessorMode2 = function (_AbstractNode3) {
             }
         }
 
-        //==============================================================================
-        /**
-         * Updates the connections of the audio graph
+        /************************************************************************************/
+        /*!
+         *  @brief          Updates the connections of the audio graph
+         *
          */
+        /************************************************************************************/
 
     }, {
         key: '_updateAudioGraph',
@@ -2531,7 +2533,7 @@ var DialogEnhancementProcessorMode3 = function (_AbstractNode4) {
 
     return DialogEnhancementProcessorMode3;
 }(_index2.default);
-},{"../core/index.js":2,"../core/utils.js":3,"../dsp/centerenhancement.js":7,"../dsp/multichannelgain.js":15}],5:[function(require,module,exports){
+},{"../core/index.js":2,"../core/utils.js":3,"../dsp/centerenhancement.js":7,"../dsp/multichannelgain.js":16}],5:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -3046,10 +3048,12 @@ var CascadeNode = function (_AbstractNode) {
         key: "_updateAudioGraph",
 
 
-        //==============================================================================
-        /**
-         * Updates the connections of the audio graph
+        /************************************************************************************/
+        /*!
+         *  @brief          Updates the connections of the audio graph
+         *
          */
+        /************************************************************************************/
         value: function _updateAudioGraph() {
             var numCascades_ = this.numCascades;
 
@@ -3242,7 +3246,7 @@ var CenterEnhancementNode = function (_AbstractNode) {
 }(_index2.default);
 
 exports.default = CenterEnhancementNode;
-},{"../core/index.js":2,"./lrms.js":14,"./phone.js":17}],8:[function(require,module,exports){
+},{"../core/index.js":2,"./lrms.js":15,"./phone.js":18}],8:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -3512,10 +3516,12 @@ var MultichannelCompressorNode = function (_AbstractNode) {
         key: '_updateAudioGraph',
 
 
-        //==============================================================================
-        /**
-         * Updates the connections of the audio graph
+        /************************************************************************************/
+        /*!
+         *  @brief          Updates the connections of the audio graph
+         *
          */
+        /************************************************************************************/
         value: function _updateAudioGraph() {
 
             var numChannels = this.getNumChannels();
@@ -3836,14 +3842,66 @@ var CompressorExpanderNode = function (_AbstractNode) {
         return _this;
     }
 
-    //==============================================================================
-    /**
-     * @brief Set attack time
+    /************************************************************************************/
+    /*!
+     *  @brief          Returns the attack time in msec
      *
      */
+    /************************************************************************************/
 
 
     _createClass(CompressorExpanderNode, [{
+        key: 'getAttack',
+        value: function getAttack() {
+            return this._attack;
+        }
+
+        /************************************************************************************/
+        /*!
+         *  @brief          Returns the release time in msec
+         *
+         */
+        /************************************************************************************/
+
+    }, {
+        key: 'getRelease',
+        value: function getRelease() {
+            return this._release;
+        }
+
+        /************************************************************************************/
+        /*!
+         *  @brief          Returns the compressor threshold, in dB
+         *
+         */
+        /************************************************************************************/
+
+    }, {
+        key: 'getCompressorThreshold',
+        value: function getCompressorThreshold() {
+            return this._compressorThreshold;
+        }
+
+        /************************************************************************************/
+        /*!
+         *  @brief          Returns the compressor ratio
+         *
+         */
+        /************************************************************************************/
+
+    }, {
+        key: 'getCompressorRatio',
+        value: function getCompressorRatio() {
+            return this._compressorRatio;
+        }
+
+        //==============================================================================
+        /**
+         * @brief Set attack time
+         *
+         */
+
+    }, {
         key: 'setAttack',
         value: function setAttack(valueInMsec) {
             var MinAttack = 0.1; /// msec
@@ -3916,7 +3974,7 @@ var CompressorExpanderNode = function (_AbstractNode) {
             var MinMakeUpGain = -40; /// dB
             var MaxMakeUpGain = 40;
 
-            this._makeupIndB = _utils2.default.clamp(value, MinMakeUpGain, MaxMakeUpGain);
+            this._makeupIndB = _utils2.default.clamp(valueIndB, MinMakeUpGain, MaxMakeUpGain);
 
             this._updateParameters();
         }
@@ -4055,6 +4113,9 @@ var MultiCompressorExpanderNode = exports.MultiCompressorExpanderNode = function
         value: function getNumChannels() {
             return this._compressorNodes.length;
         }
+
+        //==============================================================================
+
     }, {
         key: 'setAttack',
         value: function setAttack(valueInMsec) {
@@ -4065,9 +4126,6 @@ var MultiCompressorExpanderNode = exports.MultiCompressorExpanderNode = function
 
             this._updateParameters();
         }
-
-        //==============================================================================
-
     }, {
         key: 'setRelease',
         value: function setRelease(valueInMsec) {
@@ -4613,6 +4671,256 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _index = require('../core/index.js');
+
+var _index2 = _interopRequireDefault(_index);
+
+var _utils = require('../core/utils.js');
+
+var _utils2 = _interopRequireDefault(_utils);
+
+var _compressorexpander = require('../dsp/compressorexpander.js');
+
+var _compressorexpander2 = _interopRequireDefault(_compressorexpander);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /************************************************************************************/
+/*!
+ *   @file       compressorwithdrywet.js
+ *   @brief      This class implements a mono compressor/expander, with optional dry/wet control
+ *   @author     Thibaut Carpentier / Ircam CNRS UMR9912
+ *   @date       06/2016
+ *
+ */
+/************************************************************************************/
+
+/************************************************************************************/
+/*!
+ *  @class          CompressorWithDryWet
+ *  @brief          Compressor/Expander
+ *  @details        This class implements a mono compressor/expander, with optional dry/wet control
+ *  @details        mono version
+ *
+ */
+/************************************************************************************/
+
+var CompressorWithDryWet = function (_AbstractNode) {
+    _inherits(CompressorWithDryWet, _AbstractNode);
+
+    /************************************************************************************/
+    /*!
+     *  @brief          Class constructor
+     *  @param[in]      audioContext
+     *
+     */
+    /************************************************************************************/
+
+    function CompressorWithDryWet(audioContext) {
+        _classCallCheck(this, CompressorWithDryWet);
+
+        /// 100 = totally wet i.e. being compressed
+        /// 0 = totally dry, not being compressed
+
+        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(CompressorWithDryWet).call(this, audioContext));
+
+        _this._drywet = 100;
+
+        /// create the nodes
+        {
+            _this._compressorNode = new _compressorexpander2.default(_this._audioContext);
+            _this._gainDry = _this._audioContext.createGain();
+            _this._gainWet = _this._audioContext.createGain();
+        }
+
+        /// connect the nodes
+        {
+            _this._input.connect(_this._gainDry);
+            _this._input.connect(_this._compressorNode._input);
+
+            _this._compressorNode.connect(_this._gainWet);
+
+            _this._gainDry.connect(_this._output);
+            _this._gainWet.connect(_this._output);
+        }
+
+        /// sanity checks
+        if (_this._input.numberOfInputs != 1 || _this._input.numberOfOutputs != 1) {
+            throw new Error("Pas bon");
+        }
+
+        /// sanity checks
+        if (_this._output.numberOfInputs != 1 || _this._output.numberOfOutputs != 1) {
+            throw new Error("Pas bon");
+        }
+        return _this;
+    }
+
+    /************************************************************************************/
+    /*!
+     *  @brief          Returns the dry/wet ratio  in [0 - 100]
+     *
+     */
+    /************************************************************************************/
+
+
+    _createClass(CompressorWithDryWet, [{
+        key: 'getDryWet',
+        value: function getDryWet() {
+            return this._gainWet.gain.value * 100.;
+        }
+
+        /************************************************************************************/
+        /*!
+         *  @brief          Set the dry/wet ratio  in [0 - 100]
+         *  @details        100 = totally wet i.e. being compressed
+         *                  0 = totally dry, not being compressed
+         *
+         */
+        /************************************************************************************/
+
+    }, {
+        key: 'setDryWet',
+        value: function setDryWet(ratio, rampTimeInMilliseconds) {
+            /// sanity check
+            if (rampTimeInMilliseconds < 0) {
+                throw new Error("Ca parait pas bon...");
+            }
+
+            /// 100% --> totally wet
+            /// 0% --> totally dry
+
+            var percent = _utils2.default.clamp(ratio, 0, 100);
+
+            this._drywet = percent;
+
+            var wet = percent;
+            var dry = 100 - percent;
+
+            /*
+            this._gainDry.gain.value = dry / 100.;
+            this._gainWet.gain.value = wet / 100.;
+             */
+
+            var nextTime = this._audioContext.currentTime + rampTimeInMilliseconds / 1000.;
+
+            this._gainDry.gain.linearRampToValueAtTime(dry / 100., nextTime);
+            this._gainWet.gain.linearRampToValueAtTime(wet / 100., nextTime);
+        }
+
+        //==============================================================================
+
+    }, {
+        key: 'setAttack',
+        value: function setAttack(valueInMsec) {
+            this._compressorNode.setAttack(valueInMsec);
+        }
+    }, {
+        key: 'setRelease',
+        value: function setRelease(valueInMsec) {
+            this._compressorNode.setRelease(valueInMsec);
+        }
+    }, {
+        key: 'setCompressorThreshold',
+        value: function setCompressorThreshold(valueIndB) {
+            this._compressorNode.setCompressorThreshold(valueIndB);
+        }
+    }, {
+        key: 'setExpanderThreshold',
+        value: function setExpanderThreshold(valueIndB) {
+            this._compressorNode.setExpanderThreshold(valueIndB);
+        }
+    }, {
+        key: 'setCompressorRatio',
+        value: function setCompressorRatio(value) {
+            this._compressorNode.setCompressorRatio(value);
+        }
+    }, {
+        key: 'setExpanderRatio',
+        value: function setExpanderRatio(value) {
+            this._compressorNode.setExpanderRatio(value);
+        }
+    }, {
+        key: 'setMakeUpGain',
+        value: function setMakeUpGain(valueIndB) {
+            this._compressorNode.setMakeUpGain(valueIndB);
+        }
+    }, {
+        key: 'setRMSAveragingTime',
+        value: function setRMSAveragingTime(timeInMilliseconds) {
+            this._compressorNode.setRMSAveragingTime(timeInMilliseconds);
+        }
+
+        /************************************************************************************/
+        /*!
+         *  @brief          Returns the attack time in msec
+         *
+         */
+        /************************************************************************************/
+
+    }, {
+        key: 'getAttack',
+        value: function getAttack() {
+            return this._compressorNode._attack;
+        }
+
+        /************************************************************************************/
+        /*!
+         *  @brief          Returns the release time in msec
+         *
+         */
+        /************************************************************************************/
+
+    }, {
+        key: 'getRelease',
+        value: function getRelease() {
+            return this._compressorNode._release;
+        }
+
+        /************************************************************************************/
+        /*!
+         *  @brief          Returns the compressor threshold, in dB
+         *
+         */
+        /************************************************************************************/
+
+    }, {
+        key: 'getCompressorThreshold',
+        value: function getCompressorThreshold() {
+            return this._compressorNode._compressorThreshold;
+        }
+
+        /************************************************************************************/
+        /*!
+         *  @brief          Returns the compressor ratio
+         *
+         */
+        /************************************************************************************/
+
+    }, {
+        key: 'getCompressorRatio',
+        value: function getCompressorRatio() {
+            return this._compressorNode._compressorRatio;
+        }
+    }]);
+
+    return CompressorWithDryWet;
+}(_index2.default);
+
+exports.default = CompressorWithDryWet;
+},{"../core/index.js":2,"../core/utils.js":3,"../dsp/compressorexpander.js":9}],12:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
 var _set = function set(object, property, value, receiver) { var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent !== null) { set(parent, property, value, receiver); } } else if ("value" in desc && desc.writable) { desc.value = value; } else { var setter = desc.set; if (setter !== undefined) { setter.call(receiver, value); } } return value; };
@@ -4730,13 +5038,13 @@ var HeadphonesEqualization = function (_CascadeNode) {
 }(_cascade2.default);
 
 exports.default = HeadphonesEqualization;
-},{"../core/index.js":2,"../dsp/cascade.js":6}],12:[function(require,module,exports){
+},{"../core/index.js":2,"../dsp/cascade.js":6}],13:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.PeakLimiterNode = exports.MultiRMSMetering = exports.RmsMetering = exports.CompressorWithSideChain = exports.MultiCompressorExpanderNode = exports.CompressorExpanderNode = exports.MultichannelGainNode = exports.VirtualSpeakersNode = exports.TransauralShufflerNode = exports.TransauralFeedforwardNode = exports.TransauralNode = exports.SumDiffNode = exports.HeadphonesEqualization = exports.AnalysisNode = exports.CascadeNode = undefined;
+exports.PeakLimiterNode = exports.MultiRMSMetering = exports.RmsMetering = exports.CompressorWithSideChain = exports.MultiCompressorExpanderNode = exports.CompressorExpanderNode = exports.CompressorWithDryWet = exports.MultichannelGainNode = exports.VirtualSpeakersNode = exports.TransauralShufflerNode = exports.TransauralFeedforwardNode = exports.TransauralNode = exports.SumDiffNode = exports.HeadphonesEqualization = exports.AnalysisNode = exports.CascadeNode = undefined;
 
 var _cascade = require('./cascade.js');
 
@@ -4776,7 +5084,21 @@ var _peaklimiter = require('./peaklimiter.js');
 
 var _peaklimiter2 = _interopRequireDefault(_peaklimiter);
 
+var _compressorwithdrywet = require('./compressorwithdrywet.js');
+
+var _compressorwithdrywet2 = _interopRequireDefault(_compressorwithdrywet);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/************************************************************************************/
+/*!
+ *   @file       index.js
+ *   @brief      Exports the dsp modules
+ *   @author     Thibaut Carpentier / Ircam CNRS UMR9912
+ *   @date       01/2016
+ *
+ */
+/************************************************************************************/
 
 exports.CascadeNode = _cascade2.default;
 exports.AnalysisNode = _analysis2.default;
@@ -4787,21 +5109,14 @@ exports.TransauralFeedforwardNode = _transaural.TransauralFeedforwardNode;
 exports.TransauralShufflerNode = _transaural.TransauralShufflerNode;
 exports.VirtualSpeakersNode = _virtualspeakers2.default;
 exports.MultichannelGainNode = _multichannelgain2.default;
+exports.CompressorWithDryWet = _compressorwithdrywet2.default;
 exports.CompressorExpanderNode = _compressorexpander.CompressorExpanderNode;
 exports.MultiCompressorExpanderNode = _compressorexpander.MultiCompressorExpanderNode;
 exports.CompressorWithSideChain = _compressorsidechain2.default;
 exports.RmsMetering = _rmsmetering.RmsMetering;
 exports.MultiRMSMetering = _rmsmetering.MultiRMSMetering;
-exports.PeakLimiterNode = _peaklimiter2.default; /************************************************************************************/
-/*!
- *   @file       index.js
- *   @brief      Exports the dsp modules
- *   @author     Thibaut Carpentier / Ircam CNRS UMR9912
- *   @date       01/2016
- *
- */
-/************************************************************************************/
-},{"./analysis.js":5,"./cascade.js":6,"./compressorexpander.js":9,"./compressorsidechain.js":10,"./headphoneequalization.js":11,"./multichannelgain.js":15,"./peaklimiter.js":16,"./rmsmetering.js":18,"./sumdiff.js":19,"./transaural.js":20,"./virtualspeakers.js":21}],13:[function(require,module,exports){
+exports.PeakLimiterNode = _peaklimiter2.default;
+},{"./analysis.js":5,"./cascade.js":6,"./compressorexpander.js":9,"./compressorsidechain.js":10,"./compressorwithdrywet.js":11,"./headphoneequalization.js":12,"./multichannelgain.js":16,"./peaklimiter.js":17,"./rmsmetering.js":19,"./sumdiff.js":20,"./transaural.js":21,"./virtualspeakers.js":22}],14:[function(require,module,exports){
 "use strict";Object.defineProperty(exports,"__esModule",{value:true});exports.getKemar2btFilters=getKemar2btFilters; /************************************************************************************/ /*!
  *   @file       kemar.js
  *   @brief      Kemar hard-coded filters
@@ -4820,7 +5135,7 @@ var numChannels=2;var samplerate=audioContext.sampleRate;var filterLength=0;if(s
 throw new Error("Invalid samplerate "+samplerate);} ///@n actually we could use shorter filters
 var buffer=audioContext.createBuffer(2,filterLength,samplerate); /// now fill the buffer
 var sumFilter=getKemar2btSumFilter(samplerate,speakerSpan);var diffFilter=getKemar2btDiffFilter(samplerate,speakerSpan);var sumBuffer_=buffer.getChannelData(0);var diffBuffer_=buffer.getChannelData(1);for(var i=0;i<filterLength;i++){sumBuffer_[i]=sumFilter[i];diffBuffer_[i]=diffFilter[i];}return buffer;}
-},{}],14:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -4898,7 +5213,7 @@ var LRMSNode = function (_AbstractNode) {
 }(_index2.default);
 
 exports.default = LRMSNode;
-},{"../core/index.js":2,"./sumdiff.js":19}],15:[function(require,module,exports){
+},{"../core/index.js":2,"./sumdiff.js":20}],16:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -5054,10 +5369,12 @@ var MultichannelGainNode = function (_AbstractNode) {
             return this._gainNodes[channelIndex].gain.value;
         }
 
-        //==============================================================================
-        /**
-         * Updates the connections of the audio graph
+        /************************************************************************************/
+        /*!
+         *  @brief          Updates the connections of the audio graph
+         *
          */
+        /************************************************************************************/
 
     }, {
         key: '_updateAudioGraph',
@@ -5115,7 +5432,7 @@ var MultichannelGainNode = function (_AbstractNode) {
 }(_index2.default);
 
 exports.default = MultichannelGainNode;
-},{"../core/index.js":2,"../core/utils.js":3}],16:[function(require,module,exports){
+},{"../core/index.js":2,"../core/utils.js":3}],17:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -5636,7 +5953,7 @@ var PeakLimiterNode = function (_AbstractNode) {
 }(_index2.default);
 
 exports.default = PeakLimiterNode;
-},{"../core/index.js":2,"../core/utils.js":3}],17:[function(require,module,exports){
+},{"../core/index.js":2,"../core/utils.js":3}],18:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -5812,7 +6129,7 @@ var PhoneNode = function (_CascadeNode) {
 }(_cascade2.default);
 
 exports.default = PhoneNode;
-},{"../core/index.js":2,"../dsp/cascade.js":6}],18:[function(require,module,exports){
+},{"../core/index.js":2,"../dsp/cascade.js":6}],19:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -5894,12 +6211,12 @@ var RmsMetering = function (_AbstractNode) {
              which will be a constant power of 2 throughout the lifetime of the node.
              */
             var numberOfInputChannels = 1;
-            var numberOfOutputChannels = 0;
+            var numberOfOutputChannels = 1; ///< as a matter of fact, the script processor
+            /// has no outlet, but this seems to be buggy in the WAA.
+            /// so let's declare 1 outlet
             _this._scriptNode = audioContext.createScriptProcessor(bufferSize, numberOfInputChannels, numberOfOutputChannels);
 
             var metering = _this;
-
-            _this._input.connect(_this._scriptNode);
 
             _this._scriptNode.onaudioprocess = function (audioProcessingEvent) {
                 var inputBuffer = audioProcessingEvent.inputBuffer;
@@ -5910,7 +6227,9 @@ var RmsMetering = function (_AbstractNode) {
 
                 var numSamples = inputBuffer.length;
 
-                var tmp = 0.0;
+                var tmp = metering._value;
+
+                var inputData = inputBuffer.getChannelData(0);
 
                 for (var i = 0; i < numSamples; i++) {
                     var input = inputData[i];
@@ -5924,6 +6243,10 @@ var RmsMetering = function (_AbstractNode) {
             };
         }
 
+        _this._input.connect(_this._scriptNode);
+
+        /// workaround so that the script processor node get triggered (and not garbage collected)
+        _this._scriptNode.connect(audioContext.destination, 0, 0);
         return _this;
     }
 
@@ -6034,14 +6357,20 @@ var MultiRMSMetering = exports.MultiRMSMetering = function (_AbstractNode2) {
             throw new Error("Pas bon");
         }
 
-        /// create N compressorNodes
+        /// create N RmsMetering nodes
         for (var i = 0; i < numChannels; i++) {
-            var newCompressorNode = new RmsMetering(audioContext);
-            _this2._meterNodes.push(newCompressorNode);
+            var newRmsNode = new RmsMetering(audioContext);
+            _this2._meterNodes.push(newRmsNode);
         }
 
         /// create the audio graph
-        _this2._updateAudioGraph();
+        /// split the input streams into N independent channels
+        _this2._input.connect(_this2._splitterNode);
+
+        /// connect a compressorNode to each channel
+        for (var _i = 0; _i < numChannels; _i++) {
+            _this2._splitterNode.connect(_this2._meterNodes[_i]._input, _i, 0);
+        }
         return _this2;
     }
 
@@ -6128,39 +6457,11 @@ var MultiRMSMetering = exports.MultiRMSMetering = function (_AbstractNode2) {
 
             return _utils2.default.lin2powdB(avg + 1e-12);
         }
-
-        /************************************************************************************/
-        /*!
-         *  @brief          Updates the connections of the audio graph
-         *
-         */
-        /************************************************************************************/
-
-    }, {
-        key: '_updateAudioGraph',
-        value: function _updateAudioGraph() {
-            var numChannels = this.getNumChannels();
-
-            /// first of all, disconnect everything
-            this._input.disconnect();
-            this._splitterNode.disconnect();
-            for (var i = 0; i < numChannels; i++) {
-                this._meterNodes[i].disconnect();
-            }
-
-            /// split the input streams into N independent channels
-            this._input.connect(this._splitterNode);
-
-            /// connect a compressorNode to each channel
-            for (var _i = 0; _i < numChannels; _i++) {
-                this._splitterNode.connect(this._meterNodes[_i]._input, _i);
-            }
-        }
     }]);
 
     return MultiRMSMetering;
 }(_index2.default);
-},{"../core/index.js":2,"../core/utils.js":3}],19:[function(require,module,exports){
+},{"../core/index.js":2,"../core/utils.js":3}],20:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -6236,7 +6537,7 @@ var SumDiffNode = function (_AbstractNode) {
 }(_index2.default);
 
 exports.default = SumDiffNode;
-},{"../core/index.js":2}],20:[function(require,module,exports){
+},{"../core/index.js":2}],21:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -6419,10 +6720,12 @@ var TransauralShufflerNode = exports.TransauralShufflerNode = function (_Transau
         return _this2;
     }
 
-    //==============================================================================
-    /**
-     * Updates the connections of the audio graph
+    /************************************************************************************/
+    /*!
+     *  @brief          Updates the connections of the audio graph
+     *
      */
+    /************************************************************************************/
 
 
     _createClass(TransauralShufflerNode, [{
@@ -6492,7 +6795,7 @@ var TransauralFeedforwardNode = exports.TransauralFeedforwardNode = function (_T
 
     return TransauralFeedforwardNode;
 }(TransauralNode);
-},{"../core/index.js":2,"./kemar.js":13,"./sumdiff.js":19}],21:[function(require,module,exports){
+},{"../core/index.js":2,"./kemar.js":14,"./sumdiff.js":20}],22:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -6832,7 +7135,7 @@ var VirtualSpeakersNode = function (_AbstractNode) {
 }(_index2.default);
 
 exports.default = VirtualSpeakersNode;
-},{"../core/index.js":2,"binaural":57}],22:[function(require,module,exports){
+},{"../core/index.js":2,"binaural":58}],23:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -6917,7 +7220,7 @@ exports.AudioStreamDescription = _index10.AudioStreamDescription;
 exports.utilities = _utils2.default;
 exports.unittests = _index16.default;
 exports.binaural = _binaural2.default;
-},{"./core/index.js":2,"./core/utils.js":3,"./dialog-enhancement/index.js":4,"./dsp/index.js":12,"./multichannel-spatialiser/index.js":23,"./noise-adaptation/index.js":25,"./object-spatialiser-and-mixer/index.js":26,"./receiver-mix/index.js":27,"./smart-fader/index.js":30,"./stream-selector/index.js":33,"./testing/index.js":34,"binaural":57}],23:[function(require,module,exports){
+},{"./core/index.js":2,"./core/utils.js":3,"./dialog-enhancement/index.js":4,"./dsp/index.js":13,"./multichannel-spatialiser/index.js":24,"./noise-adaptation/index.js":26,"./object-spatialiser-and-mixer/index.js":27,"./receiver-mix/index.js":28,"./smart-fader/index.js":31,"./stream-selector/index.js":34,"./testing/index.js":35,"binaural":58}],24:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -7040,10 +7343,12 @@ var MultichannelSpatialiser = function (_AbstractNode) {
         /// nothing to do, for the moment
 
 
-        //==============================================================================
-        /**
-         * Updates the connections of the audio graph
+        /************************************************************************************/
+        /*!
+         *  @brief          Updates the connections of the audio graph
+         *
          */
+        /************************************************************************************/
 
     }, {
         key: '_updateAudioGraph',
@@ -7249,7 +7554,7 @@ var MultichannelSpatialiser = function (_AbstractNode) {
 }(_index2.default);
 
 exports.default = MultichannelSpatialiser;
-},{"../core/index.js":2,"../core/utils.js":3,"../dsp/headphoneequalization.js":11,"../dsp/transaural.js":20,"../dsp/virtualspeakers.js":21,"../multichannel-spatialiser/routing.js":24}],24:[function(require,module,exports){
+},{"../core/index.js":2,"../core/utils.js":3,"../dsp/headphoneequalization.js":12,"../dsp/transaural.js":21,"../dsp/virtualspeakers.js":22,"../multichannel-spatialiser/routing.js":25}],25:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -7444,7 +7749,7 @@ var StreamRouting = function (_AbstractNode) {
 }(_index2.default);
 
 exports.default = StreamRouting;
-},{"../core/index.js":2}],25:[function(require,module,exports){
+},{"../core/index.js":2}],26:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -7517,7 +7822,7 @@ var NoiseAdaptation = function (_AbstractNode) {
 }(_index2.default);
 
 exports.default = NoiseAdaptation;
-},{"../core/index.js":2}],26:[function(require,module,exports){
+},{"../core/index.js":2}],27:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -7941,7 +8246,7 @@ var ObjectSpatialiserAndMixer = function (_MultichannelSpatiali) {
 }(_index2.default);
 
 exports.default = ObjectSpatialiserAndMixer;
-},{"../core/utils.js":3,"../multichannel-spatialiser/index.js":23}],27:[function(require,module,exports){
+},{"../core/utils.js":3,"../multichannel-spatialiser/index.js":24}],28:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -7971,7 +8276,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 exports.OldReceiverMix = _oldreceivermix2.default;
 exports.NewReceiverMix = _newreceivermix2.default;
-},{"./newreceivermix.js":28,"./oldreceivermix.js":29}],28:[function(require,module,exports){
+},{"./newreceivermix.js":29,"./oldreceivermix.js":30}],29:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -7986,21 +8291,19 @@ var _index = require('../core/index.js');
 
 var _index2 = _interopRequireDefault(_index);
 
-var _analysis = require('../dsp/analysis.js');
-
-var _analysis2 = _interopRequireDefault(_analysis);
-
 var _utils = require('../core/utils.js');
 
 var _utils2 = _interopRequireDefault(_utils);
 
-var _rmsmetering = require('../dsp/rmsmetering.js');
-
-var _rmsmetering2 = _interopRequireDefault(_rmsmetering);
+var _index3 = require('../dsp/index.js');
 
 var _compressor = require('../dsp/compressor.js');
 
 var _compressor2 = _interopRequireDefault(_compressor);
+
+var _compressorwithdrywet = require('../dsp/compressorwithdrywet.js');
+
+var _compressorwithdrywet2 = _interopRequireDefault(_compressorwithdrywet);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -8013,10 +8316,10 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
  *   @file       newreceivermix.js
  *   @brief      Implements the Receiver-Mix : the so-called Receiver-Mix
  *				 corresponds to the 2nd part of the “OBJECT SPATIALISER AND MIXER”
- *				 This module inspects the RMS of the main programme, the RMS of the commentary
- *				 and it applies dynamic compression on the main programme if necessary
+ *				 This module inspects the RMS of the main program, the RMS of the commentary
+ *				 and it applies dynamic compression on the main program if necessary
  *
- *   @author     Thibaut Carpentier / Ircam CNRS UMR9912, Samuel Goldszmidt
+ *   @author     Thibaut Carpentier / Ircam CNRS UMR9912
  *   @date       01/2016
  *
  */
@@ -8049,10 +8352,8 @@ var NewReceiverMix = function (_AbstractNode) {
         var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(NewReceiverMix).call(this, audioContext, audioStreamDescriptionCollection));
 
         _this._isBypass = false;
-        _this._shouldCompress = false;
-        _this._rmsRefreshInterval = 100; /// interval (in msec for refreshing the RMS measurement)
+        _this._rmsRefreshInterval = 50; /// interval (in msec for refreshing the RMS measurement)
         _this._durationHold = 0; /// how long (in msec) the compressor has been on hold
-        _this._minimumHoldTime = 1500; /// hold time in msec) for the compressor
 
         if (typeof audioStreamDescriptionCollection === "undefined") {
             throw new Error("the audioStreamDescriptionCollection must be defined !");
@@ -8060,12 +8361,6 @@ var NewReceiverMix = function (_AbstractNode) {
 
         /// first of all, check if there is a commentary stream.
         /// if not, the Receiver-Mix has nothing to do (just bypass)
-
-        /// create a mono analyzer node for computing the RMS of the commentary
-        _this._analysisNodeCommentary = new _rmsmetering2.default(audioContext);
-
-        /// several mono analyzers for analyzing the main program
-        _this._analysisNodeProgram = [];
 
         /// this is the N value in the .pdf :
         /// when the RMS of the commentary is > N (expressed in dB), the programme P must be analyzed
@@ -8076,10 +8371,7 @@ var NewReceiverMix = function (_AbstractNode) {
         _this._thresholdForProgramme = NewReceiverMix.defaultForProgrammeThreshold;
 
         /// the actual number of channels will be later overriden
-        _this._dynamicCompressorNode = new _compressor2.default(audioContext, 1);
-        _this._dynamicCompressorNode.setRatio(NewReceiverMix.defaultCompressionRatio);
-        _this._dynamicCompressorNode.setAttack(_utils2.default.ms2sec(NewReceiverMix.defaultAttackTime));
-        _this._dynamicCompressorNode.setRelease(_utils2.default.ms2sec(NewReceiverMix.defaultReleaseTime));
+        _this._compressors = [];
 
         /// the total number of incoming channels, including all the streams
         /// (mainAudio, extendedAmbience, extendedComments and extendedDialogs)
@@ -8090,6 +8382,11 @@ var NewReceiverMix = function (_AbstractNode) {
         if (totalNumberOfChannels_ != 10) {
             console.log("warning : total number of channels = " + totalNumberOfChannels_);
         }
+
+        /// measure the RMS for each of the input channels
+        _this._rmsMeteringNode = new _index3.MultiRMSMetering(audioContext, totalNumberOfChannels_);
+
+        _this._rmsMeteringNode.SetTimeConstant(50);
 
         /// main splitter node, at the entrance of the NewReceiverMix
         _this._splitterNode = audioContext.createChannelSplitter(totalNumberOfChannels_);
@@ -8108,12 +8405,6 @@ var NewReceiverMix = function (_AbstractNode) {
         }
 
         _this._updateAudioGraph();
-
-        /*
-         window.setInterval( () => {
-         this._updateCompressor();
-         }, 100);
-         */
 
         _this._updateCompressor();
         return _this;
@@ -8325,430 +8616,19 @@ var NewReceiverMix = function (_AbstractNode) {
          */
 
     }, {
-        key: 'setCompressorThreshold',
+        key: 'getRmsForCommentary',
 
-
-        //==============================================================================
-        value: function setCompressorThreshold(value) {
-            this._dynamicCompressorNode.setThreshold(value);
-        }
-    }, {
-        key: 'getCompressorThreshold',
-        value: function getCompressorThreshold() {
-            return this._dynamicCompressorNode.getThreshold();
-        }
-
-        /**
-         * Get the compression threshold range
-         * @type {array}
-         */
-
-    }, {
-        key: 'setCompressorRatio',
-        value: function setCompressorRatio(value) {
-            this._dynamicCompressorNode.setRatio(value);
-        }
-    }, {
-        key: 'getCompressorRatio',
-        value: function getCompressorRatio() {
-            return this._dynamicCompressorNode.getRatio();
-        }
-    }, {
-        key: 'setCompressorAttack',
-        value: function setCompressorAttack(valueInMilliseconds) {
-            var value = _utils2.default.ms2sec(valueInMilliseconds);
-
-            //console.log("compressor attack = " + value.toString() + ' sec');
-
-            this._dynamicCompressorNode.setAttack(value);
-        }
-    }, {
-        key: 'getCompressorAttack',
-        value: function getCompressorAttack() {
-            return _utils2.default.sec2ms(this._dynamicCompressorNode.getAttack());
-        }
-    }, {
-        key: 'setCompressorRelease',
-        value: function setCompressorRelease(valueInMilliseconds) {
-
-            var value = _utils2.default.ms2sec(valueInMilliseconds);
-
-            //console.log("compressor release = " + value.toString() + ' sec');
-
-            this._dynamicCompressorNode.setRelease(value);
-        }
-    }, {
-        key: 'getCompressorRelease',
-        value: function getCompressorRelease() {
-            return _utils2.default.sec2ms(this._dynamicCompressorNode.getRelease());
-        }
-
-        //==============================================================================
-        /**
-         * Sets the release time, according to a slider in the GUI
-         * theSlider : the slider
-         * return the actual value of the release time (in msec)
-         */
-
-    }, {
-        key: 'setCompressorThresholdFromGui',
-        value: function setCompressorThresholdFromGui(theSlider) {
-
-            /// the value of the fader
-            var valueFader = parseFloat(theSlider.value);
-
-            // get the bounds of the fader (GUI)
-            var minFader = parseFloat(theSlider.min);
-            var maxFader = parseFloat(theSlider.max);
-
-            // get the actual bounds for this parameter
-
-            var _NewReceiverMix$compr = _slicedToArray(NewReceiverMix.compressionThresholdRange, 2);
-
-            var minValue = _NewReceiverMix$compr[0];
-            var maxValue = _NewReceiverMix$compr[1];
-
-            /// scale from GUI to DSP
-
-            var value = M4DPAudioModules.utilities.scale(valueFader, minFader, maxFader, minValue, maxValue);
-
-            this.setCompressorThreshold(value);
-
-            return value;
-        }
-
-        /**
-         * Returns the current value of release time, already scaled for the GUI
-         * theSlider : the slider
-         */
-
-    }, {
-        key: 'getCompressorThresholdForGui',
-        value: function getCompressorThresholdForGui(theSlider) {
-            // get the bounds of the fader (GUI)
-            var minFader = parseFloat(theSlider.min);
-            var maxFader = parseFloat(theSlider.max);
-
-            // get the actual bounds for this parameter
-
-            var _NewReceiverMix$compr2 = _slicedToArray(NewReceiverMix.compressionThresholdRange, 2);
-
-            var minValue = _NewReceiverMix$compr2[0];
-            var maxValue = _NewReceiverMix$compr2[1];
-
-
-            var actualValue = this.getCompressorThreshold();
-
-            /// scale from DSP to GUI
-            var value = M4DPAudioModules.utilities.scale(actualValue, minValue, maxValue, minFader, maxFader);
-
-            return value;
-        }
-
-        //==============================================================================
-        /**
-         * Sets the release time, according to a slider in the GUI
-         * theSlider : the slider
-         * return the actual value of the release time (in msec)
-         */
-
-    }, {
-        key: 'setReleaseTimeFromGui',
-        value: function setReleaseTimeFromGui(theSlider) {
-            /// the value of the fader
-            var valueFader = parseFloat(theSlider.value);
-
-            // get the bounds of the fader (GUI)
-            var minFader = parseFloat(theSlider.min);
-            var maxFader = parseFloat(theSlider.max);
-
-            // get the actual bounds for this parameter
-
-            var _NewReceiverMix$relea = _slicedToArray(NewReceiverMix.releaseTimeRange, 2);
-
-            var minValue = _NewReceiverMix$relea[0];
-            var maxValue = _NewReceiverMix$relea[1];
-
-            /// scale from GUI to DSP
-
-            var value = M4DPAudioModules.utilities.scale(valueFader, minFader, maxFader, minValue, maxValue);
-
-            this.setCompressorRelease(value);
-
-            return value;
-        }
-
-        /**
-         * Returns the current value of release time, already scaled for the GUI
-         * theSlider : the slider
-         */
-
-    }, {
-        key: 'getReleaseTimeForGui',
-        value: function getReleaseTimeForGui(theSlider) {
-            // get the bounds of the fader (GUI)
-            var minFader = parseFloat(theSlider.min);
-            var maxFader = parseFloat(theSlider.max);
-
-            // get the actual bounds for this parameter
-
-            var _NewReceiverMix$relea2 = _slicedToArray(NewReceiverMix.releaseTimeRange, 2);
-
-            var minValue = _NewReceiverMix$relea2[0];
-            var maxValue = _NewReceiverMix$relea2[1];
-
-
-            var actualValue = this.getCompressorRelease();
-
-            /// scale from DSP to GUI
-            var value = M4DPAudioModules.utilities.scale(actualValue, minValue, maxValue, minFader, maxFader);
-
-            return value;
-        }
-
-        //==============================================================================
-        /**
-         * Sets the refresh interval for RMS measurement (in msec)
-         * theSlider : the slider
-         * return the actual value of the refresh interval (in msec)
-         */
-
-    }, {
-        key: 'setRefreshRmsTimeFromGui',
-        value: function setRefreshRmsTimeFromGui(theSlider) {
-            /// the value of the fader
-            var valueFader = parseFloat(theSlider.value);
-
-            // get the bounds of the fader (GUI)
-            var minFader = parseFloat(theSlider.min);
-            var maxFader = parseFloat(theSlider.max);
-
-            // get the actual bounds for this parameter
-            var minValue = 20;
-            var maxValue = 500;
-
-            /// scale from GUI to DSP
-
-            var value = M4DPAudioModules.utilities.scale(valueFader, minFader, maxFader, minValue, maxValue);
-
-            this._rmsRefreshInterval = value;
-
-            return value;
-        }
-
-        /**
-         * Returns the refresh interval for RMS measurement (in msec)
-         * theSlider : the slider
-         */
-
-    }, {
-        key: 'getRefreshRmsTimeForGui',
-        value: function getRefreshRmsTimeForGui(theSlider) {
-            // get the bounds of the fader (GUI)
-            var minFader = parseFloat(theSlider.min);
-            var maxFader = parseFloat(theSlider.max);
-
-            // get the actual bounds for this parameter
-            var minValue = 20;
-            var maxValue = 500;
-
-
-            var actualValue = this._rmsRefreshInterval;
-
-            /// scale from DSP to GUI
-            var value = M4DPAudioModules.utilities.scale(actualValue, minValue, maxValue, minFader, maxFader);
-
-            return value;
-        }
-
-        //==============================================================================
-        /**
-         * Sets the attack time, according to a slider in the GUI
-         * theSlider : the slider
-         * return the actual value of the attack time (in msec)
-         */
-
-    }, {
-        key: 'setAttackTimeFromGui',
-        value: function setAttackTimeFromGui(theSlider) {
-            /// the value of the fader
-            var valueFader = parseFloat(theSlider.value);
-
-            // get the bounds of the fader (GUI)
-            var minFader = parseFloat(theSlider.min);
-            var maxFader = parseFloat(theSlider.max);
-
-            // get the actual bounds for this parameter
-
-            var _NewReceiverMix$attac = _slicedToArray(NewReceiverMix.attackTimeRange, 2);
-
-            var minValue = _NewReceiverMix$attac[0];
-            var maxValue = _NewReceiverMix$attac[1];
-
-            /// scale from GUI to DSP
-
-            var value = M4DPAudioModules.utilities.scale(valueFader, minFader, maxFader, minValue, maxValue);
-
-            this.setCompressorAttack(value);
-
-            return value;
-        }
-
-        /**
-         * Returns the current value of attack time, already scaled for the GUI
-         * theSlider : the slider
-         */
-
-    }, {
-        key: 'getAttackTimeForGui',
-        value: function getAttackTimeForGui(theSlider) {
-            // get the bounds of the fader (GUI)
-            var minFader = parseFloat(theSlider.min);
-            var maxFader = parseFloat(theSlider.max);
-
-            // get the actual bounds for this parameter
-
-            var _NewReceiverMix$attac2 = _slicedToArray(NewReceiverMix.attackTimeRange, 2);
-
-            var minValue = _NewReceiverMix$attac2[0];
-            var maxValue = _NewReceiverMix$attac2[1];
-
-
-            var actualValue = this.getCompressorAttack();
-
-            /// scale from DSP to GUI
-            var value = M4DPAudioModules.utilities.scale(actualValue, minValue, maxValue, minFader, maxFader);
-
-            return value;
-        }
-
-        //==============================================================================
-        /**
-         * Sets the compression ratio, according to a slider in the GUI
-         * theSlider : the slider
-         * return the actual value of the compression ratio
-         */
-
-    }, {
-        key: 'setCompressionRatioFromGui',
-        value: function setCompressionRatioFromGui(theSlider) {
-            /// the value of the fader
-            var valueFader = parseFloat(theSlider.value);
-
-            // get the bounds of the fader (GUI)
-            var minFader = parseFloat(theSlider.min);
-            var maxFader = parseFloat(theSlider.max);
-
-            // get the actual bounds for this parameter
-
-            var _NewReceiverMix$compr3 = _slicedToArray(NewReceiverMix.compressionRatioRange, 2);
-
-            var minValue = _NewReceiverMix$compr3[0];
-            var maxValue = _NewReceiverMix$compr3[1];
-
-            /// scale from GUI to DSP
-
-            var value = M4DPAudioModules.utilities.scale(valueFader, minFader, maxFader, minValue, maxValue);
-
-            this.setCompressorRatio(value);
-
-            return value;
-        }
-
-        /**
-         * Returns the current value of compression ratio, already scaled for the GUI
-         * theSlider : the slider
-         */
-
-    }, {
-        key: 'getCompressionRatioForGui',
-        value: function getCompressionRatioForGui(theSlider) {
-            // get the bounds of the fader (GUI)
-            var minFader = parseFloat(theSlider.min);
-            var maxFader = parseFloat(theSlider.max);
-
-            // get the actual bounds for this parameter
-
-            var _NewReceiverMix$compr4 = _slicedToArray(NewReceiverMix.compressionRatioRange, 2);
-
-            var minValue = _NewReceiverMix$compr4[0];
-            var maxValue = _NewReceiverMix$compr4[1];
-
-
-            var actualValue = this.getCompressorRatio();
-
-            /// scale from DSP to GUI
-            var value = M4DPAudioModules.utilities.scale(actualValue, minValue, maxValue, minFader, maxFader);
-
-            return value;
-        }
-
-        //==============================================================================
-        /**
-         * Sets the minimum hold time (in msec)
-         * theSlider : the slider
-         * return the actual value of the hold time
-         */
-
-    }, {
-        key: 'setMinimumHoldTimeFromGui',
-        value: function setMinimumHoldTimeFromGui(theSlider) {
-            /// the value of the fader
-            var valueFader = parseFloat(theSlider.value);
-
-            // get the bounds of the fader (GUI)
-            var minFader = parseFloat(theSlider.min);
-            var maxFader = parseFloat(theSlider.max);
-
-            // get the actual bounds for this parameter
-            var minValue = 1000;
-            var maxValue = 5000;
-
-            /// scale from GUI to DSP
-
-            var value = M4DPAudioModules.utilities.scale(valueFader, minFader, maxFader, minValue, maxValue);
-
-            this._minimumHoldTime = value;
-
-            return value;
-        }
-
-        /**
-         * Returns the minimum hold time (in msec)
-         * theSlider : the slider
-         */
-
-    }, {
-        key: 'getMinimumHoldTimeForGui',
-        value: function getMinimumHoldTimeForGui(theSlider) {
-            // get the bounds of the fader (GUI)
-            var minFader = parseFloat(theSlider.min);
-            var maxFader = parseFloat(theSlider.max);
-
-            // get the actual bounds for this parameter
-            var minValue = 1000;
-            var maxValue = 5000;
-
-
-            var actualValue = this._minimumHoldTime;
-
-            /// scale from DSP to GUI
-            var value = M4DPAudioModules.utilities.scale(actualValue, minValue, maxValue, minFader, maxFader);
-
-            return value;
-        }
 
         //==============================================================================
         /**
          * Returns the RMS value for the commentary, in dB
          */
-
-    }, {
-        key: 'getRmsForCommentary',
         value: function getRmsForCommentary() {
 
             if (this._hasExtendedCommentaryToAnalyze() === true) {
-                return _utils2.default.lin2dBsafe(this._analysisNodeCommentary.GetValuedB());
+                var indexForExtendedCommentary = this._getChannelIndexForExtendedCommentary();
+
+                return this._rmsMeteringNode.GetValuedB(indexForExtendedCommentary);
             } else {
                 return -200;
             }
@@ -8912,20 +8792,25 @@ var NewReceiverMix = function (_AbstractNode) {
     }, {
         key: 'getRmsForProgram',
         value: function getRmsForProgram() {
+
             if (this._hasProgramToAnalyze() === true) {
+                var indicesForProgram = this._getChannelsIndicesForProgram();
+
                 var rms = [];
 
-                /// average rms among all channels
+                /// average rms among all channels of the program (except for LFE)
 
-                for (var i = 0; i < this._analysisNodeProgram.length; i++) {
-                    var lin = this._analysisNodeProgram[i].GetValue();
+                for (var i = 0; i < indicesForProgram.length; i++) {
+                    var index = indicesForProgram[i];
+
+                    var lin = this._rmsMeteringNode.GetValue(index);
 
                     rms.push(lin);
                 }
 
                 var avg = _utils2.default.mean(rms);
 
-                return _utils2.default.lin2dBsafe(avg);
+                return _utils2.default.lin2powdB(avg + 1e-12);
             } else {
                 return -200;
             }
@@ -8960,10 +8845,12 @@ var NewReceiverMix = function (_AbstractNode) {
             }
         }
 
-        //==============================================================================
-        /**
-         * returns true if the program is being compressed
+        /************************************************************************************/
+        /*!
+         *  @brief          Returns true if some compression is currently applied
+         *
          */
+        /************************************************************************************/
 
     }, {
         key: '_updateCompressor',
@@ -8981,31 +8868,61 @@ var NewReceiverMix = function (_AbstractNode) {
                 _this2._updateCompressor();
             }, this._rmsRefreshInterval);
 
+            if (this.bypass === true) {
+                /// increment the counter
+                this._durationHold += this._rmsRefreshInterval;
+
+                /// nothing else to do
+                return;
+            }
+
+            var isCompressing = this.dynamicCompressionState;
+
             /// in msec
             /// once the compression gets activated,
-            /// we will hold it for at least 1500 msec
-            /// i.e. for 1500 msec, we suspend the RMS comparison,
-            /// and the compression remains with a dry/wet of 100%
-            var minimumHoldTime = this._minimumHoldTime;
+            /// the compression remains with a dry/wet of 100%
+            var uptime = 325; /// msec
+            var downtime = 750;
 
-            ///@todo : the hold time could also appear in the GUI
+            var holdtime = 0;
 
-            if (this.bypass === false && this._shouldCompress === true && this._durationHold <= minimumHoldTime) {
-                /// hold the compressor for at least 1000 msec
+            if (isCompressing === true) {
+                holdtime = downtime;
+            } else {
+                holdtime = uptime;
+            }
 
+            if (this._durationHold < holdtime) {
                 /// increment the counter
                 this._durationHold += this._rmsRefreshInterval;
 
                 return;
+            } else {
+                var isCriteriaMet = this._isCompressionCriteriaMet();
+
+                if (isCriteriaMet === true) {
+                    this._setDryWet(100, 250);
+                } else {
+                    this._setDryWet(0, 1500);
+                }
+
+                /// reset the counter
+                this._durationHold = 0;
             }
+        }
 
-            /// the hold period is over; now, really compare the RMS,
-            /// to activate or not the compression
+        /************************************************************************************/
+        /*!
+         *  @brief          Returns true if the compression criteria is met
+         *
+         */
+        /************************************************************************************/
 
-            this._shouldCompress = false;
-
+    }, {
+        key: '_isCompressionCriteriaMet',
+        value: function _isCompressionCriteriaMet() {
             if (this.bypass === true) {
-                this._shouldCompress = false;
+                return false;
             } else {
                 if (this._hasExtendedCommentaryToAnalyze() === true) {
                     var C = this.getRmsForCommentary();
@@ -9015,198 +8932,137 @@ var NewReceiverMix = function (_AbstractNode) {
                     var X = this.thresholdForProgramme;
 
                     if (C > N && P > X) {
-                        this._shouldCompress = true;
+                        return true;
                     }
                 } else {
-                    this._shouldCompress = false;
+                    return false;
                 }
             }
-
-            if (this._shouldCompress === true) {
-                //ratio = this._compressionRatio;
-                //this._dynamicCompressorNode.bypass = false;
-                this._dynamicCompressorNode.drywet = 100;
-
-                /// increment the counter
-                this._durationHold += this._rmsRefreshInterval;
+        }
+    }, {
+        key: '_setDryWet',
+        value: function _setDryWet(ratio, rampTimeInMilliseconds) {
+            for (var i = 0; i < this._compressors.length; i++) {
+                this._compressors[i].setDryWet(ratio, rampTimeInMilliseconds);
+            }
+        }
+    }, {
+        key: '_getDryWet',
+        value: function _getDryWet() {
+            if (this._compressors.length > 0) {
+                return this._compressors[0].getDryWet();
             } else {
-                //ratio = 1.0;
-                //this._dynamicCompressorNode.bypass = true;
-                this._dynamicCompressorNode.drywet = 0;
-
-                /// increment the counter
-                this._durationHold = 0;
+                return 0.0;
             }
         }
 
-        //==============================================================================
-        /**
-         * Updates the connections of the audio graph
+        /************************************************************************************/
+        /*!
+         *  @brief          removes all the nodes from the current audio graph
+         *
          */
+        /************************************************************************************/
+
+    }, {
+        key: '_disconnectEveryNodes',
+        value: function _disconnectEveryNodes() {
+            this._input.disconnect();
+            this._splitterNode.disconnect();
+            this._mergerNode.disconnect();
+
+            for (var i = 0; i < this._compressors.length; i++) {
+                this._compressors[i].disconnect();
+            }
+
+            /// note that the RMS metering remains always connected
+            this._input.connect(this._rmsMeteringNode._input);
+        }
+
+        /************************************************************************************/
+        /*!
+         *  @brief          Updates the connections of the audio graph
+         *
+         */
+        /************************************************************************************/
 
     }, {
         key: '_updateAudioGraph',
         value: function _updateAudioGraph() {
 
             /// first of all, disconnect everything
-            this._input.disconnect();
-            this._splitterNode.disconnect();
-            this._analysisNodeCommentary.disconnect();
-            this._mergerNode.disconnect();
-            this._dynamicCompressorNode.disconnect();
+            this._disconnectEveryNodes();
 
-            if (typeof this._splitterAfterCompressor !== "undefined") {
-                this._splitterAfterCompressor.disconnect();
-            }
-            if (typeof this._mergerBeforeCompressor !== "undefined") {
-                this._mergerBeforeCompressor.disconnect();
+            /// the bypass case
+            if (this.bypass === true || this._hasProgramToAnalyze() === false || this._hasExtendedCommentaryToAnalyze() === false) {
+                this._input.connect(this._output);
+
+                return;
             }
 
-            for (var i = 0; i < this._analysisNodeProgram.length; i++) {
-                this._analysisNodeProgram[i].disconnect();
+            var totalNumberOfChannels_ = this.getTotalNumberOfChannels();
+
+            var numChannelsForProgramStream = this._getNumChannelsForProgramStream();
+
+            /// create the compressors
+            {
+                /// delete all existing compressors (if any)
+                this._compressors = [];
+
+                for (var i = 0; i < numChannelsForProgramStream; i++) {
+                    var newCompressor = new _compressorwithdrywet2.default(this._audioContext);
+
+                    this._compressors.push(newCompressor);
+                }
             }
 
-            var indexForExtendedCommentary = this._getChannelIndexForExtendedCommentary();
+            /// configure the compressors
+            {
+                for (var _i = 0; _i < this._compressors.length; _i++) {
+                    this._compressors[_i].setAttack(5);
+                    this._compressors[_i].setRelease(80);
+                    this._compressors[_i].setCompressorRatio(2);
+                    this._compressors[_i].setCompressorThreshold(-28);
+
+                    this._compressors[_i].setExpanderRatio(1);
+                    this._compressors[_i].setMakeUpGain(0);
+                }
+            }
 
             /// split the input streams into N independent channels
             this._input.connect(this._splitterNode);
 
-            /// connect the analyzer for the commentary
-            if (this._hasExtendedCommentaryToAnalyze() === true) {
-                this._splitterNode.connect(this._analysisNodeCommentary._input, indexForExtendedCommentary, 0);
-            }
-
             var indicesForProgram = this._getChannelsIndicesForProgram();
 
-            /// connect the analyzers for the program
-            if (this._hasProgramToAnalyze() === true) {
-                var numChannelsForProgramStream = this._getNumChannelsForProgramStream();
+            /// sanity check
+            if (indicesForProgram.length !== numChannelsForProgramStream) {
+                throw new Error("Ca parait pas bon...");
+            }
 
-                /// sanity check
-                if (indicesForProgram.length !== numChannelsForProgramStream) {
-                    throw new Error("Ca parait pas bon...");
-                }
+            var compressorIndex = 0;
 
-                /// delete the previous analyzers
-                this._analysisNodeProgram = [];
+            for (var _i2 = 0; _i2 < totalNumberOfChannels_; _i2++) {
+                /// is this a channel that goes into the compressor ?
 
-                /// create N (mono) analyzers
-                for (var _i = 0; _i < numChannelsForProgramStream; _i++) {
-                    var newAnalyzer = new _rmsmetering2.default(this._audioContext);
-                    this._analysisNodeProgram.push(newAnalyzer);
-                }
+                var shouldGoToCompressor = indicesForProgram.includes(_i2);
 
-                /// connect the (mono) analyzers to the channel splitter
-                for (var _i2 = 0; _i2 < numChannelsForProgramStream; _i2++) {
-                    var splitterOutputIndex = indicesForProgram[_i2];
+                if (shouldGoToCompressor === true) {
+                    this._splitterNode.connect(this._compressors[compressorIndex]._input, _i2, 0);
 
-                    this._splitterNode.connect(this._analysisNodeProgram[_i2]._input, splitterOutputIndex, 0);
-                }
+                    this._compressors[compressorIndex]._output.connect(this._mergerNode, 0, _i2);
 
-                /// re-build the compressor if needed
-                if (this._dynamicCompressorNode.getNumChannels() !== numChannelsForProgramStream) {
-
-                    /// preserve the old state
-                    var ratio = this._dynamicCompressorNode.getRatio();
-                    var attack = this._dynamicCompressorNode.getAttack();
-                    var release = this._dynamicCompressorNode.getRelease();
-                    var threshold = this._dynamicCompressorNode.getThreshold();
-
-                    /// destroy the compressor
-                    this._dynamicCompressorNode = "undefined";
-
-                    var audioContext = this._audioContext;
-
-                    /// create a new one
-                    this._dynamicCompressorNode = new _compressor2.default(audioContext, numChannelsForProgramStream);
-
-                    /// restore the settings
-                    this._dynamicCompressorNode.setRatio(ratio);
-                    this._dynamicCompressorNode.setAttack(attack);
-                    this._dynamicCompressorNode.setRelease(release);
-                    this._dynamicCompressorNode.setThreshold(threshold);
-
-                    /// delete these nodes
-                    this._splitterAfterCompressor = "undefined";
-                    this._mergerBeforeCompressor = "undefined";
-
-                    /// a channel splitter at the output of the compressor
-                    this._splitterAfterCompressor = audioContext.createChannelSplitter(numChannelsForProgramStream);
-
-                    this._mergerBeforeCompressor = audioContext.createChannelMerger(numChannelsForProgramStream);
+                    compressorIndex++;
+                } else {
+                    /// not going to the compressor
+                    this._splitterNode.connect(this._mergerNode, _i2, _i2);
                 }
             }
 
-            if (this.bypass === true || this._hasProgramToAnalyze() === false) {
-                this._input.connect(this._output);
-            } else {
-
-                /// sanity checks
-                var _numChannelsForProgramStream = this._getNumChannelsForProgramStream();
-
-                if (_numChannelsForProgramStream <= 0) {
-                    throw new Error("pas bon !");
-                }
-
-                if (typeof this._dynamicCompressorNode === "undefined") {
-                    throw new Error("pas bon !");
-                }
-
-                if (typeof this._splitterAfterCompressor === "undefined") {
-                    throw new Error("pas bon !");
-                }
-
-                if (typeof this._mergerBeforeCompressor === "undefined") {
-                    throw new Error("pas bon !");
-                }
-
-                if (this._dynamicCompressorNode.getNumChannels() !== _numChannelsForProgramStream) {
-                    throw new Error("pas bon !");
-                }
-
-                if (this._splitterAfterCompressor.numberOfInputs != 1 || this._splitterAfterCompressor.numberOfOutputs != _numChannelsForProgramStream) {
-                    throw new Error("pas bon !");
-                }
-
-                if (this._mergerBeforeCompressor.numberOfInputs != _numChannelsForProgramStream || this._mergerBeforeCompressor.numberOfOutputs != 1) {
-                    throw new Error("pas bon !");
-                }
-
-                if (indicesForProgram.length !== _numChannelsForProgramStream) {
-                    throw new Error("pas bon !");
-                }
-
-                var totalNumberOfChannels_ = this.getTotalNumberOfChannels();
-
-                this._mergerBeforeCompressor.connect(this._dynamicCompressorNode._input);
-                this._dynamicCompressorNode.connect(this._splitterAfterCompressor);
-
-                var compressorIndex = 0;
-
-                for (var _i3 = 0; _i3 < totalNumberOfChannels_; _i3++) {
-                    /// is this a channel that goes into the compressor ?
-
-                    var shouldGoToCompressor = indicesForProgram.includes(_i3);
-
-                    if (shouldGoToCompressor === true) {
-                        this._splitterNode.connect(this._mergerBeforeCompressor, _i3, compressorIndex);
-
-                        this._splitterAfterCompressor.connect(this._mergerNode, compressorIndex, _i3);
-
-                        compressorIndex++;
-                    } else {
-                        /// not going to the compressor
-                        this._splitterNode.connect(this._mergerNode, _i3, _i3);
-                    }
-                }
-
-                /// sanity check
-                if (compressorIndex !== _numChannelsForProgramStream) {
-                    throw new Error("pas bon !");
-                }
-
-                this._mergerNode.connect(this._output);
+            /// sanity check
+            if (compressorIndex !== numChannelsForProgramStream) {
+                throw new Error("pas bon !");
             }
+
+            this._mergerNode.connect(this._output);
         }
     }, {
         key: 'bypass',
@@ -9281,21 +9137,9 @@ var NewReceiverMix = function (_AbstractNode) {
             return this._thresholdForProgramme;
         }
     }, {
-        key: 'shouldCompressProgram',
-        get: function get() {
-            return this._shouldCompress;
-        }
-
-        //==============================================================================
-        /**
-         * Returns the dynamic compression state
-         * @type {boolean}
-         */
-
-    }, {
         key: 'dynamicCompressionState',
         get: function get() {
-            return this._shouldCompress;
+            return this._getDryWet() > 1.0;
         }
     }], [{
         key: 'rangeForCommentaryThreshold',
@@ -9337,7 +9181,7 @@ var NewReceiverMix = function (_AbstractNode) {
          * @type {number}
          */
         get: function get() {
-            return -30;
+            return -40;
         }
     }, {
         key: 'rangeForProgrammeThreshold',
@@ -9357,150 +9201,7 @@ var NewReceiverMix = function (_AbstractNode) {
     }, {
         key: 'defaultForProgrammeThreshold',
         get: function get() {
-            return -35;
-        }
-    }, {
-        key: 'compressionThresholdRange',
-        get: function get() {
-            return [NewReceiverMix.minCompressionThresholdRange, NewReceiverMix.maxCompressionThresholdRange];
-        }
-    }, {
-        key: 'minCompressionThresholdRange',
-        get: function get() {
-            return _compressor2.default.minThreshold;
-        }
-    }, {
-        key: 'maxCompressionThresholdRange',
-        get: function get() {
-            return _compressor2.default.maxThreshold;
-        }
-
-        /**
-         * Returns the default threshold ratio
-         * @type {number}
-         */
-
-    }, {
-        key: 'defaultCompressionThreshold',
-        get: function get() {
-            return _compressor2.default.defaultThreshold;
-        }
-
-        /**
-         * Get the compression ratio range
-         * @type {array}
-         */
-
-    }, {
-        key: 'compressionRatioRange',
-        get: function get() {
-            return [NewReceiverMix.minCompressionRatioRange, NewReceiverMix.maxCompressionRatioRange];
-        }
-    }, {
-        key: 'minCompressionRatioRange',
-        get: function get() {
-            return _compressor2.default.minRatio;
-        }
-    }, {
-        key: 'maxCompressionRatioRange',
-        get: function get() {
-            return _compressor2.default.maxRatio;
-        }
-
-        /**
-         * Returns the default compression ratio
-         * @type {number}
-         */
-
-    }, {
-        key: 'defaultCompressionRatio',
-        get: function get() {
-            return 5;
-        }
-
-        /**
-         * Get the attack time range (in msec)
-         * @type {array}
-         */
-
-    }, {
-        key: 'attackTimeRange',
-        get: function get() {
-            return [NewReceiverMix.minAttackTimeRange, NewReceiverMix.maxAttackTimeRange];
-        }
-
-        /**
-         * Returns the minimum attack time (in msec)
-         */
-
-    }, {
-        key: 'minAttackTimeRange',
-        get: function get() {
-            return _utils2.default.sec2ms(_compressor2.default.minAttack);
-        }
-
-        /**
-         * Returns the maximum attack time (in msec)
-         */
-
-    }, {
-        key: 'maxAttackTimeRange',
-        get: function get() {
-
-            return _utils2.default.sec2ms(_compressor2.default.maxAttack);
-        }
-
-        /**
-         * Returns the default attack time (in msec)
-         * @type {number}
-         */
-
-    }, {
-        key: 'defaultAttackTime',
-        get: function get() {
-            return 5;
-        }
-
-        /**
-         * Get the release time range (in msec)
-         * @type {array}
-         */
-
-    }, {
-        key: 'releaseTimeRange',
-        get: function get() {
-            return [NewReceiverMix.minReleaseTimeRange, NewReceiverMix.maxReleaseTimeRange];
-        }
-
-        /**
-         * Returns the minimum release time (in msec)
-         */
-
-    }, {
-        key: 'minReleaseTimeRange',
-        get: function get() {
-            return _utils2.default.sec2ms(_compressor2.default.minRelease);
-        }
-
-        /**
-         * Returns the maximum release time (in msec)
-         */
-
-    }, {
-        key: 'maxReleaseTimeRange',
-        get: function get() {
-            return _utils2.default.sec2ms(_compressor2.default.maxRelease);
-        }
-
-        /**
-         * Returns the default release time (in msec)
-         * @type {number}
-         */
-
-    }, {
-        key: 'defaultReleaseTime',
-        get: function get() {
-            return 20;
+            return -45;
         }
     }]);
 
@@ -9508,7 +9209,7 @@ var NewReceiverMix = function (_AbstractNode) {
 }(_index2.default);
 
 exports.default = NewReceiverMix;
-},{"../core/index.js":2,"../core/utils.js":3,"../dsp/analysis.js":5,"../dsp/compressor.js":8,"../dsp/rmsmetering.js":18}],29:[function(require,module,exports){
+},{"../core/index.js":2,"../core/utils.js":3,"../dsp/compressor.js":8,"../dsp/compressorwithdrywet.js":11,"../dsp/index.js":13}],30:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -10563,10 +10264,12 @@ var OldReceiverMix = function (_AbstractNode) {
             }
         }
 
-        //==============================================================================
-        /**
-         * Updates the connections of the audio graph
+        /************************************************************************************/
+        /*!
+         *  @brief          Updates the connections of the audio graph
+         *
          */
+        /************************************************************************************/
 
     }, {
         key: '_updateAudioGraph',
@@ -11033,7 +10736,7 @@ var OldReceiverMix = function (_AbstractNode) {
 }(_index2.default);
 
 exports.default = OldReceiverMix;
-},{"../core/index.js":2,"../core/utils.js":3,"../dsp/analysis.js":5,"../dsp/compressor.js":8}],30:[function(require,module,exports){
+},{"../core/index.js":2,"../core/utils.js":3,"../dsp/analysis.js":5,"../dsp/compressor.js":8}],31:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -11063,7 +10766,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 exports.OldSmartFader = _oldsmartfader2.default;
 exports.NewSmartFader = _newsmartfader2.default;
-},{"./newsmartfader.js":31,"./oldsmartfader.js":32}],31:[function(require,module,exports){
+},{"./newsmartfader.js":32,"./oldsmartfader.js":33}],32:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -11552,10 +11255,12 @@ var NewSmartFader = function (_AbstractNode) {
             this._gainNode.gain.value = lin;
         }
 
-        //==============================================================================
-        /**
-         * Updates the connections of the audio graph
+        /************************************************************************************/
+        /*!
+         *  @brief          Updates the connections of the audio graph
+         *
          */
+        /************************************************************************************/
 
     }, {
         key: '_updateAudioGraph',
@@ -11880,7 +11585,7 @@ var NewSmartFader = function (_AbstractNode) {
 }(_index2.default);
 
 exports.default = NewSmartFader;
-},{"../core/index.js":2,"../core/utils.js":3,"../dsp/compressor.js":8,"../dsp/compressorexpander.js":9,"../dsp/peaklimiter.js":16}],32:[function(require,module,exports){
+},{"../core/index.js":2,"../core/utils.js":3,"../dsp/compressor.js":8,"../dsp/compressorexpander.js":9,"../dsp/peaklimiter.js":17}],33:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -12352,10 +12057,12 @@ var OldSmartFader = function (_AbstractNode) {
             this._gainNode.gain.value = lin;
         }
 
-        //==============================================================================
-        /**
-         * Updates the connections of the audio graph
+        /************************************************************************************/
+        /*!
+         *  @brief          Updates the connections of the audio graph
+         *
          */
+        /************************************************************************************/
 
     }, {
         key: '_updateAudioGraph',
@@ -12676,7 +12383,7 @@ var OldSmartFader = function (_AbstractNode) {
 }(_index2.default);
 
 exports.default = OldSmartFader;
-},{"../core/index.js":2,"../core/utils.js":3,"../dsp/compressor.js":8}],33:[function(require,module,exports){
+},{"../core/index.js":2,"../core/utils.js":3,"../dsp/compressor.js":8}],34:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -12844,10 +12551,12 @@ var StreamSelector = function (_AbstractNode) {
             }
         }
 
-        //==============================================================================
-        /**
-         * Updates the connections of the audio graph
+        /************************************************************************************/
+        /*!
+         *  @brief          Updates the connections of the audio graph
+         *
          */
+        /************************************************************************************/
 
     }, {
         key: '_updateAudioGraph',
@@ -12878,7 +12587,7 @@ var StreamSelector = function (_AbstractNode) {
 }(_index2.default);
 
 exports.default = StreamSelector;
-},{"../core/index.js":2,"../core/utils.js":3,"../dsp/multichannelgain.js":15}],34:[function(require,module,exports){
+},{"../core/index.js":2,"../core/utils.js":3,"../dsp/multichannelgain.js":16}],35:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -12955,7 +12664,7 @@ var unittests = {
 /************************************************************************************/
 
 exports.default = unittests;
-},{"./testanalysis.js":35,"./testbinaural.js":36,"./testbiquad.js":37,"./testcascade.js":38,"./testcompressorexpander.js":39,"./testmultichannel.js":40,"./testphone.js":41,"./testrouting.js":42,"./testsofa.js":43,"./testsumdiff.js":44,"./testtransaural.js":45}],35:[function(require,module,exports){
+},{"./testanalysis.js":36,"./testbinaural.js":37,"./testbiquad.js":38,"./testcascade.js":39,"./testcompressorexpander.js":40,"./testmultichannel.js":41,"./testphone.js":42,"./testrouting.js":43,"./testsofa.js":44,"./testsumdiff.js":45,"./testtransaural.js":46}],36:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -13064,7 +12773,7 @@ var analysistests = {
 };
 
 exports.default = analysistests;
-},{"../core/bufferutils.js":1,"../dsp/analysis.js":5,"../dsp/phone.js":17}],36:[function(require,module,exports){
+},{"../core/bufferutils.js":1,"../dsp/analysis.js":5,"../dsp/phone.js":18}],37:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -13162,7 +12871,7 @@ var binauraltests = {
 };
 
 exports.default = binauraltests;
-},{"../core/bufferutils.js":1,"./testsofa.js":43}],37:[function(require,module,exports){
+},{"../core/bufferutils.js":1,"./testsofa.js":44}],38:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -13259,7 +12968,7 @@ var biquadtests = {
 };
 
 exports.default = biquadtests;
-},{"../core/bufferutils.js":1}],38:[function(require,module,exports){
+},{"../core/bufferutils.js":1}],39:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -13367,7 +13076,7 @@ var cascadetests = {
 };
 
 exports.default = cascadetests;
-},{"../core/bufferutils.js":1,"../dsp/cascade.js":6}],39:[function(require,module,exports){
+},{"../core/bufferutils.js":1,"../dsp/cascade.js":6}],40:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -13455,7 +13164,7 @@ var compressorexpandertests = {
 };
 
 exports.default = compressorexpandertests;
-},{"../core/bufferutils.js":1,"../dsp/compressorexpander.js":9}],40:[function(require,module,exports){
+},{"../core/bufferutils.js":1,"../dsp/compressorexpander.js":9}],41:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -13537,7 +13246,7 @@ var multichanneltests = {
 };
 
 exports.default = multichanneltests;
-},{"../core/bufferutils.js":1}],41:[function(require,module,exports){
+},{"../core/bufferutils.js":1}],42:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -13633,7 +13342,7 @@ var phonetests = {
 };
 
 exports.default = phonetests;
-},{"../core/bufferutils.js":1,"../dsp/phone.js":17}],42:[function(require,module,exports){
+},{"../core/bufferutils.js":1,"../dsp/phone.js":18}],43:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -13723,7 +13432,7 @@ var routingtests = {
 };
 
 exports.default = routingtests;
-},{"../core/bufferutils.js":1,"../multichannel-spatialiser/routing.js":24}],43:[function(require,module,exports){
+},{"../core/bufferutils.js":1,"../multichannel-spatialiser/routing.js":25}],44:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -13876,7 +13585,7 @@ var sofatests = {
 };
 
 exports.default = sofatests;
-},{"../core/utils.js":3,"binaural":57}],44:[function(require,module,exports){
+},{"../core/utils.js":3,"binaural":58}],45:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -13962,7 +13671,7 @@ var sumdifftests = {
 };
 
 exports.default = sumdifftests;
-},{"../core/bufferutils.js":1,"../dsp/sumdiff.js":19}],45:[function(require,module,exports){
+},{"../core/bufferutils.js":1,"../dsp/sumdiff.js":20}],46:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -14045,7 +13754,7 @@ var transauraltests = {
 };
 
 exports.default = transauraltests;
-},{"../core/bufferutils.js":1,"../dsp/transaural.js":20}],46:[function(require,module,exports){
+},{"../core/bufferutils.js":1,"../dsp/transaural.js":21}],47:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -14763,7 +14472,7 @@ var BinauralPanner = exports.BinauralPanner = function () {
 }();
 
 exports.default = BinauralPanner;
-},{"../geometry/Listener":53,"../geometry/coordinates":54,"../sofa/HrtfSet":59,"./Source":47,"gl-matrix":65}],47:[function(require,module,exports){
+},{"../geometry/Listener":54,"../geometry/coordinates":55,"../sofa/HrtfSet":60,"./Source":48,"gl-matrix":66}],48:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -15038,7 +14747,7 @@ var Source = exports.Source = function () {
 }();
 
 exports.default = Source;
-},{}],48:[function(require,module,exports){
+},{}],49:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -15064,7 +14773,7 @@ exports.default = {
   Source: _Source2.default,
   utilities: _utilities2.default
 };
-},{"./BinauralPanner":46,"./Source":47,"./utilities":49}],49:[function(require,module,exports){
+},{"./BinauralPanner":47,"./Source":48,"./utilities":50}],50:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -15213,7 +14922,7 @@ exports.default = {
   createNoiseBuffer: createNoiseBuffer,
   resampleFloat32Array: resampleFloat32Array
 };
-},{}],50:[function(require,module,exports){
+},{}],51:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -15229,7 +14938,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 exports.default = {
   utilities: _utilities2.default
 };
-},{"./utilities":51}],51:[function(require,module,exports){
+},{"./utilities":52}],52:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -15278,7 +14987,7 @@ exports.default = {
   almostEquals: almostEquals,
   almostEqualsModulo: almostEqualsModulo
 };
-},{}],52:[function(require,module,exports){
+},{}],53:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -15347,7 +15056,7 @@ exports.default = {
   distanceSquared: distanceSquared,
   tree: _kd2.default
 };
-},{"kd.tree":75}],53:[function(require,module,exports){
+},{"kd.tree":76}],54:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -15600,7 +15309,7 @@ var Listener = exports.Listener = function () {
 }();
 
 exports.default = Listener;
-},{"../geometry/coordinates":54,"gl-matrix":65}],54:[function(require,module,exports){
+},{"../geometry/coordinates":55,"gl-matrix":66}],55:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -16137,7 +15846,7 @@ exports.default = {
   systemToGl: systemToGl,
   systemType: systemType
 };
-},{"./degree":55}],55:[function(require,module,exports){
+},{"./degree":56}],56:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -16229,7 +15938,7 @@ exports.default = {
   toRadian: toRadian,
   toRadianFactor: toRadianFactor
 };
-},{}],56:[function(require,module,exports){
+},{}],57:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -16260,7 +15969,7 @@ exports.default = {
   KdTree: _KdTree2.default,
   Listener: _Listener2.default
 };
-},{"./KdTree":52,"./Listener":53,"./coordinates":54,"./degree":55}],57:[function(require,module,exports){
+},{"./KdTree":53,"./Listener":54,"./coordinates":55,"./degree":56}],58:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -16302,7 +16011,7 @@ exports.default = {
   info: _info2.default,
   sofa: _sofa2.default
 };
-},{"./audio":48,"./common":50,"./geometry":56,"./info":58,"./sofa":61}],58:[function(require,module,exports){
+},{"./audio":49,"./common":51,"./geometry":57,"./info":59,"./sofa":62}],59:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -16367,7 +16076,7 @@ exports.default = {
   name: name,
   version: version
 };
-},{"../package.json":76}],59:[function(require,module,exports){
+},{"../package.json":77}],60:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -17257,7 +16966,7 @@ var HrtfSet = exports.HrtfSet = function () {
 }();
 
 exports.default = HrtfSet;
-},{"../audio/utilities":49,"../geometry/KdTree":52,"../geometry/coordinates":54,"../info":58,"./parseDataSet":62,"./parseSofa":63,"gl-matrix":65}],60:[function(require,module,exports){
+},{"../audio/utilities":50,"../geometry/KdTree":53,"../geometry/coordinates":55,"../info":59,"./parseDataSet":63,"./parseSofa":64,"gl-matrix":66}],61:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -17550,7 +17259,7 @@ var ServerDataBase = exports.ServerDataBase = function () {
 }();
 
 exports.default = ServerDataBase;
-},{"./parseDataSet":62,"./parseXml":64}],61:[function(require,module,exports){
+},{"./parseDataSet":63,"./parseXml":65}],62:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -17579,7 +17288,7 @@ exports.default = {
   HrtfSet: _HrtfSet2.default,
   ServerDataBase: _ServerDataBase2.default
 };
-},{"./HrtfSet":59,"./ServerDataBase":60}],62:[function(require,module,exports){
+},{"./HrtfSet":60,"./ServerDataBase":61}],63:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -17728,7 +17437,7 @@ function parseDataSet(input) {
 }
 
 exports.default = parseDataSet;
-},{}],63:[function(require,module,exports){
+},{}],64:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -17988,7 +17697,7 @@ exports.default = {
   parseSofa: parseSofa,
   conformSofaCoordinateSystem: conformSofaCoordinateSystem
 };
-},{}],64:[function(require,module,exports){
+},{}],65:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -18042,7 +17751,7 @@ if (typeof window.DOMParser !== 'undefined') {
 }
 
 exports.default = parseXml;
-},{}],65:[function(require,module,exports){
+},{}],66:[function(require,module,exports){
 /**
  * @fileoverview gl-matrix - High performance matrix and vector operations
  * @author Brandon Jones
@@ -18080,7 +17789,7 @@ exports.quat = require("./gl-matrix/quat.js");
 exports.vec2 = require("./gl-matrix/vec2.js");
 exports.vec3 = require("./gl-matrix/vec3.js");
 exports.vec4 = require("./gl-matrix/vec4.js");
-},{"./gl-matrix/common.js":66,"./gl-matrix/mat2.js":67,"./gl-matrix/mat2d.js":68,"./gl-matrix/mat3.js":69,"./gl-matrix/mat4.js":70,"./gl-matrix/quat.js":71,"./gl-matrix/vec2.js":72,"./gl-matrix/vec3.js":73,"./gl-matrix/vec4.js":74}],66:[function(require,module,exports){
+},{"./gl-matrix/common.js":67,"./gl-matrix/mat2.js":68,"./gl-matrix/mat2d.js":69,"./gl-matrix/mat3.js":70,"./gl-matrix/mat4.js":71,"./gl-matrix/quat.js":72,"./gl-matrix/vec2.js":73,"./gl-matrix/vec3.js":74,"./gl-matrix/vec4.js":75}],67:[function(require,module,exports){
 /* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -18152,7 +17861,7 @@ glMatrix.equals = function(a, b) {
 
 module.exports = glMatrix;
 
-},{}],67:[function(require,module,exports){
+},{}],68:[function(require,module,exports){
 /* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -18590,7 +18299,7 @@ mat2.multiplyScalarAndAdd = function(out, a, b, scale) {
 
 module.exports = mat2;
 
-},{"./common.js":66}],68:[function(require,module,exports){
+},{"./common.js":67}],69:[function(require,module,exports){
 /* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -19061,7 +18770,7 @@ mat2d.equals = function (a, b) {
 
 module.exports = mat2d;
 
-},{"./common.js":66}],69:[function(require,module,exports){
+},{"./common.js":67}],70:[function(require,module,exports){
 /* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -19809,7 +19518,7 @@ mat3.equals = function (a, b) {
 
 module.exports = mat3;
 
-},{"./common.js":66}],70:[function(require,module,exports){
+},{"./common.js":67}],71:[function(require,module,exports){
 /* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21947,7 +21656,7 @@ mat4.equals = function (a, b) {
 
 module.exports = mat4;
 
-},{"./common.js":66}],71:[function(require,module,exports){
+},{"./common.js":67}],72:[function(require,module,exports){
 /* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -22549,7 +22258,7 @@ quat.equals = vec4.equals;
 
 module.exports = quat;
 
-},{"./common.js":66,"./mat3.js":69,"./vec3.js":73,"./vec4.js":74}],72:[function(require,module,exports){
+},{"./common.js":67,"./mat3.js":70,"./vec3.js":74,"./vec4.js":75}],73:[function(require,module,exports){
 /* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23138,7 +22847,7 @@ vec2.equals = function (a, b) {
 
 module.exports = vec2;
 
-},{"./common.js":66}],73:[function(require,module,exports){
+},{"./common.js":67}],74:[function(require,module,exports){
 /* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -23917,7 +23626,7 @@ vec3.equals = function (a, b) {
 
 module.exports = vec3;
 
-},{"./common.js":66}],74:[function(require,module,exports){
+},{"./common.js":67}],75:[function(require,module,exports){
 /* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24528,7 +24237,7 @@ vec4.equals = function (a, b) {
 
 module.exports = vec4;
 
-},{"./common.js":66}],75:[function(require,module,exports){
+},{"./common.js":67}],76:[function(require,module,exports){
 /**
  * AUTHOR OF INITIAL JS LIBRARY
  * k-d Tree JavaScript - V 1.0
@@ -24987,7 +24696,7 @@ module.exports = {
   }
 }
 
-},{}],76:[function(require,module,exports){
+},{}],77:[function(require,module,exports){
 module.exports={
   "name": "binaural",
   "exports": "binaural",
@@ -25056,5 +24765,5 @@ module.exports={
   "_from": "binaural@git+https://github.com/Ircam-RnD/binauralFIR#0.3.10"
 }
 
-},{}]},{},[22])(22)
+},{}]},{},[23])(23)
 });
