@@ -447,7 +447,8 @@ var NewSmartFader = function (_AbstractNode) {
              */
 
             /// representing the decibel value above which the compression will start taking effect
-            this._peakLimiterNode.setThreshold(_utils2.default.dB2lin(threshold));
+            //this._peakLimiterNode.setThreshold( utilities.dB2lin( threshold ) );
+            this._peakLimiterNode.setThreshold(_utils2.default.dB2lin(0));
 
             /// representing the amount of time, in seconds, required to reduce the gain by 10 dB
             this._peakLimiterNode.setAttack(this._attackTime);
@@ -574,7 +575,7 @@ var NewSmartFader = function (_AbstractNode) {
 
             var reduction = this._peakLimiterNode.getMaxGainReduction();
 
-            return reduction > 0.5;
+            return reduction > 0.0;
         }
     }, {
         key: 'compressionRatio',
